@@ -14,12 +14,11 @@ function getCanvasDimensions(baseWidth, baseHeight){
   let [widthRatio, heightRatio] = [canvasWidth/baseWidth, canvasHeight/baseHeight]
   if(widthRatio < heightRatio){
     [canvasWidth, canvasHeight] = [windowWidth, windowWidth / aspectRatio]
-    contentScale = canvasHeight/windowHeight
+    contentScale = canvasWidth/baseWidth
   }
   else{
     [canvasWidth, canvasHeight] = [windowHeight * aspectRatio, windowHeight]
-    
-    contentScale = canvasWidth/windowWidth
+    contentScale = canvasHeight/baseHeight
   }
   return [canvasWidth, canvasHeight]
 }
@@ -33,4 +32,17 @@ function setup(){
 //Change the size if the screen size changes
 function windowResized(){
   resizeCanvas(...getCanvasDimensions(baseWidth, baseHeight))
+}
+
+//p5's draw function - called 60 times per second
+function draw(){
+  clear()
+  background(0)
+  scale(contentScale)
+  //Test to see if scaling works
+  push()
+  fill(255, 0, 0)
+  rect(960, 540, 400, 400)
+  rect(0, 0, 300, 300)
+  pop()
 }
