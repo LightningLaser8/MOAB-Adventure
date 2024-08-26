@@ -35,6 +35,7 @@ function getCanvasDimensions(baseWidth, baseHeight) {
 
 let images = {};
 let fonts = {};
+let backgroundGradient
 
 function preload() {
   //Load screen images
@@ -48,6 +49,13 @@ function preload() {
 //Set up the canvas, using the previous function
 function setup() {
   createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
+  backgroundGradient = createGraphics(1, 100)
+  for(let y = 0; y < 100; y++){ //For each vertical unit
+    let col = [0, 200 * y/100, 255 * y/100] //Get colour interpolation
+    backgroundGradient.noStroke() //Remove outline
+    backgroundGradient.fill(col) //Set fill colour to use
+    backgroundGradient.rect(0, y, 2, 1) //Draw the rectangle
+  }
   rectMode(CENTER);
   imageMode(CENTER);
   textFont(fonts.darktech);
@@ -60,7 +68,7 @@ function windowResized() {
 //p5's draw function - called 60 times per second
 function draw() {
   clear();
-  background(0);
+  image(backgroundGradient, 960, 540, 1920, 1080)
   scale(contentScale);
   //Pre-UI stuff, like background images
   if (ui.menuState === "title") drawTitleScreen();

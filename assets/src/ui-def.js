@@ -1,45 +1,3 @@
-//Play button on title screen
-createUIComponent(
-  ["title"],
-  960,
-  870,
-  350,
-  100,
-  "none",
-  () => {
-    ui.menuState = "start-menu";
-  },
-  "Play",
-  60
-);
-//Start menu background and header
-createUIComponent(["start-menu"], 960, 540, 1000, 900);
-createUIComponent(
-  ["start-menu"],
-  960,
-  120,
-  1000,
-  75,
-  "none",
-  undefined,
-  "         Select Option",
-  50
-);
-//Back to title screen button
-createUIComponent(
-  ["start-menu"],
-  570,
-  122,
-  200,
-  50,
-  "none",
-  () => {
-    ui.menuState = "title";
-  },
-  "< Back",
-  30
-);
-
 function createUIComponent(
   screens = [],
   x = 0,
@@ -59,3 +17,90 @@ function createUIComponent(
   //Add to game
   ui.components.push(component)
 }
+
+//   Title Screen
+
+//Play button on title screen
+createUIComponent(
+  ["title"],
+  960,
+  870,
+  350,
+  100,
+  "none",
+  () => {
+    ui.menuState = "start-menu";
+  },
+  "Play",
+  60
+);
+
+
+//   Start Menu
+
+//Start menu background and header
+createUIComponent(["start-menu"], 960, 540, 700, 700);
+createUIComponent(
+  ["start-menu"],
+  960,
+  220,
+  1000,
+  75,
+  "none",
+  undefined,
+  "         Select Option",
+  50
+);
+//Back to title screen button
+createUIComponent(
+  ["start-menu"],
+  570,
+  222,
+  200,
+  50,
+  "none",
+  () => {
+    ui.menuState = "title";
+  },
+  "< Back",
+  30
+);
+
+//Options Buttons
+createUIComponent(
+  ["start-menu"],
+  960,
+  700,
+  400,
+  80,
+  "none",
+  () => {
+    ui.menuState = "options";
+  },
+  "Options",
+  40
+);
+createUIComponent(
+  ["start-menu"],
+  960,
+  400,
+  400,
+  80,
+  "none",
+  () => {
+    ui.menuState = "new-game";
+  },
+  "New Game",
+  40
+);
+createUIComponent(
+  ["start-menu"],
+  960,
+  550,
+  400,
+  80,
+  "none",
+  undefined, //Decorative element - auto click suppression
+  "Load Game",
+  36
+);
