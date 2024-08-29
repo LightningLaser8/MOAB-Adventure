@@ -1,31 +1,38 @@
-function generateUIComponent(
-  x = 0,
-  y = 0,
-  width = 1,
-  height = 1,
-  bevel = "none",
-  onpress = () => {},
-  shownText = "",
-  shownTextSize = 20
-) {
-  const component = {};
-  //Initialise component
-  component.x = x;
-  component.y = y;
-  component.width = width;
-  component.height = height;
-  component.outlineColour = [50, 50, 50];
-  component.emphasisColour = [255, 255, 0];
-  component.emphasised = false;
-  component.draw = function () {
+class UIComponent {
+  constructor(
+    x = 0,
+    y = 0,
+    width = 1,
+    height = 1,
+    bevel = "none",
+    onpress = () => {},
+    shownText = "",
+    useOCR = false,
+    shownTextSize = 20
+  ) {
+    //Initialise component
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.outlineColour = [50, 50, 50];
+    this.emphasisColour = [255, 255, 0];
+    this.emphasised = false;
+    this.ocr = useOCR;
+    this.text = shownText;
+    this.textSize = shownTextSize;
+    this.bevel = bevel;
+    this.press = onpress;
+  }
+  draw() {
     push();
     fill(...this.outlineColour);
     if (this.emphasised) fill(...this.emphasisColour);
     push();
-    if (bevel !== "none") {
+    if (this.bevel !== "none") {
       beginClip({ invert: true });
       //Cut out triangle from the right of the outline
-      if (bevel === "right" || bevel === "both") {
+      if (this.bevel === "right" || this.bevel === "both") {
         triangle(
           this.x + (this.width + 20) / 2 - this.height,
           this.y + (this.height + 20) / 2,
@@ -36,7 +43,7 @@ function generateUIComponent(
         );
       }
       //Cut out triangle from the left of the outline
-      if (bevel === "left" || bevel === "both") {
+      if (this.bevel === "left" || this.bevel === "both") {
         triangle(
           this.x - (this.width + 20) / 2 + this.height,
           this.y - (this.height + 20) / 2,
@@ -50,12 +57,12 @@ function generateUIComponent(
     }
     //Draw outline behind background
     rect(
-      this.x + (bevel === "right" ? 10 : bevel === "left" ? -10 : 0),
+      this.x + (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
       this.y,
       this.width +
-        (bevel === "right" || bevel === "left"
+        (this.bevel === "right" || this.bevel === "left"
           ? 40
-          : bevel === "both"
+          : this.bevel === "both"
           ? 60
           : 20) -
         2,
@@ -63,11 +70,11 @@ function generateUIComponent(
     );
     pop();
     push();
-    //Add bevels
-    if (bevel !== "none") {
+    //Add this.bevels
+    if (this.bevel !== "none") {
       beginClip({ invert: true });
       //Cut out triangle from the right of the background
-      if (bevel === "right" || bevel === "both") {
+      if (this.bevel === "right" || this.bevel === "both") {
         triangle(
           this.x + this.width / 2 - this.height,
           this.y + this.height / 2,
@@ -78,7 +85,7 @@ function generateUIComponent(
         );
       }
       //Cut out triangle from the left of the background
-      if (bevel === "left" || bevel === "both") {
+      if (this.bevel === "left" || this.bevel === "both") {
         triangle(
           this.x - this.width / 2 + this.height,
           this.y - this.height / 2,
@@ -91,7 +98,7 @@ function generateUIComponent(
       endClip();
     }
     //Draw BG
-    image(
+    drawImg(
       images.ui.background,
       this.x,
       this.y,
@@ -104,13 +111,19 @@ function generateUIComponent(
     );
     pop();
     //Draw optional text
+    noStroke();
+    textFont(this.ocr ? fonts.ocr : fonts.darktech);
+    if (this.ocr) {
+      stroke(0);
+      strokeWeight(3);
+    }
     fill(0);
     textAlign(CENTER, CENTER);
-    textSize(shownTextSize);
-    text(shownText, this.x, this.y);
+    textSize(this.textSize);
+    text(this.text, this.x, this.y);
     pop();
-  };
-  component.checkMouse = function () {
+  }
+  checkMouse() {
     // If the mouse is colliding with the button
     if (
       ui.mouse.x < this.x + this.width / 2 &&
@@ -134,7 +147,70 @@ function generateUIComponent(
     } else {
       this.outlineColour = [50, 50, 50];
     }
-  };
-  component.press = onpress;
-  return component;
+  }
+}
+
+class ImageUIComponent extends UIComponent {
+  constructor(
+    x = 0,
+    y = 0,
+    width = 1,
+    height = 1,
+    shownImage = null,
+    onpress = () => {},
+    outline = true
+  ) {
+    //Initialise component
+    super(x, y, width, height, "none", onpress, "", false, 0);
+    this.image = shownImage;
+    this.outline = outline;
+  }
+  draw() {
+    push();
+    fill(...this.outlineColour);
+    if (this.emphasised) fill(...this.emphasisColour);
+    //Draw outline behind background
+    if (this.outline) rect(this.x, this.y, this.width + 18, this.height + 18);
+    //Draw image
+    drawImg(this.image, this.x, this.y, this.width - 2, this.height - 2);
+    pop();
+  }
+}
+
+class ImageContainer {
+  #image;
+  #path;
+  constructor(path) {
+    this.#path = path;
+    this.#image = null;
+  }
+  update(image) {
+    this.#image = image;
+  }
+  async load() {
+    this.#image = await loadImage(this.#path);
+    console.log("Loaded image from " + this.#path);
+    return true;
+  }
+  get image(){
+    return this.#image
+  }
+}
+
+function drawImg(
+  img = new ImageContainer("/assets/textures/error.png"),
+  x,
+  y,
+  width,
+  height,
+  ...otherParameters //IDK what else p5 image takes
+) {
+  if(!img) return; //Cancel if no image at all
+  if(img instanceof ImageContainer){
+    if(!img.image) return; //Cancel if no image loaded yet
+    image(img.image, x, y, width, height, ...otherParameters)
+  }
+  else{
+    image(img, x, y, width, height, ...otherParameters)
+  }
 }
