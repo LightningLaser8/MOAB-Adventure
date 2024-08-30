@@ -1,4 +1,41 @@
 class UIComponent {
+  //Evaluates property:value on game ui: input "slot:1" => if "slot" is "1" (or equivalent, e.g. 1) return true, else false
+  static evaluateCondition(condition) {
+    const parts = condition.split(":"); //Separate property <- : -> value
+    if (parts.length !== 2) {
+      //If extra parameters, or not enough:
+      return true; //Basically ignore
+    }
+    if (ui.conditions[parts[0]]) {
+      //If property exists
+      return parts[1] == ui.conditions[parts[0]]; //Check it and return
+    }
+    return true; //If unsure, ignore
+  }
+  //Sets property:value on game ui: input "slot:1" => sets "slot" to "1"
+  static setCondition(condition) {
+    const parts = condition.split(":"); //Separate property <- : -> value
+    if (parts.length !== 2) {
+      //If extra parameters
+      return; //Cancel
+    }
+    ui.conditions[parts[0]] = parts[1]; //Set the property
+  }
+  acceptedScreens = [];
+  conditions = [];
+  interactive = false;
+  active = false;
+  updateActivity() {
+    //It's active if it should show *and* all the conditions are met
+    this.active = this.acceptedScreens.includes(ui.menuState) && this.getActivity();
+  }
+  getActivity() {
+    for (let condition of this.conditions) {
+      //Short-circuiting: if one returns false, don't even bother checking the others, it's not active.
+      if (!UIComponent.evaluateCondition(condition)) return false;
+    }
+    return true;
+  }
   constructor(
     x = 0,
     y = 0,
@@ -23,6 +60,7 @@ class UIComponent {
     this.textSize = shownTextSize;
     this.bevel = bevel;
     this.press = onpress;
+    this.interactive = !!onpress;
   }
   draw() {
     push();
@@ -192,8 +230,8 @@ class ImageContainer {
     console.log("Loaded image from " + this.#path);
     return true;
   }
-  get image(){
-    return this.#image
+  get image() {
+    return this.#image;
   }
 }
 
@@ -205,12 +243,11 @@ function drawImg(
   height,
   ...otherParameters //IDK what else p5 image takes
 ) {
-  if(!img) return; //Cancel if no image at all
-  if(img instanceof ImageContainer){
-    if(!img.image) return; //Cancel if no image loaded yet
-    image(img.image, x, y, width, height, ...otherParameters)
-  }
-  else{
-    image(img, x, y, width, height, ...otherParameters)
+  if (!img) return; //Cancel if no image at all
+  if (img instanceof ImageContainer) {
+    if (!img.image) return; //Cancel if no image loaded yet
+    image(img.image, x, y, width, height, ...otherParameters);
+  } else {
+    image(img, x, y, width, height, ...otherParameters);
   }
 }
