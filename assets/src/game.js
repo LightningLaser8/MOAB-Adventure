@@ -1,19 +1,8 @@
-const ui = {
-  menuState: "title",
-  waitingForMouseUp: false,
-  get mouse() {
-    return {
-      x: mouseX / contentScale,
-      y: mouseY / contentScale,
-    };
-  },
-  conditions: {},
-  components: [],
-};
 const game = {
   difficulty: "normal",
   mode: "adventure",
   saveslot: 1,
+  control: "keyboard"
 };
 //Initial values for canvas width and height
 const baseWidth = 1920;
@@ -39,15 +28,6 @@ function getCanvasDimensions(baseWidth, baseHeight) {
   return [canvasWidth, canvasHeight];
 }
 
-let images = {
-  screen: {
-    title: new ImageContainer("/assets/textures/screens/title.png"),
-  },
-  ui: {
-    background: new ImageContainer("/assets/textures/ui/background.png"),
-    moab: new ImageContainer("/assets/textures/ui/moab.png"),
-  },
-};
 let fonts = {};
 let backgroundGradient;
 
@@ -91,9 +71,6 @@ function draw() {
   clear();
   scale(contentScale);
   image(backgroundGradient, 960, 540, 1920, 1080);
-  //Pre-UI stuff, like background images
-  //Because UIComponents don't have images
-  if (ui.menuState === "title") drawImg(images.screen.title, 960, 540);
   //Tick, then draw the UI
   updateUIActivity();
   tickUI();

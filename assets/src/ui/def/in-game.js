@@ -1,0 +1,11 @@
+createUIImageComponent(
+  ["in-game"],
+  [],
+  960,
+  540,
+  1920,
+  1080,
+  null,
+  images.background.sea,
+  false
+)
