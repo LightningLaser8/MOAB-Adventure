@@ -20,8 +20,10 @@ class UIComponent {
       return true; //Basically ignore
     }
     if (ui.conditions[parts[0]]) {
+      //Separate property values
+      let values = parts[1].split("|")
       //If property exists
-      return parts[1] == ui.conditions[parts[0]]; //Check it and return
+      return values.includes(ui.conditions[parts[0]]); //Check it and return
     }
     return true; //If unsure, ignore
   }
@@ -44,11 +46,22 @@ class UIComponent {
       this.acceptedScreens.includes(ui.menuState) && this.getActivity();
   }
   getActivity() {
+    if(this.conditions[0] === "any") {
+      return this.getActivityAnyCondition();
+    }
     for (let condition of this.conditions) {
       //Short-circuiting: if one returns false, don't even bother checking the others, it's not active.
       if (!UIComponent.evaluateCondition(condition)) return false;
     }
     return true;
+  }
+  getActivityAnyCondition() {
+    for (let condition of this.conditions) {
+      if(condition === "any") continue;
+      //Short-circuiting: if one returns true, don't even bother checking the others, it's active.
+      if (UIComponent.evaluateCondition(condition)) return true;
+    }
+    return false;
   }
   constructor(
     x = 0,
@@ -438,7 +451,8 @@ function createGamePropertySelector(
   property = "",
   options = [""],
   shownTexts = [""],
-  shownTextSize = 50
+  shownTextSize = 50,
+  onchange = value => {}
 ) {
   //Create display name
   createUIComponent(
@@ -485,6 +499,7 @@ function createGamePropertySelector(
         diffindicator.text = (options[i][0] ?? options[i]) + "  "; //Make the indicator show it
         diffindicator.textSize = shownTextSize * 0.8; //Make it fit
         diffindicator.chosen = options[i];
+        onchange(options[i])
       },
       shownTexts[i],
       true,

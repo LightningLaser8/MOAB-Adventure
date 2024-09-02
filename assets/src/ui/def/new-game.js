@@ -1,4 +1,5 @@
 //    New Game Menu 'new-game'
+UIComponent.setCondition("difficulty:none")
 //Difficulty selector
 createGamePropertySelector(
   ["new-game"],
@@ -11,8 +12,10 @@ createGamePropertySelector(
   "difficulty",
   ["easy", "normal", "hard"],
   ["Easy", "Normal", "Hard"],
-  50
+  50,
+  value => UIComponent.setCondition("difficulty:"+value)
 );
+UIComponent.setCondition("mode:none")
 //Game mode selector
 createGamePropertySelector(
   ["new-game"],
@@ -25,8 +28,10 @@ createGamePropertySelector(
   "mode",
   ["adventure", "boss-rush", "sandbox"],
   ["Adventure", "Boss Rush", "Sandbox"],
-  50
+  50,
+  value => UIComponent.setCondition("mode:"+value)
 );
+UIComponent.setCondition("saveslot:none")
 //Save slot selector
 createGamePropertySelector(
   ["new-game"],
@@ -39,7 +44,8 @@ createGamePropertySelector(
   "saveslot",
   [0, 1, 2, 3, 4, 5],
   ["0", "1", "2", "3", "4", "5"],
-  50
+  50,
+  value => UIComponent.setCondition("saveslot:"+value)
 );
 //Weapon slot button
 createUIComponent(
@@ -60,7 +66,7 @@ createUIComponent(
 //Start game button
 createUIComponent(
   ["new-game"],
-  [],
+  ["ap1-slot:1|2", "ap2-slot:1|2", "ap3/4-slot:1|2", "ap5-slot:1|2"],
   960,
   900,
   400,
@@ -72,4 +78,48 @@ createUIComponent(
   "Start!",
   false,
   60
+)
+createUIComponent(
+  ["new-game"],
+  ["any", "ap1-slot:none", "ap2-slot:none", "ap3/4-slot:none", "ap5-slot:none"],
+  960,
+  800,
+  0,
+  0,
+  "none",
+  null,
+  "Choose All\nWeapon Slots"
+)
+createUIComponent(
+  ["new-game"],
+  ["mode:none"],
+  960,
+  840,
+  0,
+  0,
+  "none",
+  null,
+  "Choose Game Mode"
+)
+createUIComponent(
+  ["new-game"],
+  ["saveslot:none"],
+  960,
+  870,
+  0,
+  0,
+  "none",
+  null,
+  "Choose Save Slot"
+)
+createUIComponent(
+  ["new-game"],
+  ["difficulty:none"],
+  960,
+  900,
+  0,
+  0,
+  "none",
+  null,
+  "Choose Difficulty"
 )

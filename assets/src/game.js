@@ -96,6 +96,7 @@ function drawUI() {
 }
 
 function tickUI() {
+  tickBackground(10);
   for (let component of ui.components) {
     if (component.active && component.isInteractive) {
       component.checkMouse();
