@@ -2,8 +2,10 @@ const game = {
   difficulty: "normal",
   mode: "adventure",
   saveslot: 1,
-  control: "keyboard"
+  control: "keyboard",
+  player: null,
 };
+const world = new World(images.background.sea);
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -71,6 +73,14 @@ function draw() {
   clear();
   scale(contentScale);
   image(backgroundGradient, 960, 540, 1920, 1080);
+  if (ui.menuState === "in-game") {
+    background.draw()
+    gameFrame();
+  }
+  uiFrame();
+}
+
+function uiFrame() {
   //Tick, then draw the UI
   updateUIActivity();
   tickUI();
@@ -78,6 +88,27 @@ function draw() {
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
   showMousePos();
+}
+
+function gameFrame() {
+  movePlayer()
+  world.tickAll();
+  world.drawAll();
+}
+
+function movePlayer(){
+  if(keyIsDown(87) && game.player.y > game.player.hitSize){ //If 'W' pressed
+    game.player.y -= game.player.speed
+  }
+  if(keyIsDown(83) && game.player.y < 1080 - game.player.hitSize){ //If 'S' pressed
+    game.player.y += game.player.speed
+  }
+  if(keyIsDown(65) && game.player.x > game.player.hitSize){ //If 'A' pressed
+    game.player.x -= game.player.speed * 1.5
+  }
+  if(keyIsDown(68) && game.player.x < 1920 - game.player.hitSize){ //If 'D' pressed
+    game.player.x += game.player.speed * 0.5
+  }
 }
 
 function updateUIActivity() {
@@ -88,6 +119,7 @@ function updateUIActivity() {
 }
 
 function drawUI() {
+  background.image = world.background;
   for (let component of ui.components) {
     if (component.active) {
       component.draw();
@@ -96,7 +128,7 @@ function drawUI() {
 }
 
 function tickUI() {
-  tickBackground(10);
+  background.tick(game.player?.speed ?? 0);
   for (let component of ui.components) {
     if (component.active && component.isInteractive) {
       component.checkMouse();
@@ -123,4 +155,61 @@ function showMousePos() {
   line(ui.mouse.x - 20, ui.mouse.y, ui.mouse.x + 20, ui.mouse.y);
   line(ui.mouse.x, ui.mouse.y - 20, ui.mouse.x, ui.mouse.y + 20);
   pop();
+}
+
+function createPlayer() {
+  let player = construct({
+    type: Entity,
+    x: 300,
+    y: 540,
+    name: "MOAB",
+    maxHealth: 200,
+    drawer: {
+      image: images.entity.blimp_moab,
+      width: 230,
+      height: 150,
+    },
+    team: "player",
+    hitSize: 75, //Always at least half of the smallest dimension
+    speed: 6,
+  });
+  player.addToWorld(world);
+  game.player = player;
+  const testWeapon = construct({
+    type: Weapon,
+    meta: {
+      posX: -50,
+      posY: 0
+    },
+    x: 400,
+    y: 400,
+    parts: [
+      {
+        type: Part,
+        width: 40,
+        height: 20,
+        y: -20,
+        rotation: 60
+      },
+      {
+        type: Part,
+        width: 40,
+        height: 20,
+        y: 20,
+        rotation: -60
+      },
+      {
+        type: Part,
+        width: 40,
+        height: 20
+      },
+      {
+        type: Part,
+        width: 40,
+        height: 15,
+        x: 40
+      },
+    ]
+  })
+  player.addWeapon(testWeapon)
 }

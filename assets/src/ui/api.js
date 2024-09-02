@@ -21,7 +21,7 @@ class UIComponent {
     }
     if (ui.conditions[parts[0]]) {
       //Separate property values
-      let values = parts[1].split("|")
+      let values = parts[1].split("|");
       //If property exists
       return values.includes(ui.conditions[parts[0]]); //Check it and return
     }
@@ -46,7 +46,7 @@ class UIComponent {
       this.acceptedScreens.includes(ui.menuState) && this.getActivity();
   }
   getActivity() {
-    if(this.conditions[0] === "any") {
+    if (this.conditions[0] === "any") {
       return this.getActivityAnyCondition();
     }
     for (let condition of this.conditions) {
@@ -57,7 +57,7 @@ class UIComponent {
   }
   getActivityAnyCondition() {
     for (let condition of this.conditions) {
-      if(condition === "any") continue;
+      if (condition === "any") continue;
       //Short-circuiting: if one returns true, don't even bother checking the others, it's active.
       if (UIComponent.evaluateCondition(condition)) return true;
     }
@@ -137,7 +137,7 @@ class UIComponent {
       );
       pop();
       push();
-      //Add this.bevels
+      //Add bevels
       if (this.bevel !== "none") {
         beginClip({ invert: true });
         //Cut out triangle from the right of the background
@@ -280,6 +280,44 @@ function drawImg(
   } else {
     image(img, x, y, width, height, ...otherParameters);
   }
+}
+
+function rotatedImg(img = images.env.error, x, y, width, height, angle) {
+  push() //Save current position, rotation, etc
+  translate(x, y); //Move middle to 0,0
+  rotate(angle);
+  drawImg(img, 0, 0, width, height);
+  pop() //Return to old state
+}
+
+function rotatedShape(shape = "circle", x, y, width, height, angle) {
+  push() //Save current position, rotation, etc
+  translate(x, y); //Move middle to 0,0
+  rotate(angle);
+  switch(shape){
+    case "circle":
+      circle(0, 0, (width+height)/2)
+      break;
+    case "square":
+      square(0, 0, (width+height)/2)
+      break;
+    case "ellipse":
+      ellipse(0, 0, width, height)
+      break;
+    case "rect":
+      rect(0, 0, width, height)
+      break;
+    case "rhombus":
+      scale(shape_width, shape_height); //Change the size
+      rotate(QUARTER_PI); //turn it
+      square(0, 0, 1); //make a square
+      scale(1, 1); //scale back
+      rotate(-QUARTER_PI); //turn back
+      break;
+    default:
+      break;
+  }
+  pop() //Return to old state
 }
 
 class SliderUIComponent extends UIComponent {
@@ -450,9 +488,10 @@ function createGamePropertySelector(
   height = 1,
   property = "",
   options = [""],
+  defaultOption = null,
   shownTexts = [""],
   shownTextSize = 50,
-  onchange = value => {}
+  onchange = (value) => {}
 ) {
   //Create display name
   createUIComponent(
@@ -482,6 +521,8 @@ function createGamePropertySelector(
     false,
     shownTextSize
   );
+  diffindicator.chosen =
+    defaultOption in options ? options[defaultOption] : null;
   let len = Math.min(options.length, shownTexts.length); //Get smallest array, don't use blanks
   for (let i = 0; i < len; i++) {
     //For each option or text
@@ -496,10 +537,8 @@ function createGamePropertySelector(
       "both",
       () => {
         game[property] = options[i]; //Set the property
-        diffindicator.text = (options[i][0] ?? options[i]) + "  "; //Make the indicator show it
-        diffindicator.textSize = shownTextSize * 0.8; //Make it fit
         diffindicator.chosen = options[i];
-        onchange(options[i])
+        onchange(options[i]);
       },
       shownTexts[i],
       true,
@@ -554,7 +593,7 @@ function createSliderComponent(
 
 const images = {
   env: {
-    error: new ImageContainer("/assets/textures/error.png")
+    error: new ImageContainer("/assets/textures/error.png"),
   },
   screen: {
     title: new ImageContainer("/assets/textures/screens/title.png"),
@@ -565,5 +604,8 @@ const images = {
   },
   background: {
     sea: new ImageContainer("/assets/textures/background/sea.png"),
+  },
+  entity: {
+    blimp_moab:  new ImageContainer("/assets/textures/entity/moab.png"),
   }
 };

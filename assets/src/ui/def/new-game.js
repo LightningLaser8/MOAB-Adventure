@@ -11,6 +11,7 @@ createGamePropertySelector(
   60,
   "difficulty",
   ["easy", "normal", "hard"],
+  null,
   ["Easy", "Normal", "Hard"],
   50,
   value => UIComponent.setCondition("difficulty:"+value)
@@ -27,6 +28,7 @@ createGamePropertySelector(
   60,
   "mode",
   ["adventure", "boss-rush", "sandbox"],
+  null,
   ["Adventure", "Boss Rush", "Sandbox"],
   50,
   value => UIComponent.setCondition("mode:"+value)
@@ -43,6 +45,7 @@ createGamePropertySelector(
   60,
   "saveslot",
   [0, 1, 2, 3, 4, 5],
+  null,
   ["0", "1", "2", "3", "4", "5"],
   50,
   value => UIComponent.setCondition("saveslot:"+value)
@@ -74,6 +77,7 @@ createUIComponent(
   "none",
   () => {
     ui.menuState = "in-game"
+    createPlayer()
   },
   "Start!",
   false,

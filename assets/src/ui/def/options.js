@@ -27,6 +27,7 @@ createGamePropertySelector(
   60,
   "control",
   ["keyboard", "controller"],
+  0,
   ["Keyboard and Mouse", "Gamepad"],
   40
 );
