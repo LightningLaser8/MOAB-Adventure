@@ -308,7 +308,7 @@ function rotatedShape(shape = "circle", x, y, width, height, angle) {
       rect(0, 0, width, height)
       break;
     case "rhombus":
-      scale(shape_width, shape_height); //Change the size
+      scale(width, height); //Change the size
       rotate(QUARTER_PI); //turn it
       square(0, 0, 1); //make a square
       scale(1, 1); //scale back

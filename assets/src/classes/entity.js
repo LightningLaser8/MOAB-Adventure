@@ -28,6 +28,7 @@ class Entity {
   hitSize = 100;
   speed = 10;
   team = "enemy";
+  target = {x: 0, y: 0}
   constructor() {} //Because universal
   init(){
     this.health = this.maxHealth
@@ -77,5 +78,8 @@ class Entity {
     for(let weapon of this.weapons){
       weapon.draw()
     }
+  }
+  collidesWith(obj){
+    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
   }
 }

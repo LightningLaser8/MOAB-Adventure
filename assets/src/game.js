@@ -183,6 +183,18 @@ function createPlayer() {
     },
     x: 400,
     y: 400,
+    shoot: {
+      bullet: {
+        type: Bullet,
+        lifetime: 30,
+        speed: 120,
+        hitSize: 10
+      },
+      pattern: {
+        spacing: 10,
+        amount: 3
+      }
+    },
     parts: [
       {
         type: Part,
@@ -212,4 +224,14 @@ function createPlayer() {
     ]
   })
   player.addWeapon(testWeapon)
+  //Change to an accessor property
+  Object.defineProperty(player, "target", {
+    get: () => {return ui.mouse} //This way, I only have to set it once.
+  })
+}
+
+function mousePressed(){
+  if(ui.menuState === "in-game"){
+    game.player.weapons[0].fire()
+  }
 }
