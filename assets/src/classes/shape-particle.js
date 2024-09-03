@@ -77,9 +77,9 @@ class ShapeParticle {
     fill(255);
     //Interpolate colour
     fill(
-      lerpColor(
-        color(this.colourFrom),
-        color(this.colourTo),
+      ...blendColours(
+        this.colourFrom,
+        this.colourTo,
         this.calcLifeFract()
       )
     );

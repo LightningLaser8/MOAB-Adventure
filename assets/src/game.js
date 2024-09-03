@@ -1,11 +1,19 @@
 const game = {
+  //Game options
   difficulty: "normal",
   mode: "adventure",
   saveslot: 1,
+  //Control type
   control: "keyboard",
+  //Player entity
   player: null,
+  //Currency
+  shards: 0,
+  bloonstones: 0,
+  level: 1,
 };
-const world = new World(images.background.sea);
+const world = new World("Sky High", images.background.sea);
+world.addSpawn();
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -74,7 +82,7 @@ function draw() {
   scale(contentScale);
   image(backgroundGradient, 960, 540, 1920, 1080);
   if (ui.menuState === "in-game") {
-    background.draw()
+    background.draw();
     gameFrame();
   }
   uiFrame();
@@ -91,23 +99,28 @@ function uiFrame() {
 }
 
 function gameFrame() {
-  movePlayer()
+  movePlayer();
   world.tickAll();
+  checkBoxCollisions();
   world.drawAll();
 }
 
-function movePlayer(){
-  if(keyIsDown(87) && game.player.y > game.player.hitSize){ //If 'W' pressed
-    game.player.y -= game.player.speed
+function movePlayer() {
+  if (keyIsDown(87) && game.player.y > game.player.hitSize) {
+    //If 'W' pressed
+    game.player.y -= game.player.speed;
   }
-  if(keyIsDown(83) && game.player.y < 1080 - game.player.hitSize){ //If 'S' pressed
-    game.player.y += game.player.speed
+  if (keyIsDown(83) && game.player.y < 1080 - game.player.hitSize) {
+    //If 'S' pressed
+    game.player.y += game.player.speed;
   }
-  if(keyIsDown(65) && game.player.x > game.player.hitSize){ //If 'A' pressed
-    game.player.x -= game.player.speed * 1.5
+  if (keyIsDown(65) && game.player.x > game.player.hitSize) {
+    //If 'A' pressed
+    game.player.x -= game.player.speed * 1.5;
   }
-  if(keyIsDown(68) && game.player.x < 1920 - game.player.hitSize){ //If 'D' pressed
-    game.player.x += game.player.speed * 0.5
+  if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
+    //If 'D' pressed
+    game.player.x += game.player.speed * 0.5;
   }
 }
 
@@ -179,7 +192,7 @@ function createPlayer() {
     type: Weapon,
     meta: {
       posX: -50,
-      posY: 0
+      posY: 0,
     },
     x: 400,
     y: 400,
@@ -187,13 +200,34 @@ function createPlayer() {
       bullet: {
         type: Bullet,
         lifetime: 30,
-        speed: 120,
-        hitSize: 10
+        speed: 40,
+        hitSize: 20,
+        trailColour: [255, 255, 255, 100],
+        damage: [
+          construct({
+            type: DamageInstance,
+            amount: 1,
+          }),
+          construct({
+            type: DamageInstance,
+            amount: 2,
+          }),
+          construct({
+            type: DamageInstance,
+            amount: 3,
+          }),
+        ],
+        pierce: 2,
+        drawer: {
+          image: images.entity.box_metal,
+          width: 40,
+          height: 40,
+        },
       },
       pattern: {
-        spacing: 10,
-        amount: 3
-      }
+        spacing: 5,
+        amount: 3,
+      },
     },
     parts: [
       {
@@ -201,37 +235,71 @@ function createPlayer() {
         width: 40,
         height: 20,
         y: -20,
-        rotation: 60
+        rotation: 60,
       },
       {
         type: Part,
         width: 40,
         height: 20,
         y: 20,
-        rotation: -60
+        rotation: -60,
       },
       {
         type: Part,
         width: 40,
-        height: 20
+        height: 20,
       },
       {
         type: Part,
         width: 40,
         height: 15,
-        x: 40
+        x: 40,
       },
-    ]
-  })
-  player.addWeapon(testWeapon)
+    ],
+  });
+  player.addWeapon(testWeapon);
   //Change to an accessor property
   Object.defineProperty(player, "target", {
-    get: () => {return ui.mouse} //This way, I only have to set it once.
-  })
+    get: () => {
+      return ui.mouse;
+    }, //This way, I only have to set it once.
+  });
 }
 
-function mousePressed(){
-  if(ui.menuState === "in-game"){
-    game.player.weapons[0].fire()
+function mousePressed() {
+  if (ui.menuState === "in-game") {
+    game.player.weapons[0].fire();
   }
+}
+
+function checkBoxCollisions() {
+  for (let entity of world.entities) {
+    //If player is colliding with a living entity on a different team that is a box
+    if (
+      entity instanceof Box &&
+      !entity.remove &&
+      entity.team !== game.player.team &&
+      game.player.collidesWith(entity)
+    ) {
+      game.player.takeDamage("collision", entity.health);
+      //If the player didn't die i.e. resisted, shielded, had more HP, etc.
+      if (!game.player.dead) {
+        //Remove box
+        entity.dead = true;
+      }
+      else{
+        //If dead
+        playerDies();
+      }
+    }
+  }
+}
+
+function playerDies(){
+  deathStats.shardCounter.text = "Shards: "+game.shards
+  deathStats.bloonstoneCounter.text = "Bloonstones: "+game.bloonstones
+  deathStats.progress.text = "Zone: "+world.name+" | Level "+game.level
+  deathStats.damageDealt.text = "Damage Dealt: "+game.player.damageDealt
+  deathStats.damageTaken.text = "Damage Taken: "+game.player.damageTaken
+  ui.menuState = "you-died"
 }

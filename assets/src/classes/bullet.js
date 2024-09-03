@@ -7,8 +7,9 @@ class Bullet {
   lifetime = 60;
   hitSize = 5;
   trail = true;
-  trailColour = "#ffffffc4";
+  trailColour = [255, 255, 255, 200];
   remove = false;
+  pierce = 0;
   drawer = {
     shape: "circle",
     fill: "red",
@@ -18,6 +19,8 @@ class Bullet {
   };
   world = null;
   entity = null;
+  //Effectively a pierce thing
+  damaged = []
   #trailCounter = 20;
   #trailInterval = 10;
   get directionRad(){
@@ -25,7 +28,7 @@ class Bullet {
   }
   init() {
     this.maxLife = this.lifetime;
-    this.#trailInterval = this.hitSize * 2
+    this.#trailInterval = this.hitSize * 4
   }
   step(dt) {
     this.spawnTrail(dt);
@@ -62,8 +65,8 @@ class Bullet {
               "rhombus",
               this.trailColour,
               this.trailColour,
-              this.hitSize * this.#trailInterval * 0.5,
-              this.hitSize * this.#trailInterval * 0.5,
+              this.hitSize * this.#trailInterval * 0.25,
+              this.hitSize * this.#trailInterval * 0.25,
               this.hitSize * 1.9,
               0,
               0

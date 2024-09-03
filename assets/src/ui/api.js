@@ -591,6 +591,40 @@ function createSliderComponent(
   return component;
 }
 
+function blendColours(col1, col2, col1Factor) {
+  col1[3] ??= 255
+  col2[3] ??= 255
+  let col2Factor = 1 - col1Factor;
+  let newCol1 = [
+    col1[0] * col1Factor,
+    col1[1] * col1Factor,
+    col1[2] * col1Factor,
+    col1[3] * col1Factor,
+  ];
+  let newCol2 = [
+    col2[0] * col2Factor,
+    col2[1] * col2Factor,
+    col2[2] * col2Factor,
+    col2[3] * col2Factor,
+  ];
+  let newCol = [
+    newCol1[0] + newCol2[0],
+    newCol1[1] + newCol2[1],
+    newCol1[2] + newCol2[2],
+    newCol1[3] + newCol2[3],
+  ];
+  if (newCol[0] > 255) {
+    newCol[0] = 255;
+  }
+  if (newCol[1] > 255) {
+    newCol[1] = 255;
+  }
+  if (newCol[2] > 255) {
+    newCol[2] = 255;
+  }
+  return newCol;
+}
+
 const images = {
   env: {
     error: new ImageContainer("/assets/textures/error.png"),
@@ -607,5 +641,7 @@ const images = {
   },
   entity: {
     blimp_moab:  new ImageContainer("/assets/textures/entity/moab.png"),
+    box: new ImageContainer("/assets/textures/entity/box/wood.svg"),
+    box_metal: new ImageContainer("/assets/textures/entity/box/metal.svg")
   }
 };

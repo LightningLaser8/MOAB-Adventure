@@ -2,13 +2,17 @@ class World{
   particles = []
   entities = []
   bullets = []
+  spawning = []
   background = images.background.sea
-  constructor(background = images.background.sea){
+  name = "World"
+  constructor(name = "World", background = images.background.sea){
+    this.name = name
     this.background = background
   }
   tickAll(){
     this.#actualTick()
     this.#removeDead()
+    this.tickSpawns(game.player.speed)
   }
   #actualTick(){
     //Tick *everything*
@@ -38,7 +42,7 @@ class World{
     }
     len = this.entities.length
     for(let e = 0; e < len; e++){
-      if(this.entities[e]?.remove){
+      if(this.entities[e]?.dead){
         this.entities.splice(e, 1)
       }
     }
@@ -54,5 +58,24 @@ class World{
     for(let particle of this.particles){
       particle.draw()
     }
+  }
+  tickSpawns(dt){
+    for(let spawnGroup of this.spawning){
+      if(spawnGroup.$currentCooldown <= 0){
+        construct(spawnGroup.entity).addToWorld(this)
+        spawnGroup.$currentCooldown = spawnGroup.interval
+      }
+      else{
+        spawnGroup.$currentCooldown -= dt
+      }
+    }
+  }
+  addSpawn(spawn = {entity: Box.default, interval: 60}){
+    //Handle bad properties like `null`
+    spawn.entity ??= Box.default
+    spawn.interval ??= 60
+    //Add group
+    spawn.$currentCooldown = 0
+    this.spawning.push(spawn)
   }
 }
