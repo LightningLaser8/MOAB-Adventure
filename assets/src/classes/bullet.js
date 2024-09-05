@@ -2,7 +2,7 @@ class Bullet {
   x = 0;
   y = 0;
   direction = 0;
-  damage = [new DamageInstance()];
+  damage = [];
   speed = 20;
   lifetime = 60;
   hitSize = 5;
@@ -87,7 +87,7 @@ class Bullet {
         this.y,
         this.drawer.width,
         this.drawer.height,
-        this.direction
+        this.directionRad
       );
     } else {
       //If no image, draw shape instead
@@ -96,7 +96,8 @@ class Bullet {
         this.x,
         this.y,
         this.drawer.width,
-        this.drawer.height
+        this.drawer.height,
+        this.directionRad
       );
     }
   }

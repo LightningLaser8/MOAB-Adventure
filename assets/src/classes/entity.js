@@ -33,17 +33,22 @@ class Entity {
   //Stats
   damageDealt = 0
   damageTaken = 0
+  destroyed = {
+    boxes: 0,
+    bosses: 0
+  }
 
   constructor() {} //Because universal
   init() {
-    this.health = this.maxHealth;
+    this.maxHealth = this.health; //Stop part-damaged entities spawning
   }
   addToWorld(world) {
     world.entities.push(this);
     this.world = world;
   }
-  takeDamage(type = "normal", amount = 0) {
-    this.damageTaken += amount
+  takeDamage(type = "normal", amount = 0, source = null) {
+    this.damageTaken += Math.min(amount, this.health)
+    if(source) source.damageDealt += Math.min(amount, this.health)
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
@@ -90,7 +95,8 @@ class Entity {
     }
   }
   collidesWith(obj) {
-    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
+    //No collisions if dead
+    return (!this.dead) && dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
   checkBullets() {
     for (let bullet of this.world.bullets) {
@@ -98,8 +104,7 @@ class Entity {
       if (!bullet.remove && this.team !== bullet.entity.team && this.collidesWith(bullet) && !bullet.damaged.includes(this)) {
         //Take all damage instances
         for (let instance of bullet.damage) {
-          this.takeDamage(instance.type, instance.amount);
-          bullet.entity.damageDealt += instance.amount
+          this.takeDamage(instance.type, instance.amount, bullet.entity);
         }
         //Make the bullet know
         bullet.damaged.push(this);

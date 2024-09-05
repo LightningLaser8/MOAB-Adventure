@@ -5,12 +5,13 @@ const game = {
   saveslot: 1,
   //Control type
   control: "keyboard",
-  //Player entity
+  /** @type {Entity | null} Player entity */
   player: null,
   //Currency
   shards: 0,
   bloonstones: 0,
   level: 1,
+  bosstimer: 0
 };
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
@@ -202,26 +203,16 @@ function createPlayer() {
         lifetime: 30,
         speed: 40,
         hitSize: 20,
-        trailColour: [255, 255, 255, 100],
+        trail: false,
         damage: [
-          construct({
-            type: DamageInstance,
-            amount: 1,
-          }),
-          construct({
-            type: DamageInstance,
+          {
             amount: 2,
-          }),
-          construct({
-            type: DamageInstance,
-            amount: 3,
-          }),
+          },
         ],
-        pierce: 2,
         drawer: {
           image: images.entity.box_metal,
           width: 40,
-          height: 40,
+          height: 20,
         },
       },
       pattern: {
@@ -281,7 +272,7 @@ function checkBoxCollisions() {
       entity.team !== game.player.team &&
       game.player.collidesWith(entity)
     ) {
-      game.player.takeDamage("collision", entity.health);
+      game.player.takeDamage("collision", entity.health, entity);
       //If the player didn't die i.e. resisted, shielded, had more HP, etc.
       if (!game.player.dead) {
         //Remove box
@@ -301,5 +292,18 @@ function playerDies(){
   deathStats.progress.text = "Zone: "+world.name+" | Level "+game.level
   deathStats.damageDealt.text = "Damage Dealt: "+game.player.damageDealt
   deathStats.damageTaken.text = "Damage Taken: "+game.player.damageTaken
+  deathStats.destroyedBoxes.text = "Boxes Destroyed: "+game.player.destroyed.boxes
+  deathStats.destroyedBosses.text = "Bosses Destroyed: "+game.player.destroyed.bosses
   ui.menuState = "you-died"
+  //Reset world and game
+  reset()
+}
+
+function reset(){
+  world.entities.splice(0)
+  world.particles.splice(0)
+  world.bullets.splice(0)
+  game.bloonstones = 0
+  game.shards = 0
+  game.level = 1
 }

@@ -12,6 +12,30 @@ const ui = {
 };
 
 class UIComponent {
+  static invert(uicomponent) {
+    uicomponent.inverted = true;
+    uicomponent.y *= -1;
+    return uicomponent;
+  }
+  static setBackgroundOf(uicomponent, colour = null) {
+    uicomponent.backgroundColour = colour;
+    return uicomponent;
+  }
+  static removeOutline(uicomponent){
+    uicomponent.outline = false;
+    return uicomponent;
+  }
+  static setOutlineColour(uicomponent, colour = null){
+    uicomponent.outlineColour = colour;
+    return uicomponent;
+  }
+  static alignLeft(uicomponent){
+    uicomponent.ox = uicomponent.x //Save old x
+    Object.defineProperty(uicomponent, "x", {
+      get: () => uicomponent.ox + textWidth(uicomponent.text)/2 //Add width to it
+    })
+    return uicomponent
+  }
   //Evaluates property:value on game ui: input "slot:1" => if "slot" is "1" (or equivalent, e.g. 1) return true, else false
   static evaluateCondition(condition) {
     const parts = condition.split(":"); //Separate property <- : -> value
@@ -40,6 +64,9 @@ class UIComponent {
   conditions = [];
   interactive = false;
   active = false;
+  inverted = false;
+  outline = true;
+  backgroundColour = null;
   updateActivity() {
     //It's active if it should show *and* all the conditions are met
     this.active =
@@ -91,51 +118,55 @@ class UIComponent {
   }
   draw() {
     push();
+    noStroke();
+    if (this.inverted) scale(1, -1);
     if (this.width > 0 && this.height > 0) {
-      fill(...this.outlineColour);
-      if (this.emphasised) fill(...this.emphasisColour);
-      push();
-      if (this.bevel !== "none") {
-        beginClip({ invert: true });
-        //Cut out triangle from the right of the outline
-        if (this.bevel === "right" || this.bevel === "both") {
-          triangle(
-            this.x + (this.width + 20) / 2 - this.height,
-            this.y + (this.height + 20) / 2,
-            this.x + (this.width + 20) / 2 + 20,
-            this.y - (this.height + 20) / 2,
-            this.x + (this.width + 20) / 2 + 20,
-            this.y + (this.height + 20) / 2
-          );
+      if(this.outline && this.outlineColour){
+        fill(...this.outlineColour);
+        if (this.emphasised) fill(...this.emphasisColour);
+        push();
+        if (this.bevel !== "none") {
+          beginClip({ invert: true });
+          //Cut out triangle from the right of the outline
+          if (this.bevel === "right" || this.bevel === "both") {
+            triangle(
+              this.x + (this.width + 20) / 2 - this.height,
+              this.y + (this.height + 20) / 2,
+              this.x + (this.width + 20) / 2 + 20,
+              this.y - (this.height + 20) / 2,
+              this.x + (this.width + 20) / 2 + 20,
+              this.y + (this.height + 20) / 2
+            );
+          }
+          //Cut out triangle from the left of the outline
+          if (this.bevel === "left" || this.bevel === "both") {
+            triangle(
+              this.x - (this.width + 20) / 2 + this.height,
+              this.y - (this.height + 20) / 2,
+              this.x - (this.width + 20) / 2 - 20,
+              this.y + (this.height + 20) / 2,
+              this.x - (this.width + 20) / 2 - 20,
+              this.y - (this.height + 20) / 2
+            );
+          }
+          endClip();
         }
-        //Cut out triangle from the left of the outline
-        if (this.bevel === "left" || this.bevel === "both") {
-          triangle(
-            this.x - (this.width + 20) / 2 + this.height,
-            this.y - (this.height + 20) / 2,
-            this.x - (this.width + 20) / 2 - 20,
-            this.y + (this.height + 20) / 2,
-            this.x - (this.width + 20) / 2 - 20,
-            this.y - (this.height + 20) / 2
-          );
-        }
-        endClip();
+        //Draw outline behind background
+        rect(
+          this.x +
+            (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
+          this.y,
+          this.width +
+            (this.bevel === "right" || this.bevel === "left"
+              ? 38
+              : this.bevel === "both"
+              ? 56
+              : 18) -
+            2,
+          this.height + 18
+        );
+        pop();
       }
-      //Draw outline behind background
-      rect(
-        this.x +
-          (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
-        this.y,
-        this.width +
-          (this.bevel === "right" || this.bevel === "left"
-            ? 40
-            : this.bevel === "both"
-            ? 60
-            : 20) -
-          2,
-        this.height + 18
-      );
-      pop();
       push();
       //Add bevels
       if (this.bevel !== "none") {
@@ -165,17 +196,28 @@ class UIComponent {
         endClip();
       }
       //Draw BG
-      drawImg(
-        images.ui.background,
-        this.x,
-        this.y,
-        this.width - 2,
-        this.height - 2,
-        0,
-        0,
-        this.width,
-        this.height
-      );
+      if (this.backgroundColour) {
+        fill(...this.backgroundColour)
+        rect(
+          this.x,
+          this.y,
+          this.width - 2,
+          this.height - 2,
+        );
+      }
+      else{
+        drawImg(
+          images.ui.background,
+          this.x,
+          this.y,
+          this.width - 2,
+          this.height - 2,
+          0,
+          0,
+          this.width - 2,
+          this.height - 2
+        );
+      }
       pop();
     }
     //Draw optional text
@@ -283,29 +325,29 @@ function drawImg(
 }
 
 function rotatedImg(img = images.env.error, x, y, width, height, angle) {
-  push() //Save current position, rotation, etc
+  push(); //Save current position, rotation, etc
   translate(x, y); //Move middle to 0,0
   rotate(angle);
   drawImg(img, 0, 0, width, height);
-  pop() //Return to old state
+  pop(); //Return to old state
 }
 
 function rotatedShape(shape = "circle", x, y, width, height, angle) {
-  push() //Save current position, rotation, etc
+  push(); //Save current position, rotation, etc
   translate(x, y); //Move middle to 0,0
   rotate(angle);
-  switch(shape){
+  switch (shape) {
     case "circle":
-      circle(0, 0, (width+height)/2)
+      circle(0, 0, (width + height) / 2);
       break;
     case "square":
-      square(0, 0, (width+height)/2)
+      square(0, 0, (width + height) / 2);
       break;
     case "ellipse":
-      ellipse(0, 0, width, height)
+      ellipse(0, 0, width, height);
       break;
     case "rect":
-      rect(0, 0, width, height)
+      rect(0, 0, width, height);
       break;
     case "rhombus":
       scale(width, height); //Change the size
@@ -317,7 +359,7 @@ function rotatedShape(shape = "circle", x, y, width, height, angle) {
     default:
       break;
   }
-  pop() //Return to old state
+  pop(); //Return to old state
 }
 
 class SliderUIComponent extends UIComponent {
@@ -592,8 +634,8 @@ function createSliderComponent(
 }
 
 function blendColours(col1, col2, col1Factor) {
-  col1[3] ??= 255
-  col2[3] ??= 255
+  col1[3] ??= 255;
+  col2[3] ??= 255;
   let col2Factor = 1 - col1Factor;
   let newCol1 = [
     col1[0] * col1Factor,
@@ -635,13 +677,15 @@ const images = {
   ui: {
     background: new ImageContainer("/assets/textures/ui/background.png"),
     moab: new ImageContainer("/assets/textures/ui/moab.png"),
+    shard: new ImageContainer("/assets/textures/ui/shard.svg"),
+    bloonstone: new ImageContainer("/assets/textures/ui/bloonstone.svg"),
   },
   background: {
     sea: new ImageContainer("/assets/textures/background/sea.png"),
   },
   entity: {
-    blimp_moab:  new ImageContainer("/assets/textures/entity/moab.png"),
+    blimp_moab: new ImageContainer("/assets/textures/entity/moab.png"),
     box: new ImageContainer("/assets/textures/entity/box/wood.svg"),
-    box_metal: new ImageContainer("/assets/textures/entity/box/metal.svg")
-  }
+    box_metal: new ImageContainer("/assets/textures/entity/box/metal.svg"),
+  },
 };

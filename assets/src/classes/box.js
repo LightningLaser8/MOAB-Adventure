@@ -20,20 +20,21 @@ class Box extends Entity {
       shards: 5
     },
     team: "enemy",
-    health: 5,
-    maxHealth: 5
+    health: 5
   }
   //Rewards
   reward = { bloonstones: 0, shards: 0 };
   destroyReward = structuredClone(this.reward)
   //No moving unless explicitly stated
   speed = 0
-  takeDamage(type = "normal", amount = 0){
-    super.takeDamage(type, amount)
+  takeDamage(type = "normal", amount = 0, source = null){
+    super.takeDamage(type, amount, source)
     if(this.dead){
       //Give destroy reward
       game.shards += this.destroyReward.shards ??= 0
       game.bloonstones += this.destroyReward.bloonstones ??= 0
+      if(!source) return;
+      source.destroyed.boxes ++
     }
   }
   tick(){

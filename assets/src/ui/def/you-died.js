@@ -114,3 +114,18 @@ const deathStats = {
     40
   ),
 }
+createUIComponent(
+  ["you-died"],
+  [],
+  960,
+  900,
+  400,
+  100,
+  "none",
+  () => {
+    ui.menuState = "start-menu"
+  },
+  "Return",
+  false,
+  50
+)

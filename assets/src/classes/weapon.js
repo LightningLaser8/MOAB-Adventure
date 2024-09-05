@@ -77,7 +77,7 @@ class Weapon {
         this.shoot.pattern.spread,
         -this.shoot.pattern.spread
       );
-      bulletToFire.step(2)
+      bulletToFire.step(1)
       //Add entity and world
       bulletToFire.entity = this.meta.entity
       bulletToFire.world = world
