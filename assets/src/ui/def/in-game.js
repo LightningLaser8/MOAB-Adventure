@@ -234,3 +234,75 @@ UIComponent.alignLeft(
     }
   )
 );
+//Boss Timer
+UIComponent.setCondition("boss:no"); //No boss by default
+//Like healthbar, but not
+UIComponent.invert(
+  //boss timer bar container
+  createUIComponent(
+    ["in-game"],
+    ["boss:no"], //Only show if no boss, if boss then show boss' healthbar instead
+    1520,
+    60,
+    800,
+    100,
+    "left"
+  )
+);
+UIComponent.setBackgroundOf(
+  UIComponent.invert(
+    //bit behind bar
+    createUIComponent(
+      ["in-game"],
+      ["boss:no"],
+      1600,
+      60,
+      600,
+      50,
+      "left"
+    )
+  ),
+  [0, 0, 0]
+);
+Object.defineProperties(
+  UIComponent.removeOutline(
+    UIComponent.setBackgroundOf(
+      UIComponent.invert(
+        //Match shape of underlying bar
+        createUIComponent(
+          ["in-game"],
+          ["boss:no"],
+          1600,
+          60,
+          600,
+          50,
+          "left"
+        )
+      ),
+      [255, 0, 0] //Red bar
+    )
+  ),
+  {
+    width: {
+      get: () =>
+        //Width depends on boss timer %
+        (600 * game.bosstimer) / game.bossinterval,
+    },
+    x: {
+      get: () =>
+        //Move to stay right aligned
+        1900 - (300 * game.bosstimer) / game.bossinterval,
+    },
+  }
+);
+createUIImageComponent(
+  ["in-game"],
+  ["boss:no"],
+  1240,
+  60,
+  80,
+  80,
+  null,
+  images.ui.clock,
+  false
+);

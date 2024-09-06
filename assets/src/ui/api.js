@@ -679,6 +679,7 @@ const images = {
     moab: new ImageContainer("/assets/textures/ui/moab.png"),
     shard: new ImageContainer("/assets/textures/ui/shard.svg"),
     bloonstone: new ImageContainer("/assets/textures/ui/bloonstone.svg"),
+    clock: new ImageContainer("/assets/textures/ui/clock.png"),
   },
   background: {
     sea: new ImageContainer("/assets/textures/background/sea.png"),

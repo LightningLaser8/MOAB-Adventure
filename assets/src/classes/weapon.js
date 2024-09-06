@@ -49,40 +49,47 @@ class Weapon {
         ).heading() //'A->B' = 'B' - 'A'
       );
     }
+    if(this.#cooldown > 0){
+      this.#cooldown --
+    }
   }
   fire() {
-    //Resolve nonexistent properties
-    this.shoot.pattern.spread ??= 0
-    this.shoot.pattern.amount ??= 1
-    this.shoot.pattern.spacing ??= 0
+    if (this.#cooldown <= 0) {
+      this.#cooldown = this.reload;
+      //Resolve nonexistent properties
+      this.shoot.pattern.spread ??= 0;
+      this.shoot.pattern.amount ??= 1;
+      this.shoot.pattern.spacing ??= 0;
 
-    const world = this.meta.entity.world;
-    //Max difference in direction
-    let diff = (this.shoot.pattern.spacing * (this.shoot.pattern.amount - 1)) / 2;
-    //Current angle
-    let currentAngle = -diff;
-    //For each bullet to fire
-    for (let index = 0; index < this.shoot.pattern.amount; index++) {
-      /** @type {Bullet} */
-      let bulletToFire = construct(this.shoot.bullet);
-      //Put the bullet on the gun
-      bulletToFire.x = this.x;
-      bulletToFire.y = this.y;
-      bulletToFire.direction = this.rotation;
-      //Apply uniform spread
-      bulletToFire.direction += currentAngle;
-      currentAngle += this.shoot.pattern.spacing
-      //Apply random spread
-      bulletToFire.direction += random(
-        this.shoot.pattern.spread,
-        -this.shoot.pattern.spread
-      );
-      bulletToFire.step(1)
-      //Add entity and world
-      bulletToFire.entity = this.meta.entity
-      bulletToFire.world = world
-      //Spawn it in
-      world.bullets.push(bulletToFire)
+      const world = this.meta.entity.world;
+      //Max difference in direction
+      let diff =
+        (this.shoot.pattern.spacing * (this.shoot.pattern.amount - 1)) / 2;
+      //Current angle
+      let currentAngle = -diff;
+      //For each bullet to fire
+      for (let index = 0; index < this.shoot.pattern.amount; index++) {
+        /** @type {Bullet} */
+        let bulletToFire = construct(this.shoot.bullet);
+        //Put the bullet on the gun
+        bulletToFire.x = this.x;
+        bulletToFire.y = this.y;
+        bulletToFire.direction = this.rotation;
+        //Apply uniform spread
+        bulletToFire.direction += currentAngle;
+        currentAngle += this.shoot.pattern.spacing;
+        //Apply random spread
+        bulletToFire.direction += random(
+          this.shoot.pattern.spread,
+          -this.shoot.pattern.spread
+        );
+        bulletToFire.step(1);
+        //Add entity and world
+        bulletToFire.entity = this.meta.entity;
+        bulletToFire.world = world;
+        //Spawn it in
+        world.bullets.push(bulletToFire);
+      }
     }
   }
 }

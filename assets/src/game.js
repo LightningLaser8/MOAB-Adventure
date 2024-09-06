@@ -11,7 +11,9 @@ const game = {
   shards: 0,
   bloonstones: 0,
   level: 1,
-  bosstimer: 0
+  bosstimer: 300,
+  bossinterval: 300,
+  paused: false,
 };
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
@@ -92,7 +94,7 @@ function draw() {
 function uiFrame() {
   //Tick, then draw the UI
   updateUIActivity();
-  tickUI();
+  if (!game.paused) tickUI();
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
@@ -100,9 +102,11 @@ function uiFrame() {
 }
 
 function gameFrame() {
-  movePlayer();
-  world.tickAll();
-  checkBoxCollisions();
+  if (!game.paused) {
+    movePlayer();
+    world.tickAll();
+    checkBoxCollisions();
+  }
   world.drawAll();
 }
 
@@ -197,6 +201,7 @@ function createPlayer() {
     },
     x: 400,
     y: 400,
+    reload: 20,
     shoot: {
       bullet: {
         type: Bullet,
@@ -277,8 +282,7 @@ function checkBoxCollisions() {
       if (!game.player.dead) {
         //Remove box
         entity.dead = true;
-      }
-      else{
+      } else {
         //If dead
         playerDies();
       }
@@ -286,24 +290,36 @@ function checkBoxCollisions() {
   }
 }
 
-function playerDies(){
-  deathStats.shardCounter.text = "Shards: "+game.shards
-  deathStats.bloonstoneCounter.text = "Bloonstones: "+game.bloonstones
-  deathStats.progress.text = "Zone: "+world.name+" | Level "+game.level
-  deathStats.damageDealt.text = "Damage Dealt: "+game.player.damageDealt
-  deathStats.damageTaken.text = "Damage Taken: "+game.player.damageTaken
-  deathStats.destroyedBoxes.text = "Boxes Destroyed: "+game.player.destroyed.boxes
-  deathStats.destroyedBosses.text = "Bosses Destroyed: "+game.player.destroyed.bosses
-  ui.menuState = "you-died"
+function playerDies() {
+  deathStats.shardCounter.text = "Shards: " + game.shards;
+  deathStats.bloonstoneCounter.text = "Bloonstones: " + game.bloonstones;
+  deathStats.progress.text = "Zone: " + world.name + " | Level " + game.level;
+  deathStats.damageDealt.text = "Damage Dealt: " + game.player.damageDealt;
+  deathStats.damageTaken.text = "Damage Taken: " + game.player.damageTaken;
+  deathStats.destroyedBoxes.text =
+    "Boxes Destroyed: " + game.player.destroyed.boxes;
+  deathStats.destroyedBosses.text =
+    "Bosses Destroyed: " + game.player.destroyed.bosses;
+  ui.menuState = "you-died";
   //Reset world and game
-  reset()
+  reset();
 }
 
-function reset(){
-  world.entities.splice(0)
-  world.particles.splice(0)
-  world.bullets.splice(0)
-  game.bloonstones = 0
-  game.shards = 0
-  game.level = 1
+function reset() {
+  world.entities.splice(0);
+  world.particles.splice(0);
+  world.bullets.splice(0);
+  game.bloonstones = 0;
+  game.shards = 0;
+  game.level = 1;
+  game.paused = false;
+}
+
+//Triggers on any key press
+function keyPressed() {
+  if (key === "p") {
+    //Pause / unpause
+    game.paused = !game.paused;
+  }
+  return false; //Prevent any default behaviour
 }
