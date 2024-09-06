@@ -1,0 +1,10 @@
+[
+  {
+    "url": "http://127.0.0.1:5500/assets/isl/extension.js",
+    "extensions": "*"
+  },
+  {
+    "url": "https://cdn.jsdelivr.net/gh/LightningLaser8/multisl@main/multisl.js",
+    "extensions": "*"
+  }
+]
