@@ -197,21 +197,140 @@ function createPlayer() {
     type: Weapon,
     meta: {
       posX: -50,
+      posY: 25,
+    },
+    x: 400,
+    y: 400,
+    reload: 10,
+    shoot: {
+      bullet: {
+        type: Bullet,
+        lifetime: 45,
+        speed: 40,
+        hitSize: 10,
+        trail: false,
+        damage: [
+          {
+            amount: 1,
+          },
+        ],
+        drawer: {
+          image: images.entity.box_metal,
+          width: 20,
+          height: 10,
+        },
+      },
+      pattern: {
+        amount: 1,
+      },
+    },
+    parts: [
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+        y: -10,
+        rotation: 60,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+        y: 10,
+        rotation: -60,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 7.5,
+        x: 20,
+      },
+    ],
+  });
+  const testWeapon2 = construct({
+    type: Weapon,
+    meta: {
+      posX: -50,
+      posY: -25,
+    },
+    x: 400,
+    y: 400,
+    reload: 10,
+    shoot: {
+      bullet: {
+        type: Bullet,
+        lifetime: 45,
+        speed: 40,
+        hitSize: 10,
+        trail: false,
+        damage: [
+          {
+            amount: 1,
+          },
+        ],
+        drawer: {
+          image: images.entity.box_metal,
+          width: 20,
+          height: 10,
+        },
+      },
+      pattern: {
+        amount: 1,
+      },
+    },
+    parts: [
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+        y: -10,
+        rotation: 60,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+        y: 10,
+        rotation: -60,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 10,
+      },
+      {
+        type: Part,
+        width: 20,
+        height: 7.5,
+        x: 20,
+      },
+    ],
+  });
+  const testWeapon3 = construct({
+    type: Weapon,
+    meta: {
+      posX: 50,
       posY: 0,
     },
     x: 400,
     y: 400,
-    reload: 20,
+    reload: 60,
     shoot: {
       bullet: {
         type: Bullet,
-        lifetime: 30,
+        lifetime: 45,
         speed: 40,
         hitSize: 20,
-        trail: false,
+        trail: true,
+        pierce: 3,
         damage: [
           {
-            amount: 2,
+            amount: 5,
           },
         ],
         drawer: {
@@ -221,8 +340,7 @@ function createPlayer() {
         },
       },
       pattern: {
-        spacing: 5,
-        amount: 3,
+        amount: 1,
       },
     },
     parts: [
@@ -230,15 +348,21 @@ function createPlayer() {
         type: Part,
         width: 40,
         height: 20,
-        y: -20,
-        rotation: 60,
+        y: -10,
+        rotation: 30,
       },
       {
         type: Part,
         width: 40,
         height: 20,
-        y: 20,
-        rotation: -60,
+        y: 10,
+        rotation: -30,
+      },
+      {
+        type: Part,
+        width: 40,
+        height: 20,
+        rotation: -90,
       },
       {
         type: Part,
@@ -254,6 +378,8 @@ function createPlayer() {
     ],
   });
   player.addWeapon(testWeapon);
+  player.addWeapon(testWeapon2);
+  player.addWeapon(testWeapon3);
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
@@ -264,7 +390,9 @@ function createPlayer() {
 
 function mousePressed() {
   if (ui.menuState === "in-game") {
-    game.player.weapons[0].fire();
+    for(let weapon of game.player.weapons){
+      weapon.fire()
+    }
   }
 }
 

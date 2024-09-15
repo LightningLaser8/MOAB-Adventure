@@ -18,7 +18,6 @@ ExtensionLoader.fileExtend(islinterpreter, "http://127.0.0.1:5500/assets/isl/ext
     "| image entity.blimp_moab",
     "| reward 10,2",
     "| x 2000",
-    "| y 540",
     ">",
     "spawn box-type MOAB",
     "< blimp Clock",
@@ -26,6 +25,20 @@ ExtensionLoader.fileExtend(islinterpreter, "http://127.0.0.1:5500/assets/isl/ext
     "| image ui.clock",
     "| size 100",
     ">",
+    "< box-type shard",
+    "| health 1",
+    "| size 20",
+    "| width 15",
+    "| image ui.shard",
+    "| reward 1,0",
+    "| x 2000",
+    ">",
+    "spawn box-type shard",
+    "spawn box-type shard",
+    "spawn box-type shard",
+    "spawn box-type shard",
+    "spawn box-type shard",
+    "spawn box-type shard",
     "stop"
   ])
   islinterpreter.startExecution()
