@@ -308,19 +308,29 @@ class ImageContainer {
 }
 
 function drawImg(
-  img = images.env.error,
+  img = images.env.error || "error",
   x,
   y,
   width,
   height,
   ...otherParameters //IDK what else p5 image takes
 ) {
-  if (!img) return; //Cancel if no image at all
+  //Get from registry if it exists
+  img = Registry.images.has(img) ? Registry.images.get(img) : img
   if (img instanceof ImageContainer) {
     if (!img.image) return; //Cancel if no image loaded yet
     image(img.image, x, y, width, height, ...otherParameters);
   } else {
-    image(img, x, y, width, height, ...otherParameters);
+    //Try to draw it directly if not
+    try{
+      image(img, x, y, width, height, ...otherParameters);
+    }
+    catch(error){
+      //Say the problem
+      console.error("Could not draw image: ", img)
+      //Replace with a working image
+      drawImg(images.env.error, x, y, width, height, ...otherParameters)
+    }
   }
 }
 

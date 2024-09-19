@@ -1,9 +1,9 @@
 class Box extends Entity {
   //Default box, for undefined world spawning entity
   static default = {
-    type: this,
+    type: this.name,
     drawer: {
-      image: images.entity.box,
+      image: "box.wood",
       width: 50,
       height: 50
     },

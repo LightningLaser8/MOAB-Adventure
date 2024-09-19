@@ -177,13 +177,13 @@ function showMousePos() {
 
 function createPlayer() {
   let player = construct({
-    type: Entity,
+    type: "Entity",
     x: 300,
     y: 540,
     name: "MOAB",
     maxHealth: 200,
     drawer: {
-      image: images.entity.blimp_moab,
+      image: "blimp.moab",
       width: 230,
       height: 150,
     },
@@ -193,8 +193,8 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  const testWeapon = construct({
-    type: Weapon,
+  const testWeapon = weapon({
+    type: "Weapon",
     meta: {
       posX: -50,
       posY: 0,
@@ -204,7 +204,7 @@ function createPlayer() {
     reload: 20,
     shoot: {
       bullet: {
-        type: Bullet,
+        type: "Bullet",
         lifetime: 30,
         speed: 40,
         hitSize: 20,
@@ -215,7 +215,7 @@ function createPlayer() {
           },
         ],
         drawer: {
-          image: images.entity.box_metal,
+          image: "box.metal",
           width: 40,
           height: 20,
         },
@@ -227,26 +227,26 @@ function createPlayer() {
     },
     parts: [
       {
-        type: Part,
+        type: "Part",
         width: 40,
         height: 20,
         y: -20,
         rotation: 60,
       },
       {
-        type: Part,
+        type: "Part",
         width: 40,
         height: 20,
         y: 20,
         rotation: -60,
       },
       {
-        type: Part,
+        type: "Part",
         width: 40,
         height: 20,
       },
       {
-        type: Part,
+        type: "Part",
         width: 40,
         height: 15,
         x: 40,

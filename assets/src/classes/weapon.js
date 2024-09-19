@@ -70,7 +70,7 @@ class Weapon {
       //For each bullet to fire
       for (let index = 0; index < this.shoot.pattern.amount; index++) {
         /** @type {Bullet} */
-        let bulletToFire = construct(this.shoot.bullet);
+        let bulletToFire = bullet(this.shoot.bullet);
         //Put the bullet on the gun
         bulletToFire.x = this.x;
         bulletToFire.y = this.y;
