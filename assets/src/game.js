@@ -73,6 +73,10 @@ function setup() {
   rectMode(CENTER);
   imageMode(CENTER);
   textFont(fonts.darktech);
+
+  let ap1 = new WeaponSlot()
+  ap1.upgrades = ["tiny-shooter"]
+  ap1.attemptUpgrade()
 }
 //Change the size if the screen size changes
 function windowResized() {
@@ -89,6 +93,7 @@ function draw() {
     gameFrame();
   }
   uiFrame();
+  fireIfPossible();
 }
 
 function uiFrame() {
@@ -98,7 +103,7 @@ function uiFrame() {
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
-  showMousePos();
+  if(keyIsDown(SHIFT)) showMousePos();
 }
 
 function gameFrame() {
@@ -193,78 +198,22 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  const testWeapon = weapon({
-    type: "Weapon",
-    meta: {
-      posX: -50,
-      posY: 0,
-    },
-    x: 400,
-    y: 400,
-    reload: 20,
-    shoot: {
-      bullet: {
-        type: "Bullet",
-        lifetime: 30,
-        speed: 40,
-        hitSize: 20,
-        trail: false,
-        damage: [
-          {
-            amount: 2,
-          },
-        ],
-        drawer: {
-          image: "box.metal",
-          width: 40,
-          height: 20,
-        },
-      },
-      pattern: {
-        spacing: 5,
-        amount: 3,
-      },
-    },
-    parts: [
-      {
-        type: "Part",
-        width: 40,
-        height: 20,
-        y: -20,
-        rotation: 60,
-      },
-      {
-        type: "Part",
-        width: 40,
-        height: 20,
-        y: 20,
-        rotation: -60,
-      },
-      {
-        type: "Part",
-        width: 40,
-        height: 20,
-      },
-      {
-        type: "Part",
-        width: 40,
-        height: 15,
-        x: 40,
-      },
-    ],
-  });
-  player.addWeapon(testWeapon);
+  let ap1 = new WeaponSlot("tiny-shooter", "double-shooter", "bomb-shooter")
+  player.addWeaponSlot(ap1)
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
       return ui.mouse;
     }, //This way, I only have to set it once.
   });
+  world.particles.push(new WaveParticle(player.x, player.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0))
 }
 
-function mousePressed() {
-  if (ui.menuState === "in-game") {
-    game.player.weapons[0].fire();
+function fireIfPossible() {
+  if (ui.menuState === "in-game" && mouseIsPressed) {
+    for (let slot of game.player.weaponSlots) {
+      if(slot.weapon) slot.weapon.fire();
+    }
   }
 }
 
