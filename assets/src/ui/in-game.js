@@ -116,7 +116,7 @@ UIComponent.invert(
 UIComponent.setBackgroundOf(
   UIComponent.invert(
     //bit behind healthbar
-    createUIComponent(["in-game"], [], 350, 1020, 700, 64, "right")
+    createUIComponent(["in-game"], [], 370, 1020, 700, 64, "right")
   ),
   [0, 0, 0]
 );
@@ -125,7 +125,7 @@ Object.defineProperties(
     UIComponent.setBackgroundOf(
       UIComponent.invert(
         //Match shape of underlying bar
-        createUIComponent(["in-game"], [], 350, 1020, 700, 64, "right")
+        createUIComponent(["in-game"], [], 370, 1020, 700, 64, "right")
       ),
       [255, 0, 0] //Red bar
     )
@@ -140,8 +140,8 @@ Object.defineProperties(
       get: () =>
         //Move to stay left aligned
         game.player
-          ? (700 * game.player.health) / game.player.maxHealth / 2
-          : 350,
+          ? 20 + (700 * game.player.health) / game.player.maxHealth / 2
+          : 370,
     },
   }
 );
