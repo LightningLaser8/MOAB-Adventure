@@ -3,7 +3,6 @@ class WeaponSlot {
   tier = 0;
   /** @type {Weapon} */
   weapon = null;
-  #locked = false;
   posX = 0;
   posY = 0;
   entity = null;
@@ -29,12 +28,6 @@ class WeaponSlot {
   clear() {
     this.weapon = null; //Remove weapon
     this.tier = 0; //Reset tier
-  }
-  lock() {
-    this.#locked = true;
-  }
-  unlock() {
-    this.#locked = false;
   }
   tick() {
     if (this.weapon) {

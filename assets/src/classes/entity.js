@@ -126,12 +126,12 @@ class Entity {
               instance.type,
               instance.area,
               bullet.entity,
-              instance.visual, // \
-              instance.sparkColour, // |
+              instance.visual, //        \
+              instance.sparkColour, //   |
               instance.sparkColourTo, // |
-              instance.smokeColour, // |- These are optional, but can be set per instance
+              instance.smokeColour, //   |- These are optional, but can be set per instance
               instance.smokeColourTo, // |
-              instance.waveColour // /
+              instance.waveColour //     /
             );
           else this.takeDamage(instance.type, instance.amount, bullet.entity);
         }
