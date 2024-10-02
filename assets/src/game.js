@@ -73,10 +73,6 @@ function setup() {
   rectMode(CENTER);
   imageMode(CENTER);
   textFont(fonts.darktech);
-
-  let ap1 = new WeaponSlot()
-  ap1.upgrades = ["tiny-shooter"]
-  ap1.attemptUpgrade()
 }
 //Change the size if the screen size changes
 function windowResized() {
@@ -93,13 +89,13 @@ function draw() {
     gameFrame();
   }
   uiFrame();
-  fireIfPossible();
+  if(!ui.waitingForMouseUp) fireIfPossible();
 }
 
 function uiFrame() {
   //Tick, then draw the UI
   updateUIActivity();
-  if (!game.paused) tickUI();
+  tickUI();
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
@@ -151,7 +147,7 @@ function drawUI() {
 }
 
 function tickUI() {
-  background.tick(game.player?.speed ?? 0);
+  if (!game.paused) background.tick(game.player?.speed ?? 0);
   for (let component of ui.components) {
     if (component.active && component.isInteractive) {
       component.checkMouse();
@@ -198,8 +194,7 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  let ap1 = new WeaponSlot("tiny-shooter", "double-shooter", "bomb-shooter")
-  player.addWeaponSlot(ap1)
+  player.addWeaponSlot(ap1) //Test for now
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {

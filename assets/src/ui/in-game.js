@@ -252,15 +252,7 @@ UIComponent.invert(
 UIComponent.setBackgroundOf(
   UIComponent.invert(
     //bit behind bar
-    createUIComponent(
-      ["in-game"],
-      ["boss:no"],
-      1600,
-      60,
-      600,
-      50,
-      "left"
-    )
+    createUIComponent(["in-game"], ["boss:no"], 1600, 60, 600, 50, "left")
   ),
   [0, 0, 0]
 );
@@ -269,15 +261,7 @@ Object.defineProperties(
     UIComponent.setBackgroundOf(
       UIComponent.invert(
         //Match shape of underlying bar
-        createUIComponent(
-          ["in-game"],
-          ["boss:no"],
-          1600,
-          60,
-          600,
-          50,
-          "left"
-        )
+        createUIComponent(["in-game"], ["boss:no"], 1600, 60, 600, 50, "left")
       ),
       [255, 0, 0] //Red bar
     )
@@ -306,3 +290,188 @@ createUIImageComponent(
   images.ui.clock,
   false
 );
+
+//  Upgrade Menu
+//Translucent blue background
+UIComponent.removeOutline(
+  UIComponent.setBackgroundOf(
+    createUIComponent(
+      ["in-game"],
+      ["upgrade-menu-open:true"],
+      900,
+      575,
+      800,
+      700
+    ),
+    [0, 255, 255, 100]
+  )
+);
+//Vertical line bit
+UIComponent.removeOutline(
+  UIComponent.setBackgroundOf(
+    createUIComponent(
+      ["in-game"],
+      ["upgrade-menu-open:true"],
+      900,
+      110,
+      50,
+      125
+    ),
+    [0, 255, 255, 100]
+  )
+);
+//Open / Close Buttons
+UIComponent.setCondition("upgrade-menu-open:false");
+UIComponent.setCondition("was-game-paused:false");
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:false"],
+  900,
+  25,
+  250,
+  50,
+  "none",
+  () => {
+    //Store current pause state under `was-game-paused`
+    UIComponent.setCondition("was-game-paused:"+(game.paused?"true":"false"));
+    game.paused = true //Pause the game
+    UIComponent.setCondition("upgrade-menu-open:true");
+  },
+  "Upgrades"
+);
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true"],
+  900,
+  25,
+  250,
+  50,
+  "none",
+  () => {
+    //Return game to previous state
+    game.paused = UIComponent.evaluateCondition("was-game-paused:true");
+    UIComponent.setCondition("upgrade-menu-open:false");
+  },
+  "Close"
+);
+//Header bar
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true"],
+  900, //Left pos = 500px
+  225,
+  800,
+  100,
+  "none",
+  null,
+  "Upgrades",
+  false,
+  60
+)
+
+//Weapon Upgrades
+//Title text
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:none"],
+  900,
+  325,
+  0,
+  0,
+  "none",
+  null,
+  "Weapons",
+  false,
+  40
+)
+//Buttons
+//Space them 150px apart => 100px wide => 50px separation?
+//AP3 at x = 900
+// Set conditions: All hidden
+UIComponent.setCondition("is-ap1-available:true")
+UIComponent.setCondition("is-ap2-available:true")
+UIComponent.setCondition("is-ap3-available:true")
+UIComponent.setCondition("is-ap4-available:true") //AP3 and 4 are separate
+UIComponent.setCondition("is-ap5-available:true")
+//Sub-menu
+UIComponent.setCondition("submenu-selected:none")
+//AP1
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-ap1-available:true", "submenu-selected:none"],
+  600,
+  425,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:ap1")
+  },
+  "AP1",
+  true,
+  40
+)
+//AP2
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-ap2-available:true", "submenu-selected:none"],
+  750,
+  425,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:ap2")
+  },
+  "AP2",
+  true,
+  40
+)
+//AP3
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-ap3-available:true", "submenu-selected:none"],
+  900,
+  425,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:ap3")
+  },
+  "AP3",
+  true,
+  40
+)
+//AP4
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-ap4-available:true", "submenu-selected:none"],
+  1050,
+  425,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:ap4")
+  },
+  "AP4",
+  true,
+  40
+)
+//AP5
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-ap5-available:true", "submenu-selected:none"],
+  1200,
+  425,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:ap5")
+  },
+  "AP5",
+  true,
+  40
+)

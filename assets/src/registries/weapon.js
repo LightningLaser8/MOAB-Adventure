@@ -30,17 +30,31 @@ Registry.weapons.add("tiny-shooter", {
   },
   parts: [
     {
-      type: "Part",
-      width: 40,
-      height: 15,
-      x: 30,
-      image: false,
+      type: "part",
+      x: 12,
+      y: 0,
+      width: 10,
+      height: 4,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 30,
-      height: 30,
-      image: false,
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 6,
+      y: 0,
+      width: 2,
+      height: 6,
+      rotation: 0,
+      image: false
     },
   ],
 });
