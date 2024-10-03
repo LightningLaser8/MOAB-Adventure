@@ -49,7 +49,7 @@ class Box extends Entity {
       shards: 10 //Worth more
     },
     team: "enemy",
-    health: 2 //More HP
+    health: 20 //More HP
   }
   //Rewards
   reward = { bloonstones: 0, shards: 0 };
