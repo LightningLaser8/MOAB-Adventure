@@ -17,6 +17,7 @@ const game = {
 };
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
+world.addSpawn({entity: Box.metal, interval: 300});
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -221,7 +222,7 @@ function checkBoxCollisions() {
       entity.team !== game.player.team &&
       game.player.collidesWith(entity)
     ) {
-      game.player.takeDamage("collision", entity.health, entity);
+      game.player.damage("collision", entity.health, entity);
       //If the player didn't die i.e. resisted, shielded, had more HP, etc.
       if (!game.player.dead) {
         //Remove box

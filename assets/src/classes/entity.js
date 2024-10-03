@@ -30,13 +30,6 @@ class Entity {
     bosses: 0,
   };
 
-  //Statuses
-  statuses = [];
-  effectiveSpeedMult = 1;
-  effectiveDamageMult = 1;
-  effectiveHealthMult = 1;
-  effectiveResistanceMult = 1;
-
   constructor() {} //Because universal
   init() {
     this.maxHealth = this.health; //Stop part-damaged entities spawning
@@ -45,7 +38,17 @@ class Entity {
     world.entities.push(this);
     this.world = world;
   }
-  takeDamage(type = "normal", amount = 0, source = null) {
+  damage(type = "normal", amount = 0, source = null) {
+    let calcAmount = amount
+    for(let resistance of this.resistances){
+      if(resistance.type === type){
+        calcAmount -= amount * resistance.amount //Negative resistance would actually make it do more damage
+      }
+    }
+    console.log("resisted: "+amount+" -> "+Math.max(calcAmount, 0))
+    this.takeDamage(Math.max(calcAmount, 0), source) //Take the damage, but never take negative damage
+  }
+  takeDamage(amount = 0, source = null) {
     this.damageTaken += Math.min(amount, this.health);
     if (source) source.damageDealt += Math.min(amount, this.health);
     this.health -= amount;
@@ -133,7 +136,7 @@ class Entity {
               instance.smokeColourTo, // |
               instance.waveColour //     /
             );
-          else this.takeDamage(instance.type, instance.amount, bullet.entity);
+          else this.damage(instance.type, instance.amount, bullet.entity);
         }
         //Make the bullet know
         bullet.damaged.push(this);
