@@ -45,7 +45,6 @@ class Entity {
         calcAmount -= amount * resistance.amount //Negative resistance would actually make it do more damage
       }
     }
-    console.log("resisted: "+amount+" -> "+Math.max(calcAmount, 0))
     this.takeDamage(Math.max(calcAmount, 0), source) //Take the damage, but never take negative damage
   }
   takeDamage(amount = 0, source = null) {
