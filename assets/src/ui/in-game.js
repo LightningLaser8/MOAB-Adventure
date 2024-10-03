@@ -243,7 +243,7 @@ UIComponent.invert(
     ["in-game"],
     ["boss:no"], //Only show if no boss, if boss then show boss' healthbar instead
     1520,
-    60,
+    50,
     800,
     100,
     "left"
@@ -252,7 +252,7 @@ UIComponent.invert(
 UIComponent.setBackgroundOf(
   UIComponent.invert(
     //bit behind bar
-    createUIComponent(["in-game"], ["boss:no"], 1600, 60, 600, 50, "left")
+    createUIComponent(["in-game"], ["boss:no"], 1600, 50, 600, 50, "left")
   ),
   [0, 0, 0]
 );
@@ -261,7 +261,7 @@ Object.defineProperties(
     UIComponent.setBackgroundOf(
       UIComponent.invert(
         //Match shape of underlying bar
-        createUIComponent(["in-game"], ["boss:no"], 1600, 60, 600, 50, "left")
+        createUIComponent(["in-game"], ["boss:no"], 1600, 50, 600, 50, "left")
       ),
       [255, 0, 0] //Red bar
     )
@@ -283,7 +283,7 @@ createUIImageComponent(
   ["in-game"],
   ["boss:no"],
   1240,
-  60,
+  50,
   80,
   80,
   null,
