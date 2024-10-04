@@ -31,32 +31,41 @@ Registry.weapons.add("tiny-shooter", {
   parts: [
     {
       type: "part",
-      x: 12,
+      x: 0,
       y: 0,
-      width: 10,
-      height: 4,
+      width: 25,
+      height: 25,
       rotation: 0,
       image: false
     },
     {
       type: "part",
-      x: 0,
+      x: 17.5,
       y: 0,
       width: 10,
+      height: 15,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 32.5,
+      y: 0,
+      width: 20,
       height: 10,
       rotation: 0,
       image: false
     },
     {
       type: "part",
-      x: 6,
+      x: -16.25,
       y: 0,
-      width: 2,
-      height: 6,
+      width: 7.5,
+      height: 15,
       rotation: 0,
       image: false
     },
-  ],
+  ]
 });
 Registry.weapons.add("double-shooter", {
   type: "Weapon",
@@ -93,28 +102,60 @@ Registry.weapons.add("double-shooter", {
   },
   parts: [
     {
-      type: "Part",
-      width: 40,
-      height: 15,
-      x: 30,
-      y: 8,
-      image: false,
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 30,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 40,
-      height: 15,
-      x: 30,
-      y: -8,
-      image: false,
+      type: "part",
+      x: 17.5,
+      y: 0,
+      width: 10,
+      height: 25,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 35,
-      height: 35,
-      image: false,
+      type: "part",
+      x: 32.5,
+      y: 5,
+      width: 20,
+      height: 10,
+      rotation: 0,
+      image: false
     },
-  ],
+    {
+      type: "part",
+      x: -15,
+      y: 0,
+      width: 5,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 32.5,
+      y: -5,
+      width: 20,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -18.75,
+      y: 0,
+      width: 2.5,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+  ]
 });
 Registry.weapons.add("bomb-shooter", {
   type: "Weapon",
@@ -153,38 +194,112 @@ Registry.weapons.add("bomb-shooter", {
   },
   parts: [
     {
-      type: "Part",
-      width: 50,
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 30,
+      height: 30,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 18.75,
+      y: 0,
+      width: 7.5,
+      height: 20,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 37.5,
+      y: 0,
+      width: 30,
+      height: 15,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: 0,
+      width: 5,
       height: 25,
-      x: 40,
-      image: false,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 40,
-      height: 15,
-      y: 30,
-      image: false,
+      type: "part",
+      x: -26.25,
+      y: 0,
+      width: 7.5,
+      height: 35,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 40,
-      height: 15,
-      y: -30,
-      image: false,
+      type: "part",
+      x: 0,
+      y: -17.5,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 20,
-      height: 60,
-      x: -35,
-      image: false,
+      type: "part",
+      x: 0,
+      y: 17.5,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      image: false
     },
     {
-      type: "Part",
-      width: 40,
-      height: 40,
-      image: false,
+      type: "part",
+      x: -21.25,
+      y: 0,
+      width: 2.5,
+      height: 10,
+      rotation: 0,
+      image: false
     },
-  ],
+    {
+      type: "part",
+      x: 22.5,
+      y: -20,
+      width: 15,
+      height: 7.5,
+      rotation: 30,
+      image: false
+    },
+    {
+      type: "part",
+      x: 22.5,
+      y: 20,
+      width: 15,
+      height: 7.5,
+      rotation: -30,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: -22.5,
+      width: 35,
+      height: 7.5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: 22.5,
+      width: 35,
+      height: 7.5,
+      rotation: 0,
+      image: false
+    },
+  ]
 });
