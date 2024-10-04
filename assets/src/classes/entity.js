@@ -47,6 +47,10 @@ class Entity {
     }
     this.takeDamage(Math.max(calcAmount, 0), source) //Take the damage, but never take negative damage
   }
+  knock(amount = 0, direction = -this.direction){
+    this.x += amount * Math.cos(radians(direction)) //Knock in the direction of impact
+    this.y += amount * Math.sin(radians(direction))
+  }
   takeDamage(amount = 0, source = null) {
     this.damageTaken += Math.min(amount, this.health);
     if (source) source.damageDealt += Math.min(amount, this.health);
@@ -137,6 +141,7 @@ class Entity {
             );
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
+        this.knock(bullet.knockback, bullet.direction)
         //Make the bullet know
         bullet.damaged.push(this);
         //Reduce pierce

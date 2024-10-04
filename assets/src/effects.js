@@ -81,7 +81,7 @@ function splashDamageInstance(
         damageRadius + e.hitSize &&
       e.team !== sourceEntity.team
     ) {
-      e.takeDamage(damageType, amount, sourceEntity);
+      e.damage(damageType, amount, sourceEntity);
     }
   }
 }

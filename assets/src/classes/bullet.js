@@ -19,6 +19,7 @@ class Bullet {
   };
   world = null;
   entity = null;
+  knockback = 0;
   //Effectively a pierce thing
   damaged = []
   #trailCounter = 20;
