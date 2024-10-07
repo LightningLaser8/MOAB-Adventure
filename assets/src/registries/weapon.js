@@ -423,3 +423,307 @@ Registry.weapons.add("heavy-shots", {
     },
   ]
 });
+Registry.weapons.add("laser-blaster", {
+  type: "Weapon",
+  name: "Laser Blaster",
+  description: "Shoots pulses of high-damage plasma.",
+  reload: 20,
+  cost: {
+    shards: 350,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 40,
+      hitSize: 15,
+      trail: false,
+      damage: [
+        {
+          type: "laser",
+          amount: 3,
+        },
+      ],
+      drawer: {
+        shape: "ellipse",
+        fill: "red",
+        width: 30,
+        height: 10,
+      },
+      trail: true,
+      trailColour: [255, 0, 0, 50]
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 1.25,
+      y: -17.5,
+      width: 27.5,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: 17.5,
+      width: 27.5,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: 0,
+      width: 5,
+      height: 30,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 20,
+      y: 0,
+      width: 0,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 30,
+      y: 0,
+      width: 0,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 25,
+      y: 0,
+      width: 0,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 35,
+      y: 0,
+      width: 0,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 25,
+      y: -12.5,
+      width: 25,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 25,
+      y: 12.5,
+      width: 25,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 37.5,
+      y: -12.5,
+      width: 10,
+      height: 7.5,
+      rotation: -45,
+      image: false
+    },
+    {
+      type: "part",
+      x: 37.5,
+      y: 12.5,
+      width: 7.5,
+      height: 10,
+      rotation: -45,
+      image: false
+    },
+    {
+      type: "part",
+      x: 12.5,
+      y: -10,
+      width: 10,
+      height: 10,
+      rotation: -45,
+      image: false
+    },
+    {
+      type: "part",
+      x: 12.5,
+      y: 10,
+      width: 10,
+      height: 10,
+      rotation: -45,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -22.5,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 12.5,
+      y: -22.5,
+      width: 30,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 12.5,
+      y: 22.5,
+      width: 30,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -12.5,
+      y: 17.5,
+      width: 30,
+      height: 5,
+      rotation: 27,
+      image: false
+    },
+    {
+      type: "part",
+      x: -12.5,
+      y: -17.5,
+      width: 30,
+      height: 5,
+      rotation: -27,
+      image: false
+    },
+  ]
+});
+Registry.weapons.add("rifle", {
+  type: "Weapon",
+  name: "Rifle",
+  description: "Shoots a single, fast-moving bullet.\nPierces one box.",
+  reload: 30,
+  cost: {
+    shards: 250,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 55,
+      hitSize: 15,
+      trail: false,
+      pierce: 1,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 2,
+        },
+      ],
+      drawer: {
+        image: "box.metal",
+        width: 25,
+        height: 12,
+      },
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 18.75,
+      y: 0,
+      width: 12.5,
+      height: 20,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 47.5,
+      y: 0,
+      width: 45,
+      height: 10,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: 0,
+      width: 10,
+      height: 20,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 30,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 17.5,
+      width: 25,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -17.5,
+      width: 25,
+      height: 5,
+      rotation: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      image: false
+    },
+  ]
+});

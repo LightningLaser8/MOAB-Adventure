@@ -35,6 +35,10 @@ class Box extends Entity {
       {
         type: "ballistic",
         amount: 1 //100% resistance
+      },
+      {
+        type: "laser",
+        amount: 0.3 //30% resistance
       }
     ],
     x: 1920,
