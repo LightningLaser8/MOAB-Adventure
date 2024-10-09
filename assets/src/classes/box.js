@@ -60,8 +60,8 @@ class Box extends Entity {
   destroyReward = structuredClone(this.reward)
   //No moving unless explicitly stated
   speed = 0
-  takeDamage(type = "normal", amount = 0, source = null){
-    super.takeDamage(type, amount, source)
+  takeDamage(amount = 0, source = null){
+    super.takeDamage(amount, source)
     if(this.dead){
       //Give destroy reward
       game.shards += this.destroyReward.shards ??= 0
