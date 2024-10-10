@@ -57,8 +57,8 @@ async function preload() {
       }
     }
   }
-  fonts.ocr = loadFont("/MOAB-Adventure/assets/font/ocr_a_extended.ttf");
-  fonts.darktech = loadFont("/MOAB-Adventure/assets/font/darktech_ldr.ttf");
+  fonts.ocr = loadFont("assets/font/ocr_a_extended.ttf");
+  fonts.darktech = loadFont("assets/font/darktech_ldr.ttf");
 }
 //Set up the canvas, using the previous function
 function setup() {

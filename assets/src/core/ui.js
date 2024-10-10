@@ -679,24 +679,24 @@ function blendColours(col1, col2, col1Factor) {
 
 const images = {
   env: {
-    error: new ImageContainer("/MOAB-Adventure/assets/textures/error.png"),
+    error: new ImageContainer("assets/textures/error.png"),
   },
   screen: {
-    title: new ImageContainer("/MOAB-Adventure/assets/textures/screens/title.png"),
+    title: new ImageContainer("assets/textures/screens/title.png"),
   },
   ui: {
-    background: new ImageContainer("/MOAB-Adventure/assets/textures/ui/background.png"),
-    moab: new ImageContainer("/MOAB-Adventure/assets/textures/ui/moab.png"),
-    shard: new ImageContainer("/MOAB-Adventure/assets/textures/ui/shard.svg"),
-    bloonstone: new ImageContainer("/MOAB-Adventure/assets/textures/ui/bloonstone.svg"),
-    clock: new ImageContainer("/MOAB-Adventure/assets/textures/ui/clock.png"),
+    background: new ImageContainer("assets/textures/ui/background.png"),
+    moab: new ImageContainer("assets/textures/ui/moab.png"),
+    shard: new ImageContainer("assets/textures/ui/shard.svg"),
+    bloonstone: new ImageContainer("assets/textures/ui/bloonstone.svg"),
+    clock: new ImageContainer("assets/textures/ui/clock.png"),
   },
   background: {
-    sea: new ImageContainer("/MOAB-Adventure/assets/textures/background/sea.png"),
+    sea: new ImageContainer("assets/textures/background/sea.png"),
   },
   entity: {
-    blimp_moab: new ImageContainer("/MOAB-Adventure/assets/textures/entity/moab.png"),
-    box: new ImageContainer("/MOAB-Adventure/assets/textures/entity/box/wood.svg"),
-    box_metal: new ImageContainer("/MOAB-Adventure/assets/textures/entity/box/metal.svg"),
+    blimp_moab: new ImageContainer("assets/textures/entity/moab.png"),
+    box: new ImageContainer("assets/textures/entity/box/wood.svg"),
+    box_metal: new ImageContainer("assets/textures/entity/box/metal.svg"),
   },
 };
