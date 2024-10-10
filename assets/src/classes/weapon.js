@@ -1,11 +1,5 @@
 class Weapon {
-  meta = {
-    //Metadata - mostly edited by the game itself, not the programmer
-    entity: null, //will be the player, unless it's a boss weapon - DON'T PRE-SET THIS
-    source: "custom", //Source
-    posX: 0, //X on player
-    posY: 0, //Y on player
-  };
+  entity = null; //will be the player, unless it's a boss weapon - DON'T PRE-SET THIS
   reload = 30;
   barrel = 0;
   parts = [];
@@ -17,6 +11,14 @@ class Weapon {
       spacing: 0,
     },
   };
+  //Upgrade info
+  cost = {
+    shards: 0,
+    bloonstones: 0
+  }
+  slot = null
+  name = "Name goes here"
+  description = "Description goes here"
   /**Rotation in degrees */
   rotation = 0;
   //Internal
@@ -39,12 +41,13 @@ class Weapon {
     }
   }
   tick() {
-    if (this.meta.entity) {
-      this.x = this.meta.entity.x + this.meta.posX;
-      this.y = this.meta.entity.y + this.meta.posY;
+    if (!this.slot) return;
+    if (this.slot.entity) {
+      this.x = this.slot.entity.x + this.slot.posX;
+      this.y = this.slot.entity.y + this.slot.posY;
       this.rotation = degrees(
         p5.Vector.sub(
-          createVector(this.meta.entity.target.x, this.meta.entity.target.y), //Mouse pos 'B'
+          createVector(this.slot.entity.target.x, this.slot.entity.target.y), //Mouse pos 'B'
           createVector(this.x, this.y) //Weapon pos 'A'
         ).heading() //'A->B' = 'B' - 'A'
       );
@@ -61,7 +64,7 @@ class Weapon {
       this.shoot.pattern.amount ??= 1;
       this.shoot.pattern.spacing ??= 0;
 
-      const world = this.meta.entity.world;
+      const world = this.slot.entity.world;
       //Max difference in direction
       let diff =
         (this.shoot.pattern.spacing * (this.shoot.pattern.amount - 1)) / 2;
@@ -70,7 +73,7 @@ class Weapon {
       //For each bullet to fire
       for (let index = 0; index < this.shoot.pattern.amount; index++) {
         /** @type {Bullet} */
-        let bulletToFire = construct(this.shoot.bullet);
+        let bulletToFire = bullet(this.shoot.bullet);
         //Put the bullet on the gun
         bulletToFire.x = this.x;
         bulletToFire.y = this.y;
@@ -85,7 +88,7 @@ class Weapon {
         );
         bulletToFire.step(1);
         //Add entity and world
-        bulletToFire.entity = this.meta.entity;
+        bulletToFire.entity = this.slot.entity;
         bulletToFire.world = world;
         //Spawn it in
         world.bullets.push(bulletToFire);

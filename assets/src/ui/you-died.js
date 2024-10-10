@@ -128,4 +128,4 @@ createUIComponent(
   "Return",
   false,
   50
-)
+).interactive = true

@@ -308,19 +308,29 @@ class ImageContainer {
 }
 
 function drawImg(
-  img = images.env.error,
+  img = images.env.error || "error",
   x,
   y,
   width,
   height,
   ...otherParameters //IDK what else p5 image takes
 ) {
-  if (!img) return; //Cancel if no image at all
+  //Get from registry if it exists
+  img = Registry.images.has(img) ? Registry.images.get(img) : img
   if (img instanceof ImageContainer) {
     if (!img.image) return; //Cancel if no image loaded yet
     image(img.image, x, y, width, height, ...otherParameters);
   } else {
-    image(img, x, y, width, height, ...otherParameters);
+    //Try to draw it directly if not
+    try{
+      image(img, x, y, width, height, ...otherParameters);
+    }
+    catch(error){
+      //Say the problem
+      console.error("Could not draw image: ", img)
+      //Replace with a working image
+      drawImg(images.env.error, x, y, width, height, ...otherParameters)
+    }
   }
 }
 
@@ -669,24 +679,24 @@ function blendColours(col1, col2, col1Factor) {
 
 const images = {
   env: {
-    error: new ImageContainer("/MOAB-Adventure/assets/textures/error.png"),
+    error: new ImageContainer("assets/textures/error.png"),
   },
   screen: {
-    title: new ImageContainer("/MOAB-Adventure/assets/textures/screens/title.png"),
+    title: new ImageContainer("assets/textures/screens/title.png"),
   },
   ui: {
-    background: new ImageContainer("/MOAB-Adventure/assets/textures/ui/background.png"),
-    moab: new ImageContainer("/MOAB-Adventure/assets/textures/ui/moab.png"),
-    shard: new ImageContainer("/MOAB-Adventure/assets/textures/ui/shard.svg"),
-    bloonstone: new ImageContainer("/MOAB-Adventure/assets/textures/ui/bloonstone.svg"),
-    clock: new ImageContainer("/MOAB-Adventure/assets/textures/ui/clock.png"),
+    background: new ImageContainer("assets/textures/ui/background.png"),
+    moab: new ImageContainer("assets/textures/ui/moab.png"),
+    shard: new ImageContainer("assets/textures/ui/shard.svg"),
+    bloonstone: new ImageContainer("assets/textures/ui/bloonstone.svg"),
+    clock: new ImageContainer("assets/textures/ui/clock.png"),
   },
   background: {
-    sea: new ImageContainer("/MOAB-Adventure/assets/textures/background/sea.png"),
+    sea: new ImageContainer("assets/textures/background/sea.png"),
   },
   entity: {
-    blimp_moab: new ImageContainer("/MOAB-Adventure/assets/textures/entity/moab.png"),
-    box: new ImageContainer("/MOAB-Adventure/assets/textures/entity/box/wood.svg"),
-    box_metal: new ImageContainer("/MOAB-Adventure/assets/textures/entity/box/metal.svg"),
+    blimp_moab: new ImageContainer("assets/textures/entity/moab.png"),
+    box: new ImageContainer("assets/textures/entity/box/wood.svg"),
+    box_metal: new ImageContainer("assets/textures/entity/box/metal.svg"),
   },
 };

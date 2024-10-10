@@ -2,16 +2,8 @@ class Entity {
   x = 0;
   y = 0;
   direction = 0;
-  /** @type {Array<Weapon>} */
-  weapons = [];
   //Slots only for players
-  weaponSlots = {
-    ap1: null,
-    ap2: null,
-    ap3: null,
-    ap4: null,
-    ap5: null,
-  };
+  weaponSlots = [];
   health = 100;
   maxHealth = 100;
   name = "Entity";
@@ -31,12 +23,12 @@ class Entity {
   target = { x: 0, y: 0 };
 
   //Stats
-  damageDealt = 0
-  damageTaken = 0
+  damageDealt = 0;
+  damageTaken = 0;
   destroyed = {
     boxes: 0,
-    bosses: 0
-  }
+    bosses: 0,
+  };
 
   constructor() {} //Because universal
   init() {
@@ -46,25 +38,41 @@ class Entity {
     world.entities.push(this);
     this.world = world;
   }
-  takeDamage(type = "normal", amount = 0, source = null) {
-    this.damageTaken += Math.min(amount, this.health)
-    if(source) source.damageDealt += Math.min(amount, this.health)
+  damage(type = "normal", amount = 0, source = null) {
+    let calcAmount = amount
+    for(let resistance of this.resistances){
+      if(resistance.type === type){
+        calcAmount -= amount * resistance.amount //Negative resistance would actually make it do more damage
+      }
+    }
+    this.takeDamage(Math.max(calcAmount, 0), source) //Take the damage, but never take negative damage
+  }
+  knock(amount = 0, direction = -this.direction){
+    this.x += amount * Math.cos(radians(direction)) //Knock in the direction of impact
+    this.y += amount * Math.sin(radians(direction))
+  }
+  takeDamage(amount = 0, source = null) {
+    this.damageTaken += Math.min(amount, this.health);
+    if (source) source.damageDealt += Math.min(amount, this.health);
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
       this.dead = true;
     }
   }
-  addWeapon(weapon) {
-    this.weapons.push(weapon);
-    weapon.meta.entity = this;
+  addWeaponSlot(slot) {
+    this.weaponSlots.push(slot);
+    slot.entity = this;
   }
   tick() {
     //Tick weapons
-    for (let weapon of this.weapons) {
-      weapon.tick();
+    // for (let weapon of this.weapons) {
+    //   weapon.tick();
+    // }
+    for (let slot of this.weaponSlots) {
+      slot.tick();
     }
-    this.checkBullets()
+    this.checkBullets();
   }
   getClosestEnemy() {
     /*Don't actually need this yet*/
@@ -90,30 +98,58 @@ class Entity {
       );
     }
     //Draw weapons on top
-    for (let weapon of this.weapons) {
-      weapon.draw();
+    // for (let weapon of this.weapons) {
+    //   weapon.draw();
+    // }
+    for (let slot of this.weaponSlots) {
+      slot.draw();
     }
   }
   collidesWith(obj) {
     //No collisions if dead
-    return (!this.dead) && dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
+    return (
+      !this.dead &&
+      dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
+    );
   }
   checkBullets() {
     for (let bullet of this.world.bullets) {
       //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
-      if (!bullet.remove && this.team !== bullet.entity.team && this.collidesWith(bullet) && !bullet.damaged.includes(this)) {
+      if (
+        !bullet.remove &&
+        this.team !== bullet.entity.team &&
+        this.collidesWith(bullet) &&
+        !bullet.damaged.includes(this)
+      ) {
         //Take all damage instances
         for (let instance of bullet.damage) {
-          this.takeDamage(instance.type, instance.amount, bullet.entity);
+          if (instance.area)
+            //If it explodes
+            splashDamageInstance(
+              bullet.x,
+              bullet.y,
+              instance.amount,
+              instance.type,
+              instance.area,
+              bullet.entity,
+              instance.visual, //        \
+              instance.sparkColour, //   |
+              instance.sparkColourTo, // |
+              instance.smokeColour, //   |- These are optional, but can be set per instance
+              instance.smokeColourTo, // |
+              instance.waveColour //     /
+            );
+          else this.damage(instance.type, instance.amount, bullet.entity);
         }
+        this.knock(bullet.knockback, bullet.direction)
         //Make the bullet know
         bullet.damaged.push(this);
         //Reduce pierce
-        bullet.pierce --
+        bullet.pierce--;
         //If exhausted
-        if(bullet.pierce < 0){
+        if (bullet.pierce < 0) {
           //Delete
-          bullet.remove = true
+          bullet.remove = true;
         }
       }
     }

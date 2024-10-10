@@ -1,9 +1,9 @@
 class Box extends Entity {
   //Default box, for undefined world spawning entity
   static default = {
-    type: this,
+    type: this.name,
     drawer: {
-      image: images.entity.box,
+      image: "box.wood",
       width: 50,
       height: 50
     },
@@ -22,13 +22,46 @@ class Box extends Entity {
     team: "enemy",
     health: 5
   }
+  //Basic metal box
+  static metal = {
+    type: this.name,
+    drawer: {
+      image: "box.metal",
+      width: 50,
+      height: 50
+    },
+    hitSize: 25,
+    resistances: [
+      {
+        type: "ballistic",
+        amount: 1 //100% resistance
+      },
+      {
+        type: "laser",
+        amount: 0.3 //30% resistance
+      }
+    ],
+    x: 1920,
+    //Return a random height each time
+    get y(){
+      return random(0, 1080)
+    },
+    reward: {
+      shards: 2
+    },
+    destroyReward: {
+      shards: 10 //Worth more
+    },
+    team: "enemy",
+    health: 20 //More HP
+  }
   //Rewards
   reward = { bloonstones: 0, shards: 0 };
   destroyReward = structuredClone(this.reward)
   //No moving unless explicitly stated
   speed = 0
-  takeDamage(type = "normal", amount = 0, source = null){
-    super.takeDamage(type, amount, source)
+  takeDamage(amount = 0, source = null){
+    super.takeDamage(amount, source)
     if(this.dead){
       //Give destroy reward
       game.shards += this.destroyReward.shards ??= 0
