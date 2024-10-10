@@ -17,3 +17,7 @@ function shortenedNumber(num = 0){
 function roundNum(number, dp = 0){
   return Math.round(number * 10 ** dp)/ 10 ** dp
 }
+
+function rnd(a, b){
+  return a + Math.random() * (b - a)
+}

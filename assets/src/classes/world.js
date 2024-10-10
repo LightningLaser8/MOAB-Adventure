@@ -1,6 +1,8 @@
 class World{
   particles = []
+  /** @type {Array<Entity>} */
   entities = []
+  /** @type {Array<Bullet>} */
   bullets = []
   spawning = []
   background = images.background.sea

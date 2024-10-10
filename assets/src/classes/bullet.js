@@ -19,6 +19,7 @@ class Bullet {
   };
   world = null;
   entity = null;
+  knockback = 0;
   //Effectively a pierce thing
   damaged = []
   #trailCounter = 20;
@@ -65,10 +66,10 @@ class Bullet {
               "rhombus",
               this.trailColour,
               this.trailColour,
-              this.hitSize * this.#trailInterval * 0.25,
-              this.hitSize * this.#trailInterval * 0.25,
               this.hitSize * 1.9,
               0,
+              this.hitSize * this.#trailInterval * 0.25,
+              this.hitSize * this.#trailInterval * 0.25,
               0
             )
           );
@@ -91,6 +92,7 @@ class Bullet {
       );
     } else {
       //If no image, draw shape instead
+      fill(this.drawer.fill)
       rotatedShape(
         this.drawer.shape,
         this.x,

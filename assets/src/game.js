@@ -17,6 +17,7 @@ const game = {
 };
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
+world.addSpawn({entity: Box.metal, interval: 300});
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -89,16 +90,17 @@ function draw() {
     gameFrame();
   }
   uiFrame();
+  if(!ui.waitingForMouseUp) fireIfPossible();
 }
 
 function uiFrame() {
   //Tick, then draw the UI
   updateUIActivity();
-  if (!game.paused) tickUI();
+  tickUI();
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
-  showMousePos();
+  if(keyIsDown(SHIFT)) showMousePos();
 }
 
 function gameFrame() {
@@ -146,7 +148,7 @@ function drawUI() {
 }
 
 function tickUI() {
-  background.tick(game.player?.speed ?? 0);
+  if (!game.paused) background.tick(game.player?.speed ?? 0);
   for (let component of ui.components) {
     if (component.active && component.isInteractive) {
       component.checkMouse();
@@ -177,13 +179,13 @@ function showMousePos() {
 
 function createPlayer() {
   let player = construct({
-    type: Entity,
+    type: "Entity",
     x: 300,
     y: 540,
     name: "MOAB",
     maxHealth: 200,
     drawer: {
-      image: images.entity.blimp_moab,
+      image: "blimp.moab",
       width: 230,
       height: 150,
     },
@@ -193,78 +195,21 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  const testWeapon = construct({
-    type: Weapon,
-    meta: {
-      posX: -50,
-      posY: 0,
-    },
-    x: 400,
-    y: 400,
-    reload: 20,
-    shoot: {
-      bullet: {
-        type: Bullet,
-        lifetime: 30,
-        speed: 40,
-        hitSize: 20,
-        trail: false,
-        damage: [
-          {
-            amount: 2,
-          },
-        ],
-        drawer: {
-          image: images.entity.box_metal,
-          width: 40,
-          height: 20,
-        },
-      },
-      pattern: {
-        spacing: 5,
-        amount: 3,
-      },
-    },
-    parts: [
-      {
-        type: Part,
-        width: 40,
-        height: 20,
-        y: -20,
-        rotation: 60,
-      },
-      {
-        type: Part,
-        width: 40,
-        height: 20,
-        y: 20,
-        rotation: -60,
-      },
-      {
-        type: Part,
-        width: 40,
-        height: 20,
-      },
-      {
-        type: Part,
-        width: 40,
-        height: 15,
-        x: 40,
-      },
-    ],
-  });
-  player.addWeapon(testWeapon);
+  player.addWeaponSlot(ap1) //Test for now
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
       return ui.mouse;
     }, //This way, I only have to set it once.
   });
+  world.particles.push(new WaveParticle(player.x, player.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0))
 }
 
-function mousePressed() {
-  if (ui.menuState === "in-game") {
-    game.player.weapons[0].fire();
+function fireIfPossible() {
+  if (ui.menuState === "in-game" && mouseIsPressed) {
+    for (let slot of game.player.weaponSlots) {
+      if(slot.weapon) slot.weapon.fire();
+    }
   }
 }
 
@@ -277,7 +222,7 @@ function checkBoxCollisions() {
       entity.team !== game.player.team &&
       game.player.collidesWith(entity)
     ) {
-      game.player.takeDamage("collision", entity.health, entity);
+      game.player.damage("collision", entity.health, entity);
       //If the player didn't die i.e. resisted, shielded, had more HP, etc.
       if (!game.player.dead) {
         //Remove box
