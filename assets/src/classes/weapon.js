@@ -55,6 +55,7 @@ class Weapon {
     if(this.#cooldown > 0){
       this.#cooldown --
     }
+    this.parts.forEach(x => x.tick()) //Tick all parts
   }
   fire() {
     if (this.#cooldown <= 0) {
@@ -93,6 +94,7 @@ class Weapon {
         //Spawn it in
         world.bullets.push(bulletToFire);
       }
+      this.parts.forEach(x => x.fire()) //Tick all parts
     }
   }
 }

@@ -5,3 +5,8 @@ Registry.genericType.add("part", Part)
 Registry.genericType.add("entity", Entity)
 Registry.genericType.add("box", Box)
 Registry.genericType.add("world", World)
+Registry.genericType.add("animation", PartAnimation) //Who cares that the class is named something else?
+Registry.genericType.add("infinite-animation", InfiniteAnimation)
+Registry.genericType.add("loop-animation", LoopingAnimation)
+Registry.genericType.add("bounce-animation", BounceAnimation)
+Registry.genericType.add("recoil-animation", RecoilAnimation)

@@ -54,7 +54,7 @@ class PartAnimation {
   }
   tick(dt) {
     //Do nothing if not started
-    if (!started) return;
+    if (!this._started) return;
     //Wait for delay
     if (this.#delayLeft > 0) {
       this.#delayLeft -= dt * Math.abs(this._speed); //Negative speed doesn't softlock
@@ -100,7 +100,7 @@ class BounceAnimation extends PartAnimation {
   _mode = "forward";
   hasEnded() {
     if (this._mode === "reverse") return this._progress <= 0;
-    if (this._mode === "forward") return this._progress >= 0;
+    if (this._mode === "forward") return this._progress >= 1;
   }
   onEnd() {
     this._speed *= -1;
