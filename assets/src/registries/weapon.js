@@ -31,6 +31,22 @@ Registry.weapons.add("tiny-shooter", {
   parts: [
     {
       type: "part",
+      x: 32.5,
+      y: 0,
+      width: 20,
+      height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -15
+        }
+      ]
+    },
+    {
+      type: "part",
       x: 0,
       y: 0,
       width: 25,
@@ -44,15 +60,6 @@ Registry.weapons.add("tiny-shooter", {
       y: 0,
       width: 10,
       height: 15,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
-      x: 32.5,
-      y: 0,
-      width: 20,
-      height: 10,
       rotation: 0,
       image: false
     },
@@ -103,6 +110,38 @@ Registry.weapons.add("double-shooter", {
   parts: [
     {
       type: "part",
+      x: 32.5,
+      y: 5,
+      width: 20,
+      height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -15
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 32.5,
+      y: -5,
+      width: 20,
+      height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -15
+        }
+      ]
+    },
+    {
+      type: "part",
       x: 0,
       y: 0,
       width: 25,
@@ -121,28 +160,10 @@ Registry.weapons.add("double-shooter", {
     },
     {
       type: "part",
-      x: 32.5,
-      y: 5,
-      width: 20,
-      height: 10,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
       x: -15,
       y: 0,
       width: 5,
       height: 25,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
-      x: 32.5,
-      y: -5,
-      width: 20,
-      height: 10,
       rotation: 0,
       image: false
     },
@@ -181,7 +202,7 @@ Registry.weapons.add("bomb-shooter", {
         {
           type: "explosion",
           area: 150,
-          amount: 2,
+          amount: 3,
         },
       ],
       drawer: {
@@ -193,6 +214,23 @@ Registry.weapons.add("bomb-shooter", {
     pattern: {},
   },
   parts: [
+    {
+      type: "part",
+      x: 37.5,
+      y: 0,
+      width: 30,
+      height: 15,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -25,
+          speedRatio: 0.1
+        }
+      ]
+    },
     {
       type: "part",
       x: 0,
@@ -208,15 +246,6 @@ Registry.weapons.add("bomb-shooter", {
       y: 0,
       width: 7.5,
       height: 20,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
-      x: 37.5,
-      y: 0,
-      width: 30,
-      height: 15,
       rotation: 0,
       image: false
     },
@@ -342,6 +371,38 @@ Registry.weapons.add("heavy-shots", {
   parts: [
     {
       type: "part",
+      x: 31.25,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 10,
+          xOffset: -25
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 32.5,
+      y: 0,
+      width: 25,
+      height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 7,
+          xOffset: -15
+        }
+      ]
+    },
+    {
+      type: "part",
       x: 0,
       y: 0,
       width: 40,
@@ -372,24 +433,6 @@ Registry.weapons.add("heavy-shots", {
       x: -15,
       y: 0,
       width: 5,
-      height: 10,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
-      x: 31.25,
-      y: 0,
-      width: 5,
-      height: 20,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
-      x: 32.5,
-      y: 0,
-      width: 25,
       height: 10,
       rotation: 0,
       image: false
@@ -491,7 +534,14 @@ Registry.weapons.add("laser-blaster", {
       width: 0,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: 10
+        }
+      ]
     },
     {
       type: "part",
@@ -500,7 +550,14 @@ Registry.weapons.add("laser-blaster", {
       width: 0,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: 50
+        }
+      ]
     },
     {
       type: "part",
@@ -509,7 +566,14 @@ Registry.weapons.add("laser-blaster", {
       width: 0,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: 30
+        }
+      ]
     },
     {
       type: "part",
@@ -518,7 +582,14 @@ Registry.weapons.add("laser-blaster", {
       width: 0,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: 70
+        }
+      ]
     },
     {
       type: "part",
@@ -527,7 +598,14 @@ Registry.weapons.add("laser-blaster", {
       width: 25,
       height: 10,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -7
+        }
+      ]
     },
     {
       type: "part",
@@ -536,7 +614,14 @@ Registry.weapons.add("laser-blaster", {
       width: 25,
       height: 10,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -7
+        }
+      ]
     },
     {
       type: "part",
@@ -545,7 +630,14 @@ Registry.weapons.add("laser-blaster", {
       width: 10,
       height: 7.5,
       rotation: -45,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -7
+        }
+      ]
     },
     {
       type: "part",
@@ -554,7 +646,14 @@ Registry.weapons.add("laser-blaster", {
       width: 7.5,
       height: 10,
       rotation: -45,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -7
+        }
+      ]
     },
     {
       type: "part",
@@ -599,7 +698,14 @@ Registry.weapons.add("laser-blaster", {
       width: 30,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -15
+        }
+      ]
     },
     {
       type: "part",
@@ -608,25 +714,48 @@ Registry.weapons.add("laser-blaster", {
       width: 30,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -15
+        }
+      ]
     },
     {
       type: "part",
-      x: -12.5,
-      y: 17.5,
+      x: -27.5,
+      y: 10,
       width: 30,
       height: 5,
       rotation: 27,
-      image: false
+      slide: 15,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          rotOffset: 30
+        }
+      ]
     },
     {
       type: "part",
-      x: -12.5,
-      y: -17.5,
+      x: -27.5,
+      y: -10,
       width: 30,
       height: 5,
       rotation: -27,
-      image: false
+      slide: 15,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          rotOffset: -30
+        }
+      ]
     },
   ]
 });
@@ -664,19 +793,26 @@ Registry.weapons.add("rifle", {
   parts: [
     {
       type: "part",
-      x: 18.75,
-      y: 0,
-      width: 12.5,
-      height: 20,
-      rotation: 0,
-      image: false
-    },
-    {
-      type: "part",
       x: 47.5,
       y: 0,
       width: 45,
       height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -20
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 18.75,
+      y: 0,
+      width: 12.5,
+      height: 20,
       rotation: 0,
       image: false
     },

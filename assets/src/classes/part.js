@@ -45,13 +45,13 @@ class Part {
   }
   draw(weapon) {
     let pos = createVector(weapon.x, weapon.y);
-    let angle = weapon.rotationRadians + this.rotationRadians;
+    let angle = weapon.rotationRadians + this.rotationRadians + radians(this.totalRotOffset);
     //pos.add(createVector(this.x, this.y))
     let xOffsetVct = p5.Vector.fromAngle(weapon.rotationRadians);
     xOffsetVct.mult(this.x + this.totalXOffset); //Relative horizontal offset from weapon centre
     let yOffsetVct = p5.Vector.fromAngle(weapon.rotationRadians + HALF_PI);
     yOffsetVct.mult(this.y + this.totalYOffset); //Relative vertical offset from weapon centre
-    let slideVct = p5.Vector.fromAngle(this.rotationRadians + radians(this.totalRotOffset));
+    let slideVct = p5.Vector.fromAngle(angle);
     slideVct.mult(this.slide + this.totalSlideOffset); //Offset in the direction of the part
     let finalPos = p5.Vector.add(
       p5.Vector.add(p5.Vector.add(yOffsetVct, xOffsetVct), slideVct),
