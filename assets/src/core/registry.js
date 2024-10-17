@@ -11,6 +11,7 @@ class Registry {
   static genericType = new this()
   static weapons = new this()
   static images = new this()
+  static statuses = new this()
   /** Adds an item to registry.
    * @param {string} name Registry name of item. This is not case sensitive.
    * @param {*} item Item to add to registry.

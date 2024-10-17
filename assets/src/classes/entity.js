@@ -30,6 +30,12 @@ class Entity {
     bosses: 0,
   };
 
+  //Status effects
+  effectiveDamageMult = 1;
+  effectiveHealthMult = 1;
+  effectiveResistanceMult = 1;
+  effectiveSpeedMult = 1;
+
   constructor() {} //Because universal
   init() {
     this.maxHealth = this.health; //Stop part-damaged entities spawning
@@ -39,21 +45,22 @@ class Entity {
     this.world = world;
   }
   damage(type = "normal", amount = 0, source = null) {
-    let calcAmount = amount
-    for(let resistance of this.resistances){
-      if(resistance.type === type){
-        calcAmount -= amount * resistance.amount //Negative resistance would actually make it do more damage
+    let calcAmount =
+      (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
+    for (let resistance of this.resistances) {
+      if (resistance.type === type) {
+        calcAmount -= amount * resistance.amount; //Negative resistance would actually make it do more damage
       }
     }
-    this.takeDamage(Math.max(calcAmount, 0), source) //Take the damage, but never take negative damage
+    this.takeDamage(Math.max(calcAmount, 0), source); //Take the damage, but never take negative damage
   }
-  knock(amount = 0, direction = -this.direction){
-    this.x += amount * Math.cos(radians(direction)) //Knock in the direction of impact
-    this.y += amount * Math.sin(radians(direction))
+  knock(amount = 0, direction = -this.direction) {
+    this.x += amount * Math.cos(radians(direction)); //Knock in the direction of impact
+    this.y += amount * Math.sin(radians(direction));
   }
   takeDamage(amount = 0, source = null) {
-    this.damageTaken += Math.min(amount, this.health);
-    if (source) source.damageDealt += Math.min(amount, this.health);
+    this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;
+    if (source) source.damageDealt += Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
@@ -141,7 +148,10 @@ class Entity {
             );
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
-        this.knock(bullet.knockback, bullet.direction)
+        this.knock(bullet.knockback, bullet.direction);
+        if(bullet.status !== "none"){
+          this.applyStatus(bullet.status, bullet.statusDuration);
+        }
         //Make the bullet know
         bullet.damaged.push(this);
         //Reduce pierce
@@ -153,5 +163,24 @@ class Entity {
         }
       }
     }
+  }
+  tickStatuses() {
+    this.effectiveSpeedMult =
+      this.effectiveDamageMult =
+      this.effectiveHealthMult =
+      this.effectiveResistanceMult =
+        1;
+    for (let status of this.statuses) {
+      let effect = Registry.statuses.get(status.effect);
+      this.damage(effect.damage, effect.damageType);
+      this.heal(effect.healing);
+      this.effectiveSpeedMult *= effect.speedMult ?? 1;
+      this.effectiveDamageMult *= effect.damageMult ?? 1;
+      this.effectiveHealthMult *= effect.healthMult ?? 1;
+      this.effectiveResistanceMult *= effect.resistanceMult ?? 1;
+    }
+  }
+  applyStatus(effect, time) {
+    this.statuses.push({ effect: effect, time: time, timeLeft: time });
   }
 }

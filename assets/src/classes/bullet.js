@@ -24,6 +24,9 @@ class Bullet {
   damaged = []
   #trailCounter = 20;
   #trailInterval = 10;
+  //Statuseseseseses
+  status = "none"
+  statusDuration = 0
   get directionRad(){
     return this.direction / 180 * Math.PI
   }
