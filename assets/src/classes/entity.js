@@ -35,6 +35,7 @@ class Entity {
   effectiveHealthMult = 1;
   effectiveResistanceMult = 1;
   effectiveSpeedMult = 1;
+  statuses = [];
 
   constructor() {} //Because universal
   init() {
@@ -53,6 +54,12 @@ class Entity {
       }
     }
     this.takeDamage(Math.max(calcAmount, 0), source); //Take the damage, but never take negative damage
+  }
+  heal(amount){
+    this.health += amount;
+    if (this.health > this.maxHealth) {
+      this.health = this.maxHealth;
+    }
   }
   knock(amount = 0, direction = -this.direction) {
     this.x += amount * Math.cos(radians(direction)); //Knock in the direction of impact
@@ -80,6 +87,7 @@ class Entity {
       slot.tick();
     }
     this.checkBullets();
+    this.tickStatuses();
   }
   getClosestEnemy() {
     /*Don't actually need this yet*/
@@ -144,7 +152,9 @@ class Entity {
               instance.sparkColourTo, // |
               instance.smokeColour, //   |- These are optional, but can be set per instance
               instance.smokeColourTo, // |
-              instance.waveColour //     /
+              instance.waveColour, //     /
+              bullet.status,
+              bullet.statusDuration
             );
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
@@ -172,7 +182,7 @@ class Entity {
         1;
     for (let status of this.statuses) {
       let effect = Registry.statuses.get(status.effect);
-      this.damage(effect.damage, effect.damageType);
+      this.damage(effect.damageType, effect.damage);
       this.heal(effect.healing);
       this.effectiveSpeedMult *= effect.speedMult ?? 1;
       this.effectiveDamageMult *= effect.damageMult ?? 1;

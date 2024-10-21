@@ -10,7 +10,9 @@ function splashDamageInstance(
   sparkColourTo = [255, 215, 0, 55], //The colour the sparks go to
   smokeColour = [100, 100, 100, 200], //The colour the smoke starts at
   smokeColourTo = [100, 100, 100, 0], //The colour the smoke goes to
-  waveColour = [255, 128, 0, 0] //The colour the wave ends at. It always starts white.
+  waveColour = [255, 128, 0, 0], //The colour the wave ends at. It always starts white.
+  status = "none",
+  statusDuration = 0
 ) {
   //Most of these powers are just to make it less insane at high radii
   //They are tested repeatedly to make sure they look good
@@ -82,6 +84,7 @@ function splashDamageInstance(
       e.team !== sourceEntity.team
     ) {
       e.damage(damageType, amount, sourceEntity);
+      if(status !== "none") e.applyStatus(status, statusDuration);
     }
   }
 }

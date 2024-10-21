@@ -863,3 +863,251 @@ Registry.weapons.add("rifle", {
     },
   ]
 });
+Registry.weapons.add("incendiary", {
+  type: "Weapon",
+  name: "Incendiary",
+  description: "Explosions set targets on fire.",
+  reload: 60,
+  cost: {
+    shards: 1350,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 30,
+      hitSize: 30,
+      trail: false,
+      status: "burning",
+      statusDuration: 180, //3 second fire
+      damage: [
+        {
+          type: "ballistic",
+          amount: 1,
+        },
+        {
+          type: "explosion",
+          area: 150,
+          amount: 3,
+        },
+      ],
+      drawer: {
+        image: "box.metal",
+        width: 40,
+        height: 30,
+      },
+    },
+    pattern: {},
+  },
+  parts: [
+    {
+      type: "part",
+      x: 37.5,
+      y: 0,
+      width: 30,
+      height: 15,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 5,
+          xOffset: -25,
+          speedRatio: 0.1
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 18.75,
+      y: 0,
+      width: 7.5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: 0,
+      width: 5,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -25,
+      y: 0,
+      width: 5,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -21.25,
+      y: 0,
+      width: 2.5,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 22.5,
+      y: -25,
+      width: 15,
+      height: 7.5,
+      rotation: 30,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 22.5,
+      y: 25,
+      width: 15,
+      height: 7.5,
+      rotation: -30,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: -120,
+      slide: 22.5,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: 120,
+      slide: 22.5,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: 70,
+      slide: 20,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: -70,
+      slide: 20,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 30,
+      height: 30,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: 27.5,
+      width: 35,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 1.25,
+      y: -27.5,
+      width: 35,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -20,
+      y: -30,
+      width: 15,
+      height: 7.5,
+      rotation: 30,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -20,
+      y: 30,
+      width: 15,
+      height: 7.5,
+      rotation: -30,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -32.5,
+      y: 0,
+      width: 5,
+      height: 35,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -28.75,
+      y: -6.25,
+      width: 2.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -28.75,
+      y: 6.25,
+      width: 2.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -36.25,
+      y: 0,
+      width: 2.5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+]
+});
