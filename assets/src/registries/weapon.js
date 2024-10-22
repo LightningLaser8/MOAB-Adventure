@@ -890,6 +890,8 @@ Registry.weapons.add("incendiary", {
           type: "explosion",
           area: 150,
           amount: 3,
+          smokeColour: [255, 200, 100],
+          smokeColourTo: [255, 0, 0, 0]
         },
       ],
       drawer: {
