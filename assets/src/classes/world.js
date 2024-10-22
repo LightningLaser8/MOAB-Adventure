@@ -33,6 +33,7 @@ class World{
     let len = this.bullets.length
     for(let b = 0; b < len; b++){
       if(this.bullets[b]?.remove){
+        this.bullets[b].frag()
         this.bullets.splice(b, 1)
       }
     }

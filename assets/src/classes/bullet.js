@@ -27,6 +27,18 @@ class Bullet {
   //Statuseseseseses
   status = "none"
   statusDuration = 0
+  //Frags
+  fragBullet = {};
+  fragNumber = 0
+  fragDirection = 0
+  fragSpread = 0
+  fragSpacing = 0
+  //Intervals
+  intervalBullet = {};
+  intervalNumber = 0
+  intervalDirection = 0
+  intervalSpread = 0
+  intervalSpacing = 0
   get directionRad(){
     return this.direction / 180 * Math.PI
   }
@@ -109,4 +121,11 @@ class Bullet {
   collidesWith(obj){
     return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
   }
+  frag(){
+    patternedBulletExpulsion(this.x, this.y, this.fragBullet, this.fragNumber, this.direction + this.fragDirection, this.fragSpread, this.fragSpacing, this.world, this.entity)
+  }
+  interval(){
+    patternedBulletExpulsion(this.x, this.y, this.intervalBullet, this.intervalNumber, this.direction + this.intervalDirection, this.intervalSpread, this.intervalSpacing, this.world, this.entity)
+  }
 }
+

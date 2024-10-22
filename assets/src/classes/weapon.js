@@ -65,36 +65,40 @@ class Weapon {
       this.shoot.pattern.amount ??= 1;
       this.shoot.pattern.spacing ??= 0;
 
-      const world = this.slot.entity.world;
-      //Max difference in direction
-      let diff =
-        (this.shoot.pattern.spacing * (this.shoot.pattern.amount - 1)) / 2;
-      //Current angle
-      let currentAngle = -diff;
-      //For each bullet to fire
-      for (let index = 0; index < this.shoot.pattern.amount; index++) {
-        /** @type {Bullet} */
-        let bulletToFire = bullet(this.shoot.bullet);
-        //Put the bullet on the gun
-        bulletToFire.x = this.x;
-        bulletToFire.y = this.y;
-        bulletToFire.direction = this.rotation;
-        //Apply uniform spread
-        bulletToFire.direction += currentAngle;
-        currentAngle += this.shoot.pattern.spacing;
-        //Apply random spread
-        bulletToFire.direction += random(
-          this.shoot.pattern.spread,
-          -this.shoot.pattern.spread
-        );
-        bulletToFire.step(1);
-        //Add entity and world
-        bulletToFire.entity = this.slot.entity;
-        bulletToFire.world = world;
-        //Spawn it in
-        world.bullets.push(bulletToFire);
-      }
+      patternedBulletExpulsion(this.x, this.y, this.shoot.bullet, this.shoot.pattern.amount, this.rotation, this.shoot.pattern.spread, this.shoot.pattern.spacing, this.slot.entity.world, this.slot.entity)
       this.parts.forEach(x => x.fire()) //Tick all parts
     }
+  }
+}
+
+function patternedBulletExpulsion(x, y, bulletToSpawn, amount, direction, spread, spacing, world, entity){
+  //Derives most of its code from `Weapon.fire()`  
+  //universal mode: a c t i v a t e
+  //Max difference in direction
+  let diff =
+    (spacing * (amount - 1)) / 2;
+  //Current angle
+  let currentAngle = -diff;
+  //For each bullet to fire
+  for (let index = 0; index < amount; index++) {
+    /** @type {Bullet} */
+    let bulletToFire = bullet(bulletToSpawn);
+    //Put the bullet in position
+    bulletToFire.x = x;
+    bulletToFire.y = y;
+    bulletToFire.direction = direction; //do the offset
+    //Apply uniform spread
+    bulletToFire.direction += currentAngle;
+    currentAngle += spacing;
+    //Apply random spread
+    bulletToFire.direction += random(
+      spread,
+      -spread
+    );
+    //Add entity and world
+    bulletToFire.entity = entity;
+    bulletToFire.world = world;
+    //Spawn it in
+    world.bullets.push(bulletToFire);
   }
 }
