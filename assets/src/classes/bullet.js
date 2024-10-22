@@ -22,8 +22,8 @@ class Bullet {
   knockback = 0;
   //Effectively a pierce thing
   damaged = []
-  #trailCounter = 20;
-  #trailInterval = 10;
+  _trailCounter = 20;
+  _trailInterval = 10;
   //Statuseseseseses
   status = "none"
   statusDuration = 0
@@ -32,7 +32,7 @@ class Bullet {
   }
   init() {
     this.maxLife = this.lifetime;
-    this.#trailInterval = this.hitSize * 4
+    this._trailInterval = this.hitSize * 4
   }
   step(dt) {
     this.spawnTrail(dt);
@@ -56,7 +56,7 @@ class Bullet {
   spawnTrail(dt) {
     //This got too long
     for (let e = 0; e < this.speed * dt; e++) {
-      if (this.#trailCounter <= 0) {
+      if (this._trailCounter <= 0) {
         if (this.world?.particles != null && this.trail) {
           this.world.particles.push(
             new ShapeParticle(
@@ -71,15 +71,15 @@ class Bullet {
               this.trailColour,
               this.hitSize * 1.9,
               0,
-              this.hitSize * this.#trailInterval * 0.25,
-              this.hitSize * this.#trailInterval * 0.25,
+              this.hitSize * this._trailInterval * 0.25,
+              this.hitSize * this._trailInterval * 0.25,
               0
             )
           );
         }
-        this.#trailCounter = this.#trailInterval;
+        this._trailCounter = this._trailInterval;
       } else {
-        this.#trailCounter--;
+        this._trailCounter--;
       }
     }
   }
