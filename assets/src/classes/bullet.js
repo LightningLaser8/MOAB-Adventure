@@ -39,6 +39,8 @@ class Bullet {
   intervalDirection = 0
   intervalSpread = 0
   intervalSpacing = 0
+  intervalTime = 0
+  #intervalCounter = 0
   get directionRad(){
     return this.direction / 180 * Math.PI
   }
@@ -50,6 +52,7 @@ class Bullet {
     this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {
+      this.intervalTick();
       //Which way to move
       let moveVector = p5.Vector.fromAngle(this.directionRad);
       //Scale to speed
@@ -126,6 +129,15 @@ class Bullet {
   }
   interval(){
     patternedBulletExpulsion(this.x, this.y, this.intervalBullet, this.intervalNumber, this.direction + this.intervalDirection, this.intervalSpread, this.intervalSpacing, this.world, this.entity)
+  }
+  intervalTick(){
+    if(this.#intervalCounter <= 0){
+      this.interval();
+      this.#intervalCounter = this.intervalTime;
+    }
+    else{
+      this.#intervalCounter --
+    }
   }
 }
 
