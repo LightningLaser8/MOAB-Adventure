@@ -188,6 +188,8 @@ class Entity {
       this.effectiveDamageMult *= effect.damageMult ?? 1;
       this.effectiveHealthMult *= effect.healthMult ?? 1;
       this.effectiveResistanceMult *= effect.resistanceMult ?? 1;
+      if(status.timeLeft > 0) status.timeLeft --; //Tick timer
+      else this.statuses.splice(this.statuses.indexOf(status), 1) //Delete status
     }
   }
   applyStatus(effect, time) {

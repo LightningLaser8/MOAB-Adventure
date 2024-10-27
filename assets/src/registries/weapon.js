@@ -1113,3 +1113,303 @@ Registry.weapons.add("incendiary", {
     },
 ]
 });
+Registry.weapons.add("cryo-cannon", {
+  type: "Weapon",
+  name: "Cryo Cannon",
+  description: "Shoots freezing ice bombs that\nslow down targets' weapons",
+  reload: 45,
+  cost: {
+    shards: 850,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      knockback: 20, //keep them in the blast
+      speed: 30,
+      hitSize: 25,
+      trail: false,
+      status: "freezing",
+      statusDuration: 45,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 2,
+        },
+        {
+          type: "ice",
+          amount: 2, //      No longer just visual
+          area: 75,
+          //Icy looking explosion
+          smokeColour: [255, 255, 255, 100],
+          smokeColourTo: [100, 255, 255, 0],
+          sparkColour: [100, 255, 255],
+          sparkColourTo: [0, 255, 255, 100],
+          waveColour: [100, 255, 255]
+        },
+      ],
+      drawer: {
+        image: "box.metal",
+        width: 30,
+        height: 22.5,
+      },
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 31.25,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 10,
+          xOffset: -25
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 32.5,
+      y: 0,
+      width: 25,
+      height: 10,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 7,
+          xOffset: -15
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 50,
+      height: 10,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -20,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 20,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -15,
+      y: 0,
+      width: 5,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 50,
+      height: 10,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: 0,
+      width: 7.5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 25,
+      y: -12.5,
+      width: 25,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      passiveAnimations: [
+        {
+          type: "bounce-animation",
+          rotOffset: 6,
+          duration: 60
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 25,
+      y: 12.5,
+      width: 25,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      passiveAnimations: [
+        {
+          type: "bounce-animation",
+          rotOffset: -6,
+          duration: 60
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 15,
+      width: 20,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -15,
+      width: 20,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 10,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -10,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -10,
+      y: 0,
+      width: 5,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 10,
+      y: 0,
+      width: 5,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -7.5,
+      y: 7.5,
+      width: 10,
+      height: 5,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 7.5,
+      y: -7.5,
+      width: 10,
+      height: 5,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -7.5,
+      y: -7.5,
+      width: 5,
+      height: 10,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 7.5,
+      y: 7.5,
+      width: 5,
+      height: 10,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: 45,
+      slide: 0,
+      image: false,
+      passiveAnimations: [
+        {//Spinny fan thing
+          type: "loop-animation",
+          rotOffset: 360,
+          duration: 20
+        }
+      ]
+    },
+  ]
+})
