@@ -1413,3 +1413,293 @@ Registry.weapons.add("cryo-cannon", {
     },
   ]
 })
+Registry.weapons.add("kinetic-impactor", {
+  type: "Weapon",
+  name: "Kinetic Impactor",
+  description: "Hit entities collide with others!",
+  reload: 45,
+  cost: {
+    shards: 850,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      knockback: 100, //b o n k
+      kineticKnockback: true, //The entire point of this weapon
+      speed: 30,
+      hitSize: 25,
+      trail: false,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 2,
+        },
+        {
+          type: "explosion",
+          amount: 0,
+          area: 30
+        },
+      ],
+      drawer: {
+        image: "box.metal",
+        width: 30,
+        height: 22.5,
+      },
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 31.25,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 10,
+          xOffset: -25
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 35,
+      y: 0,
+      width: 30,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 7,
+          xOffset: -17.5
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: 2.5,
+      y: 0,
+      width: 45,
+      height: 10,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 2.5,
+      y: -15,
+      width: 10,
+      height: 5,
+      rotation: 1,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 2.5,
+      y: 15,
+      width: 10,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -15,
+      y: 0,
+      width: 5,
+      height: 15,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 2.5,
+      y: 0,
+      width: 45,
+      height: 10,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: 0,
+      width: 7.5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 42.5,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          duration: 15,
+          xOffset: -35
+        }
+      ]
+    },
+    {
+      type: "part",
+      x: -5,
+      y: -5,
+      width: 20,
+      height: 5,
+      rotation: 45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -5,
+      y: 5,
+      width: 20,
+      height: 5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 8.75,
+      y: 0,
+      width: 7.5,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 23.75,
+      y: 0,
+      width: 15,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 22.5,
+      y: 20,
+      width: 7.5,
+      height: 7.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 22.5,
+      y: -20,
+      width: 7.5,
+      height: 7.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: -20,
+      width: 7.5,
+      height: 7.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -17.5,
+      y: 20,
+      width: 7.5,
+      height: 7.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 20,
+      y: 17.5,
+      width: 2.5,
+      height: 5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -15,
+      y: -17.5,
+      width: 2.5,
+      height: 5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: 20,
+      y: -17.5,
+      width: 5,
+      height: 2.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+    {
+      type: "part",
+      x: -15,
+      y: 17.5,
+      width: 5,
+      height: 2.5,
+      rotation: -45,
+      slide: 0,
+      image: false
+    },
+]
+})

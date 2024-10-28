@@ -61,9 +61,47 @@ class Entity {
       this.health = this.maxHealth;
     }
   }
-  knock(amount = 0, direction = -this.direction) {
-    this.x += amount * Math.cos(radians(direction)); //Knock in the direction of impact
-    this.y += amount * Math.sin(radians(direction));
+  knock(amount = 0, direction = -this.direction, kineticKnockback = false, resolution = 1) {
+    if(resolution < 0) resolution *= -1 //Fix possilility of infinite loop
+    if(resolution == 0) resolution = 1
+    //so sin and cos only happen once
+    let ymove = Math.sin(radians(direction));
+    let xmove = Math.cos(radians(direction));
+    if(!kineticKnockback){
+      this.x += amount * xmove //Knock in the direction of impact
+      this.y += amount * ymove
+    }
+    else{
+      let hit = false //Has the entity hit anything?
+      for(let iteration = 0; iteration < amount; iteration += resolution){
+        //For every entity this one could possibly collide with
+        for (let entity of this.world.entities) {
+          if (
+            //If a valid collision
+            entity !== this &&
+            !entity.dead &&
+            this.team === entity.team &&
+            this.collidesWith(entity)
+          ) {
+            //It's hit something!
+            hit = true;
+
+            //Move back to stop infinite loop
+            this.x -= resolution * xmove //Knock in the direction of impact
+            this.y -= resolution * ymove
+
+            //Propagate knockback
+            entity.knock(amount * 0.75 /* exponential decay */, direction, true, resolution);
+          }
+        }
+        if(hit) break; //If hit, stop moving
+        else{
+          //If not hit, move
+          this.x += resolution * xmove //Knock in the direction of impact
+          this.y += resolution * ymove
+        }
+      }
+    }
   }
   takeDamage(amount = 0, source = null) {
     this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;
@@ -133,8 +171,8 @@ class Entity {
       if (
         !bullet.remove &&
         this.team !== bullet.entity.team &&
-        this.collidesWith(bullet) &&
-        !bullet.damaged.includes(this)
+        !bullet.damaged.includes(this) &&
+        this.collidesWith(bullet) //check collisions last for performance reasons
       ) {
         //Take all damage instances
         for (let instance of bullet.damage) {
@@ -158,7 +196,7 @@ class Entity {
             );
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
-        this.knock(bullet.knockback, bullet.direction);
+        this.knock(bullet.knockback, bullet.direction, bullet.kineticKnockback); //Knock with default resolution
         if(bullet.status !== "none"){
           this.applyStatus(bullet.status, bullet.statusDuration);
         }

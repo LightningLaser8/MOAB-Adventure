@@ -195,7 +195,7 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  player.addWeaponSlot(ap1) //Test for now
+  player.addWeaponSlot(getSelectedAP(1)) //Add AP1
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
@@ -258,6 +258,13 @@ function reset() {
   game.shards = 0;
   game.level = 1;
   game.paused = false;
+
+  for(let slot of game.player.weaponSlots){
+    slot.clear() //Remove any weapons
+  }
+
+  //garbage collect player
+  game.player = null
 }
 
 //Triggers on any key press
