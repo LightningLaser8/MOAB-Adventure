@@ -61,7 +61,7 @@ class Entity {
       this.health = this.maxHealth;
     }
   }
-  knock(amount = 0, direction = -this.direction, kineticKnockback = false, resolution = 1) {
+  knock(amount = 0, direction = -this.direction, kineticKnockback = false, resolution = 1, collided = []) {
     if(resolution < 0) resolution *= -1 //Fix possilility of infinite loop
     if(resolution == 0) resolution = 1
     //so sin and cos only happen once
@@ -81,17 +81,19 @@ class Entity {
             entity !== this &&
             !entity.dead &&
             this.team === entity.team &&
+            !collided.includes(entity) && //Not if already hit
             this.collidesWith(entity)
           ) {
             //It's hit something!
             hit = true;
+            collided.push(entity)
 
             //Move back to stop infinite loop
             this.x -= resolution * xmove //Knock in the direction of impact
             this.y -= resolution * ymove
 
             //Propagate knockback
-            entity.knock(amount * 0.75 /* exponential decay */, direction, true, resolution);
+            entity.knock(amount * 0.75 /* exponential decay */, direction, true, resolution, collided); //Pass on collided entities to prevent infinite loop
           }
         }
         if(hit) break; //If hit, stop moving
