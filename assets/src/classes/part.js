@@ -16,36 +16,55 @@ class Part {
     return (this.rotation / 180) * Math.PI;
   }
   get totalXOffset() {
-    let totalOffset = 0
-    for(let ani of [...this.chargeAnimations, ...this.recoilAnimations, ...this.passiveAnimations]){
-      totalOffset += ani.xOffset
+    let totalOffset = 0;
+    for (let ani of [
+      ...this.chargeAnimations,
+      ...this.recoilAnimations,
+      ...this.passiveAnimations,
+    ]) {
+      totalOffset += ani.xOffset;
     }
-    return totalOffset
+    return totalOffset;
   }
   get totalYOffset() {
-    let totalOffset = 0
-    for(let ani of [...this.chargeAnimations, ...this.recoilAnimations, ...this.passiveAnimations]){
-      totalOffset += ani.yOffset
+    let totalOffset = 0;
+    for (let ani of [
+      ...this.chargeAnimations,
+      ...this.recoilAnimations,
+      ...this.passiveAnimations,
+    ]) {
+      totalOffset += ani.yOffset;
     }
-    return totalOffset
+    return totalOffset;
   }
   get totalRotOffset() {
-    let totalOffset = 0
-    for(let ani of [...this.chargeAnimations, ...this.recoilAnimations, ...this.passiveAnimations]){
-      totalOffset += ani.rotOffset
+    let totalOffset = 0;
+    for (let ani of [
+      ...this.chargeAnimations,
+      ...this.recoilAnimations,
+      ...this.passiveAnimations,
+    ]) {
+      totalOffset += ani.rotOffset;
     }
-    return totalOffset
+    return totalOffset;
   }
   get totalSlideOffset() {
-    let totalOffset = 0
-    for(let ani of [...this.chargeAnimations, ...this.recoilAnimations, ...this.passiveAnimations]){
-      totalOffset += ani.slideOffset
+    let totalOffset = 0;
+    for (let ani of [
+      ...this.chargeAnimations,
+      ...this.recoilAnimations,
+      ...this.passiveAnimations,
+    ]) {
+      totalOffset += ani.slideOffset;
     }
-    return totalOffset
+    return totalOffset;
   }
   draw(weapon) {
     let pos = createVector(weapon.x, weapon.y);
-    let angle = weapon.rotationRadians + this.rotationRadians + radians(this.totalRotOffset);
+    let angle =
+      weapon.rotationRadians +
+      this.rotationRadians +
+      radians(this.totalRotOffset);
     //pos.add(createVector(this.x, this.y))
     let xOffsetVct = p5.Vector.fromAngle(weapon.rotationRadians);
     xOffsetVct.mult(this.x + this.totalXOffset); //Relative horizontal offset from weapon centre
@@ -70,49 +89,60 @@ class Part {
     } else {
       //If it isn't, draw a rectangle
       push();
-      fill(255)
-      rotatedShape("rect", finalPos.x, finalPos.y, this.width, this.height, angle);
+      fill(255);
+      rotatedShape(
+        "rect",
+        finalPos.x,
+        finalPos.y,
+        this.width,
+        this.height,
+        angle
+      );
       pop();
     }
   }
   init() {
     //For each index of charge animation
-    for(let i = 0; i < this.chargeAnimations.length; i++){
-      let ani = this.chargeAnimations[i] //Get animation constructable
-      this.chargeAnimations[i] = construct(ani) //Override with constructed version
+    for (let i = 0; i < this.chargeAnimations.length; i++) {
+      let ani = this.chargeAnimations[i]; //Get animation constructable
+      this.chargeAnimations[i] = construct(ani); //Override with constructed version
     }
     //Same but for recoil
-    for(let i = 0; i < this.recoilAnimations.length; i++){
-      let ani = this.recoilAnimations[i]
-      this.recoilAnimations[i] = construct(ani)
+    for (let i = 0; i < this.recoilAnimations.length; i++) {
+      let ani = this.recoilAnimations[i];
+      this.recoilAnimations[i] = construct(ani);
     }
     //Same but for passive
-    for(let i = 0; i < this.passiveAnimations.length; i++){
-      let ani = this.passiveAnimations[i]
-      this.passiveAnimations[i] = construct(ani)
+    for (let i = 0; i < this.passiveAnimations.length; i++) {
+      let ani = this.passiveAnimations[i];
+      this.passiveAnimations[i] = construct(ani);
     }
     //Start all passive animations
-    for(let ani of this.passiveAnimations){
-      ani.start()
+    for (let ani of this.passiveAnimations) {
+      ani.start();
     }
   }
   tick() {
-    for(let ani of [...this.chargeAnimations, ...this.recoilAnimations, ...this.passiveAnimations]){
-      ani.tick(1)
+    for (let ani of [
+      ...this.chargeAnimations,
+      ...this.recoilAnimations,
+      ...this.passiveAnimations,
+    ]) {
+      ani.tick(1);
     }
   }
   preFire() {
-    for(let ani of this.chargeAnimations){
-      ani.start()
+    for (let ani of this.chargeAnimations) {
+      ani.start();
     }
   }
   //Fires on parent weapon fire.
   fire() {
-    for(let ani of this.recoilAnimations){
-      ani.start()
+    for (let ani of this.recoilAnimations) {
+      ani.start();
     }
-    for(let ani of this.chargeAnimations){
-      ani.onEnd()
+    for (let ani of this.chargeAnimations) {
+      ani.onEnd();
     }
   }
 }

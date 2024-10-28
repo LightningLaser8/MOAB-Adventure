@@ -1,5 +1,5 @@
 //    New Game Menu 'new-game'
-UIComponent.setCondition("difficulty:none")
+UIComponent.setCondition("difficulty:none");
 //Difficulty selector
 createGamePropertySelector(
   ["new-game"],
@@ -14,9 +14,9 @@ createGamePropertySelector(
   null,
   ["Easy", "Normal", "Hard"],
   50,
-  value => UIComponent.setCondition("difficulty:"+value)
+  (value) => UIComponent.setCondition("difficulty:" + value)
 );
-UIComponent.setCondition("mode:none")
+UIComponent.setCondition("mode:none");
 //Game mode selector
 createGamePropertySelector(
   ["new-game"],
@@ -31,9 +31,9 @@ createGamePropertySelector(
   null,
   ["Adventure", "Boss Rush", "Sandbox"],
   50,
-  value => UIComponent.setCondition("mode:"+value)
+  (value) => UIComponent.setCondition("mode:" + value)
 );
-UIComponent.setCondition("saveslot:none")
+UIComponent.setCondition("saveslot:none");
 //Save slot selector
 createGamePropertySelector(
   ["new-game"],
@@ -48,7 +48,7 @@ createGamePropertySelector(
   null,
   ["0", "1", "2", "3", "4", "5"],
   50,
-  value => UIComponent.setCondition("saveslot:"+value)
+  (value) => UIComponent.setCondition("saveslot:" + value)
 );
 //Weapon slot button
 createUIComponent(
@@ -76,13 +76,13 @@ createUIComponent(
   100,
   "none",
   () => {
-    ui.menuState = "in-game"
-    createPlayer()
+    ui.menuState = "in-game";
+    createPlayer();
   },
   "Start!",
   false,
   60
-)
+);
 createUIComponent(
   ["new-game"],
   ["any", "ap1-slot:none", "ap2-slot:none", "ap3/4-slot:none", "ap5-slot:none"],
@@ -93,7 +93,7 @@ createUIComponent(
   "none",
   null,
   "Choose All\nWeapon Slots"
-)
+);
 createUIComponent(
   ["new-game"],
   ["mode:none"],
@@ -104,7 +104,7 @@ createUIComponent(
   "none",
   null,
   "Choose Game Mode"
-)
+);
 createUIComponent(
   ["new-game"],
   ["saveslot:none"],
@@ -115,7 +115,7 @@ createUIComponent(
   "none",
   null,
   "Choose Save Slot"
-)
+);
 createUIComponent(
   ["new-game"],
   ["difficulty:none"],
@@ -126,4 +126,4 @@ createUIComponent(
   "none",
   null,
   "Choose Difficulty"
-)
+);

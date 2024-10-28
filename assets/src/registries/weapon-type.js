@@ -1,1 +1,1 @@
-Registry.weaponType.add("weapon", Weapon)
+Registry.weaponType.add("weapon", Weapon);

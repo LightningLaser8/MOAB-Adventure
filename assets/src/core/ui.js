@@ -21,20 +21,20 @@ class UIComponent {
     uicomponent.backgroundColour = colour;
     return uicomponent;
   }
-  static removeOutline(uicomponent){
+  static removeOutline(uicomponent) {
     uicomponent.outline = false;
     return uicomponent;
   }
-  static setOutlineColour(uicomponent, colour = null){
+  static setOutlineColour(uicomponent, colour = null) {
     uicomponent.outlineColour = colour;
     return uicomponent;
   }
-  static alignLeft(uicomponent){
-    uicomponent.ox = uicomponent.x //Save old x
+  static alignLeft(uicomponent) {
+    uicomponent.ox = uicomponent.x; //Save old x
     Object.defineProperty(uicomponent, "x", {
-      get: () => uicomponent.ox + textWidth(uicomponent.text)/2 //Add width to it
-    })
-    return uicomponent
+      get: () => uicomponent.ox + textWidth(uicomponent.text) / 2, //Add width to it
+    });
+    return uicomponent;
   }
   //Evaluates property:value on game ui: input "slot:1" => if "slot" is "1" (or equivalent, e.g. 1) return true, else false
   static evaluateCondition(condition) {
@@ -121,7 +121,7 @@ class UIComponent {
     noStroke();
     if (this.inverted) scale(1, -1);
     if (this.width > 0 && this.height > 0) {
-      if(this.outline && this.outlineColour){
+      if (this.outline && this.outlineColour) {
         fill(...this.outlineColour);
         if (this.emphasised) fill(...this.emphasisColour);
         push();
@@ -197,15 +197,9 @@ class UIComponent {
       }
       //Draw BG
       if (this.backgroundColour) {
-        fill(...this.backgroundColour)
-        rect(
-          this.x,
-          this.y,
-          this.width - 2,
-          this.height - 2,
-        );
-      }
-      else{
+        fill(...this.backgroundColour);
+        rect(this.x, this.y, this.width - 2, this.height - 2);
+      } else {
         drawImg(
           images.ui.background,
           this.x,
@@ -316,20 +310,19 @@ function drawImg(
   ...otherParameters //IDK what else p5 image takes
 ) {
   //Get from registry if it exists
-  img = Registry.images.has(img) ? Registry.images.get(img) : img
+  img = Registry.images.has(img) ? Registry.images.get(img) : img;
   if (img instanceof ImageContainer) {
     if (!img.image) return; //Cancel if no image loaded yet
     image(img.image, x, y, width, height, ...otherParameters);
   } else {
     //Try to draw it directly if not
-    try{
+    try {
       image(img, x, y, width, height, ...otherParameters);
-    }
-    catch(error){
+    } catch (error) {
       //Say the problem
-      console.error("Could not draw image: ", img)
+      console.error("Could not draw image: ", img);
       //Replace with a working image
-      drawImg(images.env.error, x, y, width, height, ...otherParameters)
+      drawImg(images.env.error, x, y, width, height, ...otherParameters);
     }
   }
 }

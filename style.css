@@ -1,6 +1,6 @@
-body{
-    margin: 0px;
-    padding: 0px;
-    overflow: hidden;
-    cursor: url(./cursor.svg) 31 31, crosshair;
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+  cursor: url(./cursor.svg) 31 31, crosshair;
 }

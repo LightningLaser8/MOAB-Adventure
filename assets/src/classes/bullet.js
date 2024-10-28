@@ -22,32 +22,32 @@ class Bullet {
   knockback = 0;
   kineticKnockback = false;
   //Effectively a pierce thing
-  damaged = []
+  damaged = [];
   _trailCounter = 20;
   _trailInterval = 10;
   //Statuseseseseses
-  status = "none"
-  statusDuration = 0
+  status = "none";
+  statusDuration = 0;
   //Frags
   fragBullet = {};
-  fragNumber = 0
-  fragDirection = 0
-  fragSpread = 0
-  fragSpacing = 0
+  fragNumber = 0;
+  fragDirection = 0;
+  fragSpread = 0;
+  fragSpacing = 0;
   //Intervals
   intervalBullet = {};
-  intervalNumber = 0
-  intervalDirection = 0
-  intervalSpread = 0
-  intervalSpacing = 0
-  intervalTime = 0
-  #intervalCounter = 0
-  get directionRad(){
-    return this.direction / 180 * Math.PI
+  intervalNumber = 0;
+  intervalDirection = 0;
+  intervalSpread = 0;
+  intervalSpacing = 0;
+  intervalTime = 0;
+  #intervalCounter = 0;
+  get directionRad() {
+    return (this.direction / 180) * Math.PI;
   }
   init() {
     this.maxLife = this.lifetime;
-    this._trailInterval = this.hitSize * 4
+    this._trailInterval = this.hitSize * 4;
   }
   step(dt) {
     this.spawnTrail(dt);
@@ -111,7 +111,7 @@ class Bullet {
       );
     } else {
       //If no image, draw shape instead
-      fill(this.drawer.fill)
+      fill(this.drawer.fill);
       rotatedShape(
         this.drawer.shape,
         this.x,
@@ -122,23 +122,41 @@ class Bullet {
       );
     }
   }
-  collidesWith(obj){
-    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
+  collidesWith(obj) {
+    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
-  frag(){
-    patternedBulletExpulsion(this.x, this.y, this.fragBullet, this.fragNumber, this.direction + this.fragDirection, this.fragSpread, this.fragSpacing, this.world, this.entity)
+  frag() {
+    patternedBulletExpulsion(
+      this.x,
+      this.y,
+      this.fragBullet,
+      this.fragNumber,
+      this.direction + this.fragDirection,
+      this.fragSpread,
+      this.fragSpacing,
+      this.world,
+      this.entity
+    );
   }
-  interval(){
-    patternedBulletExpulsion(this.x, this.y, this.intervalBullet, this.intervalNumber, this.direction + this.intervalDirection, this.intervalSpread, this.intervalSpacing, this.world, this.entity)
+  interval() {
+    patternedBulletExpulsion(
+      this.x,
+      this.y,
+      this.intervalBullet,
+      this.intervalNumber,
+      this.direction + this.intervalDirection,
+      this.intervalSpread,
+      this.intervalSpacing,
+      this.world,
+      this.entity
+    );
   }
-  intervalTick(){
-    if(this.#intervalCounter <= 0){
+  intervalTick() {
+    if (this.#intervalCounter <= 0) {
       this.interval();
       this.#intervalCounter = this.intervalTime;
-    }
-    else{
-      this.#intervalCounter --
+    } else {
+      this.#intervalCounter--;
     }
   }
 }
-

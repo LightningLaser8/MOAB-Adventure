@@ -66,8 +66,8 @@ const aps = {
 };
 function getSelectedAP(ap) {
   if (![1, 2, 3, 4, 5].includes(ap)) return aps.error; //If invalid ap, return blank slot.
-  let conditionSlot = ap
-  if(ap === 4 || ap === 3) conditionSlot = "3/4"; //Internally ap3 and 4 are stored together
+  let conditionSlot = ap;
+  if (ap === 4 || ap === 3) conditionSlot = "3/4"; //Internally ap3 and 4 are stored together
   //If valid:
   if (UIComponent.evaluateCondition("ap" + conditionSlot + "-slot:1"))
     //If selected slot has first option

@@ -14,11 +14,11 @@ class Weapon {
   //Upgrade info
   cost = {
     shards: 0,
-    bloonstones: 0
-  }
-  slot = null
-  name = "Name goes here"
-  description = "Description goes here"
+    bloonstones: 0,
+  };
+  slot = null;
+  name = "Name goes here";
+  description = "Description goes here";
   /**Rotation in degrees */
   rotation = 0;
   //Internal
@@ -52,10 +52,10 @@ class Weapon {
         ).heading() //'A->B' = 'B' - 'A'
       );
     }
-    if(this.#cooldown > 0){
-      this.#cooldown --
+    if (this.#cooldown > 0) {
+      this.#cooldown--;
     }
-    this.parts.forEach(x => x.tick()) //Tick all parts
+    this.parts.forEach((x) => x.tick()); //Tick all parts
   }
   fire() {
     if (this.#cooldown <= 0) {
@@ -65,18 +65,37 @@ class Weapon {
       this.shoot.pattern.amount ??= 1;
       this.shoot.pattern.spacing ??= 0;
 
-      patternedBulletExpulsion(this.x, this.y, this.shoot.bullet, this.shoot.pattern.amount, this.rotation, this.shoot.pattern.spread, this.shoot.pattern.spacing, this.slot.entity.world, this.slot.entity)
-      this.parts.forEach(x => x.fire()) //Tick all parts
+      patternedBulletExpulsion(
+        this.x,
+        this.y,
+        this.shoot.bullet,
+        this.shoot.pattern.amount,
+        this.rotation,
+        this.shoot.pattern.spread,
+        this.shoot.pattern.spacing,
+        this.slot.entity.world,
+        this.slot.entity
+      );
+      this.parts.forEach((x) => x.fire()); //Tick all parts
     }
   }
 }
 
-function patternedBulletExpulsion(x, y, bulletToSpawn, amount, direction, spread, spacing, world, entity){
-  //Derives most of its code from `Weapon.fire()`  
+function patternedBulletExpulsion(
+  x,
+  y,
+  bulletToSpawn,
+  amount,
+  direction,
+  spread,
+  spacing,
+  world,
+  entity
+) {
+  //Derives most of its code from `Weapon.fire()`
   //universal mode: a c t i v a t e
   //Max difference in direction
-  let diff =
-    (spacing * (amount - 1)) / 2;
+  let diff = (spacing * (amount - 1)) / 2;
   //Current angle
   let currentAngle = -diff;
   //For each bullet to fire
@@ -91,10 +110,7 @@ function patternedBulletExpulsion(x, y, bulletToSpawn, amount, direction, spread
     bulletToFire.direction += currentAngle;
     currentAngle += spacing;
     //Apply random spread
-    bulletToFire.direction += random(
-      spread,
-      -spread
-    );
+    bulletToFire.direction += random(spread, -spread);
     //Add entity and world
     bulletToFire.entity = entity;
     bulletToFire.world = world;

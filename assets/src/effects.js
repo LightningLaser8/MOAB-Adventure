@@ -84,7 +84,7 @@ function splashDamageInstance(
       e.team !== sourceEntity.team
     ) {
       e.damage(damageType, amount, sourceEntity);
-      if(status !== "none") e.applyStatus(status, statusDuration);
+      if (status !== "none") e.applyStatus(status, statusDuration);
     }
   }
 }

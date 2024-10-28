@@ -51,8 +51,7 @@ Object.defineProperty(
         "v" +
         gameVersion +
         (isPreview ? " (preview)" : "") +
-        (window.location.origin !==
-        "https://lightninglaser8.github.io"
+        (window.location.origin !== "https://lightninglaser8.github.io"
           ? " - Development Version"
           : "")
       ).substring(0, Math.floor((frameCount ?? 0) / 10)),

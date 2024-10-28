@@ -17,7 +17,7 @@ const game = {
 };
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
-world.addSpawn({entity: Box.metal, interval: 300});
+world.addSpawn({ entity: Box.metal, interval: 300 });
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -90,7 +90,7 @@ function draw() {
     gameFrame();
   }
   uiFrame();
-  if(!ui.waitingForMouseUp) fireIfPossible();
+  if (!ui.waitingForMouseUp) fireIfPossible();
 }
 
 function uiFrame() {
@@ -100,7 +100,7 @@ function uiFrame() {
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
-  if(keyIsDown(SHIFT)) showMousePos();
+  if (keyIsDown(SHIFT)) showMousePos();
 }
 
 function gameFrame() {
@@ -195,20 +195,32 @@ function createPlayer() {
   });
   player.addToWorld(world);
   game.player = player;
-  player.addWeaponSlot(getSelectedAP(1)) //Add AP1
+  player.addWeaponSlot(getSelectedAP(1)); //Add AP1
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
       return ui.mouse;
     }, //This way, I only have to set it once.
   });
-  world.particles.push(new WaveParticle(player.x, player.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0))
+  world.particles.push(
+    new WaveParticle(
+      player.x,
+      player.y,
+      120,
+      0,
+      1920,
+      [255, 0, 0],
+      [255, 0, 0, 0],
+      100,
+      0
+    )
+  );
 }
 
 function fireIfPossible() {
   if (ui.menuState === "in-game" && mouseIsPressed) {
     for (let slot of game.player.weaponSlots) {
-      if(slot.weapon) slot.weapon.fire();
+      if (slot.weapon) slot.weapon.fire();
     }
   }
 }
@@ -259,12 +271,12 @@ function reset() {
   game.level = 1;
   game.paused = false;
 
-  for(let slot of game.player.weaponSlots){
-    slot.clear() //Remove any weapons
+  for (let slot of game.player.weaponSlots) {
+    slot.clear(); //Remove any weapons
   }
 
   //garbage collect player
-  game.player = null
+  game.player = null;
 }
 
 //Triggers on any key press

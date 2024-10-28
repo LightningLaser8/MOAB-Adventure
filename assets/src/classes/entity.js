@@ -55,25 +55,30 @@ class Entity {
     }
     this.takeDamage(Math.max(calcAmount, 0), source); //Take the damage, but never take negative damage
   }
-  heal(amount){
+  heal(amount) {
     this.health += amount;
     if (this.health > this.maxHealth) {
       this.health = this.maxHealth;
     }
   }
-  knock(amount = 0, direction = -this.direction, kineticKnockback = false, resolution = 1, collided = []) {
-    if(resolution < 0) resolution *= -1 //Fix possilility of infinite loop
-    if(resolution == 0) resolution = 1
+  knock(
+    amount = 0,
+    direction = -this.direction,
+    kineticKnockback = false,
+    resolution = 1,
+    collided = []
+  ) {
+    if (resolution < 0) resolution *= -1; //Fix possilility of infinite loop
+    if (resolution == 0) resolution = 1;
     //so sin and cos only happen once
     let ymove = Math.sin(radians(direction));
     let xmove = Math.cos(radians(direction));
-    if(!kineticKnockback){
-      this.x += amount * xmove //Knock in the direction of impact
-      this.y += amount * ymove
-    }
-    else{
-      let hit = false //Has the entity hit anything?
-      for(let iteration = 0; iteration < amount; iteration += resolution){
+    if (!kineticKnockback) {
+      this.x += amount * xmove; //Knock in the direction of impact
+      this.y += amount * ymove;
+    } else {
+      let hit = false; //Has the entity hit anything?
+      for (let iteration = 0; iteration < amount; iteration += resolution) {
         //For every entity this one could possibly collide with
         for (let entity of this.world.entities) {
           if (
@@ -86,28 +91,37 @@ class Entity {
           ) {
             //It's hit something!
             hit = true;
-            collided.push(entity)
+            collided.push(entity);
 
             //Move back to stop infinite loop
-            this.x -= resolution * xmove //Knock in the direction of impact
-            this.y -= resolution * ymove
+            this.x -= resolution * xmove; //Knock in the direction of impact
+            this.y -= resolution * ymove;
 
             //Propagate knockback
-            entity.knock(amount * 0.75 /* exponential decay */, direction, true, resolution, collided); //Pass on collided entities to prevent infinite loop
+            entity.knock(
+              amount * 0.75 /* exponential decay */,
+              direction,
+              true,
+              resolution,
+              collided
+            ); //Pass on collided entities to prevent infinite loop
           }
         }
-        if(hit) break; //If hit, stop moving
-        else{
+        if (hit) break; //If hit, stop moving
+        else {
           //If not hit, move
-          this.x += resolution * xmove //Knock in the direction of impact
-          this.y += resolution * ymove
+          this.x += resolution * xmove; //Knock in the direction of impact
+          this.y += resolution * ymove;
         }
       }
     }
   }
   takeDamage(amount = 0, source = null) {
-    this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;
-    if (source) source.damageDealt += Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
+    this.damageTaken +=
+      Math.min(amount, this.health) * this.effectiveHealthMult;
+    if (source)
+      source.damageDealt +=
+        Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
@@ -199,7 +213,7 @@ class Entity {
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
         this.knock(bullet.knockback, bullet.direction, bullet.kineticKnockback); //Knock with default resolution
-        if(bullet.status !== "none"){
+        if (bullet.status !== "none") {
           this.applyStatus(bullet.status, bullet.statusDuration);
         }
         //Make the bullet know
@@ -228,8 +242,8 @@ class Entity {
       this.effectiveDamageMult *= effect.damageMult ?? 1;
       this.effectiveHealthMult *= effect.healthMult ?? 1;
       this.effectiveResistanceMult *= effect.resistanceMult ?? 1;
-      if(status.timeLeft > 0) status.timeLeft --; //Tick timer
-      else this.statuses.splice(this.statuses.indexOf(status), 1) //Delete status
+      if (status.timeLeft > 0) status.timeLeft--; //Tick timer
+      else this.statuses.splice(this.statuses.indexOf(status), 1); //Delete status
     }
   }
   applyStatus(effect, time) {

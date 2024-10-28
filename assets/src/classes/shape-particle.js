@@ -36,7 +36,7 @@ class ShapeParticle {
     this.sizeY = sizeYFrom;
     this.rotateSpeed = rotateSpeed;
     this.#rotOffset = 0;
-    this.moveWithBackground = moveWithBackground
+    this.moveWithBackground = moveWithBackground;
   }
   step(dt) {
     if (this.lifetime >= dt) {
@@ -53,7 +53,7 @@ class ShapeParticle {
         this.y + this.speed * p5.Vector.fromAngle(this.direction).y * dt
       );
       //Move with BG
-      if(this.moveWithBackground) this.x -= game.player.speed
+      if (this.moveWithBackground) this.x -= game.player.speed;
       //Decelerate
       if (this.speed >= this.decel) {
         this.speed -= this.decel * dt;
@@ -80,13 +80,7 @@ class ShapeParticle {
     noStroke();
     fill(255);
     //Interpolate colour
-    fill(
-      ...blendColours(
-        this.colourFrom,
-        this.colourTo,
-        this.calcLifeFract()
-      )
-    );
+    fill(...blendColours(this.colourFrom, this.colourTo, this.calcLifeFract()));
     //Draw the particle
     rotatedShape(
       this.shape,

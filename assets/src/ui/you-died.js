@@ -1,12 +1,5 @@
-//Background, title, etc  
-createUIComponent(
-  ["you-died"],
-  [],
-  960,
-  540,
-  1000,
-  900
-)
+//Background, title, etc
+createUIComponent(["you-died"], [], 960, 540, 1000, 900);
 createUIComponent(
   ["you-died"],
   [],
@@ -19,7 +12,7 @@ createUIComponent(
   "You Died",
   false,
   100
-)
+);
 //Interesting bit
 const deathStats = {
   shardCounter: createUIComponent(
@@ -113,7 +106,7 @@ const deathStats = {
     true,
     40
   ),
-}
+};
 createUIComponent(
   ["you-died"],
   [],
@@ -123,9 +116,9 @@ createUIComponent(
   100,
   "none",
   () => {
-    ui.menuState = "start-menu"
+    ui.menuState = "start-menu";
   },
   "Return",
   false,
   50
-).interactive = true
+).interactive = true;

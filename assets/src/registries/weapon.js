@@ -41,9 +41,9 @@ Registry.weapons.add("tiny-shooter", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -52,7 +52,7 @@ Registry.weapons.add("tiny-shooter", {
       width: 25,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -61,7 +61,7 @@ Registry.weapons.add("tiny-shooter", {
       width: 10,
       height: 15,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -70,9 +70,9 @@ Registry.weapons.add("tiny-shooter", {
       width: 7.5,
       height: 15,
       rotation: 0,
-      image: false
+      image: false,
     },
-  ]
+  ],
 });
 Registry.weapons.add("double-shooter", {
   type: "Weapon",
@@ -120,9 +120,9 @@ Registry.weapons.add("double-shooter", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -136,9 +136,9 @@ Registry.weapons.add("double-shooter", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -147,7 +147,7 @@ Registry.weapons.add("double-shooter", {
       width: 25,
       height: 30,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -156,7 +156,7 @@ Registry.weapons.add("double-shooter", {
       width: 10,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -165,7 +165,7 @@ Registry.weapons.add("double-shooter", {
       width: 5,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -174,9 +174,9 @@ Registry.weapons.add("double-shooter", {
       width: 2.5,
       height: 10,
       rotation: 0,
-      image: false
+      image: false,
     },
-  ]
+  ],
 });
 Registry.weapons.add("bomb-shooter", {
   type: "Weapon",
@@ -227,9 +227,9 @@ Registry.weapons.add("bomb-shooter", {
           type: "recoil-animation",
           duration: 5,
           xOffset: -25,
-          speedRatio: 0.1
-        }
-      ]
+          speedRatio: 0.1,
+        },
+      ],
     },
     {
       type: "part",
@@ -238,7 +238,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 30,
       height: 30,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -247,7 +247,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 7.5,
       height: 20,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -256,7 +256,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 5,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -265,7 +265,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 7.5,
       height: 35,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -274,7 +274,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 10,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -283,7 +283,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 10,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -292,7 +292,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 2.5,
       height: 10,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -301,7 +301,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 15,
       height: 7.5,
       rotation: 30,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -310,7 +310,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 15,
       height: 7.5,
       rotation: -30,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -319,7 +319,7 @@ Registry.weapons.add("bomb-shooter", {
       width: 35,
       height: 7.5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -328,9 +328,9 @@ Registry.weapons.add("bomb-shooter", {
       width: 35,
       height: 7.5,
       rotation: 0,
-      image: false
+      image: false,
     },
-  ]
+  ],
 });
 Registry.weapons.add("heavy-shots", {
   type: "Weapon",
@@ -357,7 +357,7 @@ Registry.weapons.add("heavy-shots", {
         {
           type: "explosion",
           amount: 0, //      Visual explosion effect
-          area: 30
+          area: 30,
         },
       ],
       drawer: {
@@ -381,9 +381,9 @@ Registry.weapons.add("heavy-shots", {
         {
           type: "recoil-animation",
           duration: 10,
-          xOffset: -25
-        }
-      ]
+          xOffset: -25,
+        },
+      ],
     },
     {
       type: "part",
@@ -397,9 +397,9 @@ Registry.weapons.add("heavy-shots", {
         {
           type: "recoil-animation",
           duration: 7,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -408,7 +408,7 @@ Registry.weapons.add("heavy-shots", {
       width: 40,
       height: 10,
       rotation: 45,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -417,7 +417,7 @@ Registry.weapons.add("heavy-shots", {
       width: 10,
       height: 5,
       rotation: 1,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -426,7 +426,7 @@ Registry.weapons.add("heavy-shots", {
       width: 10,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -435,7 +435,7 @@ Registry.weapons.add("heavy-shots", {
       width: 5,
       height: 10,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -444,7 +444,7 @@ Registry.weapons.add("heavy-shots", {
       width: 40,
       height: 10,
       rotation: -45,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -453,7 +453,7 @@ Registry.weapons.add("heavy-shots", {
       width: 25,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -462,9 +462,9 @@ Registry.weapons.add("heavy-shots", {
       width: 7.5,
       height: 20,
       rotation: 0,
-      image: false
+      image: false,
     },
-  ]
+  ],
 });
 Registry.weapons.add("laser-blaster", {
   type: "Weapon",
@@ -495,7 +495,7 @@ Registry.weapons.add("laser-blaster", {
         height: 10,
       },
       trail: true,
-      trailColour: [255, 0, 0, 50]
+      trailColour: [255, 0, 0, 50],
     },
     pattern: {}, //Blank pattern
   },
@@ -507,7 +507,7 @@ Registry.weapons.add("laser-blaster", {
       width: 27.5,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -516,7 +516,7 @@ Registry.weapons.add("laser-blaster", {
       width: 27.5,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -525,7 +525,7 @@ Registry.weapons.add("laser-blaster", {
       width: 5,
       height: 30,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -539,9 +539,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: 10
-        }
-      ]
+          xOffset: 10,
+        },
+      ],
     },
     {
       type: "part",
@@ -555,9 +555,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: 50
-        }
-      ]
+          xOffset: 50,
+        },
+      ],
     },
     {
       type: "part",
@@ -571,9 +571,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: 30
-        }
-      ]
+          xOffset: 30,
+        },
+      ],
     },
     {
       type: "part",
@@ -587,9 +587,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: 70
-        }
-      ]
+          xOffset: 70,
+        },
+      ],
     },
     {
       type: "part",
@@ -603,9 +603,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -7
-        }
-      ]
+          xOffset: -7,
+        },
+      ],
     },
     {
       type: "part",
@@ -619,9 +619,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -7
-        }
-      ]
+          xOffset: -7,
+        },
+      ],
     },
     {
       type: "part",
@@ -635,9 +635,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -7
-        }
-      ]
+          xOffset: -7,
+        },
+      ],
     },
     {
       type: "part",
@@ -651,9 +651,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -7
-        }
-      ]
+          xOffset: -7,
+        },
+      ],
     },
     {
       type: "part",
@@ -662,7 +662,7 @@ Registry.weapons.add("laser-blaster", {
       width: 10,
       height: 10,
       rotation: -45,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -671,7 +671,7 @@ Registry.weapons.add("laser-blaster", {
       width: 10,
       height: 10,
       rotation: -45,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -680,7 +680,7 @@ Registry.weapons.add("laser-blaster", {
       width: 25,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -689,7 +689,7 @@ Registry.weapons.add("laser-blaster", {
       width: 5,
       height: 20,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -703,9 +703,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -719,9 +719,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -736,9 +736,9 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          rotOffset: 30
-        }
-      ]
+          rotOffset: 30,
+        },
+      ],
     },
     {
       type: "part",
@@ -753,11 +753,11 @@ Registry.weapons.add("laser-blaster", {
         {
           type: "recoil-animation",
           duration: 5,
-          rotOffset: -30
-        }
-      ]
+          rotOffset: -30,
+        },
+      ],
     },
-  ]
+  ],
 });
 Registry.weapons.add("rifle", {
   type: "Weapon",
@@ -803,9 +803,9 @@ Registry.weapons.add("rifle", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -20
-        }
-      ]
+          xOffset: -20,
+        },
+      ],
     },
     {
       type: "part",
@@ -814,7 +814,7 @@ Registry.weapons.add("rifle", {
       width: 12.5,
       height: 20,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -823,7 +823,7 @@ Registry.weapons.add("rifle", {
       width: 10,
       height: 20,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -832,7 +832,7 @@ Registry.weapons.add("rifle", {
       width: 10,
       height: 30,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -841,7 +841,7 @@ Registry.weapons.add("rifle", {
       width: 25,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -850,7 +850,7 @@ Registry.weapons.add("rifle", {
       width: 25,
       height: 5,
       rotation: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -859,9 +859,9 @@ Registry.weapons.add("rifle", {
       width: 25,
       height: 25,
       rotation: 0,
-      image: false
+      image: false,
     },
-  ]
+  ],
 });
 Registry.weapons.add("incendiary", {
   type: "Weapon",
@@ -891,7 +891,7 @@ Registry.weapons.add("incendiary", {
           area: 150,
           amount: 3,
           smokeColour: [255, 200, 100],
-          smokeColourTo: [255, 0, 0, 0]
+          smokeColourTo: [255, 0, 0, 0],
         },
       ],
       drawer: {
@@ -917,9 +917,9 @@ Registry.weapons.add("incendiary", {
           type: "recoil-animation",
           duration: 5,
           xOffset: -25,
-          speedRatio: 0.1
-        }
-      ]
+          speedRatio: 0.1,
+        },
+      ],
     },
     {
       type: "part",
@@ -929,7 +929,7 @@ Registry.weapons.add("incendiary", {
       height: 20,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -939,7 +939,7 @@ Registry.weapons.add("incendiary", {
       height: 25,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -949,7 +949,7 @@ Registry.weapons.add("incendiary", {
       height: 25,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -959,7 +959,7 @@ Registry.weapons.add("incendiary", {
       height: 10,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -969,7 +969,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 30,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -979,7 +979,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: -30,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -989,7 +989,7 @@ Registry.weapons.add("incendiary", {
       height: 5,
       rotation: -120,
       slide: 22.5,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -999,7 +999,7 @@ Registry.weapons.add("incendiary", {
       height: 5,
       rotation: 120,
       slide: 22.5,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1009,7 +1009,7 @@ Registry.weapons.add("incendiary", {
       height: 5,
       rotation: 70,
       slide: 20,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1019,7 +1019,7 @@ Registry.weapons.add("incendiary", {
       height: 5,
       rotation: -70,
       slide: 20,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1029,7 +1029,7 @@ Registry.weapons.add("incendiary", {
       height: 30,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1039,7 +1039,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1049,7 +1049,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1059,7 +1059,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 30,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1069,7 +1069,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: -30,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1079,7 +1079,7 @@ Registry.weapons.add("incendiary", {
       height: 35,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1089,7 +1089,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1099,7 +1099,7 @@ Registry.weapons.add("incendiary", {
       height: 7.5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1109,9 +1109,9 @@ Registry.weapons.add("incendiary", {
       height: 20,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
-]
+  ],
 });
 Registry.weapons.add("cryo-cannon", {
   type: "Weapon",
@@ -1146,7 +1146,7 @@ Registry.weapons.add("cryo-cannon", {
           smokeColourTo: [100, 255, 255, 0],
           sparkColour: [100, 255, 255],
           sparkColourTo: [0, 255, 255, 100],
-          waveColour: [100, 255, 255]
+          waveColour: [100, 255, 255],
         },
       ],
       drawer: {
@@ -1170,9 +1170,9 @@ Registry.weapons.add("cryo-cannon", {
         {
           type: "recoil-animation",
           duration: 10,
-          xOffset: -25
-        }
-      ]
+          xOffset: -25,
+        },
+      ],
     },
     {
       type: "part",
@@ -1186,9 +1186,9 @@ Registry.weapons.add("cryo-cannon", {
         {
           type: "recoil-animation",
           duration: 7,
-          xOffset: -15
-        }
-      ]
+          xOffset: -15,
+        },
+      ],
     },
     {
       type: "part",
@@ -1198,7 +1198,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1208,7 +1208,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1218,7 +1218,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1228,7 +1228,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1238,7 +1238,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1248,7 +1248,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 25,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1258,7 +1258,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 20,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1273,9 +1273,9 @@ Registry.weapons.add("cryo-cannon", {
         {
           type: "bounce-animation",
           rotOffset: 6,
-          duration: 60
-        }
-      ]
+          duration: 60,
+        },
+      ],
     },
     {
       type: "part",
@@ -1290,9 +1290,9 @@ Registry.weapons.add("cryo-cannon", {
         {
           type: "bounce-animation",
           rotOffset: -6,
-          duration: 60
-        }
-      ]
+          duration: 60,
+        },
+      ],
     },
     {
       type: "part",
@@ -1302,7 +1302,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1312,7 +1312,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1322,7 +1322,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1332,7 +1332,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1342,7 +1342,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1352,7 +1352,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1362,7 +1362,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1372,7 +1372,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 5,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1382,7 +1382,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1392,7 +1392,7 @@ Registry.weapons.add("cryo-cannon", {
       height: 10,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1404,15 +1404,16 @@ Registry.weapons.add("cryo-cannon", {
       slide: 0,
       image: false,
       passiveAnimations: [
-        {//Spinny fan thing
+        {
+          //Spinny fan thing
           type: "loop-animation",
           rotOffset: 360,
-          duration: 20
-        }
-      ]
+          duration: 20,
+        },
+      ],
     },
-  ]
-})
+  ],
+});
 Registry.weapons.add("kinetic-impactor", {
   type: "Weapon",
   name: "Kinetic Impactor",
@@ -1439,7 +1440,7 @@ Registry.weapons.add("kinetic-impactor", {
         {
           type: "explosion",
           amount: 0,
-          area: 30
+          area: 30,
         },
       ],
       drawer: {
@@ -1463,9 +1464,9 @@ Registry.weapons.add("kinetic-impactor", {
         {
           type: "recoil-animation",
           duration: 10,
-          xOffset: -25
-        }
-      ]
+          xOffset: -25,
+        },
+      ],
     },
     {
       type: "part",
@@ -1480,9 +1481,9 @@ Registry.weapons.add("kinetic-impactor", {
         {
           type: "recoil-animation",
           duration: 7,
-          xOffset: -17.5
-        }
-      ]
+          xOffset: -17.5,
+        },
+      ],
     },
     {
       type: "part",
@@ -1492,7 +1493,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 10,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1502,7 +1503,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: 1,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1512,7 +1513,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1522,7 +1523,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 15,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1532,7 +1533,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 10,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1542,7 +1543,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 25,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1552,7 +1553,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 20,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1567,9 +1568,9 @@ Registry.weapons.add("kinetic-impactor", {
         {
           type: "recoil-animation",
           duration: 15,
-          xOffset: -35
-        }
-      ]
+          xOffset: -35,
+        },
+      ],
     },
     {
       type: "part",
@@ -1579,7 +1580,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: 45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1589,7 +1590,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1599,7 +1600,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1609,7 +1610,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1619,7 +1620,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 10,
       rotation: 0,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1629,7 +1630,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 7.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1639,7 +1640,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 7.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1649,7 +1650,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 7.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1659,7 +1660,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 7.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1669,7 +1670,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1679,7 +1680,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1689,7 +1690,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 2.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
     {
       type: "part",
@@ -1699,7 +1700,7 @@ Registry.weapons.add("kinetic-impactor", {
       height: 2.5,
       rotation: -45,
       slide: 0,
-      image: false
+      image: false,
     },
-]
-})
+  ],
+});

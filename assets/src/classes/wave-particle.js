@@ -23,7 +23,7 @@ class WaveParticle {
     this.maxLifetime = lifetime;
     this.strokeFrom = strokeFrom;
     this.strokeTo = strokeTo;
-    this.moveWithBackground = moveWithBackground
+    this.moveWithBackground = moveWithBackground;
   }
   step(dt) {
     if (this.lifetime >= dt) {
@@ -31,7 +31,7 @@ class WaveParticle {
         this.fromRadius * this.calcLifeFract() +
         this.toRadius * (1 - this.calcLifeFract());
       //Move with BG
-      if(this.moveWithBackground) this.x -= game.player.speed
+      if (this.moveWithBackground) this.x -= game.player.speed;
       this.lifetime -= dt;
     } else {
       this.remove = true;
