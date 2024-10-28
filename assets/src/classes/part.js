@@ -6,6 +6,7 @@ class Part {
   rotation = 0;
   width = 0;
   height = 0;
+  colour = [200, 200, 200];
 
   chargeAnimations = [];
   recoilAnimations = [];
@@ -89,7 +90,7 @@ class Part {
     } else {
       //If it isn't, draw a rectangle
       push();
-      fill(255);
+      fill(...this.colour);
       rotatedShape(
         "rect",
         finalPos.x,

@@ -24,6 +24,12 @@ class Weapon {
   //Internal
   #delay = 0;
   #cooldown = 0;
+  //Special weapon effects
+  accel = 0;
+  accelDecay = 0;
+  maxAccel = 2;
+  #acceleration = 0;
+  #accelerated = 0;
   constructor() {}
   get rotationRadians() {
     return (this.rotation / 180) * Math.PI;
@@ -52,14 +58,43 @@ class Weapon {
         ).heading() //'A->B' = 'B' - 'A'
       );
     }
+    this.decelerate()
     if (this.#cooldown > 0) {
       this.#cooldown--;
     }
     this.parts.forEach((x) => x.tick()); //Tick all parts
   }
+  getAcceleratedReloadRate(){
+    if(this.#acceleration <= -1 || this.#acceleration > this.maxAccel) return this.reload; //If bad acceleration then ignore it
+    return this.reload / (1 + this.#acceleration); //2 acceleration = 200% fire rate increase = 3x fire rate
+  }
+  accelerate() {
+    this.#accelerated = this.getAcceleratedReloadRate() * 1.1; //Always wait for at least the reload time before deceling
+    if(this.#acceleration < this.maxAccel){
+      this.#acceleration += this.accel;
+    }
+    if(this.#acceleration > this.maxAccel){
+      this.#acceleration = this.maxAccel;
+    }
+  }
+  decelerate(){
+    //If accelerated this frame, don't slow down
+    if(this.#accelerated > 0){
+      this.#accelerated--;
+      return;
+    }
+    //Else do
+    if(this.#acceleration > 0){
+      this.#acceleration -= this.accelDecay;
+    }
+    if(this.#acceleration < 0){
+      this.#acceleration = 0;
+    }
+  }
   fire() {
     if (this.#cooldown <= 0) {
-      this.#cooldown = this.reload;
+      this.#cooldown = this.getAcceleratedReloadRate();
+      this.accelerate() //Apply acceleration effects
       //Resolve nonexistent properties
       this.shoot.pattern.spread ??= 0;
       this.shoot.pattern.amount ??= 1;
