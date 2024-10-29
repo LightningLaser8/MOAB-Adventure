@@ -12,3 +12,4 @@ Registry.genericType.add("bounce-animation", BounceAnimation);
 Registry.genericType.add("recoil-animation", RecoilAnimation);
 Registry.genericType.add("status-effect", StatusEffect);
 Registry.genericType.add("missile", Missile);
+Registry.genericType.add("laser", LaserBullet);

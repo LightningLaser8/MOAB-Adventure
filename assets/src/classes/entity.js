@@ -188,7 +188,7 @@ class Entity {
         !bullet.remove &&
         this.team !== bullet.entity.team &&
         !bullet.damaged.includes(this) &&
-        this.collidesWith(bullet) //check collisions last for performance reasons
+        bullet.collidesWith(this) //check collisions last for performance reasons
       ) {
         //Take all damage instances
         for (let instance of bullet.damage) {

@@ -9,7 +9,8 @@ const aps = {
     opt2: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
-      "bomb-shooter" /*, "missile-launcher", "missile-battery", ... */
+      "bomb-shooter",
+      "missile-launcher" /*, "missile-battery", ... */
     ),
   },
   ap2: {
@@ -36,7 +37,8 @@ const aps = {
     opt2: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
-      "laser-blaster" /*, "lancer", "spike", ... */
+      "laser-blaster",
+      "lancer" /*, "spike", ... */
     ),
   },
   ap4: {
@@ -49,7 +51,8 @@ const aps = {
     opt2: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
-      "laser-blaster" /*, "lancer", "spike", ... */
+      "laser-blaster",
+      "lancer" /*, "spike", ... */
     ),
   },
   ap5: {
