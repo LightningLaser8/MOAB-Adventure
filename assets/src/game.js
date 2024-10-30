@@ -183,7 +183,7 @@ function createPlayer() {
     x: 300,
     y: 540,
     name: "MOAB",
-    maxHealth: 200,
+    health: 200,
     drawer: {
       image: "blimp.moab",
       width: 230,

@@ -1227,7 +1227,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
@@ -1245,7 +1245,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
@@ -1263,7 +1263,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
@@ -1281,7 +1281,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
@@ -1299,7 +1299,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
@@ -1317,7 +1317,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "recoil-animation",
           duration: 5,
-          xOffset: -25,
+          xOffset: -15,
           speedRatio: 0.1,
         },
       ],
