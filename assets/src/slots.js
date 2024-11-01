@@ -10,7 +10,8 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "bomb-shooter",
-      "missile-launcher" /*, "missile-battery", ... */
+      "missile-launcher",
+      "missile-battery",
     ),
   },
   ap2: {
@@ -24,7 +25,8 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "heavy-shots",
-      "cryo-cannon" /*, "shattering-shells", ... */
+      "cryo-cannon",
+      "shattering-shells",
     ),
   },
   ap3: {
