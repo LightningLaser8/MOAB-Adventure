@@ -33,7 +33,29 @@ class World {
     let len = this.bullets.length;
     for (let b = 0; b < len; b++) {
       if (this.bullets[b]?.remove) {
-        this.bullets[b].frag();
+        let bullet = this.bullets[b]
+        for (let instance of bullet.damage) {
+          if (instance.area)
+            //If it explodes
+            splashDamageInstance(
+              bullet.x,
+              bullet.y,
+              instance.amount,
+              instance.type,
+              instance.area,
+              bullet.entity,
+              instance.visual, //        \
+              instance.sparkColour, //   |
+              instance.sparkColourTo, // |
+              instance.smokeColour, //   |- These are optional, but can be set per instance
+              instance.smokeColourTo, // |
+              instance.waveColour, //     /
+              bullet.status,
+              bullet.statusDuration
+            );
+        }
+        bullet.frag();
+        //Delete the bullet
         this.bullets.splice(b, 1);
       }
     }

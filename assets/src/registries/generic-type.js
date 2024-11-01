@@ -11,5 +11,6 @@ Registry.genericType.add("loop-animation", LoopingAnimation);
 Registry.genericType.add("bounce-animation", BounceAnimation);
 Registry.genericType.add("recoil-animation", RecoilAnimation);
 Registry.genericType.add("status-effect", StatusEffect);
-Registry.genericType.add("missile", Missile);
-Registry.genericType.add("laser", LaserBullet);
+Registry.genericType.add("missile-bullet", Missile);
+Registry.genericType.add("laser-bullet", LaserBullet);
+Registry.genericType.add("point-bullet", PointBullet);

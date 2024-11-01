@@ -13,7 +13,7 @@ Registry.weapons.add("tiny-shooter", {
       type: "Bullet",
       lifetime: 40,
       speed: 30,
-      hitSize: 15,
+      hitSize: 8,
       trail: false,
       damage: [
         {
@@ -22,9 +22,9 @@ Registry.weapons.add("tiny-shooter", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 20,
-        height: 15,
+        image: "bullet.normal",
+        width: 28,
+        height: 16,
       },
     },
     pattern: {}, //Blank pattern
@@ -89,7 +89,7 @@ Registry.weapons.add("double-shooter", {
       type: "Bullet",
       lifetime: 40,
       speed: 30,
-      hitSize: 15,
+      hitSize: 8,
       trail: false,
       damage: [
         {
@@ -98,9 +98,9 @@ Registry.weapons.add("double-shooter", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 20,
-        height: 15,
+        image: "bullet.normal",
+        width: 28,
+        height: 16,
       },
     },
     pattern: {
@@ -194,7 +194,7 @@ Registry.weapons.add("bomb-shooter", {
       type: "Bullet",
       lifetime: 40,
       speed: 30,
-      hitSize: 30,
+      hitSize: 15,
       trail: false,
       damage: [
         {
@@ -208,8 +208,8 @@ Registry.weapons.add("bomb-shooter", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 40,
+        image: "bullet.bomb",
+        width: 30,
         height: 30,
       },
     },
@@ -349,7 +349,7 @@ Registry.weapons.add("heavy-shots", {
       lifetime: 40,
       knockback: 50,
       speed: 30,
-      hitSize: 25,
+      hitSize: 10,
       trail: false,
       damage: [
         {
@@ -363,9 +363,9 @@ Registry.weapons.add("heavy-shots", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 30,
-        height: 22.5,
+        image: "bullet.normal",
+        width: 35,
+        height: 20,
       },
     },
     pattern: {}, //Blank pattern
@@ -482,7 +482,7 @@ Registry.weapons.add("laser-blaster", {
       type: "Bullet",
       lifetime: 40,
       speed: 40,
-      hitSize: 15,
+      hitSize: 10,
       trail: false,
       damage: [
         {
@@ -775,7 +775,7 @@ Registry.weapons.add("rifle", {
       type: "Bullet",
       lifetime: 40,
       speed: 55,
-      hitSize: 15,
+      hitSize: 6,
       trail: false,
       pierce: 1,
       damage: [
@@ -785,7 +785,7 @@ Registry.weapons.add("rifle", {
         },
       ],
       drawer: {
-        image: "box.metal",
+        image: "bullet.normal",
         width: 25,
         height: 12,
       },
@@ -880,7 +880,7 @@ Registry.weapons.add("incendiary", {
       type: "Bullet",
       lifetime: 40,
       speed: 30,
-      hitSize: 30,
+      hitSize: 15,
       trail: false,
       status: "burning",
       statusDuration: 180, //3 second fire
@@ -898,8 +898,8 @@ Registry.weapons.add("incendiary", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 40,
+        image: "bullet.bomb",
+        width: 30,
         height: 30,
       },
     },
@@ -1119,7 +1119,7 @@ Registry.weapons.add("incendiary", {
 Registry.weapons.add("missile-launcher", {
   type: "Weapon",
   name: "Missile Launcher",
-  description: "Shoots faster moving homing missiles",
+  description: "Shoots faster moving slightly homing missiles",
   reload: 60,
   cost: {
     shards: 800,
@@ -1130,10 +1130,10 @@ Registry.weapons.add("missile-launcher", {
       type: "Missile",
       lifetime: 40,
       speed: 40,
-      hitSize: 30,
+      hitSize: 18,
       trail: true,
       targetType: "hovered",
-      turnSpeed: 4,
+      turnSpeed: 1,
       damage: [
         {
           type: "ballistic",
@@ -1141,14 +1141,14 @@ Registry.weapons.add("missile-launcher", {
         },
         {
           type: "explosion",
-          area: 100,
+          area: 125,
           amount: 3,
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 40,
-        height: 25,
+        image: "bullet.missile",
+        width: 80,
+        height: 45,
       },
     },
     pattern: {},
@@ -1410,7 +1410,7 @@ Registry.weapons.add("kinetic-impactor", {
       knockback: 100, //b o n k
       kineticKnockback: true, //The entire point of this weapon
       speed: 30,
-      hitSize: 25,
+      hitSize: 10,
       trail: false,
       damage: [
         {
@@ -1424,9 +1424,9 @@ Registry.weapons.add("kinetic-impactor", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 30,
-        height: 22.5,
+        image: "bullet.normal",
+        width: 35,
+        height: 20,
       },
     },
     pattern: {}, //Blank pattern
@@ -1721,9 +1721,9 @@ Registry.weapons.add("cryo-cannon", {
         },
       ],
       drawer: {
-        image: "box.metal",
-        width: 30,
-        height: 22.5,
+        image: "bullet.icebomb",
+        width: 20,
+        height: 20,
       },
     },
     pattern: {}, //Blank pattern
@@ -2001,7 +2001,7 @@ Registry.weapons.add("accelerator", {
       type: "Bullet",
       lifetime: 40,
       speed: 40,
-      hitSize: 15,
+      hitSize: 10,
       trail: false,
       damage: [
         {
@@ -2618,6 +2618,333 @@ Registry.weapons.add("lancer", {
           speedRatio: 0.1,
         },
       ],
+    },
+  ],
+});
+Registry.weapons.add("shotgun", {
+  type: "Weapon",
+  name: "Shotgun",
+  description: "Shoots 3 projectiles at once,\nwith a large inaccuracy.",
+  reload: 40,
+  cost: {
+    shards: 900,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 55,
+      hitSize: 6,
+      trail: false,
+      pierce: 1,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 2,
+        },
+      ],
+      drawer: {
+        image: "bullet.normal",
+        width: 25,
+        height: 12,
+      },
+    },
+    pattern: {
+      amount: 3,
+      spacing: 15,
+    },
+  },
+  parts: [
+    {
+      type: "part",
+      x: 36.25,
+      y: 0,
+      width: 22.5,
+      height: 15,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      recoilAnimations: [
+        { type: "recoil-animation", duration: 7, xOffset: -20 },
+      ],
+    },
+    {
+      type: "part",
+      x: 20,
+      y: 0,
+      width: 15,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 30,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 15,
+      y: 17.5,
+      width: 12.5,
+      height: 5,
+      rotation: -30,
+      slide: 5,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          rotOffset: 20,
+          duration: 10,
+        },
+      ],
+    },
+    {
+      type: "part",
+      x: 15,
+      y: -17.5,
+      width: 12.5,
+      height: 5,
+      rotation: 30,
+      slide: 5,
+      image: false,
+      recoilAnimations: [
+        {
+          type: "recoil-animation",
+          rotOffset: -20,
+          duration: 10,
+        },
+      ],
+    },
+    {
+      type: "part",
+      x: -27.5,
+      y: -17.5,
+      width: 17.5,
+      height: 5,
+      rotation: 30,
+      slide: 7.5,
+      image: false,
+    },
+    {
+      type: "part",
+      x: -27.5,
+      y: 17.5,
+      width: 17.5,
+      height: 5,
+      rotation: -30,
+      slide: 7.5,
+      image: false,
+    },
+    {
+      type: "part",
+      x: -22.5,
+      y: 0,
+      width: 5,
+      height: 12.5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -21.25,
+      width: 20,
+      height: 2.5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 21.25,
+      width: 20,
+      height: 2.5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -17.5,
+      width: 30,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 17.5,
+      width: 30,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: -16.25,
+      y: 0,
+      width: 7.5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+  ],
+});
+Registry.weapons.add("sniper", {
+  type: "Weapon",
+  name: "Sniper",
+  description:
+    "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
+  reload: 60,
+  cost: {
+    shards: 1000,
+    bloonstones: 0,
+  },
+  shoot: {
+    bullet: {
+      type: "Point",
+      lifetime: 2,
+      hitSize: 6,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 10,
+        },
+      ],
+      drawer: {
+        image: false,
+        fill: [0, 0, 0, 0],
+        //Hidden
+        width: 1,
+        height: 1,
+      },
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 50,
+      y: 0,
+      width: 40,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      image: false,
+      recoilAnimations: [
+        { type: "recoil-animation", duration: 2, xOffset: -20, speedRatio: 0.04 },
+      ],
+    },
+    {
+      type: "part",
+      x: 17.5,
+      y: -1.25,
+      width: 25,
+      height: 7.5,
+      rotation: 108,
+      slide: 20,
+      image: false,
+      recoilAnimations: [
+        { type: "recoil-animation", duration: 2, rotOffset: -20, speedRatio: 0.04 },
+      ],
+    },
+    {
+      type: "part",
+      x: 17.5,
+      y: 1.25,
+      width: 25,
+      height: 7.5,
+      rotation: -108,
+      slide: 20,
+      image: false,
+      recoilAnimations: [
+        { type: "recoil-animation", duration: 2, rotOffset: 20, speedRatio: 0.04 },
+      ],
+    },
+    {
+      type: "part",
+      x: -10,
+      y: -2.5,
+      width: 25,
+      height: 7.5,
+      rotation: 45,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: -10,
+      y: 2.5,
+      width: 25,
+      height: 7.5,
+      rotation: -45,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 2.5,
+      y: 0,
+      width: 40,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 26.25,
+      y: 0,
+      width: 7.5,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: -22.5,
+      y: 0,
+      width: 10,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 22.5,
+      height: 22.5,
+      rotation: 0,
+      slide: 0,
+      image: false,
     },
   ],
 });

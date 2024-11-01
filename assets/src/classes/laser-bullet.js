@@ -16,11 +16,11 @@ class LaserBullet extends Bullet {
       this.intervalTick();
       if (this.lifetime >= this.maxLife - this.extendTime) {
         //If spawning
-        this.#lengthFraction += 1 / this.extendTime; //Slowly turn to one
+        this.#lengthFraction += dt / this.extendTime; //Slowly turn to one
       }
       if (this.lifetime <= this.despawnTime) {
         //If despawning
-        this.#widthFraction -= 1 / this.despawnTime; //Slowly turn to zero
+        this.#widthFraction -= dt / this.despawnTime; //Slowly turn to zero
       }
       // Don't move
       //Tick lifetime

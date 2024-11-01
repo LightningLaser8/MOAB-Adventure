@@ -692,4 +692,12 @@ const images = {
     box: new ImageContainer("assets/textures/entity/box/wood.svg"),
     box_metal: new ImageContainer("assets/textures/entity/box/metal.svg"),
   },
+  bullet: {
+    normal: new ImageContainer("assets/textures/bullet/normal_7-4.png"),
+    bomb: new ImageContainer("assets/textures/bullet/bomb_1-1.png"),
+    nuke: new ImageContainer("assets/textures/bullet/nuke_8-5.png"),
+    icebomb: new ImageContainer("assets/textures/bullet/icebomb_1-1.png"),
+    missile: new ImageContainer("assets/textures/bullet/missile_16-9.svg"),
+    crystal: new ImageContainer("assets/textures/bullet/crystal_1-1.png")
+  }
 };

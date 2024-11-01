@@ -59,12 +59,14 @@ const aps = {
     opt1: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
-      "rifle" /*, "sniper", "sharp-shooter", ... */
+      "rifle",
+      "sniper" /*, "sharp-shooter", ... */
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
-      "rifle" /*, "shotgun", "chainhook-shotgun", ... */
+      "rifle",
+      "shotgun" /*, "chainhook-shotgun", ... */
     ),
   },
   error: new WeaponSlot(),
