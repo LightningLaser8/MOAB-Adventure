@@ -14,3 +14,4 @@ Registry.genericType.add("status-effect", StatusEffect);
 Registry.genericType.add("missile-bullet", Missile);
 Registry.genericType.add("laser-bullet", LaserBullet);
 Registry.genericType.add("point-bullet", PointBullet);
+Registry.genericType.add("radiation-zone", RadiationZone);

@@ -53,6 +53,15 @@ class World {
               bullet.status,
               bullet.statusDuration
             );
+          if(instance.blinds){
+            blindingFlash(
+              bullet.x,
+              bullet.y,
+              instance.blindOpacity,
+              instance.blindDuration,
+              instance.glareSize
+            )
+          }
         }
         bullet.frag();
         //Delete the bullet

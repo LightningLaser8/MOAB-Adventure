@@ -699,5 +699,8 @@ const images = {
     icebomb: new ImageContainer("assets/textures/bullet/icebomb_1-1.png"),
     missile: new ImageContainer("assets/textures/bullet/missile_16-9.svg"),
     crystal: new ImageContainer("assets/textures/bullet/crystal_1-1.png")
+  },
+  effect: {
+    glare: new ImageContainer("assets/textures/effect/glare.png")
   }
 };
