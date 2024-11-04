@@ -695,6 +695,8 @@ const images = {
   bullet: {
     normal: new ImageContainer("assets/textures/bullet/normal_7-4.png"),
     cyan: new ImageContainer("assets/textures/bullet/cyan_7-4.png"),
+    du: new ImageContainer("assets/textures/bullet/du_7-4.png"),
+    dark: new ImageContainer("assets/textures/bullet/dark_7-4.png"),
     bomb: new ImageContainer("assets/textures/bullet/bomb_1-1.png"),
     nuke: new ImageContainer("assets/textures/bullet/nuke_8-5.png"),
     icebomb: new ImageContainer("assets/textures/bullet/icebomb_1-1.png"),
@@ -703,5 +705,8 @@ const images = {
   },
   effect: {
     glare: new ImageContainer("assets/textures/effect/glare.png")
+  },
+  part: {
+    radiation: new ImageContainer("assets/textures/part/radiation.png")
   }
 };

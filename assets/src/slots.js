@@ -68,13 +68,15 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "rifle",
-      "sniper" /*, "sharp-shooter", ... */
+      "sniper",
+      "sharp-shooter"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
       "double-shooter",
       "rifle",
-      "shotgun" /*, "chainhook-shotgun", ... */
+      "shotgun",
+      "du-rounds"
     ),
   },
   error: new WeaponSlot(),

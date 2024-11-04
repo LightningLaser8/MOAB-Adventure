@@ -77,7 +77,7 @@ class Part {
       p5.Vector.add(p5.Vector.add(yOffsetVct, xOffsetVct), slideVct),
       pos
     ); //Add them all up
-    if (this.image instanceof ImageContainer) {
+    if (this.image instanceof ImageContainer || typeof this.image === "string") {
       //If it's an image, draw it
       rotatedImg(
         this.image,
