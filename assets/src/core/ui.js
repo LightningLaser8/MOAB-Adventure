@@ -219,7 +219,7 @@ class UIComponent {
     textFont(this.ocr ? fonts.ocr : fonts.darktech);
     if (this.ocr) {
       stroke(0);
-      strokeWeight(3);
+      strokeWeight(this.textSize/15);
     }
     fill(0);
     textAlign(CENTER, CENTER);
@@ -694,6 +694,7 @@ const images = {
   },
   bullet: {
     normal: new ImageContainer("assets/textures/bullet/normal_7-4.png"),
+    cyan: new ImageContainer("assets/textures/bullet/cyan_7-4.png"),
     bomb: new ImageContainer("assets/textures/bullet/bomb_1-1.png"),
     nuke: new ImageContainer("assets/textures/bullet/nuke_8-5.png"),
     icebomb: new ImageContainer("assets/textures/bullet/icebomb_1-1.png"),

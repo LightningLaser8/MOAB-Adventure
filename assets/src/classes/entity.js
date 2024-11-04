@@ -212,7 +212,19 @@ class Entity {
             );
           else this.damage(instance.type, instance.amount, bullet.entity);
         }
-        this.knock(bullet.knockback, bullet.direction, bullet.kineticKnockback); //Knock with default resolution
+        if(bullet.controlledKnockback){
+          //Get direction to the target
+          let direction = degrees(
+            p5.Vector.sub(
+              createVector(bullet.entity.target.x, bullet.entity.target.y), //Target pos 'B'
+              createVector(bullet.x, bullet.y) //Bullet pos 'A'
+            ).heading() //'A->B' = 'B' - 'A'
+          );
+          this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
+        }
+        else{
+          this.knock(bullet.knockback, bullet.direction, bullet.kineticKnockback); //Knock with default resolution
+        }
         if (bullet.status !== "none") {
           this.applyStatus(bullet.status, bullet.statusDuration);
         }

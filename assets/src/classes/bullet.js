@@ -21,6 +21,7 @@ class Bullet {
   entity = null;
   knockback = 0;
   kineticKnockback = false;
+  controlledKnockback = false;
   //Effectively a pierce thing
   damaged = [];
   _trailCounter = 20;

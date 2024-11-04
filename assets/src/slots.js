@@ -20,7 +20,8 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "heavy-shots",
-      "kinetic-impactor" /*, "controlled-collision-device", ... */
+      "kinetic-impactor",
+      "controlled-collision-device"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
