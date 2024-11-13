@@ -38,6 +38,9 @@ class Entity {
   statuses = [];
 
   constructor() {} //Because universal
+  upgrade(blimp) {
+    construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
+  }
   init() {
     this.maxHealth = this.health; //Stop part-damaged entities spawning
   }

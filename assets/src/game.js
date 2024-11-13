@@ -182,20 +182,18 @@ function createPlayer() {
     type: "Entity",
     x: 300,
     y: 540,
-    name: "MOAB",
-    health: 200,
-    drawer: {
-      image: "blimp.moab",
-      width: 230,
-      height: 150,
-    },
-    team: "player",
-    hitSize: 75, //Always at least half of the smallest dimension
-    speed: 6,
+    team: "player"
   });
+  //Add all slots: not all of them will be accessible
+  player.addWeaponSlot(getSelectedAP(1))
+  player.addWeaponSlot(getSelectedAP(2))
+  player.addWeaponSlot(getSelectedAP(3))
+  player.addWeaponSlot(getSelectedAP(4))
+  player.addWeaponSlot(getSelectedAP(5))
   player.addToWorld(world);
   game.player = player;
-  player.addWeaponSlot(getSelectedAP(1)); //Add AP1
+  //is moab
+  player.upgrade("moab")
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {

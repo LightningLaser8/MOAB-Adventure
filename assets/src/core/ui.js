@@ -689,6 +689,10 @@ const images = {
   },
   entity: {
     blimp_moab: new ImageContainer("assets/textures/entity/moab.png"),
+    blimp_bfb: new ImageContainer("assets/textures/entity/bfb.png"),
+    blimp_zomg: new ImageContainer("assets/textures/entity/zomg.png"),
+    blimp_ddt: new ImageContainer("assets/textures/entity/ddt.png"),
+    blimp_bad: new ImageContainer("assets/textures/entity/bad.png"),
     box: new ImageContainer("assets/textures/entity/box/wood.svg"),
     box_metal: new ImageContainer("assets/textures/entity/box/metal.svg"),
   },

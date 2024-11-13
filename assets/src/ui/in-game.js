@@ -390,11 +390,11 @@ createUIComponent(
 //Space them 150px apart => 100px wide => 50px separation?
 //AP3 at x = 900
 // Set conditions: All available
-UIComponent.setCondition("is-ap1-available:true");
-UIComponent.setCondition("is-ap2-available:true");
-UIComponent.setCondition("is-ap3-available:true");
-UIComponent.setCondition("is-ap4-available:true"); //AP3 and 4 are separate
-UIComponent.setCondition("is-ap5-available:true");
+UIComponent.setCondition("is-ap1-available:false");
+UIComponent.setCondition("is-ap2-available:false");
+UIComponent.setCondition("is-ap3-available:false");
+UIComponent.setCondition("is-ap4-available:false"); //AP3 and 4 are separate
+UIComponent.setCondition("is-ap5-available:false");
 //Sub-menu
 UIComponent.setCondition("submenu-selected:none");
 //AP1
@@ -491,7 +491,7 @@ function getSelectedSlotIndex() {
 //  Back button
 createUIComponent(
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"],
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|blimp"],
   525,
   225,
   50,
@@ -788,6 +788,411 @@ createUIComponent(
     game.player.weaponSlots[slot].tick(1); //Make the game realise the weapon got upgraded
   },
   "Upgrade!",
+  false,
+  20
+);
+
+// Blimp
+//Entry Button
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:none"],
+  1000,
+  525,
+  500,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:blimp");
+  },
+  "Blimp",
+  true,
+  40
+);
+//Title
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"],
+  900,
+  325,
+  0,
+  0,
+  "none",
+  null,
+  "Primary: ",
+  false,
+  40
+),
+//Path 1
+Object.defineProperty(
+  createUIComponent(
+    //Name
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+    900,
+    380,
+    750,
+    40,
+    "none",
+    null,
+    "Not unlocked yet",
+    true,
+    30
+  ),
+  "text",
+  {
+    get: () => {
+      if (!game?.player) return "No player";
+      if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
+      let upgrade = game.player.blimp.path1
+      if(!upgrade || upgrade === "none") return "No Upgrade"
+      let blimp = Registry.blimps.get(upgrade)
+      return blimp.name;
+    },
+  }
+);
+Object.defineProperty(
+  createUIComponent(
+    //Description
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+    835,
+    475,
+    625,
+    100,
+    "none",
+    null,
+    "No weapon is present. Upgrade to add one.",
+    true,
+    25
+  ),
+  "text",
+  {
+    get: () => {
+      if (!game?.player) return "No player";
+      if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
+      let upgrade = game.player.blimp.path1
+      if(!upgrade || upgrade === "none") return "This path has no upgrade for this blimp."
+      let blimp = Registry.blimps.get(upgrade)
+      return "Max HP: "+blimp.health+" | Speed: "+blimp.speed;
+    },
+  }
+);
+//Next upgrade info
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"],
+  900,
+  565,
+  0,
+  0,
+  "none",
+  null,
+  "Alternative: ",
+  false,
+  35
+);
+Object.defineProperty(
+  createUIComponent(
+    //Name
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+    900,
+    625,
+    750,
+    40,
+    "none",
+    null,
+    "Max Upgrades",
+    true,
+    30
+  ),
+  "text",
+  {
+    get: () => {
+      if (!game?.player) return "No player";
+      if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
+      let upgrade = game.player.blimp.path2
+      if(!upgrade || upgrade === "none") return "No Upgrade"
+      let blimp = Registry.blimps.get(upgrade)
+      return blimp.name;
+    },
+  }
+);
+Object.defineProperty(
+  createUIComponent(
+    //'Description': Health, speed etc
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+    835,
+    720,
+    625,
+    100,
+    "none",
+    null,
+    "Maximum upgrade level for this blimp\nhas been reached.",
+    true,
+    25
+  ),
+  "text",
+  {
+    get: () => {
+      if (!game?.player) return "No player";
+      if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
+      let upgrade = game.player.blimp.path2
+      if(!upgrade || upgrade === "none") return "This path has no upgrade for this blimp."
+      let blimp = Registry.blimps.get(upgrade)
+      return "Max HP: "+blimp.health+" | Speed: "+blimp.speed;
+    },
+  }
+);
+//Costs
+createUIComponent(
+  //Cost background
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1225,
+  475,
+  100,
+  100,
+  "none",
+  null,
+  "",
+  true,
+  20
+);
+createUIImageComponent(
+  //Shard icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1200,
+  455,
+  30,
+  30,
+  null,
+  images.ui.shard,
+  false
+);
+createUIImageComponent(
+  //Bloonstone icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1200,
+  495,
+  30,
+  30,
+  null,
+  images.ui.bloonstone,
+  false
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Shard Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+      1225,
+      455,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        if (!game?.player) return "⚠";
+        if (!game?.player?.blimp) return "⚠"; //in case not
+        let upgrade = game.player.blimp.path1
+        if(!upgrade || upgrade === "none") return "..."
+        let blimp = Registry.blimps.get(upgrade)
+        return shortenedNumber(blimp?.cost?.shards??0);
+      },
+    }
+  )
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Bloonstone Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+      1225,
+      495,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        if (!game?.player) return "⚠";
+        if (!game?.player?.blimp) return "⚠"; //in case not
+        let upgrade = game.player.blimp.path1
+        if(!upgrade || upgrade === "none") return "..."
+        let blimp = Registry.blimps.get(upgrade)
+        return shortenedNumber(blimp?.cost?.bloonstones??0);
+      },
+    }
+  )
+);
+//cost 2
+//Costs
+createUIComponent(
+  //Cost background
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1225,
+  720,
+  100,
+  100,
+  "none",
+  null,
+  "",
+  true,
+  20
+);
+createUIImageComponent(
+  //Shard icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1200,
+  700,
+  30,
+  30,
+  null,
+  images.ui.shard,
+  false
+);
+createUIImageComponent(
+  //Bloonstone icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+  1200,
+  740,
+  30,
+  30,
+  null,
+  images.ui.bloonstone,
+  false
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Shard Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+      1225,
+      700,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        if (!game?.player) return "⚠";
+        if (!game?.player?.blimp) return "⚠"; //in case not
+        let upgrade = game.player.blimp.path2
+        if(!upgrade || upgrade === "none") return "..."
+        let blimp = Registry.blimps.get(upgrade)
+        return shortenedNumber(blimp?.cost?.shards??0);
+      },
+    }
+  )
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Bloonstone Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+      1225,
+      740,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        if (!game?.player) return "⚠";
+        if (!game?.player?.blimp) return "⚠"; //in case not
+        let upgrade = game.player.blimp.path2
+        if(!upgrade || upgrade === "none") return "..."
+        let blimp = Registry.blimps.get(upgrade)
+        return shortenedNumber(blimp?.cost?.bloonstones??0);
+      },
+    }
+  )
+);
+//buttons
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"],
+  725,
+  825,
+  350,
+  60,
+  "none",
+  () => {
+    if (!game?.player) return;
+    if (!game?.player?.blimp) return;
+    let upgrade = game.player.blimp.path1
+    if(!upgrade || upgrade === "none") return;
+    let blimp = Registry.blimps.get(upgrade)
+    //Check cost and buy
+    let shards = (blimp?.cost?.shards??0),
+    bloonstones = (blimp?.cost?.bloonstones??0);
+    if(shards <= game.shards && bloonstones <= game.bloonstones){
+      game.shards -= shards;
+      game.bloonstones -= bloonstones;
+      game.player.upgrade(upgrade)
+    }
+  },
+  "Upgrade\nPrimary",
+  false,
+  20
+);
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:blimp"],
+  1100,
+  825,
+  350,
+  60,
+  "none",
+  () => {
+    if (!game?.player) return;
+    if (!game?.player?.blimp) return;
+    let upgrade = game.player.blimp.path2
+    if(!upgrade || upgrade === "none") return;
+    let blimp = Registry.blimps.get(upgrade)
+    //Check cost and buy
+    let shards = (blimp?.cost?.shards??0),
+    bloonstones = (blimp?.cost?.bloonstones??0);
+    if(shards <= game.shards && bloonstones <= game.bloonstones){
+      game.shards -= shards;
+      game.bloonstones -= bloonstones;
+      game.player.upgrade(upgrade)
+    }
+  },
+  "Upgrade\nAlternative",
   false,
   20
 );

@@ -1,5 +1,9 @@
 Registry.images.add("error", images.env.error);
 Registry.images.add("blimp.moab", images.entity.blimp_moab);
+Registry.images.add("blimp.bfb", images.entity.blimp_bfb);
+Registry.images.add("blimp.zomg", images.entity.blimp_zomg);
+Registry.images.add("blimp.ddt", images.entity.blimp_ddt);
+Registry.images.add("blimp.bad", images.entity.blimp_bad);
 Registry.images.add("background.sea", images.background.sea);
 Registry.images.add("ui.moab", images.ui.moab);
 Registry.images.add("ui.shard", images.ui.shard);
