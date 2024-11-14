@@ -103,10 +103,12 @@ class World {
       }
     }
   }
-  addSpawn(spawn = { entity: Box.default, interval: 60 }) {
+  addSpawn(spawn = { entity: Box.default, interval: 60 }, isHighTier = false) {
     //Handle bad properties like `null`
     spawn.entity ??= Box.default;
     spawn.interval ??= 60;
+    //Apply difficulty rules
+    spawn.interval /= difficulty[game.difficulty][isHighTier?"spawnRateHighTier":"spawnRateLowTier"] ?? 1
     //Add group
     spawn.$currentCooldown = 0;
     this.spawning.push(spawn);

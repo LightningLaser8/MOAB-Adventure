@@ -42,6 +42,7 @@ class Entity {
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
   }
   init() {
+    this.scaleToDifficulty()
     this.maxHealth = this.health; //Stop part-damaged entities spawning
   }
   addToWorld(world) {
@@ -263,5 +264,9 @@ class Entity {
   }
   applyStatus(effect, time) {
     this.statuses.push({ effect: effect, time: time, timeLeft: time });
+  }
+  scaleToDifficulty(){
+    let diff = difficulty[game.difficulty] //Get difficulty
+    //Do nothing, as it doesn't matter for normal entities
   }
 }

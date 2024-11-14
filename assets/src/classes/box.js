@@ -83,4 +83,8 @@ class Box extends Entity {
       super.tick();
     }
   }
+  scaleToDifficulty(){
+    let diff = difficulty[game.difficulty] //Get difficulty
+    this.health *= diff.boxHP ?? 1 //Multiply HP by box HP multiplier
+  }
 }

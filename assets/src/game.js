@@ -15,9 +15,29 @@ const game = {
   bossinterval: 300,
   paused: false,
 };
+const difficulty = {
+  easy: {
+    spawnRateLowTier: 0.75,
+    spawnRateHighTier: 0.67,
+    boxHP: 0.85,
+    bossHP: 0.85
+  },
+  normal: {
+    spawnRateLowTier: 1,
+    spawnRateHighTier: 1,
+    boxHP: 1,
+    bossHP: 1
+  },
+  hard: {
+    spawnRateLowTier: 1.3,
+    spawnRateHighTier: 2,
+    boxHP: 1.25,
+    bossHP: 1.3
+  }
+}
 const world = new World("Sky High", images.background.sea);
 world.addSpawn();
-world.addSpawn({ entity: Box.metal, interval: 300 });
+world.addSpawn({ entity: Box.metal, interval: 300 }, true);
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
