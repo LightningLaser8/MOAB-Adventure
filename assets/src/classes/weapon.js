@@ -37,7 +37,7 @@ class Weapon {
   init() {
     let np = [];
     for (let p of this.parts) {
-      np.push(construct(p));
+      np.push(construct(p, Part));
     }
     this.parts = np;
   }

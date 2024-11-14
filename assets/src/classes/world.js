@@ -96,7 +96,7 @@ class World {
   tickSpawns(dt) {
     for (let spawnGroup of this.spawning) {
       if (spawnGroup.$currentCooldown <= 0) {
-        construct(spawnGroup.entity).addToWorld(this);
+        construct(spawnGroup.entity, Entity).addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
         spawnGroup.$currentCooldown -= dt;

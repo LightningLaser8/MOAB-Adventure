@@ -106,17 +106,17 @@ class Part {
     //For each index of charge animation
     for (let i = 0; i < this.chargeAnimations.length; i++) {
       let ani = this.chargeAnimations[i]; //Get animation constructable
-      this.chargeAnimations[i] = construct(ani); //Override with constructed version
+      this.chargeAnimations[i] = construct(ani, PartAnimation); //Override with constructed version
     }
     //Same but for recoil
     for (let i = 0; i < this.recoilAnimations.length; i++) {
       let ani = this.recoilAnimations[i];
-      this.recoilAnimations[i] = construct(ani);
+      this.recoilAnimations[i] = construct(ani, RecoilAnimation);
     }
     //Same but for passive
     for (let i = 0; i < this.passiveAnimations.length; i++) {
       let ani = this.passiveAnimations[i];
-      this.passiveAnimations[i] = construct(ani);
+      this.passiveAnimations[i] = construct(ani, LoopingAnimation);
     }
     //Start all passive animations
     for (let ani of this.passiveAnimations) {

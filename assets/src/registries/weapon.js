@@ -4,7 +4,6 @@
 
 //Tier 1 - 2
 Registry.weapons.add("tiny-shooter", {
-  type: "Weapon",
   name: "Tiny Shooter",
   description: "Shoots a single, low damage bullet directly\nforwards.",
   reload: 20,
@@ -80,7 +79,6 @@ Registry.weapons.add("tiny-shooter", {
   ],
 });
 Registry.weapons.add("double-shooter", {
-  type: "Weapon",
   name: "Double Shooter",
   description: "Shoots 2 bullets at once.",
   reload: 20,
@@ -185,7 +183,6 @@ Registry.weapons.add("double-shooter", {
 });
 //Tier 3
 Registry.weapons.add("bomb-shooter", {
-  type: "Weapon",
   name: "Bomb Shooter",
   description: "Shoots an explosive, dealing damage in an area.",
   reload: 60,
@@ -339,7 +336,6 @@ Registry.weapons.add("bomb-shooter", {
   ],
 });
 Registry.weapons.add("heavy-shots", {
-  type: "Weapon",
   name: "Heavy Shots",
   description: "Large bullets deal more damage, and knock boxes\nback.",
   reload: 30,
@@ -473,7 +469,6 @@ Registry.weapons.add("heavy-shots", {
   ],
 });
 Registry.weapons.add("laser-blaster", {
-  type: "Weapon",
   name: "Laser Blaster",
   description: "Shoots pulses of high-damage plasma.",
   reload: 20,
@@ -766,7 +761,6 @@ Registry.weapons.add("laser-blaster", {
   ],
 });
 Registry.weapons.add("rifle", {
-  type: "Weapon",
   name: "Rifle",
   description: "Shoots a single, fast-moving bullet.\nPierces one box.",
   reload: 30,
@@ -871,7 +865,6 @@ Registry.weapons.add("rifle", {
 });
 //Tier 4
 Registry.weapons.add("incendiary", {
-  type: "Weapon",
   name: "Incendiary",
   description: "Explosions set targets on fire.",
   reload: 60,
@@ -1121,7 +1114,6 @@ Registry.weapons.add("incendiary", {
   ],
 });
 Registry.weapons.add("missile-launcher", {
-  type: "Weapon",
   name: "Missile Launcher",
   description: "Shoots faster moving slightly homing missiles",
   reload: 60,
@@ -1399,7 +1391,6 @@ Registry.weapons.add("missile-launcher", {
   ],
 });
 Registry.weapons.add("kinetic-impactor", {
-  type: "Weapon",
   name: "Kinetic Impactor",
   description: "Hit entities collide with others!",
   reload: 45,
@@ -1689,7 +1680,6 @@ Registry.weapons.add("kinetic-impactor", {
   ],
 });
 Registry.weapons.add("cryo-cannon", {
-  type: "Weapon",
   name: "Cryo Cannon",
   description: "Shoots freezing ice bombs that slow down targets'\nweapons",
   reload: 45,
@@ -1990,7 +1980,6 @@ Registry.weapons.add("cryo-cannon", {
   ],
 });
 Registry.weapons.add("accelerator", {
-  type: "Weapon",
   name: "Accelerator",
   description: "Shoots faster the longer it fires for!",
   reload: 30, //Shoots slower by default
@@ -2304,7 +2293,6 @@ Registry.weapons.add("accelerator", {
   ],
 });
 Registry.weapons.add("lancer", {
-  type: "Weapon",
   name: "Lancer",
   description: "Shoots high-damage piercing beams at a slower rate.",
   reload: 75,
@@ -2626,7 +2614,6 @@ Registry.weapons.add("lancer", {
   ],
 });
 Registry.weapons.add("sniper", {
-  type: "Weapon",
   name: "Sniper",
   description:
     "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
@@ -2814,7 +2801,6 @@ Registry.weapons.add("sniper", {
   ],
 });
 Registry.weapons.add("shotgun", {
-  type: "Weapon",
   name: "Shotgun",
   description: "Shoots 3 projectiles at once, with a large spread.",
   reload: 40,
@@ -3009,7 +2995,6 @@ Registry.weapons.add("shotgun", {
 });
 //Tier 5
 Registry.weapons.add("nuke-launcher", {
-  type: "Weapon",
   name: "Nuke Launcher",
   description:
     "Shoots nuclear explosives, dealing great damage in\na much larger area, leaving radioactive fallout.",
@@ -3329,7 +3314,6 @@ Registry.weapons.add("nuke-launcher", {
   ],
 });
 Registry.weapons.add("missile-battery", {
-  type: "Weapon",
   name: "Missile Battery",
   description: "Launches 6 smaller missiles, following the mouse\ncursor.",
   reload: 90,
@@ -3660,7 +3644,6 @@ Registry.weapons.add("missile-battery", {
   ],
 });
 Registry.weapons.add("controlled-collision-device", {
-  type: "Weapon",
   name: "Controlled Collision Device",
   description:
     "Finer control over directional displacement.\n(Knockback acts towards mouse)",
@@ -3961,7 +3944,6 @@ Registry.weapons.add("controlled-collision-device", {
   ],
 });
 Registry.weapons.add("shattering-shells", {
-  type: "Weapon",
   name: "Shattering Shells",
   description:
     "Ice bombs release many low damage shards,\nwith a lesser effect",
@@ -4474,7 +4456,6 @@ Registry.weapons.add("shattering-shells", {
   ],
 });
 Registry.weapons.add("greenbeam", {
-  type: "Weapon",
   name: "Greenbeam™",
   description:
     "Shorter wavelength of lasers increases photon\nenergy, dealing increased damage.",
@@ -4868,7 +4849,6 @@ Registry.weapons.add("greenbeam", {
   ],
 });
 Registry.weapons.add("spike", {
-  type: "Weapon",
   name: "Spike",
   description: "Bigger laser that travels farther and knocks boxes\nback.",
   reload: 90,
@@ -5319,7 +5299,6 @@ Registry.weapons.add("spike", {
   ],
 });
 Registry.weapons.add("sharp-shooter", {
-  type: "Weapon",
   name: "Sharp Shooter",
   description:
     "30% chance to fire a powerful critical shot,\ndealing triple damage.",
@@ -5613,7 +5592,6 @@ Registry.weapons.add("sharp-shooter", {
   ],
 });
 Registry.weapons.add("du-rounds", {
-  type: "Weapon",
   name: "DU Rounds",
   description:
     "Depleted uranium rounds pierce enemies of any type,\nand irradiate them!",
