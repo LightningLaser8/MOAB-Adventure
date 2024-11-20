@@ -37,7 +37,12 @@ const background = {
   },
 };
 
-//Currency counters
+//###################################################################
+//
+// in-game UI > informative UI > CURRENCY COUNTERS
+//
+//###################################################################
+
 createUIComponent(["in-game"], [], 350, 55, 700, 125, "right");
 //Shards
 createUIImageComponent(
@@ -108,7 +113,12 @@ UIComponent.alignLeft(
   )
 );
 
-//Healthbar
+//###################################################################
+//
+// in-game UI > informative UI > HEALTHBAR
+//
+//###################################################################
+
 UIComponent.invert(
   //Healthbar container
   createUIComponent(["in-game"], [], 400, 1020, 800, 125, "right")
@@ -234,8 +244,15 @@ UIComponent.alignLeft(
     }
   )
 );
-//Boss Timer
+//###################################################################
+//
+// in-game UI > informative UI > BOSSBAR
+//
+//###################################################################
+
 UIComponent.setCondition("boss:no"); //No boss by default
+
+//    When boss inactive
 //Like healthbar, but not
 UIComponent.invert(
   //boss timer bar container
@@ -290,8 +307,15 @@ createUIImageComponent(
   images.ui.clock,
   false
 );
+//  When boss active
 
-//  Upgrade Menu
+//###################################################################
+//
+// in-game UI > interactable UI > UPGRADE MENU
+//
+//###################################################################
+
+
 //Translucent blue background
 UIComponent.removeOutline(
   UIComponent.setBackgroundOf(
@@ -478,6 +502,7 @@ createUIComponent(
   40
 );
 
+
 //    Sub-menus
 function getSelectedSlotIndex() {
   //Returns the index for the selected slot.
@@ -504,7 +529,13 @@ createUIComponent(
   false,
   60
 );
-//  AP1
+
+//###################################################################
+//
+// in-game UI > interactable UI > upgrade menu > WEAPON UPGRADE MENU
+//
+//###################################################################
+
 //Title
 Object.defineProperty(
   createUIComponent(
@@ -792,7 +823,12 @@ createUIComponent(
   20
 );
 
-// Blimp
+//###################################################################
+//
+// in-game UI > interactable UI > upgrade menu > BLIMP UPGRADE MENU
+//
+//###################################################################
+
 //Entry Button
 createUIComponent(
   ["in-game"],
