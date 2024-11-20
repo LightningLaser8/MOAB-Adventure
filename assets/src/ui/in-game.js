@@ -308,6 +308,93 @@ createUIImageComponent(
   false
 );
 //  When boss active
+//Boss healthbar
+createUIComponent(
+  ["in-game"],
+  ["boss:yes"], //Only show if boss is active
+  1475,
+  140,
+  400,
+  50,
+  "left"
+)
+UIComponent.alignRight(
+  Object.defineProperty(
+    createUIComponent(
+      ["in-game"],
+      ["boss:yes"], //Only show if boss is active
+      1666,
+      140,
+      0,
+      0,
+      "left"
+    ),
+    "text",
+    {
+      get: () => world.getFirstBoss()?.name ?? "Boss" //Text is name
+    }
+  )
+)
+UIComponent.setBackgroundOf(
+  UIComponent.invert(
+    //bit behind bar
+    createUIComponent(["in-game"], ["boss:yes"], 1425, 200, 500, 50, "left")
+  ),
+  [0, 0, 0]
+);
+Object.defineProperties(
+  UIComponent.removeOutline(
+    UIComponent.setBackgroundOf(
+      UIComponent.invert(
+        //Match shape of underlying bar
+        createUIComponent(["in-game"], ["boss:yes"], 1425, 200, 500, 50, "left")
+      ),
+      [255, 0, 0] //Red bar
+    )
+  ),
+  {
+    width: {
+      get: () =>
+        //Width depends on boss health %
+        (500 * (world.getFirstBoss()?.health ?? 1)) / (world.getFirstBoss()?.maxHealth ?? 1),
+    },
+    x: {
+      get: () =>
+        //Move to stay right aligned
+        1725 - (300 * (world.getFirstBoss()?.health ?? 1)) / (world.getFirstBoss()?.maxHealth ?? 1),
+    },
+  }
+);
+//bottom thing
+UIComponent.invert(
+  createUIComponent(
+    ["in-game"],
+    ["boss:yes"], //Only show if boss is active
+    1600,
+    245,
+    350,
+    20,
+    "left"
+  )
+)
+//square thing with boss class
+Object.defineProperty(
+  createUIComponent(
+    ["in-game"],
+    ["boss:yes"], //Only show if boss is active
+    1760,
+    185,
+    150,
+    150,
+    "none",
+    null,
+    "o",
+    false,
+    60
+  ), "text", {
+    get: () => world.getFirstBoss()?.class??"o" //Show boss class if it exists, otherwise show "o"
+  }
+)
 
 //###################################################################
 //

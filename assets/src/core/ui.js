@@ -29,6 +29,13 @@ class UIComponent {
     uicomponent.outlineColour = colour;
     return uicomponent;
   }
+  static alignRight(uicomponent) {
+    uicomponent.ox = uicomponent.x; //Save old x
+    Object.defineProperty(uicomponent, "x", {
+      get: () => uicomponent.ox - textWidth(uicomponent.text) / 2, //Add width to it
+    });
+    return uicomponent;
+  }
   static alignLeft(uicomponent) {
     uicomponent.ox = uicomponent.x; //Save old x
     Object.defineProperty(uicomponent, "x", {
@@ -309,6 +316,7 @@ function drawImg(
   height,
   ...otherParameters //IDK what else p5 image takes
 ) {
+  noSmooth()
   //Get from registry if it exists
   img = Registry.images.has(img) ? Registry.images.get(img) : img;
   if (img instanceof ImageContainer) {

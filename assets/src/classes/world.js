@@ -7,6 +7,7 @@ class World {
   spawning = [];
   background = images.background.sea;
   name = "World";
+  boss = null;
   constructor(name = "World", background = images.background.sea) {
     this.name = name;
     this.background = background;
@@ -112,5 +113,18 @@ class World {
     //Add group
     spawn.$currentCooldown = 0;
     this.spawning.push(spawn);
+  }
+  spawnBoss(entity, bossClass = "o"){ //forceFocus forces the bossbar to focus on the boss, bossClass shows a letter on the square part of the bossbar
+    let ent = construct(entity, Entity); //Construct entity
+    ent.class = bossClass;
+    ent.isBoss = true; //boss is made of boss
+    UIComponent.setCondition("boss:yes"); //There is, in fact, a boss.
+    ent.addToWorld(this); //Add entity
+  }
+  getFirstBoss(){
+    for(let entity of this.entities){
+      if(entity.isBoss && !entity.hidden) return entity;
+    }
+    return null;
   }
 }

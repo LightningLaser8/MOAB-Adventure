@@ -127,9 +127,24 @@ function gameFrame() {
   if (!game.paused) {
     movePlayer();
     world.tickAll();
+    tickBossEvent()
     checkBoxCollisions();
   }
   world.drawAll();
+}
+
+function tickBossEvent(){
+  UIComponent.setCondition("boss:"+(world.getFirstBoss()?"yes":"no")) // Update condition
+  if(UIComponent.evaluateCondition("boss:no")){ // If there's no boss active
+    if(game.bosstimer <= 0){ //If timer has run out
+      game.bosstimer = game.bossinterval //Reset timer
+      world.spawnBoss(Box.boss, "B") //Spawn a class B Gigantic Box
+      //spawnBoss() //Function for later use
+    }
+    else{
+      game.bosstimer -= 0.1
+    }
+  }
 }
 
 function movePlayer() {
