@@ -138,7 +138,7 @@ function tickBossEvent(){
   if(UIComponent.evaluateCondition("boss:no")){ // If there's no boss active
     if(game.bosstimer <= 0){ //If timer has run out
       game.bosstimer = game.bossinterval //Reset timer
-      world.spawnBoss(Box.boss, "B") //Spawn a class B Gigantic Box
+      world.spawnBoss(Boss.box, "B") //Spawn a class B Gigantic Box
       //spawnBoss() //Function for later use
     }
     else{

@@ -78,6 +78,9 @@ class World {
     len = this.entities.length;
     for (let e = 0; e < len; e++) {
       if (this.entities[e]?.dead) {
+        if(this.entities[e]?.isBoss){
+          game.level ++
+        }
         this.entities.splice(e, 1);
       }
     }
@@ -97,7 +100,9 @@ class World {
   tickSpawns(dt) {
     for (let spawnGroup of this.spawning) {
       if (spawnGroup.$currentCooldown <= 0) {
-        construct(spawnGroup.entity, Entity).addToWorld(this);
+        let ent = construct(spawnGroup.entity, Entity)
+        ent.scaleToDifficulty()
+        ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
         spawnGroup.$currentCooldown -= dt;

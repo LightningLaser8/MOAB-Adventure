@@ -23,31 +23,6 @@ class Box extends Entity {
     team: "enemy",
     health: 5,
   };
-  //"Boss" box
-  static boss = {
-    type: this.name,
-    name: "Gigantic Box",
-    drawer: {
-      image: "box.wood",
-      width: 200,
-      height: 200,
-    },
-    hitSize: 100,
-    x: 1920,
-    //Return a random height each time
-    get y() {
-      return random(0, 1080);
-    },
-    reward: {
-      shards: 0,
-    },
-    destroyReward: {
-      shards: 0,
-      bloonstones: 20,
-    },
-    team: "enemy",
-    health: 100,
-  };
   //Basic metal box
   static metal = {
     type: this.name,
@@ -112,6 +87,7 @@ class Box extends Entity {
   }
   scaleToDifficulty(){
     let diff = difficulty[game.difficulty] //Get difficulty
-    this.health *= diff.boxHP ?? 1 //Multiply HP by box HP multiplier
+    this.maxHealth *= diff.boxHP ?? 1 //Multiply HP by box HP multiplier
+    this.health = this.maxHealth
   }
 }
