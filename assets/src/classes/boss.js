@@ -51,6 +51,10 @@ class Boss extends Entity {
     for(let name in this.actions){
       this.actions[name] = construct(this.actions[name], BossAction)
     }
+    //Instantly use first action
+    let currentAction = this.actions[this.sequence[this.#action]]
+    if (!currentAction) return; //Stop immediately if actions empty
+    currentAction.execute(this)
   }
   tick() {
     //Tick as normal
@@ -64,10 +68,13 @@ class Boss extends Entity {
     } else {
       this.#action++;
       this.#timer = 0;
-      if (this.#action > this.sequence.length) {
+      if (this.#action >= this.sequence.length) {
         this.#action = 0;
       }
-      this.actions[this.sequence[this.#action]].execute(this);
+      let next = this.actions[this.sequence[this.#action]]
+      if(!next) return; //Stop if only action has been done
+      next.execute(this);
+      next.tick(this)
     }
   }
 }

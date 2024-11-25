@@ -248,6 +248,9 @@ function createPlayer() {
       0
     )
   );
+
+  //Temporary, for testing
+  game.bosstimer = 0
 }
 
 function fireIfPossible() {
