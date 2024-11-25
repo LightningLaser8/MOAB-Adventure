@@ -270,3 +270,13 @@ class Entity {
     //Do nothing, as it doesn't matter for normal entities
   }
 }
+
+//Entity that scales health as the game's level increases.
+class ScalingEntity extends Entity{
+  //Amount of extra health per game level.
+  healthIncrease = 0
+  init(){
+    this.health += this.healthIncrease*((game.level - 1)??0) //Level 1 is +0 HP
+    super.init() //Make sure to do this part AFTER
+  }
+}

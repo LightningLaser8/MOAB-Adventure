@@ -101,7 +101,6 @@ class World {
     for (let spawnGroup of this.spawning) {
       if (spawnGroup.$currentCooldown <= 0) {
         let ent = construct(spawnGroup.entity, Entity)
-        ent.scaleToDifficulty()
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
@@ -119,7 +118,7 @@ class World {
     spawn.$currentCooldown = 0;
     this.spawning.push(spawn);
   }
-  spawnBoss(entity, bossClass = "o"){ //forceFocus forces the bossbar to focus on the boss, bossClass shows a letter on the square part of the bossbar
+  spawnBoss(entity, bossClass = "o"){ //bossClass shows a letter on the square part of the bossbar
     let ent = construct(entity, Entity); //Construct entity
     ent.class = bossClass;
     ent.isBoss = true; //boss is made of boss

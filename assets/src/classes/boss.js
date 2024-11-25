@@ -1,4 +1,4 @@
-class Boss extends Entity {
+class Boss extends ScalingEntity {
   //Actually a boss now
   static box = {
     type: this.name,
@@ -25,6 +25,7 @@ class Boss extends Entity {
     ],
     team: "enemy",
     health: 300,
+    healthIncrease: 150
   };
   reward = {shards: 0, bloonstones: 0}
   /** @type {Array<BossAction>} */
@@ -76,5 +77,9 @@ class Boss extends Entity {
       next.execute(this);
       next.tick(this)
     }
+  }
+  scaleToDifficulty(){
+    let diff = difficulty[game.difficulty] //Get difficulty
+    this.health *= diff.bossHP ?? 1 //Multiply HP by boss HP multiplier
   }
 }

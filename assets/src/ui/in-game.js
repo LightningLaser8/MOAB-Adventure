@@ -377,6 +377,31 @@ UIComponent.invert(
     "left"
   )
 )
+//HP thing
+UIComponent.alignRight(
+  Object.defineProperty(
+    createUIComponent(
+      ["in-game"],
+      ["boss:yes"], //Only show if boss is active
+      1666,
+      245,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true
+    ),
+    "text",
+    {
+      get: () => {
+        let boss = world.getFirstBoss();
+        if(!boss) return "unknown";
+        return (shortenedNumber(boss.health ?? 1) + "/" + shortenedNumber(boss.maxHealth ?? 1))
+      } //Text is hp / max hp
+    }
+  )
+)
 //square thing with boss class
 Object.defineProperty(
   createUIComponent(

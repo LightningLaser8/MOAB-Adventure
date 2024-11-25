@@ -1,4 +1,4 @@
-class Box extends Entity {
+class Box extends ScalingEntity {
   //Default box, for undefined world spawning entity
   static default = {
     type: this.name,
@@ -22,6 +22,7 @@ class Box extends Entity {
     },
     team: "enemy",
     health: 5,
+    healthIncrease: 5
   };
   //Basic metal box
   static metal = {
@@ -56,6 +57,7 @@ class Box extends Entity {
     },
     team: "enemy",
     health: 20, //More HP
+    healthIncrease: 10
   };
   //Rewards
   reward = { bloonstones: 0, shards: 0 };
