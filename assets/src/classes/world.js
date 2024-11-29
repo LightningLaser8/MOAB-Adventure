@@ -5,10 +5,10 @@ class World {
   /** @type {Array<Bullet>} */
   bullets = [];
   spawning = [];
-  background = images.background.sea;
+  background = "background.sea";
   name = "World";
   boss = null;
-  constructor(name = "World", background = images.background.sea) {
+  constructor(name = "World", background = "background.sea") {
     this.name = name;
     this.background = background;
   }

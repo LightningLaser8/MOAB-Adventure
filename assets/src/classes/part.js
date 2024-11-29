@@ -1,5 +1,5 @@
 class Part {
-  image = images.env.error;
+  image = "error";
   x = 0;
   y = 0;
   slide = 0;

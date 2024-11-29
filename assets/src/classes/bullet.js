@@ -13,7 +13,7 @@ class Bullet {
   drawer = {
     shape: "circle",
     fill: "red",
-    image: images.env.error,
+    image: "error",
     width: 10,
     height: 10,
   };

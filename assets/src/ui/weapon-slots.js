@@ -35,7 +35,7 @@ createUIImageComponent(
   400,
   400,
   null,
-  images.ui.moab,
+  "ui.moab",
   false
 );
 createUIComponent(

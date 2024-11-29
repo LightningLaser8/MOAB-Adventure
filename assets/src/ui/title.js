@@ -8,7 +8,7 @@ createUIImageComponent(
   1120,
   420,
   null,
-  images.screen.title,
+  "ui.title",
   false
 );
 

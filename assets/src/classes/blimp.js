@@ -8,7 +8,7 @@ class Blimp {
   drawer = {
     shape: "circle",
     fill: "red",
-    image: images.env.error,
+    image: "error",
     width: 100,
     height: 100,
   };

@@ -208,7 +208,7 @@ class UIComponent {
         rect(this.x, this.y, this.width - 2, this.height - 2);
       } else {
         drawImg(
-          images.ui.background,
+          "ui.background",
           this.x,
           this.y,
           this.width - 2,
@@ -309,7 +309,7 @@ class ImageContainer {
 }
 
 function drawImg(
-  img = images.env.error || "error",
+  img = "error",
   x,
   y,
   width,
@@ -330,12 +330,12 @@ function drawImg(
       //Say the problem
       console.error("Could not draw image: ", img);
       //Replace with a working image
-      drawImg(images.env.error, x, y, width, height, ...otherParameters);
+      drawImg("error", x, y, width, height, ...otherParameters);
     }
   }
 }
 
-function rotatedImg(img = images.env.error, x, y, width, height, angle) {
+function rotatedImg(img = "error", x, y, width, height, angle) {
   push(); //Save current position, rotation, etc
   translate(x, y); //Move middle to 0,0
   rotate(angle);
@@ -677,10 +677,10 @@ function blendColours(col1, col2, col1Factor) {
   }
   return newCol;
 }
-
+/*
 const images = {
   env: {
-    error: new ImageContainer("assets/textures/error.png"),
+    error: 
   },
   screen: {
     title: new ImageContainer("assets/textures/screens/title.png"),
@@ -688,37 +688,40 @@ const images = {
   ui: {
     background: new ImageContainer("assets/textures/ui/background.png"),
     moab: new ImageContainer("assets/textures/ui/moab.png"),
-    shard: new ImageContainer("assets/textures/ui/shard.svg"),
-    bloonstone: new ImageContainer("assets/textures/ui/bloonstone.svg"),
-    clock: new ImageContainer("assets/textures/ui/clock.png"),
+    shard: 
+    bloonstone: 
+    clock: 
   },
   background: {
-    sea: new ImageContainer("assets/textures/background/sea.png"),
+    sea: 
   },
   entity: {
-    blimp_moab: new ImageContainer("assets/textures/entity/moab.png"),
-    blimp_bfb: new ImageContainer("assets/textures/entity/bfb.png"),
-    blimp_zomg: new ImageContainer("assets/textures/entity/zomg.png"),
-    blimp_ddt: new ImageContainer("assets/textures/entity/ddt.png"),
-    blimp_bad: new ImageContainer("assets/textures/entity/bad.png"),
-    box: new ImageContainer("assets/textures/entity/box/wood.svg"),
-    box_metal: new ImageContainer("assets/textures/entity/box/metal.svg"),
+    blimp_moab: ,
+    blimp_bfb: ,
+    blimp_zomg: ,
+    blimp_ddt: ,
+    blimp_bad: ,
+    box: ,
+    box_metal: ,
+    boss_monkeyace: ,
+    boss_monkeyace_stage2: new ImageContainer("assets/textures/entity/monkey-ace-2.svg"),
   },
   bullet: {
-    normal: new ImageContainer("assets/textures/bullet/normal_7-4.png"),
-    cyan: new ImageContainer("assets/textures/bullet/cyan_7-4.png"),
-    du: new ImageContainer("assets/textures/bullet/du_7-4.png"),
-    dark: new ImageContainer("assets/textures/bullet/dark_7-4.png"),
-    bomb: new ImageContainer("assets/textures/bullet/bomb_1-1.png"),
-    nuke: new ImageContainer("assets/textures/bullet/nuke_8-5.png"),
-    icebomb: new ImageContainer("assets/textures/bullet/icebomb_1-1.png"),
-    missile: new ImageContainer("assets/textures/bullet/missile_16-9.svg"),
-    crystal: new ImageContainer("assets/textures/bullet/crystal_1-1.png")
+    normal: ,
+    cyan: ,
+    du: ,
+    dark: ,
+    bomb: ,
+    nuke: ,
+    icebomb: ,
+    missile: ,
+    crystal: 
   },
   effect: {
     glare: new ImageContainer("assets/textures/effect/glare.png")
   },
   part: {
-    radiation: new ImageContainer("assets/textures/part/radiation.png")
+    radiation: 
   }
 };
+*/

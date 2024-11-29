@@ -13,6 +13,7 @@ class Registry {
   static images = new this();
   static statuses = new this();
   static blimps = new this();
+  static entities = new this();
   /** Adds an item to registry.
    * @param {string} name Registry name of item. This is not case sensitive.
    * @param {*} item Item to add to registry.
@@ -102,5 +103,23 @@ class Registry {
     let current = this.get(name);
     //Add new entry with the same content
     this.add(as, current);
+  }
+  /**
+   * Executes a function for each element in the registry.
+   * @param {(item, name: string) => void} func Callback for each element.
+   */
+  forEach(func) {
+    //Use built-in Map iterator
+    this.#content.forEach((element, name) => {
+      //Discard return value
+      void func(element, name);
+    });
+  }
+  /**
+   * Performs a function on each item in registry asynchronously.
+   * @param {(name: string, item) => void} callback Function to perform on each item.
+   */
+  async forEachAsync(callback){
+    this.#content.forEach(async (value, key) => await void callback(key, value))
   }
 }

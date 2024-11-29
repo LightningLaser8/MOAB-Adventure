@@ -5,7 +5,7 @@ const background = {
     1920,
     1080,
     null,
-    images.background.sea,
+    "background.sea",
     false
   ),
   bg2: new ImageUIComponent(
@@ -14,7 +14,7 @@ const background = {
     1920,
     1080,
     null,
-    images.background.sea,
+    "background.sea",
     false
   ),
   draw() {
@@ -53,7 +53,7 @@ createUIImageComponent(
   65,
   75,
   null,
-  images.ui.shard,
+  "ui.shard",
   false
 );
 //Overwrite text
@@ -87,7 +87,7 @@ createUIImageComponent(
   60,
   75,
   null,
-  images.ui.bloonstone,
+  "ui.bloonstone",
   false
 );
 //Overwrite text
@@ -304,7 +304,7 @@ createUIImageComponent(
   80,
   80,
   null,
-  images.ui.clock,
+  "ui.clock",
   false
 );
 //  When boss active
@@ -834,7 +834,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.shard,
+  "ui.shard",
   false
 );
 createUIImageComponent(
@@ -846,7 +846,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.bloonstone,
+  "ui.bloonstone",
   false
 );
 UIComponent.alignLeft(
@@ -1118,7 +1118,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.shard,
+  "ui.shard",
   false
 );
 createUIImageComponent(
@@ -1130,7 +1130,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.bloonstone,
+  "ui.bloonstone",
   false
 );
 UIComponent.alignLeft(
@@ -1216,7 +1216,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.shard,
+  "ui.shard",
   false
 );
 createUIImageComponent(
@@ -1228,7 +1228,7 @@ createUIImageComponent(
   30,
   30,
   null,
-  images.ui.bloonstone,
+  "ui.bloonstone",
   false
 );
 UIComponent.alignLeft(

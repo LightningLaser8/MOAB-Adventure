@@ -35,7 +35,7 @@ const difficulty = {
     bossHP: 1.3
   }
 }
-const world = new World("Sky High", images.background.sea);
+const world = new World("Sky High", "background.sea");
 world.addSpawn();
 world.addSpawn({ entity: Box.metal, interval: 300 }, true);
 //Initial values for canvas width and height
@@ -66,17 +66,7 @@ let fonts = {};
 let backgroundGradient;
 
 async function preload() {
-  //For each category defined
-  for (let category in Object.getOwnPropertyDescriptors(images)) {
-    //For each image in it
-    for (let image in Object.getOwnPropertyDescriptors(images[category])) {
-      let thing = images[category][image];
-      //Load it if it's an image container
-      if (thing instanceof ImageContainer) {
-        await thing.load();
-      }
-    }
-  }
+  await Registry.images.forEachAsync((name, item)=>{item.load()});
   fonts.ocr = loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = loadFont("assets/font/darktech_ldr.ttf");
 }
@@ -213,12 +203,7 @@ function showMousePos() {
 }
 
 function createPlayer() {
-  let player = construct({
-    type: "Entity",
-    x: 300,
-    y: 540,
-    team: "player"
-  });
+  let player = construct(Registry.entities.get("player"));
   //Add all slots: not all of them will be accessible
   player.addWeaponSlot(getSelectedAP(1))
   player.addWeaponSlot(getSelectedAP(2))

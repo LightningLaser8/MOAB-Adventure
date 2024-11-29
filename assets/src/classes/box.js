@@ -1,64 +1,12 @@
 class Box extends ScalingEntity {
   //Default box, for undefined world spawning entity
-  static default = {
-    type: this.name,
-    name: "Wooden Box",
-    drawer: {
-      image: "box.wood",
-      width: 50,
-      height: 50,
-    },
-    hitSize: 25,
-    x: 1920,
-    //Return a random height each time
-    get y() {
-      return random(0, 1080);
-    },
-    reward: {
-      shards: 2,
-    },
-    destroyReward: {
-      shards: 5,
-    },
-    team: "enemy",
-    health: 5,
-    healthIncrease: 5
-  };
+  static get default() {
+    return Registry.entities.get("wooden-box");
+  }
   //Basic metal box
-  static metal = {
-    type: this.name,
-    name: "Metal Box",
-    drawer: {
-      image: "box.metal",
-      width: 50,
-      height: 50,
-    },
-    hitSize: 25,
-    resistances: [
-      {
-        type: "ballistic",
-        amount: 1, //100% resistance
-      },
-      {
-        type: "laser",
-        amount: 0.3, //30% resistance
-      },
-    ],
-    x: 1920,
-    //Return a random height each time
-    get y() {
-      return random(0, 1080);
-    },
-    reward: {
-      shards: 2,
-    },
-    destroyReward: {
-      shards: 10, //Worth more
-    },
-    team: "enemy",
-    health: 20, //More HP
-    healthIncrease: 10
-  };
+  static get metal() {
+    return Registry.entities.get("metal-box");
+  }
   //Rewards
   reward = { bloonstones: 0, shards: 0 };
   destroyReward = structuredClone(this.reward);
@@ -87,8 +35,8 @@ class Box extends ScalingEntity {
       super.tick();
     }
   }
-  scaleToDifficulty(){
-    let diff = difficulty[game.difficulty] //Get difficulty
-    this.health *= diff.boxHP ?? 1 //Multiply HP by box HP multiplier
+  scaleToDifficulty() {
+    let diff = difficulty[game.difficulty]; //Get difficulty
+    this.health *= diff.boxHP ?? 1; //Multiply HP by box HP multiplier
   }
 }
