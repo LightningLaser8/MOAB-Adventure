@@ -73,10 +73,10 @@ Registry.blimps.add("bad", {
   positions: [{x: 80, y: 0}, {x: -80, y: 0}, {x: 30, y: 50}, {x: 30, y: -50}],
   drawer: {
     image: "blimp.bad",
-    width: 310,
-    height: 226,
+    width: 465,
+    height: 339,
   },
-  hitSize: 110,
+  hitSize: 165,
   cost: {
     shards: 200000,
     bloonstones: 0
