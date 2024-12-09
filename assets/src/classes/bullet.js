@@ -43,6 +43,8 @@ class Bullet {
   intervalSpacing = 0;
   intervalTime = 0;
   #intervalCounter = 0;
+  //Following
+  followsScreen = false;
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
@@ -68,6 +70,8 @@ class Bullet {
       } else {
         this.lifetime -= dt;
       }
+      //Follow
+      if(this.followsScreen) this.x -= game.player?.speed ?? 0;
     }
   }
   spawnTrail(dt) {

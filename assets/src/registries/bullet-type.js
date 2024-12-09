@@ -1,6 +1,7 @@
 Registry.bulletType.add("bullet", Bullet);
 Registry.bulletType.add("missile", Missile);
 Registry.bulletType.add("laser", LaserBullet);
+Registry.bulletType.add("continuous-laser", ContinuousLaserBullet);
 Registry.bulletType.add("point", PointBullet);
 Registry.bulletType.add("critical", CriticalBullet);
 Registry.bulletType.add("radiation-zone", RadiationZone);

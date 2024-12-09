@@ -15,6 +15,7 @@ Registry.genericType.add("recoil-animation", RecoilAnimation);
 Registry.genericType.add("status-effect", StatusEffect);
 //Bullets
 Registry.genericType.add("missile-bullet", Missile);
+Registry.genericType.add("continuous-laser-bullet", ContinuousLaserBullet);
 Registry.genericType.add("laser-bullet", LaserBullet);
 Registry.genericType.add("point-bullet", PointBullet);
 Registry.genericType.add("radiation-zone", RadiationZone);
