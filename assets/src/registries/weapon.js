@@ -5873,10 +5873,6 @@ Registry.weapons.add("meltdown", {
         statusDuration: 1200, //20 second fire
         damage: [
           {
-            type: "ballistic",
-            amount: 1,
-          },
-          {
             type: "explosion",
             area: 250,
             amount: 25, //A LOT more damage
