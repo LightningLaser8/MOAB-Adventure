@@ -5875,7 +5875,7 @@ Registry.weapons.add("meltdown", {
         damage: [
           {
             type: "explosion",
-            area: 250,
+            area: 350,
             amount: 25, //A LOT more damage
             smokeColour: [255, 33, 50],
             smokeColourTo: [0, 255, 0, 0],
@@ -6325,10 +6325,10 @@ Registry.weapons.add("meltdown", {
 Registry.weapons.add("swarmer", {
   name: "Swarmer",
   description: "Even more missiles, and missiles home in on boxes.",
-  reload: 60,
+  reload: 45,
   cost: {
     shards: 12500,
-    bloonstones: 0,
+    bloonstones: 200,
   },
   shoot: {
     bullet: {
