@@ -23,6 +23,7 @@ class Bullet {
   kineticKnockback = false;
   controlledKnockback = false;
   //Effectively a pierce thing
+  multiHit = false;
   damaged = [];
   _trailCounter = 20;
   _trailInterval = 10;
@@ -164,4 +165,6 @@ class Bullet {
       this.#intervalCounter--;
     }
   }
+  //On top of damage
+  onHit(entity){}
 }

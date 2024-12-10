@@ -42,7 +42,7 @@ class Entity {
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
   }
   init() {
-    this.scaleToDifficulty()
+    this.scaleToDifficulty();
     this.maxHealth = this.health; //Stop part-damaged entities spawning
   }
   addToWorld(world) {
@@ -111,7 +111,8 @@ class Entity {
             ); //Pass on collided entities to prevent infinite loop
           }
         }
-        if (hit) break; //If hit, stop moving
+        //If hit, stop moving
+        if (hit) break;
         else {
           //If not hit, move
           this.x += resolution * xmove; //Knock in the direction of impact
@@ -137,10 +138,6 @@ class Entity {
     slot.entity = this;
   }
   tick() {
-    //Tick weapons
-    // for (let weapon of this.weapons) {
-    //   weapon.tick();
-    // }
     for (let slot of this.weaponSlots) {
       slot.tick();
     }
@@ -170,10 +167,6 @@ class Entity {
         this.drawer.height
       );
     }
-    //Draw weapons on top
-    // for (let weapon of this.weapons) {
-    //   weapon.draw();
-    // }
     for (let slot of this.weaponSlots) {
       slot.draw();
     }
@@ -196,9 +189,10 @@ class Entity {
       ) {
         //Take all damage instances
         for (let instance of bullet.damage) {
-          if (!instance.area) this.damage(instance.type, instance.amount, bullet.entity); //Wait if kaboom
+          if (!instance.area)
+            this.damage(instance.type, instance.amount, bullet.entity); //Wait if kaboom
         }
-        if(bullet.controlledKnockback){
+        if (bullet.controlledKnockback) {
           //Get direction to the target
           let direction = degrees(
             p5.Vector.sub(
@@ -207,21 +201,36 @@ class Entity {
             ).heading() //'A->B' = 'B' - 'A'
           );
           this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
-        }
-        else{
-          this.knock(bullet.knockback, bullet.direction, bullet.kineticKnockback); //Knock with default resolution
+        } else {
+          this.knock(
+            bullet.knockback,
+            bullet.direction,
+            bullet.kineticKnockback
+          ); //Knock with default resolution
         }
         if (bullet.status !== "none") {
           this.applyStatus(bullet.status, bullet.statusDuration);
         }
         //Make the bullet know
         bullet.damaged.push(this);
+        bullet.onHit(this);
         //Reduce pierce
         bullet.pierce--;
         //If exhausted
         if (bullet.pierce < 0) {
           //Delete
           bullet.remove = true;
+        }
+      } else {
+        if(
+          !bullet.remove &&
+          this.team !== bullet.entity.team &&
+          bullet.damaged.includes(this)
+        ){
+          if (bullet.multiHit && !bullet.collidesWith(this)) {
+            //Unpierce it
+            bullet.damaged.splice(bullet.damaged.indexOf(this), 1);
+          }
         }
       }
     }
@@ -247,18 +256,18 @@ class Entity {
   applyStatus(effect, time) {
     this.statuses.push({ effect: effect, time: time, timeLeft: time });
   }
-  scaleToDifficulty(){
-    let diff = difficulty[game.difficulty] //Get difficulty
+  scaleToDifficulty() {
+    let diff = difficulty[game.difficulty]; //Get difficulty
     //Do nothing, as it doesn't matter for normal entities
   }
 }
 
 //Entity that scales health as the game's level increases.
-class ScalingEntity extends Entity{
+class ScalingEntity extends Entity {
   //Amount of extra health per game level.
-  healthIncrease = 0
-  init(){
-    this.health += this.healthIncrease*((game.level - 1)??0) //Level 1 is +0 HP
-    super.init() //Make sure to do this part AFTER
+  healthIncrease = 0;
+  init() {
+    this.health += this.healthIncrease * (game.level - 1 ?? 0); //Level 1 is +0 HP
+    super.init(); //Make sure to do this part AFTER
   }
 }
