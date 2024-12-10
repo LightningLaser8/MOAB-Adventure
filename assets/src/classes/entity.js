@@ -196,25 +196,7 @@ class Entity {
       ) {
         //Take all damage instances
         for (let instance of bullet.damage) {
-          if (instance.area)
-            //If it explodes
-            splashDamageInstance(
-              bullet.x,
-              bullet.y,
-              instance.amount,
-              instance.type,
-              instance.area,
-              bullet.entity,
-              instance.visual, //        \
-              instance.sparkColour, //   |
-              instance.sparkColourTo, // |
-              instance.smokeColour, //   |- These are optional, but can be set per instance
-              instance.smokeColourTo, // |
-              instance.waveColour, //     /
-              bullet.status,
-              bullet.statusDuration
-            );
-          else this.damage(instance.type, instance.amount, bullet.entity);
+          if (!instance.area) this.damage(instance.type, instance.amount, bullet.entity); //Wait if kaboom
         }
         if(bullet.controlledKnockback){
           //Get direction to the target

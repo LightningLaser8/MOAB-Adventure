@@ -13,7 +13,8 @@ const aps = {
       "double-shooter",
       "bomb-shooter",
       "missile-launcher",
-      "missile-battery"
+      "missile-battery",
+      "swarmer"
     ),
   },
   ap2: {
