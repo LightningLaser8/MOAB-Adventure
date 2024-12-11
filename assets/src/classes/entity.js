@@ -182,7 +182,7 @@ class Entity {
     for (let bullet of this.world.bullets) {
       //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
       if (
-        !bullet.remove &&
+        !bullet.remove && 
         this.team !== bullet.entity.team &&
         !bullet.damaged.includes(this) &&
         bullet.collidesWith(this) //check collisions last for performance reasons
@@ -218,8 +218,8 @@ class Entity {
         bullet.pierce--;
         //If exhausted
         if (bullet.pierce < 0) {
-          //Delete
-          bullet.remove = true;
+          if(bullet instanceof LaserBullet) bullet.canHurt = false;
+          else bullet.remove = true; //Delete
         }
       } else {
         if(

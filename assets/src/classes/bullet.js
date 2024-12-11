@@ -51,6 +51,7 @@ class Bullet {
   }
   init() {
     this.maxLife = this.lifetime;
+    this.maxPierce = this.pierce;
     this._trailInterval = this.hitSize * 4;
   }
   step(dt) {

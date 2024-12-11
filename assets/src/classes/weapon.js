@@ -109,7 +109,8 @@ class Weapon {
         this.shoot.pattern.spread,
         this.shoot.pattern.spacing,
         this.slot.entity.world,
-        this.slot.entity
+        this.slot.entity,
+        this
       );
       this.parts.forEach((x) => x.fire()); //Tick all parts
     }
@@ -125,7 +126,8 @@ function patternedBulletExpulsion(
   spread,
   spacing,
   world,
-  entity
+  entity,
+  source
 ) {
   //Derives most of its code from `Weapon.fire()`
   //universal mode: a c t i v a t e
@@ -149,6 +151,7 @@ function patternedBulletExpulsion(
     //Add entity and world
     bulletToFire.entity = entity;
     bulletToFire.world = world;
+    bulletToFire.source = source;
     //Spawn it in
     world.bullets.push(bulletToFire);
   }

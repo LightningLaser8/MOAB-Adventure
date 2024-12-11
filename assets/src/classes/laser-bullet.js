@@ -5,6 +5,10 @@ class LaserBullet extends Bullet {
   #widthFraction = 1;
   extendTime = -1; //Time taken to get to full length
   despawnTime = -1; //Time taken to disappear fully
+  canHurt = true; //Can this laser hurt things?
+  followsSource = false;
+  /** @type {Weapon} */
+  source = null;
   init() {
     super.init();
     if (this.extendTime === -1) this.extendTime = this.maxLife * 0.2;
@@ -13,8 +17,13 @@ class LaserBullet extends Bullet {
   step(dt) {
     //Not if dead
     if (!this.remove) {
+      if(this.followsSource && this.source){
+        this.x = this.source.x;
+        this.y = this.source.y;
+        this.direction = this.source.rotation;
+      }
       this.intervalTick();
-      if (this.lifetime >= this.maxLife - this.extendTime) {
+      if (this.lifetime >= this.maxLife - this.extendTime && this.canHurt) {
         //If spawning
         this.#lengthFraction += dt / this.extendTime; //Slowly turn to one
       }
@@ -71,6 +80,7 @@ class LaserBullet extends Bullet {
   collidesWith(obj) {
     let currentLength = this.length * this.#lengthFraction;
     let currentHitSize = this.hitSize * this.#widthFraction;
+    if(!this.canHurt) return false;
     if(currentHitSize <= 0.001 || currentLength > 10000) return false; //Catch problem where hitsize = 0 causes infinite loop
     let offset = {
       x: Math.cos(this.directionRad),

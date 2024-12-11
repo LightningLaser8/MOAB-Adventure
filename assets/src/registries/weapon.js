@@ -7311,7 +7311,7 @@ Registry.weapons.add("ray-of-frost", {
             },
             {
               type: "ice",
-              amount: 2, //      No longer just visual
+              amount: 4, //      No longer just visual
               area: 75,
               //Icy looking explosion
               smokeColour: [255, 255, 255, 100],
@@ -8035,29 +8035,28 @@ Registry.weapons.add("ray-of-frost", {
     {
       //Mini 'ray' - actually fast-firing bullets
       offset: 60,
-      reload: 0,
+      reload: 90,
       isAuto: true,
+      range: 900,
       shoot: {
         bullet: {
-          type: "missile",
-          targetType: "nearest",
-          lifetime: 15,
-          trail: false,
-          speed: 60,
-          turnSpeed: 361,
+          type: "continuous-laser",
+          lifetime: 60,
+          length: 900,
           hitSize: 5,
+          status: "freezing",
+          statusDuration: 2,
+          followsSource: true,
           damage: [
             {
               type: "ice",
-              amount: 1,
+              amount: 0.5,
             },
           ],
           drawer: {
-            shape: "ellipse",
-            fill: "white",
-            width: 15,
-            height: 6,
-          },
+            shape: "rect",
+            fill: "#c0ffff",
+          }
         },
         pattern: {},
       },
@@ -8222,28 +8221,27 @@ Registry.weapons.add("ray-of-frost", {
     {
       //Mini 'ray' #2
       offset: 60,
-      reload: 0,
+      reload: 90,
       isAuto: true,
+      range: 900,
       shoot: {
         bullet: {
-          type: "missile",
-          targetType: "nearest",
-          lifetime: 15,
-          trail: false,
-          speed: 60,
-          turnSpeed: 361,
+          type: "continuous-laser",
+          lifetime: 60,
+          length: 900,
           hitSize: 5,
+          status: "freezing",
+          statusDuration: 2,
+          followsSource: true,
           damage: [
             {
               type: "ice",
-              amount: 1,
+              amount: 0.5,
             },
           ],
           drawer: {
-            shape: "ellipse",
-            fill: "white",
-            width: 15,
-            height: 6,
+            shape: "rect",
+            fill: "#c0ffff",
           },
         },
         pattern: {},
