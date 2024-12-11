@@ -31,7 +31,8 @@ const aps = {
       "double-shooter",
       "heavy-shots",
       "cryo-cannon",
-      "shattering-shells"
+      "shattering-shells",
+      "ray-of-frost"
     ),
   },
   ap3: {

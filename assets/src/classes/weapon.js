@@ -23,7 +23,7 @@ class Weapon {
   rotation = 0;
   //Internal
   #delay = 0;
-  #cooldown = 0;
+  _cooldown = 0;
   //Special weapon effects
   accel = 0;
   accelDecay = 0;
@@ -59,8 +59,8 @@ class Weapon {
       );
     }
     this.decelerate()
-    if (this.#cooldown > 0) {
-      this.#cooldown--;
+    if (this._cooldown > 0) {
+      this._cooldown--;
     }
     this.parts.forEach((x) => x.tick()); //Tick all parts
   }
@@ -92,8 +92,8 @@ class Weapon {
     }
   }
   fire() {
-    if (this.#cooldown <= 0) {
-      this.#cooldown = this.getAcceleratedReloadRate();
+    if (this._cooldown <= 0) {
+      this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate() //Apply acceleration effects
       //Resolve nonexistent properties
       this.shoot.pattern.spread ??= 0;
