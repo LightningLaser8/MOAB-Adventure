@@ -41,7 +41,8 @@ const aps = {
       "double-shooter",
       "laser-blaster",
       "accelerator",
-      "greenbeam"
+      "greenbeam",
+      "purple-destroyer"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
@@ -57,7 +58,8 @@ const aps = {
       "double-shooter",
       "laser-blaster",
       "accelerator",
-      "greenbeam"
+      "greenbeam",
+      "purple-destroyer"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",

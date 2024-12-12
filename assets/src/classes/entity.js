@@ -191,6 +191,7 @@ class Entity {
         for (let instance of bullet.damage) {
           if (!instance.area)
             this.damage(instance.type, instance.amount, bullet.entity); //Wait if kaboom
+          this.maxHealth -= instance.amount * bullet.maxHPReductionFactor
         }
         if (bullet.controlledKnockback) {
           //Get direction to the target

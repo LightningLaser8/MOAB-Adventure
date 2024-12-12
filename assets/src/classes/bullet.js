@@ -46,6 +46,8 @@ class Bullet {
   #intervalCounter = 0;
   //Following
   followsScreen = false;
+  //This may be OP
+  maxHPReductionFactor = 0;
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
