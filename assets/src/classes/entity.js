@@ -190,7 +190,7 @@ class Entity {
         //Take all damage instances
         for (let instance of bullet.damage) {
           if (!instance.area)
-            this.damage(instance.type, instance.amount, bullet.entity); //Wait if kaboom
+            this.damage(instance.type, instance.amount + (bullet.source?bullet.source.getDVScale():0), bullet.entity); //Wait if kaboom
           this.maxHealth -= instance.amount * bullet.maxHPReductionFactor
         }
         if (bullet.controlledKnockback) {
@@ -221,6 +221,12 @@ class Entity {
         if (bullet.pierce < 0) {
           if(bullet instanceof LaserBullet) bullet.canHurt = false;
           else bullet.remove = true; //Delete
+        }
+        //Check death
+        if(this.dead){
+          if(bullet.source){
+            if(bullet.source.storesDV) bullet.source.absorbDVFrom(this) //Add the DV
+          }
         }
       } else {
         if(

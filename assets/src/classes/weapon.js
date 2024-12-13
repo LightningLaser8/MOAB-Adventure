@@ -30,9 +30,27 @@ class Weapon {
   maxAccel = 2;
   #acceleration = 0;
   #accelerated = 0;
+  //Death Value
+  storesDV = false //Does this weapon store DV?
+  dvRatio = 0 //Amount DV increases by per damage
+  _dv = 0 //Stored DV.
   constructor() {}
   get rotationRadians() {
     return (this.rotation / 180) * Math.PI;
+  }
+  getDVScale(){
+    return this._dv * this.dvRatio
+  }
+  absorbDVFrom(entity){ //Increases stored DV from defeating an entity
+    if(entity instanceof Boss){
+      this._dv += 250 //Gain 250 DV from bosses
+    }
+    else if(entity instanceof Box){
+      this._dv ++ //Gain 1 DV from boxes
+    }
+    else{
+      this._dv += 25 //Gain 25 DV from random stuff
+    }
   }
   init() {
     let np = [];

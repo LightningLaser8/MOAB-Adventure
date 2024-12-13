@@ -45,6 +45,7 @@ class Bullet {
   intervalTime = 0;
   #intervalCounter = 0;
   //Following
+  source = null;
   followsScreen = false;
   //This may be OP
   maxHPReductionFactor = 0;
@@ -144,7 +145,8 @@ class Bullet {
       this.fragSpread,
       this.fragSpacing,
       this.world,
-      this.entity
+      this.entity,
+      this.source
     );
   }
   interval() {
@@ -157,7 +159,8 @@ class Bullet {
       this.intervalSpread,
       this.intervalSpacing,
       this.world,
-      this.entity
+      this.entity,
+      this.source
     );
   }
   intervalTick() {

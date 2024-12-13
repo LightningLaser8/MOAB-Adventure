@@ -22,7 +22,8 @@ class CriticalBullet extends Bullet{
           0,
           0,
           this.world,
-          this.entity
+          this.entity,
+          this.source
         )
       }
       else{
@@ -36,7 +37,8 @@ class CriticalBullet extends Bullet{
           0,
           0,
           this.world,
-          this.entity
+          this.entity,
+          this.source
         )
       }
       //Delete self

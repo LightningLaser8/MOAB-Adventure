@@ -49,7 +49,8 @@ const aps = {
       "double-shooter",
       "laser-blaster",
       "lancer",
-      "spike"
+      "spike",
+      "impale"
     ),
   },
   ap4: {
@@ -66,7 +67,8 @@ const aps = {
       "double-shooter",
       "laser-blaster",
       "lancer",
-      "spike"
+      "spike",
+      "impale"
     ),
   },
   ap5: {
@@ -75,7 +77,8 @@ const aps = {
       "double-shooter",
       "rifle",
       "sniper",
-      "sharp-shooter"
+      "sharp-shooter",
+      "hunter"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
