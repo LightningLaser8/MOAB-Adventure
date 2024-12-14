@@ -6,7 +6,8 @@ const aps = {
       "bomb-shooter",
       "incendiary",
       "nuke-launcher",
-      "meltdown"
+      "meltdown",
+      "solar-flare"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
@@ -85,7 +86,8 @@ const aps = {
       "double-shooter",
       "rifle",
       "shotgun",
-      "du-rounds"
+      "du-rounds",
+      "super-shotgun"
     ),
   },
   error: new WeaponSlot(),

@@ -81,7 +81,8 @@ class LaserBullet extends Bullet {
     let currentLength = this.length * this.#lengthFraction;
     let currentHitSize = this.hitSize * this.#widthFraction;
     if(!this.canHurt) return false;
-    if(currentHitSize <= 0.001 || currentLength > 10000) return false; //Catch problem where hitsize = 0 causes infinite loop
+    if(currentHitSize <= 0.01 || currentLength > 5000) return false; //Catch problem where hitsize = 0 causes infinite loop, and also performance stuff
+    if(currentHitSize < 1) currentHitSize = 1;
     let offset = {
       x: Math.cos(this.directionRad),
       y: Math.sin(this.directionRad),
