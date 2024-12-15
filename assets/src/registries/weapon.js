@@ -1116,7 +1116,7 @@ Registry.weapons.add("incendiary", {
 Registry.weapons.add("missile-launcher", {
   name: "Missile Launcher",
   description: "Shoots faster moving slightly homing missiles",
-  reload: 60,
+  reload: 45,
   cost: {
     shards: 800,
     bloonstones: 0,
@@ -1138,7 +1138,7 @@ Registry.weapons.add("missile-launcher", {
         {
           type: "explosion",
           area: 125,
-          amount: 3,
+          amount: 7.5,
         },
       ],
       drawer: {
@@ -2310,7 +2310,7 @@ Registry.weapons.add("lancer", {
       damage: [
         {
           type: "laser",
-          amount: 10,
+          amount: 20,
         },
       ],
       drawer: {
@@ -3338,7 +3338,7 @@ Registry.weapons.add("missile-battery", {
         {
           type: "explosion",
           area: 75,
-          amount: 3,
+          amount: 5,
         },
       ],
       drawer: {
@@ -4867,7 +4867,7 @@ Registry.weapons.add("spike", {
       damage: [
         {
           type: "laser",
-          amount: 20,
+          amount: 40,
         },
       ],
       drawer: {
@@ -6347,7 +6347,7 @@ Registry.weapons.add("swarmer", {
         {
           type: "explosion",
           area: 85,
-          amount: 10,
+          amount: 12.5,
         },
       ],
       drawer: {
@@ -9257,7 +9257,7 @@ Registry.weapons.add("impale", {
       damage: [
         {
           type: "laser",
-          amount: 125,
+          amount: 225,
         },
       ],
       drawer: {
@@ -9265,7 +9265,7 @@ Registry.weapons.add("impale", {
         fill: [89, 0, 255], //Kind of purplish
       },
       //Visual effects & extra damage
-      intervalNumber: 6,
+      intervalNumber: 10,
       intervalSpacing: 10,
       intervalSpread: 10,
       intervalTime: 9999,
@@ -10276,11 +10276,11 @@ Registry.weapons.add("hunter", {
       critBullet: {
         type: "Point",
         lifetime: 2,
-        hitSize: 6,
+        hitSize: 10,
         damage: [
           {
             type: "ballistic",
-            amount: 300, //Triple damage (oof 300 damage)
+            amount: 600, //Triple damage (oof 300 damage)
           },
         ],
         //Red, fades back to yellow
@@ -10290,11 +10290,11 @@ Registry.weapons.add("hunter", {
       normalBullet: {
         type: "Point",
         lifetime: 2,
-        hitSize: 6,
+        hitSize: 10,
         damage: [
           {
             type: "ballistic",
-            amount: 100,
+            amount: 200,
           },
         ],
         hitColour: [0, 0, 255],
