@@ -33,7 +33,8 @@ const aps = {
       "heavy-shots",
       "cryo-cannon",
       "shattering-shells",
-      "ray-of-frost"
+      "ray-of-frost",
+      "subzero"
     ),
   },
   ap3: {

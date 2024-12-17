@@ -11,7 +11,7 @@ Registry.statuses.add(
   construct({
     type: "status-effect",
     speedMult: 0.75,
-    healthMult: 0.8,
+    healthMult: 0.85,
     damageMult: 0.9,
     resistanceMult: 0.6,
   })
