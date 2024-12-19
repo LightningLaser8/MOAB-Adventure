@@ -22,6 +22,7 @@ class MovementAction extends BossAction {
 class FireWeaponAction extends BossAction{
   slotIndex = 0;
   execute(entity){
+    if(entity.weaponSlots[this.slotIndex]?.weapon)
     entity.weaponSlots[this.slotIndex].weapon.fire()
   }
 }

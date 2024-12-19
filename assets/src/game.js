@@ -20,21 +20,21 @@ const difficulty = {
     spawnRateLowTier: 0.75,
     spawnRateHighTier: 0.67,
     boxHP: 0.85,
-    bossHP: 0.85
+    bossHP: 0.85,
   },
   normal: {
     spawnRateLowTier: 1,
     spawnRateHighTier: 1,
     boxHP: 1,
-    bossHP: 1
+    bossHP: 1,
   },
   hard: {
     spawnRateLowTier: 1.3,
     spawnRateHighTier: 2,
     boxHP: 1.25,
-    bossHP: 1.3
-  }
-}
+    bossHP: 1.3,
+  },
+};
 const world = new World("Sky High", "background.sea");
 world.addSpawn();
 world.addSpawn({ entity: Box.metal, interval: 300 }, true);
@@ -66,7 +66,9 @@ let fonts = {};
 let backgroundGradient;
 
 async function preload() {
-  await Registry.images.forEachAsync((name, item)=>{item.load()});
+  await Registry.images.forEachAsync((name, item) => {
+    item.load();
+  });
   fonts.ocr = loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = loadFont("assets/font/darktech_ldr.ttf");
 }
@@ -117,21 +119,29 @@ function gameFrame() {
   if (!game.paused) {
     movePlayer();
     world.tickAll();
-    tickBossEvent()
+    tickBossEvent();
     checkBoxCollisions();
   }
   world.drawAll();
 }
 
-function tickBossEvent(){
-  UIComponent.setCondition("boss:"+(world.getFirstBoss()?"yes":"no")) // Update condition
-  if(UIComponent.evaluateCondition("boss:no")){ // If there's no boss active
-    if(game.bosstimer <= 0){ //If timer has run out
-      game.bosstimer = game.bossinterval //Reset timer
-      world.spawnBoss(Boss.box, "B") //Spawn a class B Gigantic Box
-    }
-    else{
-      game.bosstimer -= game.player.speed * 0.0167
+function tickBossEvent() {
+  UIComponent.setCondition("boss:" + (world.getFirstBoss() ? "yes" : "no")); // Update condition
+  if (UIComponent.evaluateCondition("boss:no")) {
+    // If there's no boss active
+    if (game.bosstimer <= 0) {
+      //If timer has run out
+      game.bosstimer = game.bossinterval; //Reset timer
+      if (game.level % 2 === 0)
+        world.spawnBoss(
+          Registry.entities.get("monkey-ace"),
+          "A"
+        ); //Every other level is monkey ace
+      else world.spawnBoss(Boss.box, "B"); //Spawn a class B Gigantic Box
+      world.reducedSpawns = true;
+    } else {
+      game.bosstimer -= game.player.speed * 0.0167;
+      if(world.reducedSpawns) world.reducedSpawns = false;
     }
   }
 }
@@ -204,15 +214,15 @@ function showMousePos() {
 function createPlayer() {
   let player = construct(Registry.entities.get("player"));
   //Add all slots: not all of them will be accessible
-  player.addWeaponSlot(getSelectedAP(1))
-  player.addWeaponSlot(getSelectedAP(2))
-  player.addWeaponSlot(getSelectedAP(3))
-  player.addWeaponSlot(getSelectedAP(4))
-  player.addWeaponSlot(getSelectedAP(5))
+  player.addWeaponSlot(getSelectedAP(1));
+  player.addWeaponSlot(getSelectedAP(2));
+  player.addWeaponSlot(getSelectedAP(3));
+  player.addWeaponSlot(getSelectedAP(4));
+  player.addWeaponSlot(getSelectedAP(5));
   player.addToWorld(world);
   game.player = player;
   //is moab
-  player.upgrade("moab")
+  player.upgrade("moab");
   //Change to an accessor property
   Object.defineProperty(player, "target", {
     get: () => {
@@ -265,15 +275,18 @@ function checkBoxCollisions() {
 }
 
 function playerDies() {
-  deathStats.shardCounter.text = "Shards: " + game.shards;
-  deathStats.bloonstoneCounter.text = "Bloonstones: " + game.bloonstones;
+  deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
+  deathStats.bloonstoneCounter.text =
+    "Bloonstones: " + shortenedNumber(game.bloonstones);
   deathStats.progress.text = "Zone: " + world.name + " | Level " + game.level;
-  deathStats.damageDealt.text = "Damage Dealt: " + game.player.damageDealt;
-  deathStats.damageTaken.text = "Damage Taken: " + game.player.damageTaken;
+  deathStats.damageDealt.text =
+    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  deathStats.damageTaken.text =
+    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
   deathStats.destroyedBoxes.text =
-    "Boxes Destroyed: " + game.player.destroyed.boxes;
+    "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
   deathStats.destroyedBosses.text =
-    "Bosses Destroyed: " + game.player.destroyed.bosses;
+    "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
   ui.menuState = "you-died";
   //Reset world and game
   reset();

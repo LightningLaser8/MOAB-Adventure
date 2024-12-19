@@ -37,6 +37,10 @@ class Entity {
   effectiveSpeedMult = 1;
   statuses = [];
 
+  get directionRad() {
+    return (this.direction / 180) * Math.PI;
+  }
+
   constructor() {} //Because universal
   upgrade(blimp) {
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
@@ -44,6 +48,17 @@ class Entity {
   init() {
     this.scaleToDifficulty();
     this.maxHealth = this.health; //Stop part-damaged entities spawning
+    /**@type {Array<WeaponSlot>} */
+    let madeSlots = this.weaponSlots.map((x) => construct(x, WeaponSlot)); //Create weapon slots
+    this.weaponSlots = [];
+    madeSlots.forEach((x) => {
+      this.addWeaponSlot(x);
+      let t = x.tier;
+      x.tier = 0;
+      for (let i = 0; i < t; i++) {
+        x.attemptUpgrade();
+      }
+    });
   }
   addToWorld(world) {
     world.entities.push(this);
@@ -155,7 +170,7 @@ class Entity {
         this.y,
         this.drawer.width,
         this.drawer.height,
-        this.direction
+        this.directionRad
       );
     } else {
       //If no image, draw shape instead
@@ -164,7 +179,8 @@ class Entity {
         this.x,
         this.y,
         this.drawer.width,
-        this.drawer.height
+        this.drawer.height,
+        this.directionRad
       );
     }
     for (let slot of this.weaponSlots) {
@@ -182,7 +198,7 @@ class Entity {
     for (let bullet of this.world.bullets) {
       //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
       if (
-        !bullet.remove && 
+        !bullet.remove &&
         this.team !== bullet.entity.team &&
         !bullet.damaged.includes(this) &&
         bullet.collidesWith(this) //check collisions last for performance reasons
@@ -190,8 +206,13 @@ class Entity {
         //Take all damage instances
         for (let instance of bullet.damage) {
           if (!instance.area)
-            this.damage(instance.type, instance.amount + (bullet.source?bullet.source.getDVScale():0), bullet.entity); //Wait if kaboom
-          this.maxHealth -= instance.amount * bullet.maxHPReductionFactor
+            this.damage(
+              instance.type,
+              instance.amount +
+                (bullet.source ? bullet.source.getDVScale() : 0),
+              bullet.entity
+            ); //Wait if kaboom
+          this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;
         }
         if (bullet.controlledKnockback) {
           //Get direction to the target
@@ -219,21 +240,21 @@ class Entity {
         bullet.pierce--;
         //If exhausted
         if (bullet.pierce < 0) {
-          if(bullet instanceof LaserBullet) bullet.canHurt = false;
+          if (bullet instanceof LaserBullet) bullet.canHurt = false;
           else bullet.remove = true; //Delete
         }
         //Check death
-        if(this.dead){
-          if(bullet.source){
-            if(bullet.source.storesDV) bullet.source.absorbDVFrom(this) //Add the DV
+        if (this.dead) {
+          if (bullet.source) {
+            if (bullet.source.storesDV) bullet.source.absorbDVFrom(this); //Add the DV
           }
         }
       } else {
-        if(
+        if (
           !bullet.remove &&
           this.team !== bullet.entity.team &&
           bullet.damaged.includes(this)
-        ){
+        ) {
           if (bullet.multiHit && !bullet.collidesWith(this)) {
             //Unpierce it
             bullet.damaged.splice(bullet.damaged.indexOf(this), 1);

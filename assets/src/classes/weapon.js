@@ -1,6 +1,6 @@
 class Weapon {
   entity = null; //will be the player, unless it's a boss weapon - DON'T PRE-SET THIS
-  reload = 30;
+  reload = 1;
   barrel = 0;
   parts = [];
   shoot = {

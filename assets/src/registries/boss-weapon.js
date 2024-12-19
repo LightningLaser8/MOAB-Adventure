@@ -12,9 +12,9 @@ Registry.weapons.add(".ace-radial-gun", {
   shoot: {
     bullet: {
       type: "Bullet",
-      lifetime: 40,
+      lifetime: 80,
       speed: 30,
-      hitSize: 8,
+      hitSize: 10,
       trail: false,
       damage: [
         {
@@ -24,7 +24,7 @@ Registry.weapons.add(".ace-radial-gun", {
       ],
       drawer: {
         image: "bullet.normal",
-        width: 28,
+        width: 56,
         height: 16,
       },
     },
@@ -39,7 +39,7 @@ Registry.weapons.add(".ace-gatling-gun", {
   shoot: {
     bullet: {
       type: "Bullet",
-      lifetime: 40,
+      lifetime: 120,
       speed: 30,
       hitSize: 8,
       trail: false,
@@ -54,9 +54,23 @@ Registry.weapons.add(".ace-gatling-gun", {
         width: 28,
         height: 16,
       },
+      intervalNumber: 1,
+      intervalTime: 9999,
+      intervalBullet: {
+        lifetime: 0,
+        speed: 0,
+        damage: [
+          {
+            area: 60,
+            amount: 0,
+            type: "no"
+          }
+        ]
+      }
     },
     pattern: {
-      spread: 5
+      spread: 5,
+      amount: 2 //impression of more brrr
     },
   },
 });

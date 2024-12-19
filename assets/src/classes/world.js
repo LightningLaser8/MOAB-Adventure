@@ -8,6 +8,7 @@ class World {
   background = "background.sea";
   name = "World";
   boss = null;
+  reducedSpawns = false;
   constructor(name = "World", background = "background.sea") {
     this.name = name;
     this.background = background;
@@ -104,7 +105,7 @@ class World {
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -= dt;
+        spawnGroup.$currentCooldown -= dt * this.reducedSpawns?0.33:1;
       }
     }
   }
