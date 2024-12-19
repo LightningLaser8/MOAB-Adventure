@@ -133,15 +133,13 @@ function tickBossEvent() {
       //If timer has run out
       game.bosstimer = game.bossinterval; //Reset timer
       if (game.level % 2 === 0)
-        world.spawnBoss(
-          Registry.entities.get("monkey-ace"),
-          "A"
-        ); //Every other level is monkey ace
-      else world.spawnBoss(Boss.box, "B"); //Spawn a class B Gigantic Box
+        world.spawnBoss(Registry.entities.get("monkey-ace"), "A");
+      //Every other level is monkey ace
+      else world.spawnBoss(Registry.entities.get("gigantic-box"), "B"); //Spawn a class B Gigantic Box
       world.reducedSpawns = true;
     } else {
       game.bosstimer -= game.player.speed * 0.0167;
-      if(world.reducedSpawns) world.reducedSpawns = false;
+      if (world.reducedSpawns) world.reducedSpawns = false;
     }
   }
 }
@@ -162,6 +160,10 @@ function movePlayer() {
   if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
     //If 'D' pressed
     game.player.x += game.player.speed * 0.5;
+  }
+  //regen
+  if(game.player.health < game.player.maxHealth){
+    game.player.heal(0.0003 * game.player.maxHealth)
   }
 }
 

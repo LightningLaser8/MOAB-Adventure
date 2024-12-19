@@ -114,6 +114,7 @@ class Weapon {
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate() //Apply acceleration effects
       //Resolve nonexistent properties
+      this.shoot.pattern ??= {}
       this.shoot.pattern.spread ??= 0;
       this.shoot.pattern.amount ??= 1;
       this.shoot.pattern.spacing ??= 0;
@@ -123,7 +124,7 @@ class Weapon {
         this.y,
         this.shoot.bullet,
         this.shoot.pattern.amount,
-        this.rotation,
+        this.rotation + (this.shoot?.pattern?.offset??0),
         this.shoot.pattern.spread,
         this.shoot.pattern.spacing,
         this.slot.entity.world,

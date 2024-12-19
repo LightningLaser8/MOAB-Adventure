@@ -209,7 +209,7 @@ class Entity {
             this.damage(
               instance.type,
               instance.amount +
-                (bullet.source ? bullet.source.getDVScale() : 0),
+                (bullet.source ? bullet.source.getDVScale() : 0) + (instance.levelScaling??0)*game.level,
               bullet.entity
             ); //Wait if kaboom
           this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;

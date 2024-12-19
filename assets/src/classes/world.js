@@ -42,7 +42,7 @@ class World {
             splashDamageInstance(
               bullet.x,
               bullet.y,
-              instance.amount,
+              instance.amount + (bullet.source ? bullet.source.getDVScale() : 0) + (instance.levelScaling??0)*game.level,
               instance.type,
               instance.area,
               bullet.entity,
@@ -105,7 +105,7 @@ class World {
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -= dt * this.reducedSpawns?0.33:1;
+        spawnGroup.$currentCooldown -= dt * (this.reducedSpawns?0.33:1);
       }
     }
   }

@@ -1,31 +1,4 @@
 class Boss extends ScalingEntity {
-  //Actually a boss now
-  static box = {
-    type: this.name,
-    name: "Gigantic Box",
-    drawer: {
-      image: "box.wood",
-      width: 200,
-      height: 200,
-    },
-    hitSize: 100,
-    direction: 180,
-    speed: 4,
-    x: 1920,
-    //Return a random height each time
-    get y() {
-      return random(0, 1080);
-    },
-    reward: {
-      bloonstones: 100,
-    },
-    team: "enemy",
-    health: 300,
-    healthIncrease: 150,
-    trackingOffsetX: 500,
-    turnWhileMoving: true,
-    turnSpeed: 10
-  };
   reward = { shards: 0, bloonstones: 0 };
   /** @type {Array<BossAction>} */
   actions = {}; //Essentially a registry, holds items to be used in sequence

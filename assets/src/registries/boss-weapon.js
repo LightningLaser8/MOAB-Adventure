@@ -19,7 +19,8 @@ Registry.weapons.add(".ace-radial-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 10,
+          amount: 5,
+          levelScaling: 5
         },
       ],
       drawer: {
@@ -30,7 +31,8 @@ Registry.weapons.add(".ace-radial-gun", {
     },
     pattern: {
       amount: 8,
-      spacing: 45
+      spacing: 45,
+      offset: 22.5
     },
   },
 });
@@ -47,6 +49,7 @@ Registry.weapons.add(".ace-gatling-gun", {
         {
           type: "ballistic",
           amount: 3,
+          levelScaling: 1.5
         },
       ],
       drawer: {
@@ -72,5 +75,31 @@ Registry.weapons.add(".ace-gatling-gun", {
       spread: 5,
       amount: 2 //impression of more brrr
     },
+  },
+});
+//## GIGANTIC BOX ##
+Registry.weapons.add(".box-impact", {
+  name: ".box-impact",
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 0,
+      speed: 0,
+      hitSize: 0,
+      trail: false,
+      knockback: 200,
+      kineticKnockback: true,
+      damage: [
+        {
+          type: "impact",
+          amount: 25,
+          area: 175,
+          sparkColour: [0,0,0,0],
+          sparkColourTo: [0,0,0,0],
+          levelScaling: 10
+        },
+      ],
+    },
+    pattern: {}
   },
 });

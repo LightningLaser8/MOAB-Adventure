@@ -110,10 +110,10 @@ Registry.entities.add("monkey-ace", {
       type: "action",
       duration: 5,
     },
-    "reverse": {
+    reverse: {
       type: "move-action",
       duration: 50,
-      x: -400
+      x: -400,
     },
   },
   sequence: [
@@ -152,4 +152,52 @@ Registry.entities.add("monkey-ace", {
   turnWhileMoving: true, //Face where it's going
   turnSpeed: 2, //planes don't turn very fast
   speed: 12, //but are fast
+});
+Registry.entities.add("gigantic-box", {
+  type: "boss",
+  name: "Gigantic Box",
+  drawer: {
+    image: "box.wood",
+    width: 200,
+    height: 200,
+  },
+  hitSize: 100,
+  direction: 180,
+  speed: 4,
+  x: 1920,
+  //Return a random height each time
+  get y() {
+    return random(0, 1080);
+  },
+  reward: {
+    bloonstones: 100,
+  },
+  actions: {
+    charge: {
+      type: "move-action",
+      duration: 10,
+      x: -275,
+    },
+    bonk: {
+      type: "fire-weapon-action",
+      slotIndex: 0,
+    },
+    wait: {
+      type: "action",
+      duration: 180,
+    },
+  },
+  weaponSlots: [
+    {
+      upgrades: [".box-impact"],
+      tier: 1,
+    },
+  ],
+  sequence: ["wait", "charge", "charge", "bonk"],
+  team: "enemy",
+  health: 300,
+  healthIncrease: 150,
+  trackingOffsetX: 500,
+  turnWhileMoving: true,
+  turnSpeed: 10,
 });
