@@ -19,8 +19,8 @@ Registry.weapons.add(".ace-radial-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 5,
-          levelScaling: 5
+          amount: 3,
+          levelScaling: 2
         },
       ],
       drawer: {
@@ -48,8 +48,8 @@ Registry.weapons.add(".ace-gatling-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 3,
-          levelScaling: 1.5
+          amount: 2.5,
+          levelScaling: 0.5
         },
       ],
       drawer: {
@@ -92,7 +92,7 @@ Registry.weapons.add(".box-impact", {
       damage: [
         {
           type: "impact",
-          amount: 25,
+          amount: 15,
           area: 175,
           sparkColour: [0,0,0,0],
           sparkColourTo: [0,0,0,0],
