@@ -15,10 +15,11 @@ class Boss extends ScalingEntity {
   //Much like the boxes' version
   takeDamage(amount = 0, source = null) {
     super.takeDamage(amount, source);
-    if (this.dead) {
+    if (this.dead && !this.rewarded) {
       //Give destroy reward
       game.shards += this.reward.shards ??= 0;
       game.bloonstones += this.reward.bloonstones ??= 0;
+      this.rewarded = true;
       if (!source) return;
       //Stats
       source.destroyed.bosses++;

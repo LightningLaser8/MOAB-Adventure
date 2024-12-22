@@ -32,7 +32,6 @@ Registry.weapons.add(".ace-radial-gun", {
     pattern: {
       amount: 8,
       spacing: 45,
-      offset: 22.5
     },
   },
 });

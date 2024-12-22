@@ -146,7 +146,7 @@ Registry.entities.add("monkey-ace", {
     "gatling",
   ],
   team: "enemy",
-  health: 200, //More HP
+  health: 100, //More HP
   healthIncrease: 200,
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
@@ -195,7 +195,7 @@ Registry.entities.add("gigantic-box", {
   ],
   sequence: ["wait", "charge", "charge", "bonk"],
   team: "enemy",
-  health: 300,
+  health: 200,
   healthIncrease: 150,
   trackingOffsetX: 500,
   turnWhileMoving: true,
