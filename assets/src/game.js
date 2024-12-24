@@ -274,6 +274,9 @@ function checkBoxCollisions() {
       }
     }
   }
+  if (game.player.dead) {
+    playerDies();
+  }
 }
 
 function playerDies() {
@@ -302,6 +305,7 @@ function reset() {
   game.shards = 0;
   game.level = 1;
   game.paused = false;
+  game.bosstimer = game.bossinterval;
 
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
