@@ -4,8 +4,6 @@
 
 //These aren't usually obtainable.
 
-
-
 //## MONKEY ACE ##
 Registry.weapons.add(".ace-radial-gun", {
   name: ".ace-radial-gun",
@@ -20,7 +18,7 @@ Registry.weapons.add(".ace-radial-gun", {
         {
           type: "ballistic",
           amount: 3,
-          levelScaling: 2
+          levelScaling: 2,
         },
       ],
       drawer: {
@@ -48,7 +46,7 @@ Registry.weapons.add(".ace-gatling-gun", {
         {
           type: "ballistic",
           amount: 2.5,
-          levelScaling: 0.5
+          levelScaling: 0.5,
         },
       ],
       drawer: {
@@ -65,14 +63,14 @@ Registry.weapons.add(".ace-gatling-gun", {
           {
             area: 60,
             amount: 0,
-            type: "no"
-          }
-        ]
-      }
+            type: "no",
+          },
+        ],
+      },
     },
     pattern: {
       spread: 5,
-      amount: 2 //impression of more brrr
+      amount: 2, //impression of more brrr
     },
   },
 });
@@ -93,12 +91,210 @@ Registry.weapons.add(".box-impact", {
           type: "impact",
           amount: 15,
           area: 175,
-          sparkColour: [0,0,0,0],
-          sparkColourTo: [0,0,0,0],
-          levelScaling: 10
+          sparkColour: [0, 0, 0, 0],
+          sparkColourTo: [0, 0, 0, 0],
+          levelScaling: 10,
         },
       ],
     },
-    pattern: {}
+    pattern: {},
   },
+});
+//## WORMS ##
+Registry.weapons.add(".worm-gun", {
+  get reload() {
+    return rnd(180, 240);
+  },
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 60,
+      speed: 60,
+      hitSize: 7.5,
+      damage: [
+        {
+          type: "laser",
+          amount: 1,
+          levelScaling: 1,
+        },
+      ],
+      drawer: {
+        shape: "ellipse",
+        fill: "red",
+        width: 30,
+        height: 5,
+      },
+      trail: true,
+      pierce: 1,
+      trailColour: [255, 0, 0, 50],
+    },
+    pattern: {}, //Blank pattern
+  },
+  parts: [
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 25,
+      height: 25,
+      rotation: 0,
+      slide: 0,
+      colour: [0, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: 12.5,
+      width: 17.5,
+      height: 7.5,
+      rotation: -18,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: -12.5,
+      width: 17.5,
+      height: 7.5,
+      rotation: 18,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: 0,
+      width: 7.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: -15,
+      y: 0,
+      width: 5,
+      height: 20,
+      rotation: 0,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -15,
+      width: 17.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 15,
+      width: 17.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      colour: [56, 56, 56],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -15,
+      width: 12.5,
+      height: 2.5,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 15,
+      width: 12.5,
+      height: 2.5,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 20,
+      height: 15,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 15,
+      height: 10,
+      rotation: 0,
+      slide: 0,
+      colour: [0, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: -12.5,
+      width: 7.5,
+      height: 2.5,
+      rotation: 18,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 16.25,
+      y: 12.5,
+      width: 7.5,
+      height: 2.5,
+      rotation: -18,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -6.25,
+      width: 7.5,
+      height: 5,
+      rotation: 0,
+      slide: 0,
+      colour: [0, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: -5,
+      width: 2.5,
+      height: 7.5,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+  ],
 });

@@ -24,4 +24,6 @@ Registry.images.add("bullet.nuke", new ImageContainer("assets/textures/bullet/nu
 Registry.images.add("bullet.missile", new ImageContainer("assets/textures/bullet/missile_16-9.svg"));
 Registry.images.add("bullet.crystal", new ImageContainer("assets/textures/bullet/crystal_1-1.png"));
 Registry.images.add("decal.radioactive", new ImageContainer("assets/textures/part/radiation.png"));
-Registry.images.add("boss.monkey-ace", new ImageContainer("assets/textures/entity/monkey-ace.svg"))
+Registry.images.add("boss.monkey-ace", new ImageContainer("assets/textures/entity/monkey-ace.svg"));
+Registry.images.add("boss.short-circuit.head", new ImageContainer("assets/textures/entity/short-circuit-head.png"));
+Registry.images.add("boss.short-circuit.body", new ImageContainer("assets/textures/entity/short-circuit-body.png"));

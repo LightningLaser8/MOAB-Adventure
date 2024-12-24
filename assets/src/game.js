@@ -259,7 +259,7 @@ function checkBoxCollisions() {
     //If player is colliding with a living entity on a different team that is a box
     if (
       entity instanceof Box &&
-      !entity.remove &&
+      !entity.dead &&
       entity.team !== game.player.team &&
       game.player.collidesWith(entity)
     ) {
@@ -273,6 +273,9 @@ function checkBoxCollisions() {
         playerDies();
       }
     }
+  }
+  if(game.player.dead){
+    playerDies();
   }
 }
 
@@ -302,6 +305,7 @@ function reset() {
   game.shards = 0;
   game.level = 1;
   game.paused = false;
+  game.bosstimer = game.bossinterval;
 
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
