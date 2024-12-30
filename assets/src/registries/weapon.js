@@ -7288,7 +7288,7 @@ Registry.weapons.add("ray-of-frost", {
   description: "Shoots 2 secondary ice beams which independently\ntarget.",
   cost: {
     shards: 32500,
-    bloonstones: 0,
+    bloonstones: 200,
   },
   weapons: [
     {
