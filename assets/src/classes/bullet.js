@@ -17,7 +17,9 @@ class Bullet {
     width: 10,
     height: 10,
   };
+  /** @type {World | null} */
   world = null;
+  /** @type {Entity | null} */
   entity = null;
   knockback = 0;
   kineticKnockback = false;

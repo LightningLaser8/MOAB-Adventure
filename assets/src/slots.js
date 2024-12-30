@@ -26,7 +26,8 @@ const aps = {
       "heavy-shots",
       "kinetic-impactor",
       "controlled-collision-device",
-      "telekinetic-transporter"
+      "telekinetic-transporter",
+      "kinetic-inversion"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
