@@ -15,7 +15,8 @@ const aps = {
       "bomb-shooter",
       "missile-launcher",
       "missile-battery",
-      "swarmer"
+      "swarmer",
+      "hive"
     ),
   },
   ap2: {

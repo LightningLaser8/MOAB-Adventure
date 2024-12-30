@@ -6,11 +6,14 @@ class Missile extends Bullet {
   trail = true;
   _trailInterval = -1;
   turnSpeed = 1;
+  trailWidth = -1;
+  trailShape = "circle";
   targetType = "mouse"; //"nearest", "mouse", "hovered"
   init() {
     if (this._trailInterval === -1) {
       this._trailInterval = this.speed / this.hitSize;
     }
+    if(this.trailWidth === -1) this.trailWidth = this.hitSize
   }
   spawnTrail(dt) {
     //Visual fire effect
@@ -25,12 +28,12 @@ class Missile extends Bullet {
               this.flameLength / this.speed, //Fixed life
               0,
               0,
-              "circle", //flames
+              this.trailShape, //flames
               this.trailColour,
               this.trailColourTo, //Lerp colour thing
-              this.hitSize * 1.9,
+              this.trailWidth * 1.9,
               0,
-              this.hitSize * 1.9,
+              this.trailWidth * 1.9,
               0,
               0
             )

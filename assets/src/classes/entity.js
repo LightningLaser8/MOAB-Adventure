@@ -208,8 +208,11 @@ class Entity {
           if (!instance.area)
             this.damage(
               instance.type,
-              instance.amount +
-                (bullet.source ? bullet.source.getDVScale() : 0) + (instance.levelScaling??0)*game.level,
+              (instance.amount +
+                (bullet.source ? bullet.source.getDVScale() : 0) +
+                (instance.levelScaling ?? 0) * game.level) *
+                //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
+                (this instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
               bullet.entity
             ); //Wait if kaboom
           this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;

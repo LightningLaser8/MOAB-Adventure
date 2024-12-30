@@ -35,14 +35,16 @@ class World {
     let len = this.bullets.length;
     for (let b = 0; b < len; b++) {
       if (this.bullets[b]?.remove) {
-        let bullet = this.bullets[b]
+        let bullet = this.bullets[b];
         for (let instance of bullet.damage) {
           if (instance.area)
             //If it explodes
             splashDamageInstance(
               bullet.x,
               bullet.y,
-              instance.amount + (bullet.source ? bullet.source.getDVScale() : 0) + (instance.levelScaling??0)*game.level,
+              instance.amount +
+                (bullet.source ? bullet.source.getDVScale() : 0) +
+                (instance.levelScaling ?? 0) * game.level,
               instance.type,
               instance.area,
               bullet.entity,
@@ -53,16 +55,17 @@ class World {
               instance.smokeColourTo, // |
               instance.waveColour, //     /
               bullet.status,
-              bullet.statusDuration
+              bullet.statusDuration,
+              instance.bossDamageMultiplier ?? 1
             );
-          if(instance.blinds){
+          if (instance.blinds) {
             blindingFlash(
               bullet.x,
               bullet.y,
               instance.blindOpacity,
               instance.blindDuration,
               instance.glareSize
-            )
+            );
           }
         }
         bullet.frag();
@@ -79,8 +82,8 @@ class World {
     len = this.entities.length;
     for (let e = 0; e < len; e++) {
       if (this.entities[e]?.dead) {
-        if(this.entities[e]?.isBoss){
-          game.level ++
+        if (this.entities[e]?.isBoss) {
+          game.level++;
         }
         this.entities.splice(e, 1);
       }
@@ -101,11 +104,11 @@ class World {
   tickSpawns(dt) {
     for (let spawnGroup of this.spawning) {
       if (spawnGroup.$currentCooldown <= 0) {
-        let ent = construct(spawnGroup.entity, Entity)
+        let ent = construct(spawnGroup.entity, Entity);
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -= dt * (this.reducedSpawns?0.33:1);
+        spawnGroup.$currentCooldown -= dt * (this.reducedSpawns ? 0.33 : 1);
       }
     }
   }
@@ -114,21 +117,25 @@ class World {
     spawn.entity ??= Box.default;
     spawn.interval ??= 60;
     //Apply difficulty rules
-    spawn.interval /= difficulty[game.difficulty][isHighTier?"spawnRateHighTier":"spawnRateLowTier"] ?? 1
+    spawn.interval /=
+      difficulty[game.difficulty][
+        isHighTier ? "spawnRateHighTier" : "spawnRateLowTier"
+      ] ?? 1;
     //Add group
     spawn.$currentCooldown = 0;
     this.spawning.push(spawn);
   }
-  spawnBoss(entity, bossClass = "o"){ //bossClass shows a letter on the square part of the bossbar
+  spawnBoss(entity, bossClass = "o") {
+    //bossClass shows a letter on the square part of the bossbar
     let ent = construct(entity, Entity); //Construct entity
     ent.class = bossClass;
     ent.isBoss = true; //boss is made of boss
     UIComponent.setCondition("boss:yes"); //There is, in fact, a boss.
     ent.addToWorld(this); //Add entity
   }
-  getFirstBoss(){
-    for(let entity of this.entities){
-      if(entity.isBoss && !entity.hidden) return entity;
+  getFirstBoss() {
+    for (let entity of this.entities) {
+      if (entity.isBoss && !entity.hidden) return entity;
     }
     return null;
   }
