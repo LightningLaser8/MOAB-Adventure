@@ -268,9 +268,6 @@ function checkBoxCollisions() {
       if (!game.player.dead) {
         //Remove box
         entity.dead = true;
-      } else {
-        //If dead
-        playerDies();
       }
     }
   }

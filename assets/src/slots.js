@@ -46,7 +46,8 @@ const aps = {
       "laser-blaster",
       "accelerator",
       "greenbeam",
-      "purple-destroyer"
+      "purple-destroyer",
+      "ultraviolet-obliterator"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
@@ -54,7 +55,8 @@ const aps = {
       "laser-blaster",
       "lancer",
       "spike",
-      "impale"
+      "impale",
+      "crucify"
     ),
   },
   ap4: {
@@ -64,7 +66,8 @@ const aps = {
       "laser-blaster",
       "accelerator",
       "greenbeam",
-      "purple-destroyer"
+      "purple-destroyer",
+      "ultraviolet-obliterator"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
@@ -72,7 +75,8 @@ const aps = {
       "laser-blaster",
       "lancer",
       "spike",
-      "impale"
+      "impale",
+      "crucify"
     ),
   },
   ap5: {
