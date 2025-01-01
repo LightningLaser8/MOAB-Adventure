@@ -86,7 +86,8 @@ const aps = {
       "rifle",
       "sniper",
       "sharp-shooter",
-      "hunter"
+      "hunter",
+      "foreshadow"
     ),
     opt2: new WeaponSlot(
       "tiny-shooter",
@@ -94,7 +95,8 @@ const aps = {
       "rifle",
       "shotgun",
       "du-rounds",
-      "super-shotgun"
+      "super-shotgun",
+      "diffuse"
     ),
   },
   error: new WeaponSlot(),

@@ -18,6 +18,7 @@ class GrabBullet extends PointBullet {
   }
   /** @param {Entity} entity */
   onHit(entity) {
+    super.onHit(entity);
     //When an entity was hit
     //If it's a box
     if (entity instanceof Box) {

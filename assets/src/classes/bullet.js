@@ -51,6 +51,19 @@ class Bullet {
   followsScreen = false;
   //This may be OP
   maxHPReductionFactor = 0;
+  //On hit bullets
+  hitBullet = {};
+  hitNumber = 0;
+  hitDirection = 0;
+  hitSpread = 0;
+  hitSpacing = 0;
+  //On destroy bullets
+  destroyBullet = {};
+  destroyNumber = 0;
+  destroyDirection = 0;
+  destroySpread = 0;
+  destroySpacing = 0;
+  //Main stuff
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
@@ -174,5 +187,34 @@ class Bullet {
     }
   }
   //On top of damage
-  onHit(entity){}
+  onHit(entity){
+    //Always spawn hit bullets
+    patternedBulletExpulsion(
+      this.x,
+      this.y,
+      this.hitBullet,
+      this.hitNumber,
+      this.direction + this.hitDirection,
+      this.hitSpread,
+      this.hitSpacing,
+      this.world,
+      this.entity,
+      this.source
+    );
+    //If dead, spawn destroy bullets
+    if(entity.dead){
+      patternedBulletExpulsion(
+        this.x,
+        this.y,
+        this.destroyBullet,
+        this.destroyNumber,
+        this.direction + this.destroyDirection,
+        this.destroySpread,
+        this.destroySpacing,
+        this.world,
+        this.entity,
+        this.source
+      );
+    }
+  }
 }
