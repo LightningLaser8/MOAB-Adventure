@@ -36,8 +36,6 @@ const difficulty = {
   },
 };
 const world = new World("Sky High", "background.sea");
-world.addSpawn();
-world.addSpawn({ entity: Box.metal, interval: 300 }, true);
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -244,6 +242,10 @@ function createPlayer() {
       0
     )
   );
+
+  //set up spawns
+  world.addSpawn();
+  world.addSpawn({ entity: Box.metal, interval: 300 }, true);
 }
 
 function fireIfPossible() {
@@ -298,6 +300,7 @@ function reset() {
   world.entities.splice(0);
   world.particles.splice(0);
   world.bullets.splice(0);
+  world.spawning.splice(0);
   game.bloonstones = 0;
   game.shards = 0;
   game.level = 1;

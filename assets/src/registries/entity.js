@@ -28,7 +28,7 @@ Registry.entities.add("wooden-box", {
   },
   team: "enemy",
   health: 5,
-  healthIncrease: 5,
+  healthIncrease: 1.25,
 });
 Registry.entities.add("metal-box", {
   type: "box",
@@ -62,7 +62,7 @@ Registry.entities.add("metal-box", {
   },
   team: "enemy",
   health: 20, //More HP
-  healthIncrease: 10,
+  healthIncrease: 5,
 });
 //### BOSSES ###
 Registry.entities.add("monkey-ace", {
@@ -146,8 +146,8 @@ Registry.entities.add("monkey-ace", {
     "gatling",
   ],
   team: "enemy",
-  health: -100, //More HP
-  healthIncrease: 200,
+  health: 100, //More HP
+  healthIncrease: 100,
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
   turnSpeed: 2, //planes don't turn very fast
