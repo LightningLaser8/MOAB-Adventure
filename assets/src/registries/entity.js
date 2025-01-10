@@ -112,7 +112,7 @@ Registry.entities.add("monkey-ace", {
     },
     reverse: {
       type: "move-action",
-      duration: 50,
+      duration: 30,
       x: -400,
     },
   },
@@ -146,7 +146,7 @@ Registry.entities.add("monkey-ace", {
     "gatling",
   ],
   team: "enemy",
-  health: 100, //More HP
+  health: -100, //More HP
   healthIncrease: 200,
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
@@ -175,8 +175,8 @@ Registry.entities.add("gigantic-box", {
   actions: {
     charge: {
       type: "move-action",
-      duration: 10,
-      x: -275,
+      duration: 20,
+      x: -550,
     },
     bonk: {
       type: "fire-weapon-action",
@@ -193,7 +193,7 @@ Registry.entities.add("gigantic-box", {
       tier: 1,
     },
   ],
-  sequence: ["wait", "charge", "charge", "bonk"],
+  sequence: ["wait", "charge", "bonk"],
   team: "enemy",
   health: 200,
   healthIncrease: 150,

@@ -47,7 +47,7 @@ Registry.weapons.add(".ace-gatling-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 2.5,
+          amount: 1,
           levelScaling: 0.5
         },
       ],
@@ -95,7 +95,7 @@ Registry.weapons.add(".box-impact", {
           area: 175,
           sparkColour: [0,0,0,0],
           sparkColourTo: [0,0,0,0],
-          levelScaling: 10
+          levelScaling: 5
         },
       ],
     },
