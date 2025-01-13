@@ -34,9 +34,13 @@ class ExitAction extends BossAction{
   }
 }
 class EntryAction extends BossAction{
+  x = null;
+  y = null;
   execute(entity){
     entity.hidden = false; //Lets bossbar find it again
-    entity.x = entity.oldX??1 //Return to old x
+    entity.x = entity.oldX??0 //Return to old x
+    if(typeof this.x === "number") entity.x = this.x;
+    if(typeof this.y === "number") entity.y = this.y;
   }
 }
 class RegenAction extends BossAction{

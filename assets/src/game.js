@@ -130,10 +130,7 @@ function tickBossEvent() {
     if (game.bosstimer <= 0) {
       //If timer has run out
       game.bosstimer = game.bossinterval; //Reset timer
-      if (game.level % 2 === 0)
-        world.spawnBoss(Registry.entities.get("monkey-ace"), "A");
-      //Every other level is monkey ace
-      else world.spawnBoss(Registry.entities.get("gigantic-box"), "B"); //Spawn a class B Gigantic Box
+      world.nextBoss();
       world.reducedSpawns = true;
     } else {
       game.bosstimer -= game.player.speed * 0.0167;
@@ -246,6 +243,7 @@ function createPlayer() {
   //set up spawns
   world.addSpawn();
   world.addSpawn({ entity: Box.metal, interval: 300 }, true);
+  world.setBossList("gigantic-box", "monkey-ace", "super-monkey");
 }
 
 function fireIfPossible() {
@@ -301,6 +299,7 @@ function reset() {
   world.particles.splice(0);
   world.bullets.splice(0);
   world.spawning.splice(0);
+  world.setBossList();
   game.bloonstones = 0;
   game.shards = 0;
   game.level = 1;

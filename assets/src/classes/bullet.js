@@ -76,6 +76,12 @@ class Bullet {
     this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {
+      if(this.followsSource && this.source){
+        this.x = this.source.x;
+        this.y = this.source.y;
+        this.direction = this.source.rotation;
+      }
+
       this.intervalTick();
       //Which way to move
       let moveVector = p5.Vector.fromAngle(this.directionRad);

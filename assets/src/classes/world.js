@@ -9,6 +9,8 @@ class World {
   name = "World";
   boss = null;
   reducedSpawns = false;
+  #bossList = [];
+  #currentBossIndex = 0;
   constructor(name = "World", background = "background.sea") {
     this.name = name;
     this.background = background;
@@ -138,5 +140,13 @@ class World {
       if (entity.isBoss && !entity.hidden) return entity;
     }
     return null;
+  }
+  setBossList(...bosses){
+    this.#bossList = bosses
+  }
+  nextBoss(){
+    this.spawnBoss(Registry.entities.get(this.#bossList[this.#currentBossIndex]))
+    this.#currentBossIndex ++
+    if(this.#currentBossIndex >= this.#bossList.length) this.#currentBossIndex = 0;
   }
 }

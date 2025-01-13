@@ -4,8 +4,6 @@
 
 //These aren't usually obtainable.
 
-
-
 //## MONKEY ACE ##
 Registry.weapons.add(".ace-radial-gun", {
   name: ".ace-radial-gun",
@@ -20,7 +18,7 @@ Registry.weapons.add(".ace-radial-gun", {
         {
           type: "ballistic",
           amount: 3,
-          levelScaling: 2
+          levelScaling: 2,
         },
       ],
       drawer: {
@@ -48,7 +46,7 @@ Registry.weapons.add(".ace-gatling-gun", {
         {
           type: "ballistic",
           amount: 1,
-          levelScaling: 0.5
+          levelScaling: 0.5,
         },
       ],
       drawer: {
@@ -65,14 +63,14 @@ Registry.weapons.add(".ace-gatling-gun", {
           {
             area: 60,
             amount: 0,
-            type: "no"
-          }
-        ]
-      }
+            type: "no",
+          },
+        ],
+      },
     },
     pattern: {
       spread: 5,
-      amount: 2 //impression of more brrr
+      amount: 2, //impression of more brrr
     },
   },
 });
@@ -93,12 +91,60 @@ Registry.weapons.add(".box-impact", {
           type: "impact",
           amount: 15,
           area: 175,
-          sparkColour: [0,0,0,0],
-          sparkColourTo: [0,0,0,0],
-          levelScaling: 5
+          sparkColour: [0, 0, 0, 0],
+          sparkColourTo: [0, 0, 0, 0],
+          levelScaling: 5,
         },
       ],
     },
-    pattern: {}
+    pattern: {},
+  },
+});
+
+//## SUPER MONKEY ##
+Registry.weapons.add(".super-monkey-throw", {
+  name: ".super-monkey-throw",
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 0,
+      pierce: 9999999,
+      hitSize: -1000,
+      trail: false,
+      //Gives the impression of many shots
+      intervalBullet: {
+        lifetime: 45,
+        speed: 45,
+        hitSize: 5,
+        trail: true,
+        damage: [
+          {
+            type: "ballistic",
+            amount: -1,
+            levelScaling: 0.5,
+          },
+          {
+            type: "no",
+            amount: 0,
+            area: 40,
+            smokeColour: [0, 0, 0, 0],
+            smokeColourTo: [0, 0, 0, 0],
+            waveColour: [255, 255, 255, -2000],
+            sparkColour: [255, 255, 255],
+            sparkColourTo: [255, 255, 255]
+          }
+        ],
+        drawer: {
+          image: "bullet.normal", //should really be a dart but i don't have the asset
+          width: 32,
+          height: 16,
+        },
+      },
+      intervalTime: 2,
+      intervalNumber: 1,
+      followsSource: true,
+    },
+    pattern: {},
   },
 });

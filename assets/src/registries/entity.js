@@ -201,3 +201,74 @@ Registry.entities.add("gigantic-box", {
   turnWhileMoving: true,
   turnSpeed: 10,
 });
+Registry.entities.add("super-monkey", {
+  type: "boss",
+  name: "Super Monkey",
+  drawer: {
+    image: "boss.super-monkey",
+    width: 276,
+    height: 160,
+  },
+  hitSize: 120,
+  direction: 180,
+  speed: 32,
+  x: 1920,
+  //Return a random height each time
+  get y() {
+    return random(0, 1080);
+  },
+  reward: {
+    bloonstones: 100,
+  },
+  actions: {
+    charge: {
+      type: "move-action",
+      duration: 70,
+      x: -3000,
+    },
+    leave: {
+      type: "move-action",
+      duration: 1,
+      x: 30000
+    },
+    enter: {
+      type: "entry-action",
+      x: 1920,
+    },
+    "dart-throw": {
+      type: "fire-weapon-action",
+      slotIndex: 0,
+    },
+    wait: {
+      type: "action",
+      duration: 180,
+    },
+  },
+  weaponSlots: [
+    {
+      upgrades: [".super-monkey-throw"],
+      tier: 1,
+    },
+  ],
+  sequence: [
+    "charge",
+    "leave",
+    "wait",
+    "enter",
+    "dart-throw",
+    "wait",
+    "wait",
+    "dart-throw",
+    "wait",
+    "dart-throw",
+    "wait",
+    "dart-throw",
+    "wait"
+  ],
+  team: "enemy",
+  health: -200,
+  healthIncrease: 100,
+  trackingOffsetX: 0,
+  turnWhileMoving: true,
+  turnSpeed: 4,
+});
