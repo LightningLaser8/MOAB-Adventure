@@ -58,6 +58,12 @@ Registry.blimps.add("ddt", {
     width: 290,
     height: 200,
   },
+  resistances: [
+    {
+      type: "ballistic",
+      amount: 1
+    }
+  ],
   hitSize: 80,
   cost: {
     shards: 15000,

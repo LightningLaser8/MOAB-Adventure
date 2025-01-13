@@ -147,7 +147,7 @@ Registry.entities.add("monkey-ace", {
   ],
   team: "enemy",
   health: 100, //More HP
-  healthIncrease: 100,
+  healthIncrease: 150,
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
   turnSpeed: 2, //planes don't turn very fast
@@ -196,7 +196,7 @@ Registry.entities.add("gigantic-box", {
   sequence: ["wait", "charge", "bonk"],
   team: "enemy",
   health: 200,
-  healthIncrease: 150,
+  healthIncrease: 200,
   trackingOffsetX: 500,
   turnWhileMoving: true,
   turnSpeed: 10,
@@ -266,8 +266,8 @@ Registry.entities.add("super-monkey", {
     "wait"
   ],
   team: "enemy",
-  health: -200,
-  healthIncrease: 100,
+  health: -150,
+  healthIncrease: 150,
   trackingOffsetX: 0,
   turnWhileMoving: true,
   turnSpeed: 4,
