@@ -29,6 +29,7 @@ class Box extends ScalingEntity {
       this.x -= game.player.speed + this.speed;
       if (this.x < -this.hitSize) {
         this.dead = true;
+        this.left = true;
         //Give basic reward
         game.shards += this.reward.shards ??= 0;
         game.bloonstones += this.reward.bloonstones ??= 0;

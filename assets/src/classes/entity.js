@@ -243,6 +243,8 @@ class Entity {
         //Make the bullet know
         bullet.damaged.push(this);
         bullet.onHit(this);
+        playSound(this.hitSound);
+        playSound(bullet.hitSound);
         //Reduce pierce
         bullet.pierce--;
         //If exhausted

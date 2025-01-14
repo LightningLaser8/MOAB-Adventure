@@ -86,6 +86,7 @@ class PartialWeapon extends Weapon {
   }
   fire() {
     if (this._cooldown <= 0) {
+      playSound(this.fireSound);
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate(); //Apply acceleration effects
       //Resolve nonexistent properties

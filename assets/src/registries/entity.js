@@ -4,6 +4,7 @@ Registry.entities.add("player", {
   x: 300,
   y: 540,
   team: "player",
+  deathSound: "player-death"
 });
 //### BOXES ###
 Registry.entities.add("wooden-box", {
@@ -29,6 +30,8 @@ Registry.entities.add("wooden-box", {
   team: "enemy",
   health: 5,
   healthIncrease: 1.25,
+  hitSound: "wood-hit",
+  deathSound: "wood-break"
 });
 Registry.entities.add("metal-box", {
   type: "box",
@@ -63,6 +66,8 @@ Registry.entities.add("metal-box", {
   team: "enemy",
   health: 20, //More HP
   healthIncrease: 5,
+  hitSound: "metal-hit",
+  deathSound: "metal-break"
 });
 //### BOSSES ###
 Registry.entities.add("monkey-ace", {
@@ -151,7 +156,9 @@ Registry.entities.add("monkey-ace", {
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
   turnSpeed: 2, //planes don't turn very fast
-  speed: 12, //but are fast
+  speed: 12,//but are fast
+  hitSound: "metal-hit",
+  deathSound: "boss-death" 
 });
 Registry.entities.add("gigantic-box", {
   type: "boss",
@@ -200,6 +207,8 @@ Registry.entities.add("gigantic-box", {
   trackingOffsetX: 500,
   turnWhileMoving: true,
   turnSpeed: 10,
+  hitSound: "wood-hit",
+  deathSound: "boss-death" 
 });
 Registry.entities.add("super-monkey", {
   type: "boss",
@@ -271,4 +280,5 @@ Registry.entities.add("super-monkey", {
   trackingOffsetX: 0,
   turnWhileMoving: true,
   turnSpeed: 4,
+  deathSound: "boss-death" 
 });

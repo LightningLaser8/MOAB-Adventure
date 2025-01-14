@@ -97,7 +97,7 @@ class World {
     len = this.entities.length;
     for (let e = 0; e < len; e++) {
       let entity = this.entities[e];
-      if (entity?.dead) {
+      if (entity?.dead && !entity.left) {
         if (entity?.isBoss) {
           game.level++;
         }

@@ -68,7 +68,7 @@ class Bullet {
   hitSound = null;
   despawnSound = null;
   spawnSound = null;
-
+  #sounded = false;
 
   //Main stuff
   get directionRad() {
@@ -79,7 +79,14 @@ class Bullet {
     this.maxPierce = this.pierce;
     this._trailInterval = this.hitSize * 4;
   }
+  sound(){
+    if(!this.#sounded){
+      playSound(this.spawnSound);
+      this.#sounded = true;
+    }
+  }
   step(dt) {
+    this.sound();
     this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {

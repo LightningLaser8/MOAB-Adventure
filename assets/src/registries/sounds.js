@@ -4,6 +4,7 @@ Registry.sounds.add("bomb-shoot", new SoundContainer("assets/sound/bomb-shoot.wa
 Registry.sounds.add("sniper-shoot", new SoundContainer("assets/sound/sniper-shoot.wav"));
 Registry.sounds.add("laser-bolt", new SoundContainer("assets/sound/laser-bolt.wav"));
 Registry.sounds.add("laser-beam", new SoundContainer("assets/sound/laser-beam.wav"));
+Registry.sounds.add("laser", new SoundContainer("assets/sound/laser.ogg"));
 //Explosions
 Registry.sounds.add("explosion", new SoundContainer("assets/sound/explosion.wav"));
 Registry.sounds.add("big-boom", new SoundContainer("assets/sound/big-boom.mp3"));

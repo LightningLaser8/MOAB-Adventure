@@ -7,6 +7,7 @@ Registry.weapons.add("tiny-shooter", {
   name: "Tiny Shooter",
   description: "Shoots a single, low damage bullet directly\nforwards.",
   reload: 20,
+  fireSound: "shoot",
   cost: {
     shards: 50,
     bloonstones: 0,
@@ -82,6 +83,7 @@ Registry.weapons.add("double-shooter", {
   name: "Double Shooter",
   description: "Shoots 2 bullets at once.",
   reload: 20,
+  fireSound: "shoot",
   cost: {
     shards: 200,
     bloonstones: 0,
@@ -186,6 +188,7 @@ Registry.weapons.add("bomb-shooter", {
   name: "Bomb Shooter",
   description: "Shoots an explosive, dealing damage in an area.",
   reload: 60,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 540,
     bloonstones: 0,
@@ -197,6 +200,7 @@ Registry.weapons.add("bomb-shooter", {
       speed: 30,
       hitSize: 15,
       trail: false,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -339,6 +343,7 @@ Registry.weapons.add("heavy-shots", {
   name: "Heavy Shots",
   description: "Large bullets deal more damage, and knock boxes\nback.",
   reload: 30,
+  fireSound: "shoot",
   cost: {
     shards: 400,
     bloonstones: 0,
@@ -472,6 +477,7 @@ Registry.weapons.add("laser-blaster", {
   name: "Laser Blaster",
   description: "Shoots pulses of high-damage plasma.",
   reload: 20,
+  fireSound: "laser-bolt",
   cost: {
     shards: 350,
     bloonstones: 0,
@@ -764,6 +770,7 @@ Registry.weapons.add("rifle", {
   name: "Rifle",
   description: "Shoots a single, fast-moving bullet.\nPierces one box.",
   reload: 30,
+  fireSound: "shoot",
   cost: {
     shards: 250,
     bloonstones: 0,
@@ -868,6 +875,7 @@ Registry.weapons.add("incendiary", {
   name: "Incendiary",
   description: "Explosions set targets on fire.",
   reload: 60,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 1350,
     bloonstones: 0,
@@ -1117,6 +1125,7 @@ Registry.weapons.add("missile-launcher", {
   name: "Missile Launcher",
   description: "Shoots faster moving slightly homing missiles",
   reload: 45,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 800,
     bloonstones: 0,
@@ -1130,6 +1139,7 @@ Registry.weapons.add("missile-launcher", {
       trail: true,
       targetType: "hovered",
       turnSpeed: 1,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -1394,6 +1404,7 @@ Registry.weapons.add("kinetic-impactor", {
   name: "Kinetic Impactor",
   description: "Hit entities collide with others!",
   reload: 45,
+  fireSound: "shoot",
   cost: {
     shards: 850,
     bloonstones: 0,
@@ -1683,6 +1694,7 @@ Registry.weapons.add("cryo-cannon", {
   name: "Cryo Cannon",
   description: "Shoots freezing ice bombs that slow down targets'\nweapons",
   reload: 45,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 850,
     bloonstones: 0,
@@ -1697,6 +1709,7 @@ Registry.weapons.add("cryo-cannon", {
       trail: false,
       status: "freezing",
       statusDuration: 45,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -1985,6 +1998,7 @@ Registry.weapons.add("accelerator", {
   reload: 30, //Shoots slower by default
   accel: 0.15, //15% more each shot
   accelDecay: 0.03,
+  fireSound: "laser-bolt",
   cost: {
     shards: 1250,
     bloonstones: 0,
@@ -2296,6 +2310,7 @@ Registry.weapons.add("lancer", {
   name: "Lancer",
   description: "Shoots high-damage piercing beams at a slower rate.",
   reload: 75,
+  fireSound: "laser",
   cost: {
     shards: 1050,
     bloonstones: 0,
@@ -2618,6 +2633,7 @@ Registry.weapons.add("sniper", {
   description:
     "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
   reload: 60,
+  fireSound: "sniper-shoot",
   cost: {
     shards: 1000,
     bloonstones: 0,
@@ -2804,6 +2820,7 @@ Registry.weapons.add("shotgun", {
   name: "Shotgun",
   description: "Shoots 3 projectiles at once, with a large spread.",
   reload: 40,
+  fireSound: "shoot",
   cost: {
     shards: 900,
     bloonstones: 0,
@@ -2999,6 +3016,7 @@ Registry.weapons.add("nuke-launcher", {
   description:
     "Shoots nuclear explosives, dealing great damage in\na much larger area, leaving radioactive fallout.",
   reload: 90,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 5200,
     bloonstones: 0,
@@ -3011,6 +3029,7 @@ Registry.weapons.add("nuke-launcher", {
       hitSize: 15,
       trail: false,
       status: "burning",
+      despawnSound: "big-boom",
       statusDuration: 600, //10 second fire
       damage: [
         {
@@ -3317,6 +3336,7 @@ Registry.weapons.add("missile-battery", {
   name: "Missile Battery",
   description: "Launches 6 smaller missiles, following the mouse\ncursor.",
   reload: 90,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 3200,
     bloonstones: 0,
@@ -3330,6 +3350,7 @@ Registry.weapons.add("missile-battery", {
       trail: true,
       targetType: "mouse",
       turnSpeed: 4,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -3648,6 +3669,7 @@ Registry.weapons.add("controlled-collision-device", {
   description:
     "Finer control over directional displacement.\n(Knockback acts towards mouse)",
   reload: 45,
+  fireSound: "shoot",
   cost: {
     shards: 650, //The only T5 to actually cost *less* than the T4
     bloonstones: 0,
@@ -3948,6 +3970,7 @@ Registry.weapons.add("shattering-shells", {
   description:
     "Ice bombs release many low damage shards,\nwith a lesser effect",
   reload: 45,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 2400,
     bloonstones: 0,
@@ -3962,6 +3985,7 @@ Registry.weapons.add("shattering-shells", {
       trail: false,
       status: "freezing",
       statusDuration: 45,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -4463,6 +4487,7 @@ Registry.weapons.add("greenbeam", {
   accel: 0.2,
   accelDecay: 0.03,
   maxAccel: 4, //More max acceleration
+  fireSound: "laser-bolt",
   cost: {
     shards: 3750,
     bloonstones: 0,
@@ -4852,6 +4877,7 @@ Registry.weapons.add("spike", {
   name: "Spike",
   description: "Bigger laser that travels farther and knocks boxes\nback.",
   reload: 90,
+  fireSound: "laser",
   cost: {
     shards: 2900,
     bloonstones: 0,
@@ -5303,6 +5329,7 @@ Registry.weapons.add("sharp-shooter", {
   description:
     "30% chance to fire a powerful critical shot,\ndealing triple damage.",
   reload: 60,
+  fireSound: "sniper-shoot",
   cost: {
     shards: 3600,
     bloonstones: 0,
@@ -5596,6 +5623,7 @@ Registry.weapons.add("du-rounds", {
   description:
     "Depleted uranium rounds pierce enemies of any type,\nand irradiate them!",
   reload: 50,
+  fireSound: "shoot",
   cost: {
     shards: 2795,
     bloonstones: 0,
@@ -5843,6 +5871,7 @@ Registry.weapons.add("meltdown", {
   name: "Meltdown",
   description: "Explosions have more fallout, and fire radioactive\nlasers.",
   reload: 220,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 40000,
     bloonstones: 200,
@@ -5871,6 +5900,7 @@ Registry.weapons.add("meltdown", {
         type: "bullet",
         lifetime: 1,
         status: "burning",
+        despawnSound: "big-boom",
         statusDuration: 1200, //20 second fire
         damage: [
           {
@@ -6326,6 +6356,7 @@ Registry.weapons.add("swarmer", {
   name: "Swarmer",
   description: "Even more missiles, and missiles home in on boxes.",
   reload: 25,
+  fireSound: "bomb-shoot",
   cost: {
     shards: 12500,
     bloonstones: 200,
@@ -6339,6 +6370,7 @@ Registry.weapons.add("swarmer", {
       trail: true,
       targetType: "hovered",
       turnSpeed: 6,
+      despawnSound: "explosion",
       damage: [
         {
           type: "ballistic",
@@ -6895,6 +6927,7 @@ Registry.weapons.add("telekinetic-transporter", {
   description:
     "Main attack replaced with a telekinetic grab\nability, capable of smashing boxes into each other.\nMultiple boxes can be held at once.",
   reload: 60,
+  fireSound: "laser-bolt",
   cost: {
     shards: 20500, //expensive bc powerful box delete
     bloonstones: 200,
@@ -7295,6 +7328,7 @@ Registry.weapons.add("ray-of-frost", {
     {
       //Main weapon
       reload: 45,
+      fireSound: "bomb-shoot",
       shoot: {
         bullet: {
           type: "Bullet",
@@ -7305,6 +7339,7 @@ Registry.weapons.add("ray-of-frost", {
           trail: false,
           status: "freezing",
           statusDuration: 45,
+          despawnSound: "explosion",
           damage: [
             {
               type: "ballistic",
@@ -8034,11 +8069,12 @@ Registry.weapons.add("ray-of-frost", {
       ],
     },
     {
-      //Mini 'ray' - actually fast-firing bullets
+      //Mini 'ray' - not actually fast-firing bullets anymore
       offset: 60,
       reload: 90,
       isAuto: true,
       range: 900,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -8225,6 +8261,7 @@ Registry.weapons.add("ray-of-frost", {
       reload: 90,
       isAuto: true,
       range: 900,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -8411,6 +8448,7 @@ Registry.weapons.add("purple-destroyer", {
   name: "Purple Destroyer",
   description: "Periodic purple beam deals extreme damage.",
   reload: 270,
+  fireSound: "laser-beam",
   cost: {
     shards: 27500,
     bloonstones: 200,
@@ -9242,6 +9280,7 @@ Registry.weapons.add("impale", {
   name: "Impale",
   description: "Hit entities permanently lose some max health.",
   reload: 80,
+  fireSound: "laser",
   cost: {
     shards: 26500,
     bloonstones: 200,
@@ -10264,6 +10303,7 @@ Registry.weapons.add("hunter", {
   name: "Hunter",
   description: "More boxes destroyed => more damage dealt.",
   reload: 90,
+  fireSound: "sniper-shoot",
   cost: {
     shards: 35600,
     bloonstones: 0,
@@ -10795,6 +10835,7 @@ Registry.weapons.add("super-shotgun", {
   name: "Super Shotgun",
   description: "Shots have knockback, and fire from 2 barrels.",
   reload: 25,
+  fireSound: "shoot",
   cost: {
     shards: 15000,
     bloonstones: 200,
@@ -11254,6 +11295,7 @@ Registry.weapons.add("solar-flare", {
   name: "Solar Flare",
   description: "The sun is a deadly laser.",
   reload: 400,
+  fireSound: "bomb-shoot",
   cost: {
     //big expense cannon
     shards: 160000,
@@ -11273,6 +11315,7 @@ Registry.weapons.add("solar-flare", {
         height: 30,
       },
       fragNumber: 1,
+      despawnSound: "biggest-boom",
       damage: [
         {
           type: "ballistic",
@@ -12010,6 +12053,7 @@ Registry.weapons.add("hive", {
     {
       //Main missile attack
       reload: 75, //slower, damn it
+      fireSound: "bomb-shoot",
       shoot: {
         bullet: {
           type: "Missile",
@@ -12022,6 +12066,7 @@ Registry.weapons.add("hive", {
           trailColourTo: [255, 255, 0, 0],
           turnSpeed: 9,
           trailWidth: 13,
+          despawnSound: "explosion",
           damage: [
             {
               type: "ballistic",
@@ -12945,6 +12990,7 @@ Registry.weapons.add("hive", {
       reload: 20,
       isAuto: true,
       range: 1800,
+      fireSound: "bomb-shoot",
       shoot: {
         bullet: {
           type: "Missile",
@@ -12956,6 +13002,7 @@ Registry.weapons.add("hive", {
           trailColourTo: [255, 255, 0, 0],
           targetType: "nearest",
           turnSpeed: 4.5,
+          despawnSound: "explosion",
           damage: [
             {
               type: "ballistic",
@@ -12997,6 +13044,7 @@ Registry.weapons.add("subzero", {
     {
       //Main weapon
       reload: 45,
+      fireSound: "bomb-shoot",
       shoot: {
         bullet: {
           type: "Bullet",
@@ -13007,6 +13055,7 @@ Registry.weapons.add("subzero", {
           trail: false,
           status: "freezing",
           statusDuration: 180,
+          despawnSound: "explosion",
           damage: [
             {
               type: "ballistic",
@@ -13943,6 +13992,7 @@ Registry.weapons.add("subzero", {
       reload: 110,
       isAuto: true,
       range: 1200,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -14319,6 +14369,7 @@ Registry.weapons.add("subzero", {
       reload: 110,
       isAuto: true,
       range: 1200,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -14695,6 +14746,7 @@ Registry.weapons.add("subzero", {
       reload: 110,
       isAuto: true,
       range: 1200,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -15071,6 +15123,7 @@ Registry.weapons.add("subzero", {
       reload: 110,
       isAuto: true,
       range: 1200,
+      fireSound: "laser",
       shoot: {
         bullet: {
           type: "continuous-laser",
@@ -15451,6 +15504,7 @@ Registry.weapons.add("kinetic-inversion", {
     shards: 75000, //back to cheap t6+ stuff?
     bloonstones: 1000,
   },
+  fireSound: "laser-bolt",
   shoot: {
     bullet: {
       type: "Grab",
@@ -16221,6 +16275,7 @@ Registry.weapons.add("ultraviolet-obliterator", {
   name: "Ultraviolet Obliterator",
   description: "They'll never see it coming.",
   reload: 300,
+  fireSound: "laser-beam",
   cost: {
     shards: 120000,
     bloonstones: 1000,
@@ -17498,6 +17553,7 @@ Registry.weapons.add("crucify", {
   name: "Crucify",
   description: "Don't run from the Lord!",
   reload: 160,
+  fireSound: "laser",
   cost: {
     shards: 80000,
     bloonstones: 1000,
@@ -18963,6 +19019,7 @@ Registry.weapons.add("foreshadow", {
   name: "Foreshadow",
   description: "Target sighted.",
   reload: 120,
+  fireSound: "sniper-shoot",
   cost: {
     shards: 75000,
     bloonstones: 1000,
@@ -19873,6 +19930,7 @@ Registry.weapons.add("diffuse", {
   name: "Diffuse",
   description: "Frick everything in that general direction.",
   reload: 50,
+  fireSound: "shoot",
   cost: {
     shards: 95000,
     bloonstones: 1000,

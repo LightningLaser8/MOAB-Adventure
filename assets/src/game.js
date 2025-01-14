@@ -281,6 +281,7 @@ function checkBoxCollisions() {
 }
 
 function playerDies() {
+  playSound("player-death");
   deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
   deathStats.bloonstoneCounter.text =
     "Bloonstones: " + shortenedNumber(game.bloonstones);
