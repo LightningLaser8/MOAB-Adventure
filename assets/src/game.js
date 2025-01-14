@@ -35,7 +35,7 @@ const difficulty = {
     bossHP: 1.3,
   },
 };
-const world = new World("Sky High", "background.sea");
+const world = new World("Ocean Skies", "background.sea", "sky-high");
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -72,7 +72,7 @@ async function preload() {
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
-  await userStartAudio()
+  await userStartAudio();
 }
 //Set up the canvas, using the previous function
 function setup() {
@@ -161,8 +161,8 @@ function movePlayer() {
     game.player.x += game.player.speed * 0.5;
   }
   //regen
-  if(game.player.health < game.player.maxHealth){
-    game.player.heal(0.0003 * game.player.maxHealth)
+  if (game.player.health < game.player.maxHealth) {
+    game.player.heal(0.0003 * game.player.maxHealth);
   }
 }
 
@@ -307,7 +307,7 @@ function reset() {
   game.bloonstones = 0;
   game.shards = 0;
   game.level = 1;
-  game.paused = false;
+  unpause();
   game.bosstimer = game.bossinterval;
 
   for (let slot of game.player.weaponSlots) {
@@ -322,7 +322,18 @@ function reset() {
 function keyPressed() {
   if (key === "p") {
     //Pause / unpause
-    game.paused = !game.paused;
+    if (game.paused) unpause();
+    else pause();
   }
   return false; //Prevent any default behaviour
+}
+
+function pause() {
+  game.paused = true;
+  pauseSound(world.bgm);
+}
+
+function unpause() {
+  game.paused = false;
+  playSound(world.bgm, true);
 }

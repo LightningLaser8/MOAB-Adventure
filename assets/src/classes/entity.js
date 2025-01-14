@@ -37,6 +37,10 @@ class Entity {
   effectiveSpeedMult = 1;
   statuses = [];
 
+  //Sounds
+  hitSound = null;
+  deathSound = null;
+
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }

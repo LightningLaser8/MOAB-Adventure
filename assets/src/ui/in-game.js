@@ -472,7 +472,7 @@ createUIComponent(
     UIComponent.setCondition(
       "was-game-paused:" + (game.paused ? "true" : "false")
     );
-    game.paused = true; //Pause the game
+    pause(); //Pause the game
     UIComponent.setCondition("upgrade-menu-open:true");
   },
   "Upgrades"
@@ -487,7 +487,7 @@ createUIComponent(
   "none",
   () => {
     //Return game to previous state
-    game.paused = UIComponent.evaluateCondition("was-game-paused:true");
+    if(!UIComponent.evaluateCondition("was-game-paused:true")) unpause();
     UIComponent.setCondition("upgrade-menu-open:false");
   },
   "Close"

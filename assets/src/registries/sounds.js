@@ -15,3 +15,5 @@ Registry.sounds.add("wood-hit", new SoundContainer("assets/sound/wood-hit.wav"))
 Registry.sounds.add("wood-break", new SoundContainer("assets/sound/wood-break.wav"));
 Registry.sounds.add("player-death", new SoundContainer("assets/sound/player-death.ogg"));
 Registry.sounds.add("boss-death", new SoundContainer("assets/sound/boss-death.mp3"));
+//Soundtrack
+Registry.sounds.add("sky-high", new SoundContainer("assets/sound/music/sky-high.wav"));

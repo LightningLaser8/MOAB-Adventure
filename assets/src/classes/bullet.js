@@ -63,6 +63,13 @@ class Bullet {
   destroyDirection = 0;
   destroySpread = 0;
   destroySpacing = 0;
+
+  //Sounds
+  hitSound = null;
+  despawnSound = null;
+  spawnSound = null;
+
+
   //Main stuff
   get directionRad() {
     return (this.direction / 180) * Math.PI;

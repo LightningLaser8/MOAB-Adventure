@@ -11,14 +11,25 @@ class World {
   reducedSpawns = false;
   #bossList = [];
   #currentBossIndex = 0;
-  constructor(name = "World", background = "background.sea") {
+
+  //Sounds!
+  bgm = null; //Background Music
+  ambientSound = null; //Played randomly
+  ambienceChance = 0.001; //Chance per frame to play ambientSound
+
+  constructor(name = "World", background = "background.sea", bgm = null) {
     this.name = name;
     this.background = background;
+    this.bgm = bgm;
   }
   tickAll() {
     this.#actualTick();
     this.#removeDead();
     this.tickSpawns(game.player.speed);
+    if (Math.random() < this.ambienceChance) {
+      playSound(this.ambientSound);
+    }
+    playSound(this.bgm, true);
   }
   #actualTick() {
     //Tick *everything*
@@ -71,6 +82,8 @@ class World {
           }
         }
         bullet.frag();
+        //Sound time!
+        playSound(bullet.despawnSound);
         //Delete the bullet
         this.bullets.splice(b, 1);
       }
@@ -83,10 +96,12 @@ class World {
     }
     len = this.entities.length;
     for (let e = 0; e < len; e++) {
-      if (this.entities[e]?.dead) {
-        if (this.entities[e]?.isBoss) {
+      let entity = this.entities[e];
+      if (entity?.dead) {
+        if (entity?.isBoss) {
           game.level++;
         }
+        playSound(entity.deathSound);
         this.entities.splice(e, 1);
       }
     }
@@ -141,12 +156,15 @@ class World {
     }
     return null;
   }
-  setBossList(...bosses){
-    this.#bossList = bosses
+  setBossList(...bosses) {
+    this.#bossList = bosses;
   }
-  nextBoss(){
-    this.spawnBoss(Registry.entities.get(this.#bossList[this.#currentBossIndex]))
-    this.#currentBossIndex ++
-    if(this.#currentBossIndex >= this.#bossList.length) this.#currentBossIndex = 0;
+  nextBoss() {
+    this.spawnBoss(
+      Registry.entities.get(this.#bossList[this.#currentBossIndex])
+    );
+    this.#currentBossIndex++;
+    if (this.#currentBossIndex >= this.#bossList.length)
+      this.#currentBossIndex = 0;
   }
 }

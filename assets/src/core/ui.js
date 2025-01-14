@@ -722,3 +722,13 @@ function stopSound(sound = null) {
     Registry.sounds.get(sound).sound.stop();
   }
 }
+
+function pauseSound(sound = null) {
+  //So silence is an option
+  if (sound === null) return;
+  if (sound instanceof SoundContainer) {
+    sound.sound.pause();
+  } else {
+    Registry.sounds.get(sound).sound.pause();
+  }
+}
