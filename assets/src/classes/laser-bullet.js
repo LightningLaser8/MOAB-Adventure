@@ -17,6 +17,7 @@ class LaserBullet extends Bullet {
   step(dt) {
     //Not if dead
     if (!this.remove) {
+      this.sound();
       if(this.followsSource && this.source){
         this.x = this.source.x;
         this.y = this.source.y;
