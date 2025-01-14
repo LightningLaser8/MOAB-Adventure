@@ -9,7 +9,8 @@ const ui = {
   },
   conditions: {},
   components: [],
-  volume: 0.5,
+  //Volume percentage
+  volume: 50,
 };
 
 class UIComponent {
@@ -695,19 +696,29 @@ class SoundContainer {
   }
 }
 
-function playSound(sound = null, forcePlay = false) {
+function playSound(sound = null, waitForEnd = false) {
   //So silence is an option
   if (sound === null) return;
   if (sound instanceof SoundContainer) {
     //Set the sound volume to configured one
-    //sound.sound.setVolume(ui.volume);
+    sound.sound.setVolume(ui.volume / 100);
     //Start playing, if not already
-    if (!sound.sound.isPlaying() || forcePlay) sound.sound.play();
+    if (!sound.sound.isPlaying() || !waitForEnd) sound.sound.play();
   } else {
     let snd = Registry.sounds.get(sound).sound;
     //Set the sound volume to configured one
-    snd.setVolume(ui.volume);
+    snd.setVolume(ui.volume / 100);
     //Start playing, if not already
-    if (!snd.isPlaying() || forcePlay) snd.play();
+    if (!snd.isPlaying() || !waitForEnd) snd.play();
+  }
+}
+
+function stopSound(sound = null) {
+  //So silence is an option
+  if (sound === null) return;
+  if (sound instanceof SoundContainer) {
+    sound.sound.stop();
+  } else {
+    Registry.sounds.get(sound).sound.stop();
   }
 }
