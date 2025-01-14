@@ -67,8 +67,12 @@ async function preload() {
   await Registry.images.forEachAsync((name, item) => {
     item.load();
   });
-  fonts.ocr = loadFont("assets/font/ocr_a_extended.ttf");
-  fonts.darktech = loadFont("assets/font/darktech_ldr.ttf");
+  await Registry.sounds.forEachAsync((name, item) => {
+    item.load();
+  });
+  fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
+  fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
+  await userStartAudio()
 }
 //Set up the canvas, using the previous function
 function setup() {

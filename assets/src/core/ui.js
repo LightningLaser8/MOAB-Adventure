@@ -9,6 +9,7 @@ const ui = {
   },
   conditions: {},
   components: [],
+  volume: 0.5,
 };
 
 class UIComponent {
@@ -226,7 +227,7 @@ class UIComponent {
     textFont(this.ocr ? fonts.ocr : fonts.darktech);
     if (this.ocr) {
       stroke(0);
-      strokeWeight(this.textSize/15);
+      strokeWeight(this.textSize / 15);
     }
     fill(0);
     textAlign(CENTER, CENTER);
@@ -288,26 +289,6 @@ class ImageUIComponent extends UIComponent {
   }
 }
 
-class ImageContainer {
-  #image;
-  #path;
-  constructor(path) {
-    this.#path = path;
-    this.#image = null;
-  }
-  update(image) {
-    this.#image = image;
-  }
-  async load() {
-    this.#image = await loadImage(this.#path);
-    console.log("Loaded image from " + this.#path);
-    return true;
-  }
-  get image() {
-    return this.#image;
-  }
-}
-
 function drawImg(
   img = "error",
   x,
@@ -316,7 +297,7 @@ function drawImg(
   height,
   ...otherParameters //IDK what else p5 image takes
 ) {
-  noSmooth()
+  noSmooth();
   //Get from registry if it exists
   img = Registry.images.has(img) ? Registry.images.get(img) : img;
   if (img instanceof ImageContainer) {
@@ -677,51 +658,56 @@ function blendColours(col1, col2, col1Factor) {
   }
   return newCol;
 }
-/*
-const images = {
-  env: {
-    error: 
-  },
-  screen: {
-    title: new ImageContainer("assets/textures/screens/title.png"),
-  },
-  ui: {
-    background: new ImageContainer("assets/textures/ui/background.png"),
-    moab: new ImageContainer("assets/textures/ui/moab.png"),
-    shard: 
-    bloonstone: 
-    clock: 
-  },
-  background: {
-    sea: 
-  },
-  entity: {
-    blimp_moab: ,
-    blimp_bfb: ,
-    blimp_zomg: ,
-    blimp_ddt: ,
-    blimp_bad: ,
-    box: ,
-    box_metal: ,
-    boss_monkeyace: ,
-    boss_monkeyace_stage2: new ImageContainer("assets/textures/entity/monkey-ace-2.svg"),
-  },
-  bullet: {
-    normal: ,
-    cyan: ,
-    du: ,
-    dark: ,
-    bomb: ,
-    nuke: ,
-    icebomb: ,
-    missile: ,
-    crystal: 
-  },
-  effect: {
-    glare: new ImageContainer("assets/textures/effect/glare.png")
-  },
-  part: {
-    radiation: 
+
+class ImageContainer {
+  #image;
+  #path;
+  constructor(path) {
+    this.#path = path;
+    this.#image = null;
   }
-};
-*/
+  update(image) {
+    this.#image = image;
+  }
+  async load() {
+    this.#image = await loadImage(this.#path);
+    console.log("Loaded image from " + this.#path);
+    return true;
+  }
+  get image() {
+    return this.#image;
+  }
+}
+
+class SoundContainer {
+  #sound = null;
+  #path;
+  constructor(path) {
+    this.#path = path;
+  }
+  async load() {
+    this.#sound = await loadSound(this.#path);
+    console.log("Loaded sound from " + this.#path);
+    return true;
+  }
+  get sound() {
+    return this.#sound;
+  }
+}
+
+function playSound(sound = null, forcePlay = false) {
+  //So silence is an option
+  if (sound === null) return;
+  if (sound instanceof SoundContainer) {
+    //Set the sound volume to configured one
+    //sound.sound.setVolume(ui.volume);
+    //Start playing, if not already
+    if (!sound.sound.isPlaying() || forcePlay) sound.sound.play();
+  } else {
+    let snd = Registry.sounds.get(sound).sound;
+    //Set the sound volume to configured one
+    snd.setVolume(ui.volume);
+    //Start playing, if not already
+    if (!snd.isPlaying() || forcePlay) snd.play();
+  }
+}

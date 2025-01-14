@@ -34,6 +34,8 @@ class Weapon {
   storesDV = false //Does this weapon store DV?
   dvRatio = 0 //Amount DV increases by per damage
   _dv = 0 //Stored DV.
+  //Sound
+  fireSound = null;
   constructor() {}
   get rotationRadians() {
     return (this.rotation / 180) * Math.PI;

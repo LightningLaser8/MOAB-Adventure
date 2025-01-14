@@ -12,7 +12,7 @@ createSliderComponent(
   false,
   30,
   (value) => {
-    UIComponent.setCondition("volume:" + value);
+    ui.volume = value;
   },
   0,
   100
