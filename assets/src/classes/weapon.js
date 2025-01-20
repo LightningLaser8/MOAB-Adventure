@@ -1,5 +1,4 @@
 class Weapon {
-  entity = null; //will be the player, unless it's a boss weapon - DON'T PRE-SET THIS
   reload = 1;
   barrel = 0;
   parts = [];
@@ -16,6 +15,7 @@ class Weapon {
     shards: 0,
     bloonstones: 0,
   };
+  /**@type {WeaponSlot} */
   slot = null;
   name = "Name goes here";
   description = "Description goes here";
@@ -31,27 +31,30 @@ class Weapon {
   #acceleration = 0;
   #accelerated = 0;
   //Death Value
-  storesDV = false //Does this weapon store DV?
-  dvRatio = 0 //Amount DV increases by per damage
-  _dv = 0 //Stored DV.
+  storesDV = false; //Does this weapon store DV?
+  dvRatio = 0; //Amount DV increases by per damage
+  _dv = 0; //Stored DV.
   //Sound
   fireSound = null;
+  //Recoil/Rotation
+  recoil = 0;
+  rotate = true;
+  maxRotation = -1;
   constructor() {}
   get rotationRadians() {
     return (this.rotation / 180) * Math.PI;
   }
-  getDVScale(){
-    return this._dv * this.dvRatio
+  getDVScale() {
+    return this._dv * this.dvRatio;
   }
-  absorbDVFrom(entity){ //Increases stored DV from defeating an entity
-    if(entity instanceof Boss){
-      this._dv += 250 //Gain 250 DV from bosses
-    }
-    else if(entity instanceof Box){
-      this._dv ++ //Gain 1 DV from boxes
-    }
-    else{
-      this._dv += 25 //Gain 25 DV from random stuff
+  absorbDVFrom(entity) {
+    //Increases stored DV from defeating an entity
+    if (entity instanceof Boss) {
+      this._dv += 250; //Gain 250 DV from bosses
+    } else if (entity instanceof Box) {
+      this._dv++; //Gain 1 DV from boxes
+    } else {
+      this._dv += 25; //Gain 25 DV from random stuff
     }
   }
   init() {
@@ -71,65 +74,70 @@ class Weapon {
     if (this.slot.entity) {
       this.x = this.slot.entity.x + this.slot.posX;
       this.y = this.slot.entity.y + this.slot.posY;
-      this.rotation = degrees(
-        p5.Vector.sub(
-          createVector(this.slot.entity.target.x, this.slot.entity.target.y), //Mouse pos 'B'
-          createVector(this.x, this.y) //Weapon pos 'A'
-        ).heading() //'A->B' = 'B' - 'A'
-      );
+      if (this.rotate) {
+        this.rotation = degrees(
+          p5.Vector.sub(
+            createVector(this.slot.entity.target.x, this.slot.entity.target.y), //Mouse pos 'B'
+            createVector(this.x, this.y) //Weapon pos 'A'
+          ).heading() //'A->B' = 'B' - 'A'
+        );
+        //If there is a rotation confinement
+        if(this.maxRotation > 0){
+          if(this.rotation > this.maxRotation) this.rotation = this.maxRotation //Constrain positively
+          if(this.rotation < -this.maxRotation) this.rotation = -this.maxRotation //Constrain negatively
+        }
+      }
     }
-    this.decelerate()
+    this.decelerate();
     if (this._cooldown > 0) {
       this._cooldown--;
     }
     this.parts.forEach((x) => x.tick()); //Tick all parts
   }
-  getAcceleratedReloadRate(){
-    if(this.#acceleration <= -1 || this.#acceleration > this.maxAccel) return this.reload; //If bad acceleration then ignore it
+  getAcceleratedReloadRate() {
+    if (this.#acceleration <= -1 || this.#acceleration > this.maxAccel)
+      return this.reload; //If bad acceleration then ignore it
     return this.reload / (1 + this.#acceleration); //2 acceleration = 200% fire rate increase = 3x fire rate
   }
   accelerate() {
     this.#accelerated = this.getAcceleratedReloadRate() * 1.1; //Always wait for at least the reload time before deceling
-    if(this.#acceleration < this.maxAccel){
+    if (this.#acceleration < this.maxAccel) {
       this.#acceleration += this.accel;
     }
-    if(this.#acceleration > this.maxAccel){
+    if (this.#acceleration > this.maxAccel) {
       this.#acceleration = this.maxAccel;
     }
   }
-  decelerate(){
+  decelerate() {
     //If accelerated this frame, don't slow down
-    if(this.#accelerated > 0){
+    if (this.#accelerated > 0) {
       this.#accelerated--;
       return;
     }
     //Else do
-    if(this.#acceleration > 0){
+    if (this.#acceleration > 0) {
       this.#acceleration -= this.accelDecay;
     }
-    if(this.#acceleration < 0){
+    if (this.#acceleration < 0) {
       this.#acceleration = 0;
     }
   }
   fire() {
     if (this._cooldown <= 0) {
-      playSound(this.fireSound)
+      playSound(this.fireSound);
       this._cooldown = this.getAcceleratedReloadRate();
-      this.accelerate() //Apply acceleration effects
-      //Resolve nonexistent properties
-      this.shoot.pattern ??= {}
-      this.shoot.pattern.spread ??= 0;
-      this.shoot.pattern.amount ??= 1;
-      this.shoot.pattern.spacing ??= 0;
+      this.accelerate(); //Apply acceleration effects
+
+      this.slot.entity.knock(this.recoil, this.rotation + 180);
 
       patternedBulletExpulsion(
         this.x,
         this.y,
-        this.shoot.bullet,
-        this.shoot.pattern.amount,
-        this.rotation + (this.shoot?.pattern?.offset??0),
-        this.shoot.pattern.spread,
-        this.shoot.pattern.spacing,
+        this.shoot?.bullet ?? {},
+        this.shoot?.pattern?.amount ?? 1,
+        this.rotation + (this.shoot?.pattern?.offset ?? 0),
+        this.shoot?.pattern?.spread ?? 0,
+        this.shoot?.pattern?.spacing ?? 0,
         this.slot.entity.world,
         this.slot.entity,
         this
@@ -143,10 +151,10 @@ function patternedBulletExpulsion(
   x,
   y,
   bulletToSpawn,
-  amount,
-  direction,
-  spread,
-  spacing,
+  amount = 1,
+  direction = 0,
+  spread = 0,
+  spacing = 0,
   world,
   entity,
   source

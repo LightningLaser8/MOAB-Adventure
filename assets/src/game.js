@@ -160,6 +160,23 @@ function movePlayer() {
     //If 'D' pressed
     game.player.x += game.player.speed * 0.5;
   }
+  //If the player is out of bounds, then damage rapidly
+  if(game.player.x > 1920 - game.player.hitSize + game.player.speed){
+    game.player.x -= 10
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  }
+  if(game.player.x < game.player.hitSize - game.player.speed){
+    game.player.x += 10
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  }
+  if(game.player.y < game.player.hitSize - game.player.speed){
+    game.player.y += 10
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  }
+  if(game.player.y > 1080 - game.player.hitSize + game.player.speed){
+    game.player.y -= 10
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  }
   //regen
   if (game.player.health < game.player.maxHealth) {
     game.player.heal(0.0003 * game.player.maxHealth);

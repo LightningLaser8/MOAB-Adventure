@@ -876,6 +876,7 @@ Registry.weapons.add("incendiary", {
   description: "Explosions set targets on fire.",
   reload: 60,
   fireSound: "bomb-shoot",
+  recoil: 2,
   cost: {
     shards: 1350,
     bloonstones: 0,
@@ -2634,6 +2635,7 @@ Registry.weapons.add("sniper", {
     "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
   reload: 60,
   fireSound: "sniper-shoot",
+  recoil: 5,
   cost: {
     shards: 1000,
     bloonstones: 0,
@@ -3017,6 +3019,7 @@ Registry.weapons.add("nuke-launcher", {
     "Shoots nuclear explosives, dealing great damage in\na much larger area, leaving radioactive fallout.",
   reload: 90,
   fireSound: "bomb-shoot",
+  recoil: 5,
   cost: {
     shards: 5200,
     bloonstones: 0,
@@ -4878,6 +4881,7 @@ Registry.weapons.add("spike", {
   description: "Bigger laser that travels farther and knocks boxes\nback.",
   reload: 90,
   fireSound: "laser",
+  recoil: 15,
   cost: {
     shards: 2900,
     bloonstones: 0,
@@ -5624,6 +5628,7 @@ Registry.weapons.add("du-rounds", {
     "Depleted uranium rounds pierce enemies of any type,\nand irradiate them!",
   reload: 50,
   fireSound: "shoot",
+  recoil: 20,
   cost: {
     shards: 2795,
     bloonstones: 0,
@@ -5872,6 +5877,7 @@ Registry.weapons.add("meltdown", {
   description: "Explosions have more fallout, and fire radioactive\nlasers.",
   reload: 220,
   fireSound: "bomb-shoot",
+  recoil: 15,
   cost: {
     shards: 40000,
     bloonstones: 200,
@@ -9281,6 +9287,7 @@ Registry.weapons.add("impale", {
   description: "Hit entities permanently lose some max health.",
   reload: 80,
   fireSound: "laser",
+  recoil: 30,
   cost: {
     shards: 26500,
     bloonstones: 200,
@@ -10836,6 +10843,7 @@ Registry.weapons.add("super-shotgun", {
   description: "Shots have knockback, and fire from 2 barrels.",
   reload: 25,
   fireSound: "shoot",
+  recoil: 30,
   cost: {
     shards: 15000,
     bloonstones: 200,
@@ -11296,6 +11304,7 @@ Registry.weapons.add("solar-flare", {
   description: "The sun is a deadly laser.",
   reload: 400,
   fireSound: "bomb-shoot",
+  recoil: 20,
   cost: {
     //big expense cannon
     shards: 160000,
@@ -17554,6 +17563,7 @@ Registry.weapons.add("crucify", {
   description: "Don't run from the Lord!",
   reload: 160,
   fireSound: "laser",
+  recoil: 50,
   cost: {
     shards: 80000,
     bloonstones: 1000,
@@ -19020,6 +19030,7 @@ Registry.weapons.add("foreshadow", {
   description: "Target sighted.",
   reload: 120,
   fireSound: "sniper-shoot",
+  recoil: 60,
   cost: {
     shards: 75000,
     bloonstones: 1000,
@@ -19931,6 +19942,7 @@ Registry.weapons.add("diffuse", {
   description: "Frick everything in that general direction.",
   reload: 50,
   fireSound: "shoot",
+  recoil: 35,
   cost: {
     shards: 95000,
     bloonstones: 1000,
@@ -20744,4 +20756,4 @@ Registry.weapons.add("diffuse", {
     },
   ],
 });
-//Finally, 20689 loc later, all weapons finished. Phew.
+//Finally, 20759 loc later, all weapons finished. Phew.
