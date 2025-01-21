@@ -4,7 +4,7 @@ Registry.entities.add("player", {
   x: 300,
   y: 540,
   team: "player",
-  deathSound: "player-death"
+  deathSound: "player-death",
 });
 //### BOXES ###
 Registry.entities.add("wooden-box", {

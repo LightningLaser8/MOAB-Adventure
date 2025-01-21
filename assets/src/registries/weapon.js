@@ -8,6 +8,7 @@ Registry.weapons.add("tiny-shooter", {
   description: "Shoots a single, low damage bullet directly\nforwards.",
   reload: 20,
   fireSound: "shoot",
+  maxRotation: 10,
   cost: {
     shards: 50,
     bloonstones: 0,

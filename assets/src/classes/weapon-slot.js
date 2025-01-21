@@ -5,6 +5,7 @@ class WeaponSlot {
   weapon = null;
   posX = 0;
   posY = 0;
+  /** @type {Entity} */
   entity = null;
   constructor(...upgrades) {
     //new WeaponSlot("upgrade1", "upgrade2", "upgrade3", ...)

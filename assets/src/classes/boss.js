@@ -66,6 +66,9 @@ class Boss extends ScalingEntity {
       next.execute(this);
       next.tick(this);
     }
+     //Corrective rotating
+     this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading())
+ 
   }
   scaleToDifficulty() {
     let diff = difficulty[game.difficulty]; //Get difficulty

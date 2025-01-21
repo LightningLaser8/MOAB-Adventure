@@ -82,10 +82,13 @@ class Weapon {
           ).heading() //'A->B' = 'B' - 'A'
         );
         //If there is a rotation confinement
-        if(this.maxRotation > 0){
-          if(this.rotation > this.maxRotation) this.rotation = this.maxRotation //Constrain positively
-          if(this.rotation < -this.maxRotation) this.rotation = -this.maxRotation //Constrain negatively
+        if(this.maxRotation >= 0){
+          if(this.rotation > this.maxRotation + this.slot.entity.direction) this.rotation = this.maxRotation + this.slot.entity.direction //Constrain positively
+          if(this.rotation < -this.maxRotation + this.slot.entity.direction) this.rotation = -this.maxRotation + this.slot.entity.direction //Constrain negatively
         }
+      }
+      else{
+        this.rotation = this.slot.entity.direction;
       }
     }
     this.decelerate();

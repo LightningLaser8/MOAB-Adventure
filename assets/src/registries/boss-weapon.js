@@ -35,6 +35,7 @@ Registry.weapons.add(".ace-radial-gun", {
 });
 Registry.weapons.add(".ace-gatling-gun", {
   name: ".ace-gatling-gun",
+  rotate: false,
   shoot: {
     bullet: {
       type: "Bullet",
