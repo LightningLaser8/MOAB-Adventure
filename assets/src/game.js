@@ -35,7 +35,9 @@ const difficulty = {
     bossHP: 1.3,
   },
 };
-const world = new World("Ocean Skies", "background.sea", "sky-high");
+/** @type {World} */
+let world;
+moveToWorld("ocean-skies")
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -99,12 +101,14 @@ function draw() {
   clear();
   scale(contentScale);
   image(backgroundGradient, 960, 540, 1920, 1080);
-  if (ui.menuState === "in-game") {
-    background.draw();
-    gameFrame();
+  if(world){
+    if (ui.menuState === "in-game") {
+      background.draw();
+      gameFrame();
+    }
+    uiFrame();
+    if (!ui.waitingForMouseUp) fireIfPossible();
   }
-  uiFrame();
-  if (!ui.waitingForMouseUp) fireIfPossible();
 }
 
 function uiFrame() {
@@ -161,21 +165,21 @@ function movePlayer() {
     game.player.x += game.player.speed * 0.5;
   }
   //If the player is out of bounds, then damage rapidly
-  if(game.player.x > 1920 - game.player.hitSize + game.player.speed){
-    game.player.x -= 10
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  if (game.player.x > 1920 - game.player.hitSize + game.player.speed) {
+    game.player.x -= 10;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
   }
-  if(game.player.x < game.player.hitSize - game.player.speed){
-    game.player.x += 10
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  if (game.player.x < game.player.hitSize - game.player.speed) {
+    game.player.x += 10;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
   }
-  if(game.player.y < game.player.hitSize - game.player.speed){
-    game.player.y += 10
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  if (game.player.y < game.player.hitSize - game.player.speed) {
+    game.player.y += 10;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
   }
-  if(game.player.y > 1080 - game.player.hitSize + game.player.speed){
-    game.player.y -= 10
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025)
+  if (game.player.y > 1080 - game.player.hitSize + game.player.speed) {
+    game.player.y -= 10;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
   }
   //regen
   if (game.player.health < game.player.maxHealth) {
@@ -260,11 +264,6 @@ function createPlayer() {
       0
     )
   );
-
-  //set up spawns
-  world.addSpawn();
-  world.addSpawn({ entity: Box.metal, interval: 300 }, true);
-  world.setBossList("gigantic-box", "monkey-ace", "super-monkey");
 }
 
 function fireIfPossible() {
@@ -354,4 +353,20 @@ function pause() {
 function unpause() {
   game.paused = false;
   playSound(world.bgm, true);
+}
+
+function moveToWorld(worldName = "ocean-skies") {
+  //Construct registry item as a new World.
+  let newWorld = construct(Registry.worlds.get(worldName), World);
+  //If the player exists
+  if (game.player) {
+    //Put them in it
+    game.player.addToWorld(newWorld);
+    //Reset player position
+    game.player.x = 200;
+    game.player.y = 540;
+  }
+
+  //Set the game's world to the new one. The old one will be garbage collected.
+  world = newWorld;
 }

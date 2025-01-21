@@ -9,6 +9,7 @@ class World {
   name = "World";
   boss = null;
   reducedSpawns = false;
+  bosses = [];
   #bossList = [];
   #currentBossIndex = 0;
 
@@ -21,6 +22,24 @@ class World {
     this.name = name;
     this.background = background;
     this.bgm = bgm;
+  }
+  init() {
+    //Copy bosses array
+    this.#bossList = this.bosses.slice(0);
+    //Get improper spawning array
+    let spawns = this.spawning.slice(0);
+    //reset actual spawning
+    this.spawning = [];
+    for (let spawner of spawns) {
+      //Add the spawning group properly
+      this.addSpawn(
+        {
+          entity: Registry.entities.get(spawner.entity),
+          interval: spawner.interval,
+        },
+        spawner.isHighTier
+      );
+    }
   }
   tickAll() {
     this.#actualTick();
