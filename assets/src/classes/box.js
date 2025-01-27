@@ -12,16 +12,12 @@ class Box extends ScalingEntity {
   destroyReward = structuredClone(this.reward);
   //No moving unless explicitly stated
   speed = 0;
-  takeDamage(amount = 0, source = null) {
-    super.takeDamage(amount, source);
-    if (this.dead && !this.rewarded) {
-      //Give destroy reward
-      game.shards += this.destroyReward.shards ??= 0;
-      game.bloonstones += this.destroyReward.bloonstones ??= 0;
-      this.rewarded = true;
-      if (!source) return;
-      source.destroyed.boxes++;
-    }
+  onDeath() {
+    //Give destroy reward
+    game.shards += this.destroyReward.shards ??= 0;
+    game.bloonstones += this.destroyReward.bloonstones ??= 0;
+    if (!source) return;
+    source.destroyed.boxes++;
   }
   tick() {
     if (!this.dead) {

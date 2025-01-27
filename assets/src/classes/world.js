@@ -26,6 +26,11 @@ class World {
   init() {
     //Copy bosses array
     this.#bossList = this.bosses.slice(0);
+    //Throw if no bosses, to prevent a different error
+    //Each world has to have a final anyway, or the player can't leave.
+    if(this.bosses.length === 0){
+      throw new Error("Each world must have at least one defined boss!")
+    }
     //Get improper spawning array
     let spawns = this.spawning.slice(0);
     //reset actual spawning
@@ -117,9 +122,7 @@ class World {
     for (let e = 0; e < len; e++) {
       let entity = this.entities[e];
       if (entity?.dead && !entity.left) {
-        if (entity?.isBoss) {
-          game.level++;
-        }
+        entity.onDeath();
         playSound(entity.deathSound);
         this.entities.splice(e, 1);
       }
@@ -163,11 +166,13 @@ class World {
   }
   spawnBoss(entity, bossClass = "o") {
     //bossClass shows a letter on the square part of the bossbar
+    /**@type {Entity} */
     let ent = construct(entity, Entity); //Construct entity
     ent.class = bossClass;
     ent.isBoss = true; //boss is made of boss
     UIComponent.setCondition("boss:yes"); //There is, in fact, a boss.
     ent.addToWorld(this); //Add entity
+    return ent;
   }
   getFirstBoss() {
     for (let entity of this.entities) {

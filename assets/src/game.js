@@ -109,6 +109,7 @@ function draw() {
     uiFrame();
     if (!ui.waitingForMouseUp) fireIfPossible();
   }
+  if (!game.paused) Timer.main.tick();
 }
 
 function uiFrame() {
@@ -337,10 +338,13 @@ function reset() {
 
 //Triggers on any key press
 function keyPressed() {
-  if (key === "p") {
+  if (key.toLowerCase() === "p") {
     //Pause / unpause
     if (game.paused) unpause();
     else pause();
+  }
+  if(key.toLowerCase() === "f12"){
+    return true;
   }
   return false; //Prevent any default behaviour
 }
@@ -369,4 +373,5 @@ function moveToWorld(worldName = "ocean-skies") {
 
   //Set the game's world to the new one. The old one will be garbage collected.
   world = newWorld;
+  stopSound(world.bgm);
 }

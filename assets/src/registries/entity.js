@@ -100,23 +100,23 @@ Registry.entities.add("monkey-ace", {
   ],
   actions: {
     fire: {
-      type: "fire-weapon-action",
+      type: "action.fire-weapon",
       slotIndex: 0,
     },
     gatling: {
-      type: "fire-weapon-action",
+      type: "action.fire-weapon",
       slotIndex: 1,
     },
     wait: {
-      type: "action",
+      type: "action.generic",
       duration: 60,
     },
     "wait-short": {
-      type: "action",
+      type: "action.generic",
       duration: 5,
     },
     reverse: {
-      type: "move-action",
+      type: "action.move",
       duration: 30,
       x: -400,
     },
@@ -181,16 +181,16 @@ Registry.entities.add("gigantic-box", {
   },
   actions: {
     charge: {
-      type: "move-action",
+      type: "action.move",
       duration: 20,
       x: -550,
     },
     bonk: {
-      type: "fire-weapon-action",
+      type: "action.fire-weapon",
       slotIndex: 0,
     },
     wait: {
-      type: "action",
+      type: "action.generic",
       duration: 180,
     },
   },
@@ -231,25 +231,25 @@ Registry.entities.add("super-monkey", {
   },
   actions: {
     charge: {
-      type: "move-action",
+      type: "action.move",
       duration: 70,
       x: -3000,
     },
     leave: {
-      type: "move-action",
+      type: "action.move",
       duration: 1,
       x: 30000
     },
     enter: {
-      type: "entry-action",
+      type: "action.entry",
       x: 1920,
     },
     "dart-throw": {
-      type: "fire-weapon-action",
+      type: "action.fire-weapon",
       slotIndex: 0,
     },
     wait: {
-      type: "action",
+      type: "action.generic",
       duration: 180,
     },
   },

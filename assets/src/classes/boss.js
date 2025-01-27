@@ -12,19 +12,6 @@ class Boss extends ScalingEntity {
   trackingOffsetX = 400;
   trackingOffsetY = 0;
   previousRot = 0;
-  //Much like the boxes' version
-  takeDamage(amount = 0, source = null) {
-    super.takeDamage(amount, source);
-    if (this.dead && !this.rewarded) {
-      //Give destroy reward
-      game.shards += this.reward.shards ??= 0;
-      game.bloonstones += this.reward.bloonstones ??= 0;
-      this.rewarded = true;
-      if (!source) return;
-      //Stats
-      source.destroyed.bosses++;
-    }
-  }
   init() {
     super.init();
     //Construct boss actions
@@ -66,9 +53,8 @@ class Boss extends ScalingEntity {
       next.execute(this);
       next.tick(this);
     }
-     //Corrective rotating
-     this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading())
- 
+    //Corrective rotating
+    this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading());
   }
   scaleToDifficulty() {
     let diff = difficulty[game.difficulty]; //Get difficulty
@@ -134,5 +120,14 @@ class Boss extends ScalingEntity {
     //Turn
     this.direction += degrees(deltaD);
     return done; // Tell caller its done
+  }
+  onDeath() {
+    //Give destroy reward
+    game.shards += this.reward.shards ??= 0;
+    game.bloonstones += this.reward.bloonstones ??= 0;
+    if (!source) return;
+    //Stats
+    source.destroyed.bosses++;
+    game.level++;
   }
 }

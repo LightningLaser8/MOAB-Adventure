@@ -7,6 +7,7 @@ class Entity {
   health = 100;
   maxHealth = 100;
   name = "Entity";
+  /**@type {World} */
   world = null;
   resistances = [];
   //How the entity will be drawn
@@ -67,6 +68,7 @@ class Entity {
   addToWorld(world) {
     world.entities.push(this);
     this.world = world;
+    return this;
   }
   damage(type = "normal", amount = 0, source = null) {
     let calcAmount =
@@ -297,6 +299,7 @@ class Entity {
     let diff = difficulty[game.difficulty]; //Get difficulty
     //Do nothing, as it doesn't matter for normal entities
   }
+  onDeath(){}
 }
 
 //Entity that scales health as the game's level increases.
