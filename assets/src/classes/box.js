@@ -12,7 +12,7 @@ class Box extends ScalingEntity {
   destroyReward = structuredClone(this.reward);
   //No moving unless explicitly stated
   speed = 0;
-  onDeath() {
+  onDeath(source) {
     //Give destroy reward
     game.shards += this.destroyReward.shards ??= 0;
     game.bloonstones += this.destroyReward.bloonstones ??= 0;

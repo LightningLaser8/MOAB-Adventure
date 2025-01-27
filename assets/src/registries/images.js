@@ -35,3 +35,5 @@ Registry.images.add("decal.radioactive", new ImageContainer("assets/textures/par
 //Bosses
 Registry.images.add("boss.monkey-ace", new ImageContainer("assets/textures/entity/monkey-ace.svg"))
 Registry.images.add("boss.super-monkey", new ImageContainer("assets/textures/entity/super-monkey.svg"))
+Registry.images.add("final-boss.robo-monkey", new ImageContainer("assets/textures/entity/robo-monkey.svg"))
+Registry.images.add("minion.drone", new ImageContainer("assets/textures/entity/drone.svg"))

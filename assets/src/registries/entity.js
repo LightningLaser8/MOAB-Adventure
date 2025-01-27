@@ -31,7 +31,7 @@ Registry.entities.add("wooden-box", {
   health: 5,
   healthIncrease: 1.25,
   hitSound: "wood-hit",
-  deathSound: "wood-break"
+  deathSound: "wood-break",
 });
 Registry.entities.add("metal-box", {
   type: "box",
@@ -67,7 +67,7 @@ Registry.entities.add("metal-box", {
   health: 20, //More HP
   healthIncrease: 5,
   hitSound: "metal-hit",
-  deathSound: "metal-break"
+  deathSound: "metal-break",
 });
 //### BOSSES ###
 Registry.entities.add("monkey-ace", {
@@ -156,9 +156,9 @@ Registry.entities.add("monkey-ace", {
   trackingOffsetX: -500, // Try to stay behind blimp
   turnWhileMoving: true, //Face where it's going
   turnSpeed: 2, //planes don't turn very fast
-  speed: 12,//but are fast
+  speed: 12, //but are fast
   hitSound: "metal-hit",
-  deathSound: "boss-death" 
+  deathSound: "boss-death",
 });
 Registry.entities.add("gigantic-box", {
   type: "boss",
@@ -208,7 +208,7 @@ Registry.entities.add("gigantic-box", {
   turnWhileMoving: true,
   turnSpeed: 10,
   hitSound: "wood-hit",
-  deathSound: "boss-death" 
+  deathSound: "boss-death",
 });
 Registry.entities.add("super-monkey", {
   type: "boss",
@@ -238,7 +238,7 @@ Registry.entities.add("super-monkey", {
     leave: {
       type: "action.move",
       duration: 1,
-      x: 30000
+      x: 30000,
     },
     enter: {
       type: "action.entry",
@@ -272,7 +272,7 @@ Registry.entities.add("super-monkey", {
     "dart-throw",
     "wait",
     "dart-throw",
-    "wait"
+    "wait",
   ],
   team: "enemy",
   health: -150,
@@ -280,5 +280,201 @@ Registry.entities.add("super-monkey", {
   trackingOffsetX: 0,
   turnWhileMoving: true,
   turnSpeed: 4,
-  deathSound: "boss-death" 
+  deathSound: "boss-death",
+});
+//### FINAL BOSSES ###
+Registry.entities.add("robo-monkey", {
+  type: "final-boss",
+  name: "Robo-Monkey",
+  drawer: {
+    image: "final-boss.robo-monkey",
+    width: 276,
+    height: 160,
+  },
+  hitSize: 120,
+  direction: 180,
+  speed: 10,
+  x: 1920,
+  y: 0,
+  reward: {
+    bloonstones: 100,
+  },
+  actions: {
+    "dart-throw": {
+      type: "action.fire-weapon",
+      slotIndex: 0,
+    },
+    "laser-beam": {
+      type: "action.fire-weapon",
+      slotIndex: 1,
+      duration: 60,
+    },
+    "wait-3s": {
+      type: "action.generic",
+      duration: 180,
+    },
+    "wait-1s": {
+      type: "action.generic",
+      duration: 60,
+    },
+    retarget: {
+      type: "action.change-speed",
+      speed: 20,
+      turnSpeed: 4,
+      changesBack: true,
+      duration: 30,
+    },
+    "speed.aim": {
+      type: "action.change-speed",
+      speed: 2,
+      turnSpeed: 0.8,
+      changesBack: false,
+    },
+    "speed.normal": {
+      type: "action.change-speed",
+      speed: 10,
+      turnSpeed: 4,
+      changesBack: false,
+    },
+    spin: {
+      type: "action.move",
+      rot: 1440,
+      duration: 60,
+    },
+    "summon-top": {
+      type: "action.summon",
+      entity: "robo-drone",
+      offsetY: -50,
+    },
+    "summon-bottom": {
+      type: "action.summon",
+      entity: "robo-drone",
+      offsetY: 50,
+      differences: {
+        trackingOffsetY: 500,
+      },
+    },
+  },
+  weaponSlots: [
+    {
+      upgrades: [".robo-monkey-throw"],
+      tier: 1,
+    },
+    {
+      upgrades: [".robo-monkey-laser"],
+      tier: 1,
+    },
+  ],
+  sequence: [
+    //Main loop
+    "wait-3s",
+    "dart-throw",
+    "wait-1s",
+    "wait-1s",
+    "dart-throw",
+    "wait-3s",
+    "speed.aim",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "speed.normal",
+    //1
+    "wait-3s",
+    "dart-throw",
+    "wait-1s",
+    "wait-1s",
+    "dart-throw",
+    "wait-3s",
+    "speed.aim",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "speed.normal",
+    //2
+    "wait-3s",
+    "dart-throw",
+    "wait-1s",
+    "wait-1s",
+    "dart-throw",
+    "wait-3s",
+    "speed.aim",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "retarget",
+    "laser-beam",
+    "speed.normal",
+    //3 times
+    "spin",
+    "summon-top",
+    "summon-bottom",
+  ],
+  team: "enemy",
+  health: 50000,
+  healthIncrease: 0,
+  trackingOffsetX: 1000,
+  turnWhileMoving: false,
+  turnSpeed: 4,
+  deathSound: "boss-death",
+  destinationWorld: "workshop"
+});
+Registry.entities.add("robo-drone", {
+  type: "boss",
+  name: "Laser Drone",
+  drawer: {
+    image: "minion.drone",
+    width: 106,
+    height: 80,
+  },
+  hitSize: 40,
+  direction: 180,
+  speed: 15,
+  x: 1920,
+  y: 0,
+  actions: {
+    "laser-beam": {
+      type: "action.fire-weapon",
+      slotIndex: 0,
+      duration: 60,
+    },
+    "wait-3s": {
+      type: "action.generic",
+      duration: 180,
+    },
+    "wait-1s": {
+      type: "action.generic",
+      duration: 60,
+    },
+    "speed.aim": {
+      type: "action.change-speed",
+      speed: 1,
+      turnSpeed: 0,
+      changesBack: false,
+    },
+    "speed.normal": {
+      type: "action.change-speed",
+      speed: 15,
+      turnSpeed: 10,
+      changesBack: false,
+    },
+  },
+  weaponSlots: [
+    {
+      upgrades: [".robo-monkey-laser"],
+      tier: 1,
+    },
+  ],
+  sequence: ["wait-3s", "speed.aim", "laser-beam", "speed.normal"],
+  team: "enemy",
+  health: 1000,
+  healthIncrease: 0,
+  trackingOffsetX: 200,
+  trackingOffsetY: -500,
+  turnWhileMoving: true,
+  turnSpeed: 10,
+  deathSound: "explosion",
 });

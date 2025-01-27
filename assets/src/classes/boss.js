@@ -43,6 +43,7 @@ class Boss extends ScalingEntity {
       currentAction.tick(this);
       this.#timer++;
     } else {
+      currentAction.end(this);
       this.#action++;
       this.#timer = 0;
       if (this.#action >= this.sequence.length) {
@@ -121,7 +122,7 @@ class Boss extends ScalingEntity {
     this.direction += degrees(deltaD);
     return done; // Tell caller its done
   }
-  onDeath() {
+  onDeath(source) {
     //Give destroy reward
     game.shards += this.reward.shards ??= 0;
     game.bloonstones += this.reward.bloonstones ??= 0;

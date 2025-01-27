@@ -3,9 +3,9 @@ class FinalBoss extends Boss {
   //5s default delay
   transportDelay = 600;
   //When the boss dies,
-  onDeath() {
+  onDeath(source) {
     //Do all the stuff bosses do,
-    super.onDeath()
+    super.onDeath(source)
     //And add an operation to the timer
     Timer.main.addOperation(
       //To move the player to the next world,

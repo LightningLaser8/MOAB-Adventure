@@ -28,7 +28,7 @@ class Bullet {
   multiHit = false;
   damaged = [];
   _trailCounter = 20;
-  _trailInterval = 10;
+  trailInterval = 10;
   //Statuseseseseses
   status = "none";
   statusDuration = 0;
@@ -77,7 +77,7 @@ class Bullet {
   init() {
     this.maxLife = this.lifetime;
     this.maxPierce = this.pierce;
-    this._trailInterval = this.hitSize * 4;
+    this.trailInterval = this.hitSize * 4;
   }
   sound(){
     if(!this.#sounded){
@@ -132,13 +132,13 @@ class Bullet {
               this.trailColour,
               this.hitSize * 1.9,
               0,
-              this.hitSize * this._trailInterval * 0.25,
-              this.hitSize * this._trailInterval * 0.25,
+              this.hitSize * this.trailInterval * 0.25,
+              this.hitSize * this.trailInterval * 0.25,
               0
             )
           );
         }
-        this._trailCounter = this._trailInterval;
+        this._trailCounter = this.trailInterval;
       } else {
         this._trailCounter--;
       }

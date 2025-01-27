@@ -6,16 +6,27 @@ Registry.worlds.add("ocean-skies", {
     {
       entity: "wooden-box",
       interval: 60,
-      isHighTier: false
+      isHighTier: false,
     },
     {
       entity: "metal-box",
       interval: 300,
-      isHighTier: true
-    }
+      isHighTier: true,
+    },
   ],
-  bosses: ["gigantic-box", "monkey-ace", "super-monkey"]
-})
+  bosses: [
+    "gigantic-box",
+    "monkey-ace",
+    "super-monkey",
+    "gigantic-box",
+    "monkey-ace",
+    "super-monkey",
+    "gigantic-box",
+    "monkey-ace",
+    "super-monkey",
+    "robo-monkey",
+  ],
+});
 Registry.worlds.add("workshop", {
   name: "Workshop",
   bgm: "deconstruction",
@@ -24,12 +35,12 @@ Registry.worlds.add("workshop", {
     {
       entity: "metal-box",
       interval: 80,
-      isHighTier: false
+      isHighTier: false,
     },
     {
       entity: "wooden-box",
       interval: 300,
-      isHighTier: false
-    }
+      isHighTier: false,
+    },
   ],
-})
+});

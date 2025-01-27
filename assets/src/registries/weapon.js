@@ -15523,6 +15523,7 @@ Registry.weapons.add("kinetic-inversion", {
       hitColour: [0, 255, 110],
       hitColourTo: [0, 255, 255, 0],
       reflectsProjectiles: true,
+      pierce: 3,
       trail: false,
     },
     pattern: {}, //Blank pattern
@@ -20014,13 +20015,13 @@ Registry.weapons.add("diffuse", {
             image: "box.wood",
             width: 25,
             height: 4,
-          }
+          },
         },
         destroyNumber: 5,
-        destroySpread: 25
+        destroySpread: 25,
       },
       destroyNumber: 5,
-      destroySpread: 25
+      destroySpread: 25,
     },
     pattern: {
       amount: 15,

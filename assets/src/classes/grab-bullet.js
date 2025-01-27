@@ -11,7 +11,10 @@ class GrabBullet extends PointBullet {
           bullet.direction += 180; //reverse direction
           bullet.entity = this.entity; //yoink bullet
           bullet.lifetime = bullet.maxLife; //reset lifetime because funny
-          this.remove = true; //kill this bullet
+          this.pierce --
+          if(this.pierce < 0){
+            this.remove = true; //kill this bullet
+          }
         }
       }
     }

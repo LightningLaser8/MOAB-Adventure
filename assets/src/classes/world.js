@@ -122,7 +122,7 @@ class World {
     for (let e = 0; e < len; e++) {
       let entity = this.entities[e];
       if (entity?.dead && !entity.left) {
-        entity.onDeath();
+        entity.onDeath(entity.lastHurtSource);
         playSound(entity.deathSound);
         this.entities.splice(e, 1);
       }

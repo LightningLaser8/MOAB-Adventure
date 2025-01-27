@@ -8,15 +8,19 @@ class BossAction {
    * @param {Entity} entity
    */
   tick(entity) {} //Called every frame of this action
+  /**
+   * @param {Entity} entity
+   */
+  end(entity) {} //Called on the last frame of the action
 }
 class MovementAction extends BossAction {
   x = 0;
   y = 0;
   rot = 0;
   tick(entity) {
-    entity.x += this.x / this.duration;
-    entity.y += this.y / this.duration;
-    entity.direction += this.rot / this.duration;
+    entity.x += this.x / (this.duration + 1);
+    entity.y += this.y / (this.duration + 1);
+    entity.direction += this.rot / (this.duration + 1);
   }
 }
 class FireWeaponAction extends BossAction {
@@ -47,7 +51,7 @@ class EntryAction extends BossAction {
 class RegenAction extends BossAction {
   amount = 0;
   tick(entity) {
-    entity.heal(this.amount / this.duration || this.amount);
+    entity.heal(this.amount / (this.duration + 1));
   }
 }
 //boom
@@ -100,12 +104,15 @@ class SummonMinionAction extends BossAction {
   isBoss = false;
   //A single character to represent the type of boss the summon is
   bossClass = "s";
+  //Any differences?
+  differences = {};
   /**
    * @param {Entity} entity
    */
   execute(entity) {
     //get the entity
-    let toSpawn = Registry.entities.get(entity);
+    let toSpawn = structuredClone(Registry.entities.get(this.entity));
+    Object.assign(toSpawn, this.differences)
     //construct the entity
     /**@type {Entity} */
     let spawned = this.isBoss
@@ -151,5 +158,36 @@ class SpawnBulletAction extends BossAction {
       entity,
       null
     );
+  }
+}
+//Changes a boss' speed for a time
+class ChangeSpeedAction extends BossAction {
+  speed = -1;
+  turnSpeed = -1;
+  changesBack = true;
+  #oldSpeed = 0;
+  #oldTurnSpeed = 0;
+  execute(entity) {
+    //if the speed is defined, and makes sense
+    if (this.speed >= 0) {
+      //save old speed, and change
+      this.#oldSpeed = entity.speed;
+      entity.speed = this.speed;
+    }
+    if (this.turnSpeed >= 0) {
+      this.#oldTurnSpeed = entity.turnSpeed;
+      entity.turnSpeed = this.turnSpeed;
+    }
+  }
+  end(entity) {
+    if (this.changesBack) {
+      //Change it back
+      if (this.speed >= 0) {
+        entity.speed = this.#oldSpeed;
+      }
+      if (this.turnSpeed >= 0) {
+        entity.turnSpeed = this.#oldTurnSpeed;
+      }
+    }
   }
 }

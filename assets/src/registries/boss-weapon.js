@@ -149,3 +149,104 @@ Registry.weapons.add(".super-monkey-throw", {
     pattern: {},
   },
 });
+//## ROBO-MONKEY ##
+Registry.weapons.add(".robo-monkey-throw", {
+  name: ".robo-monkey-throw",
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 0,
+      pierce: 9999999,
+      hitSize: -1000,
+      trail: false,
+      intervalBullet: {
+        type: "missile",
+        trailColour: [255, 169, 207],
+        trailColourTo: [212, 0, 255],
+        trailShape: "rhombus",
+        targetType: "nearest",
+        turnSpeed: 0.5,
+        trailInterval: 5,
+        trailWidth: 5,
+        lifetime: 90,
+        speed: 25,
+        hitSize: 5,
+        trail: true,
+        damage: [
+          {
+            type: "ballistic",
+            amount: 5,
+          },
+          {
+            type: "no",
+            amount: 0,
+            area: 40,
+            smokeColour: [0, 0, 0, 0],
+            smokeColourTo: [0, 0, 0, 0],
+            waveColour: [255, 255, 255, -2000],
+            sparkColour: [255, 169, 207],
+            sparkColourTo: [212, 0, 255]
+          }
+        ],
+        drawer: {
+          image: "bullet.normal", //should really be a dart but i don't have the asset
+          width: 32,
+          height: 16,
+        },
+      },
+      intervalTime: 10,
+      intervalNumber: 5,
+      intervalSpread: 15,
+      followsSource: true,
+    },
+    pattern: {},
+  },
+});
+Registry.weapons.add(".robo-monkey-laser", {
+  name: ".robo-monkey-laser",
+  rotate: false,
+  shoot: {
+    bullet: {
+      speed: 0,
+      lifetime: 30,
+      hitSize: -1000,
+      trail: false,
+      followsSource: true,
+      intervalTime: 15,
+      intervalNumber: 1,
+      intervalBullet: {
+        type: "laser",
+        lifetime: 5,
+        length: 2000,
+        pierce: 999,
+        hitSize: 2,
+        drawer: {
+          shape: "rect",
+          fill: [255, 255, 255]
+        },
+        followsSource: true
+      },
+      fragNumber: 1,
+      fragBullet: {
+        type: "continuous-laser",
+        lifetime: 30,
+        length: 2000,
+        pierce: 999,
+        hitSize: 15,
+        drawer: {
+          shape: "rect",
+          fill: [234, 84, 232]
+        },
+        followsSource: true,
+        damage: [
+          {
+            amount: 2.5,
+            type: "laser"
+          }
+        ]
+      },
+    },
+    pattern: {},
+  },
+});

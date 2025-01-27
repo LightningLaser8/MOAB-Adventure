@@ -11,6 +11,13 @@ const ui = {
   components: [],
   //Volume percentage
   volume: 50,
+  //Percentages for different parts
+  //Multiplicative with `volume`
+  piecewiseVolume: {
+    music: 100,
+    weapons: 100,
+    entities: 100,
+  },
 };
 
 class UIComponent {
@@ -369,7 +376,8 @@ class SliderUIComponent extends UIComponent {
     shownTextSize = 20,
     onchange = (value) => {},
     min = 0,
-    max = 100
+    max = 100,
+    current = null
   ) {
     super(
       x,
@@ -386,7 +394,7 @@ class SliderUIComponent extends UIComponent {
     this.change = onchange;
     this.length = sliderLength;
     this.min = min;
-    this._current = (min + max) / 2;
+    this._current = current ?? (min + max) / 2;
     this.max = max;
   }
   draw() {
@@ -600,7 +608,8 @@ function createSliderComponent(
   shownTextSize = 20,
   onchange = null,
   min = 0,
-  max = 100
+  max = 100,
+  current = null
 ) {
   //Make component
   const component = new SliderUIComponent(
@@ -615,7 +624,8 @@ function createSliderComponent(
     shownTextSize,
     onchange ?? (() => {}),
     min,
-    max
+    max,
+    current
   );
   component.conditions = conditions;
   //Set conditional things
@@ -682,9 +692,15 @@ class ImageContainer {
 
 class SoundContainer {
   #sound = null;
+  #category = "none";
   #path;
-  constructor(path) {
+  /**
+   * @param {string} path 
+   * @param {"weapons" | "entities" | "music"} category 
+   */
+  constructor(path, category = "none") {
     this.#path = path;
+    this.#category = category;
   }
   async load() {
     this.#sound = await loadSound(this.#path);
@@ -694,22 +710,35 @@ class SoundContainer {
   get sound() {
     return this.#sound;
   }
+  get category() {
+    return this.#category;
+  }
 }
-
+/**
+ * @param {SoundContainer | string} sound 
+ * @param {boolean} waitForEnd 
+ */
 function playSound(sound = null, waitForEnd = false) {
   //So silence is an option
   if (sound === null) return;
   if (sound instanceof SoundContainer) {
     //Set the sound volume to configured one
-    sound.sound.setVolume(ui.volume / 100);
+    sound.sound.setVolume(
+      //Default volume * the category's volume.
+      (ui.volume / 100) * ((ui.piecewiseVolume[sound.category] ?? 0) / 100)
+    );
     //Start playing, if not already
     if (!sound.sound.isPlaying() || !waitForEnd) sound.sound.play();
   } else {
-    let snd = Registry.sounds.get(sound).sound;
+    let snd = Registry.sounds.get(sound);
     //Set the sound volume to configured one
-    snd.setVolume(ui.volume / 100);
+    //No container, so no category
+    snd.sound.setVolume(
+      //Default volume * the category's volume.
+      (ui.volume / 100) * ((ui.piecewiseVolume[snd.category] ?? 0) / 100)
+    );
     //Start playing, if not already
-    if (!snd.isPlaying() || !waitForEnd) snd.play();
+    if (!snd.sound.isPlaying() || !waitForEnd) snd.sound.play();
   }
 }
 

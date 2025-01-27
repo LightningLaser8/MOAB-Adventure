@@ -66,11 +66,12 @@ let fonts = {};
 let backgroundGradient;
 
 async function preload() {
-  await Registry.images.forEachAsync((name, item) => {
-    item.load();
+  await Registry.images.forEachAsync(async (name, item) => {
+    await item.load();
   });
-  await Registry.sounds.forEachAsync((name, item) => {
-    item.load();
+  await Registry.sounds.forEachAsync(async (name, item) => {
+    await item.load();
+    item.sound.playMode("restart");
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
@@ -166,21 +167,21 @@ function movePlayer() {
     game.player.x += game.player.speed * 0.5;
   }
   //If the player is out of bounds, then damage rapidly
-  if (game.player.x > 1920 - game.player.hitSize + game.player.speed) {
-    game.player.x -= 10;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
+  if (game.player.x > 1920 - game.player.hitSize + game.player.speed * 2) {
+    game.player.x -= game.player.speed * 4;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
-  if (game.player.x < game.player.hitSize - game.player.speed) {
-    game.player.x += 10;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
+  if (game.player.x < game.player.hitSize - game.player.speed * 4) {
+    game.player.x += game.player.speed * 4;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
-  if (game.player.y < game.player.hitSize - game.player.speed) {
-    game.player.y += 10;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
+  if (game.player.y < game.player.hitSize - game.player.speed * 3) {
+    game.player.y += game.player.speed * 4;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
-  if (game.player.y > 1080 - game.player.hitSize + game.player.speed) {
-    game.player.y -= 10;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.025);
+  if (game.player.y > 1080 - game.player.hitSize + game.player.speed * 3) {
+    game.player.y -= game.player.speed * 4;
+    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   //regen
   if (game.player.health < game.player.maxHealth) {
@@ -280,7 +281,7 @@ function checkBoxCollisions() {
     //If player is colliding with a living entity on a different team that is a box
     if (
       entity instanceof Box &&
-      !entity.remove &&
+      !entity.dead &&
       entity.team !== game.player.team &&
       game.player.collidesWith(entity)
     ) {
@@ -320,8 +321,6 @@ function reset() {
   world.entities.splice(0);
   world.particles.splice(0);
   world.bullets.splice(0);
-  world.spawning.splice(0);
-  world.setBossList();
   game.bloonstones = 0;
   game.shards = 0;
   game.level = 1;
@@ -331,6 +330,7 @@ function reset() {
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
   }
+  moveToWorld("ocean-skies")
 
   //garbage collect player
   game.player = null;
@@ -360,6 +360,7 @@ function unpause() {
 }
 
 function moveToWorld(worldName = "ocean-skies") {
+  if(world?.bgm) stopSound(world.bgm);
   //Construct registry item as a new World.
   let newWorld = construct(Registry.worlds.get(worldName), World);
   //If the player exists
@@ -373,5 +374,4 @@ function moveToWorld(worldName = "ocean-skies") {
 
   //Set the game's world to the new one. The old one will be garbage collected.
   world = newWorld;
-  stopSound(world.bgm);
 }
