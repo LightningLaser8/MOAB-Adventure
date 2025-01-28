@@ -1,7 +1,7 @@
 Registry.blimps.add("moab", {
   name: "MOAB",
   health: 200,
-  speed: 6,
+  speed: 8,
   weaponSlots: [1],
   drawer: {
     image: "blimp.moab",
@@ -14,7 +14,7 @@ Registry.blimps.add("moab", {
 Registry.blimps.add("bfb", {
   name: "BFB",
   health: 700,
-  speed: 1.5,
+  speed: 6,
   weaponSlots: [1, 2],
   positions: [{x: 50, y: 0}, {x: -100, y: 0}],
   drawer: {
@@ -32,7 +32,7 @@ Registry.blimps.add("bfb", {
 Registry.blimps.add("zomg", {
   name: "ZOMG",
   health: 4000,
-  speed: 1.08,
+  speed: 3,
   weaponSlots: [1, 2, 3],
   positions: [{x: 50, y: 0}, {x: -100, y: 0}, {x: 0, y: 0}],
   drawer: {
@@ -50,7 +50,7 @@ Registry.blimps.add("zomg", {
 Registry.blimps.add("ddt", {
   name: "DDT",
   health: 400,
-  speed: 15.84,
+  speed: 16,
   weaponSlots: [1, 5],
   positions: [{x: 50, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: -80, y: 0}],
   drawer: {
@@ -74,7 +74,7 @@ Registry.blimps.add("ddt", {
 Registry.blimps.add("bad", {
   name: "BAD",
   health: 20000,
-  speed: 1.08,
+  speed: 3,
   weaponSlots: [1, 2, 3, 4],
   positions: [{x: 80, y: 0}, {x: -80, y: 0}, {x: 30, y: 50}, {x: 30, y: -50}],
   drawer: {

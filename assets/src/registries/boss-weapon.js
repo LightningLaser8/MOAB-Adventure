@@ -206,6 +206,7 @@ Registry.weapons.add(".robo-monkey-throw", {
 Registry.weapons.add(".robo-monkey-laser", {
   name: ".robo-monkey-laser",
   rotate: false,
+  fireSound: "whirr",
   shoot: {
     bullet: {
       speed: 0,
@@ -230,6 +231,7 @@ Registry.weapons.add(".robo-monkey-laser", {
       fragNumber: 1,
       fragBullet: {
         type: "continuous-laser",
+        spawnSound: "laser-beam",
         lifetime: 30,
         length: 2000,
         pierce: 999,

@@ -137,6 +137,8 @@ class SummonMinionAction extends BossAction {
 //Like having a weapon, but also not having one at the same time.
 //Allows bullet hell attacks, without having to work with difficult weapon stuff.
 class SpawnBulletAction extends BossAction {
+  xVar = 0;
+  yVar = 0;
   x = 0;
   y = 0;
   direction = 0;
@@ -147,8 +149,8 @@ class SpawnBulletAction extends BossAction {
   execute(entity) {
     //Spawn the bullets.
     patternedBulletExpulsion(
-      this.x,
-      this.y,
+      this.x + rnd(-this.xVar, this.xVar),
+      this.y + rnd(-this.yVar, this.yVar),
       this.bullet,
       this.amount,
       this.direction,

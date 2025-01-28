@@ -19,3 +19,5 @@ Registry.sounds.add("boss-death", new SoundContainer("assets/sound/boss-death.mp
 //Soundtrack
 Registry.sounds.add("sky-high", new SoundContainer("assets/sound/music/sky-high.wav", "music"));
 Registry.sounds.add("deconstruction", new SoundContainer("assets/sound/music/deconstruction.mp3", "music"));
+//aim
+Registry.sounds.add("whirr", new SoundContainer("assets/sound/whirr.wav", "entities"));
