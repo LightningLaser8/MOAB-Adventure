@@ -8,11 +8,12 @@ class Bullet {
   hitSize = 5;
   trail = true;
   trailColour = [255, 255, 255, 200];
+  trailWidth = -1;
   remove = false;
   pierce = 0;
   drawer = {
     shape: "circle",
-    fill: "red",
+    fill: [255, 0, 0],
     image: "error",
     width: 10,
     height: 10,
@@ -28,7 +29,7 @@ class Bullet {
   multiHit = false;
   damaged = [];
   _trailCounter = 20;
-  trailInterval = 10;
+  trailInterval = -1;
   //Statuseseseseses
   status = "none";
   statusDuration = 0;
@@ -77,7 +78,10 @@ class Bullet {
   init() {
     this.maxLife = this.lifetime;
     this.maxPierce = this.pierce;
-    this.trailInterval = this.hitSize * 4;
+    if (this.trailInterval === -1) {
+      this.trailInterval = this.hitSize * 2;
+    }
+    if(this.trailWidth === -1) this.trailWidth = this.hitSize * 1.9
   }
   sound(){
     if(!this.#sounded){
@@ -130,7 +134,7 @@ class Bullet {
               "rhombus",
               this.trailColour,
               this.trailColour,
-              this.hitSize * 1.9,
+              this.trailWidth,
               0,
               this.hitSize * this.trailInterval * 0.25,
               this.hitSize * this.trailInterval * 0.25,
@@ -145,6 +149,7 @@ class Bullet {
     }
   }
   draw() {
+    if(this.drawer.hidden) return;
     if (this.drawer.image) {
       rotatedImg(
         this.drawer.image,
