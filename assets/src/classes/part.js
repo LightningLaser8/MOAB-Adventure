@@ -1,5 +1,5 @@
 class Part {
-  image = "error";
+  image = null;
   x = 0;
   y = 0;
   slide = 0;
