@@ -35,16 +35,18 @@ class Timer {
       func();
       return -1;
     }
-    this.#operations.push(new TimerOperation(func, delay, this.#nextId, parameters));
+    this.#operations.push(
+      new TimerOperation(func, delay, this.#nextId, parameters)
+    );
     //Increment the ID
     this.#nextId++;
     //Return the id used
     return this.#nextId - 1;
   }
   /**
-   * Repeats a function call every so many ticks, with a configurable initial delay.  
-   * Passes in the current iteration number (i.e. the first iteration will be passed `0`, the second `1`, etc.).  
-   * Every call shares the same ID, so can all be cancelled at once.  
+   * Repeats a function call every so many ticks, with a configurable initial delay.
+   * Passes in the current iteration number (i.e. the first iteration will be passed `0`, the second `1`, etc.).
+   * Every call shares the same ID, so can all be cancelled at once.
    * More memory-efficient than repeatedly calling `Timer.do()`.
    * @param {(iteration: int) => void} func Function to call.
    * @param {int} times The number of times to repeat this function call.
@@ -54,7 +56,16 @@ class Timer {
    * @returns {int} The ID the operations are using. Used in `Timer.cancel()`.
    */
   repeat(func, times, interval = 1, delay = 0, ...parameters) {
-    this.#operations.push(new TimerOperation(func, delay, this.#nextId, parameters, times, interval));
+    this.#operations.push(
+      new RepeatedTimerOperation(
+        func,
+        delay,
+        this.#nextId,
+        parameters,
+        times,
+        interval
+      )
+    );
     //Increment the ID
     this.#nextId++;
     //Return the id used
@@ -90,12 +101,33 @@ class Timer {
     }
   }
 }
-/** Represents a single or repeated operation. */
+/** Represents a single delayed operation. */
 class TimerOperation {
+  executed = false;
+  constructor(func, delay = 0, id = 0, params = []) {
+    this.id = id;
+    this.func = func;
+    this.delay = delay;
+    this.params = params;
+  }
+  tick() {
+    //Don't run if already finished
+    if (this.executed) return;
+    //Reduce delay
+    this.delay--;
+    //If ready to go:
+    if (this.delay < 0) {
+      //execute
+      this.func(...this.params);
+      //Stop
+      this.executed = true;
+    }
+  }
+}
+/** Represents a repeated operation. */
+class RepeatedTimerOperation extends TimerOperation {
   #repeated = 0;
   #currentIntervalWait = 0;
-  #shouldRepeat = false;
-  executed = false;
   constructor(
     func,
     delay = 0,
@@ -104,13 +136,12 @@ class TimerOperation {
     repeatNumber = 1,
     repeatInterval = 1
   ) {
+    super(func, delay, id, params);
     this.id = id;
     this.func = func;
     this.delay = delay;
     this.params = params;
     this.repeatNumber = repeatNumber;
-    //Only repeats if executing more than once (duh)
-    this.#shouldRepeat = repeatNumber > 1;
     this.repeatInterval = repeatInterval;
   }
   tick() {
@@ -120,32 +151,19 @@ class TimerOperation {
     this.delay--;
     //If ready to go:
     if (this.delay < 0) {
-      if (this.#shouldRepeat) {
-        //If repeating
-
-        if (this.#currentIntervalWait <= 0) {
-          //increase repeats
-          this.#repeated++;
-          //Stop if finished repeating
-          if (this.#repeated > this.repeatNumber) {
-            this.executed = true;
-            return;
-          }
-          //execute
-          this.func(this.#repeated - 1, ...this.params);
-          //reset interval
-          this.#currentIntervalWait = this.repeatInterval;
-        } else {
-          //Continue counting
-          this.#currentIntervalWait--;
+      this.#currentIntervalWait--;
+      if (this.#currentIntervalWait <= 0) {
+        //increase repeats
+        this.#repeated++;
+        //Stop if finished repeating
+        if (this.#repeated > this.repeatNumber) {
+          this.executed = true;
+          return;
         }
-      } else {
-        //If not
-
         //execute
-        this.func(...this.params);
-        //Stop
-        this.executed = true;
+        this.func(this.#repeated - 1, ...this.params);
+        //reset interval
+        this.#currentIntervalWait = this.repeatInterval;
       }
     }
   }
