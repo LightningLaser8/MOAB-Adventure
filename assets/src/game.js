@@ -374,4 +374,6 @@ function moveToWorld(worldName = "ocean-skies") {
 
   //Set the game's world to the new one. The old one will be garbage collected.
   world = newWorld;
+  //Make the flash effect
+  worldTransitionEffect(world.name);
 }

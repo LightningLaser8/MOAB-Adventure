@@ -11319,7 +11319,7 @@ Registry.weapons.add("solar-flare", {
       trail: true,
       trailColour: [255, 255, 0, 50],
       drawer: {
-        image: "bullet.nuke",
+        image: "bullet.solarnuke",
         width: 48,
         height: 30,
       },
