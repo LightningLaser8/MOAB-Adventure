@@ -42,6 +42,13 @@ class Entity {
   //Sounds
   hitSound = null;
   deathSound = null;
+  //Movement
+  turnSpeed = 1;
+  turnWhileMoving = false;
+  trackTarget = true;
+  trackingOffsetX = 0;
+  trackingOffsetY = 0;
+  previousRot = 0;
 
   get directionRad() {
     return (this.direction / 180) * Math.PI;
@@ -166,6 +173,7 @@ class Entity {
     }
     this.checkBullets();
     this.tickStatuses();
+    this.ai();
   }
   getClosestEnemy() {
     /*Don't actually need this yet*/
@@ -298,10 +306,73 @@ class Entity {
     this.statuses.push({ effect: effect, time: time, timeLeft: time });
   }
   scaleToDifficulty() {
-    let diff = difficulty[game.difficulty]; //Get difficulty
     //Do nothing, as it doesn't matter for normal entities
   }
   onDeath(){}
+  rotateTowards(x, y, amount) {
+    let done = false;
+    let maxRotateAmount = radians(amount); //use p5 to get radians
+    let delta = { x: x - this.x, y: y - this.y };
+    //Define variables
+    let currentDirection = p5.Vector.fromAngle(this.directionRad).heading(); //Find current angle, standardised
+    let targetDirection = Math.atan2(delta.y, delta.x); //Find target angle, standardised
+    if (targetDirection === currentDirection) return; //Do nothing if facing the right way
+    let deltaRot = targetDirection - currentDirection;
+    //Rotation correction
+    if (deltaRot < -PI) {
+      deltaRot += TWO_PI;
+    } else if (deltaRot > PI) {
+      deltaRot -= TWO_PI;
+    }
+    let sign = deltaRot < 0 ? -1 : 1; //Get sign: -1 if negative, 1 if positive
+    let deltaD = 0;
+    //Choose smaller turn
+    if (Math.abs(deltaRot) > maxRotateAmount) {
+      deltaD = maxRotateAmount * sign;
+      done = true; //Done turning
+    } else {
+      deltaD = deltaRot;
+      done = false;
+    }
+    //Turn
+    this.direction += degrees(deltaD);
+    return done; // Tell caller its done
+  }
+  moveTowards(x, y, rotate = false) {
+    if (!rotate) {
+      let oldRot = this.direction;
+      this.direction = this.previousRot;
+      this.rotateTowards(x, y, this.turnSpeed);
+      this.x += this.speed * Math.cos(radians(this.direction)); //Move in x-direction
+      this.y += this.speed * Math.sin(radians(this.direction)); // Move in y-direction
+      this.previousRot = this.direction;
+      this.direction = oldRot;
+      return true;
+    } else {
+      let done = this.rotateTowards(x, y, this.turnSpeed);
+      this.x += this.speed * Math.cos(radians(this.direction)); //Move in x-direction
+      this.y += this.speed * Math.sin(radians(this.direction)); // Move in y-direction
+      return done;
+    }
+  }
+  /** Moves and optionally rotates towards a point. */
+  trackPoint(x, y) {
+    if (this.target)
+      if (
+        this.moveTowards(
+          x,
+          y,
+          this.turnWhileMoving && !(x === this.target.x || y === this.target.y)
+        )
+      )
+        if (this.turnWhileMoving)
+          /*If done moving*/
+          // and target exists
+          this.rotateTowards(this.target.x, this.target.y, this.turnSpeed); //turn towards it.
+  }
+  ai() {
+    //Do nothing by default
+  }
 }
 
 //Entity that scales health as the game's level increases.

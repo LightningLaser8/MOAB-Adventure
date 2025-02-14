@@ -24,11 +24,14 @@ class Boss extends ScalingEntity {
     currentAction.execute(this);
     this.previousRot = this.direction;
   }
-  tick() {
-    //Tick as normal
-    super.tick();
+  scaleToDifficulty() {
+    let diff = difficulty[game.difficulty]; //Get difficulty
+    this.health *= diff.bossHP ?? 1; //Multiply HP by boss HP multiplier
+  }
+  ai() {
     //Temporarily, set target to player. This should almost always be the case, until player minions exist.
     this.target = game?.player;
+
     //Move towards tracking point
     if (this.trackTarget)
       if (this.target)
@@ -36,6 +39,7 @@ class Boss extends ScalingEntity {
           this.target.x + this.trackingOffsetX,
           this.target.y + this.trackingOffsetY
         );
+
     //Do the action thing
     let currentAction = this.actions[this.sequence[this.#action]];
     if (!currentAction) return; //Stop immediately if actions empty

@@ -31,3 +31,5 @@ Registry.genericType.add("action.regen", RegenAction)
 Registry.genericType.add("action.summon", SummonMinionAction)
 Registry.genericType.add("action.spawn-bullet", SpawnBulletAction)
 Registry.genericType.add("action.change-speed", ChangeSpeedAction)
+//Extra entities
+Registry.genericType.add("segmented-entity", SegmentedEntity);

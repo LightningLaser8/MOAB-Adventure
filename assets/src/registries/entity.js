@@ -624,3 +624,46 @@ Registry.entities.add("robo-drone", {
   turnSpeed: 10,
   deathSound: "explosion",
 });
+//### TESTS ###
+Registry.entities.add("short-circuit", {
+  type: "segmented-entity",
+  name: "The Short Circuit",
+  drawer: {
+    image: "boss.short-circuit.head",
+    width: 100,
+    height: 100,
+  },
+  hitSize: 50,
+  x: 0,
+  y: 1080,
+  reward: {
+    shards: 2,
+  },
+  destroyReward: {
+    shards: 5,
+  },
+  team: "enemy",
+  health: 150000,
+  healthIncrease: 80000,
+  direction: -33,
+  segmentType: {
+    drawer: {
+      image: "boss.short-circuit.body",
+      width: 100,
+      height: 100,
+    },
+    hitSize: 50,
+    weaponSlots: [
+      {
+        upgrades: [".worm-gun"],
+        tier: 1,
+      },
+    ],
+  },
+  segmentCount: 150,
+  maxSegmentSpacing: 100,
+  segmentWeaponSpacing: 5,
+  speed: 20,
+  turnSpeed: 2,
+  turnWhileMoving: true,
+})

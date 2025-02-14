@@ -37,3 +37,5 @@ Registry.images.add("boss.monkey-ace", new ImageContainer("assets/textures/entit
 Registry.images.add("boss.super-monkey", new ImageContainer("assets/textures/entity/super-monkey.svg"))
 Registry.images.add("final-boss.robo-monkey", new ImageContainer("assets/textures/entity/robo-monkey.svg"))
 Registry.images.add("minion.drone", new ImageContainer("assets/textures/entity/drone.svg"))
+Registry.images.add("boss.short-circuit.head", new ImageContainer("assets/textures/entity/short-circuit-head.png"));
+Registry.images.add("boss.short-circuit.body", new ImageContainer("assets/textures/entity/short-circuit-body.png"));
