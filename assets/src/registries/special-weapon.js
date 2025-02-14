@@ -119,14 +119,14 @@ Registry.weapons.add("dissection", {
             hidden: true,
           },
           fragBullet: {
-            lifetime: 20,
-            speed: 50,
+            lifetime: 15,
+            speed: 75,
             hitSize: 16,
             trail: true,
             trailWidth: 8,
-            trailColour: [255, 255, 255],
+            trailColour: [255, 255, 255, 100],
             pierce: 2,
-            knockback: 100,
+            knockback: 50,
             damage: [
               {
                 type: "ballistic",
@@ -143,7 +143,7 @@ Registry.weapons.add("dissection", {
               turnSpeed: 0,
               lifetime: 10,
               speed: 30,
-              hitSize: 8,
+              hitSize: 5,
               trail: true,
               trailColour: [255, 255, 255],
               trailColourTo: [255, 255, 0],
