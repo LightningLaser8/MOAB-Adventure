@@ -22,9 +22,9 @@ Registry.weapons.add(".ace-radial-gun", {
         },
       ],
       drawer: {
-        image: "bullet.normal",
+        image: "bullet.dart",
         width: 56,
-        height: 16,
+        height: 35,
       },
     },
     pattern: {

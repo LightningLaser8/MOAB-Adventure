@@ -1,10 +1,10 @@
 Registry.images.add("error", new ImageContainer("assets/textures/error.png"),);
 //Blimps
-Registry.images.add("blimp.moab", new ImageContainer("assets/textures/entity/moab.png"));
-Registry.images.add("blimp.bfb", new ImageContainer("assets/textures/entity/bfb.png"));
-Registry.images.add("blimp.zomg", new ImageContainer("assets/textures/entity/zomg.png"));
-Registry.images.add("blimp.ddt", new ImageContainer("assets/textures/entity/ddt.png"));
-Registry.images.add("blimp.bad", new ImageContainer("assets/textures/entity/bad.png"));
+Registry.images.add("blimp.moab", new ImageContainer("assets/textures/entity/moab.svg"));
+Registry.images.add("blimp.bfb", new ImageContainer("assets/textures/entity/bfb.svg"));
+Registry.images.add("blimp.zomg", new ImageContainer("assets/textures/entity/zomg.svg"));
+Registry.images.add("blimp.ddt", new ImageContainer("assets/textures/entity/ddt.svg"));
+Registry.images.add("blimp.bad", new ImageContainer("assets/textures/entity/bad.svg"));
 //Background
 Registry.images.add("background.sea", new ImageContainer("assets/textures/background/sea.png"));
 Registry.images.add("background.conveyor", new ImageContainer("assets/textures/background/conveyor.png"));
@@ -21,6 +21,7 @@ Registry.images.add("box.metal", new ImageContainer("assets/textures/entity/box/
 //idk
 Registry.images.add("effect.glare", new ImageContainer("assets/textures/effect/glare.png"));
 //Bullets
+Registry.images.add("bullet.dart", new ImageContainer("assets/textures/bullet/dart_8-5.svg"));
 Registry.images.add("bullet.normal", new ImageContainer("assets/textures/bullet/normal_7-4.png"));
 Registry.images.add("bullet.cyan", new ImageContainer("assets/textures/bullet/cyan_7-4.png"));
 Registry.images.add("bullet.du", new ImageContainer("assets/textures/bullet/du_7-4.png"));
@@ -28,6 +29,7 @@ Registry.images.add("bullet.dark", new ImageContainer("assets/textures/bullet/da
 Registry.images.add("bullet.bomb", new ImageContainer("assets/textures/bullet/bomb_1-1.png"));
 Registry.images.add("bullet.icebomb", new ImageContainer("assets/textures/bullet/icebomb_1-1.png"));
 Registry.images.add("bullet.nuke", new ImageContainer("assets/textures/bullet/nuke_8-5.png"));
+Registry.images.add("bullet.solarnuke", new ImageContainer("assets/textures/bullet/sun-bomb.svg"));
 Registry.images.add("bullet.missile", new ImageContainer("assets/textures/bullet/missile_16-9.svg"));
 Registry.images.add("bullet.crystal", new ImageContainer("assets/textures/bullet/crystal_1-1.png"));
 //Weapon parts

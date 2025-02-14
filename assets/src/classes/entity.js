@@ -79,7 +79,7 @@ class Entity {
     return this;
   }
   damage(type = "normal", amount = 0, source = null) {
-    this.lastHurtSource = source;
+    if(source) this.lastHurtSource = source;
     let calcAmount =
       (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
     for (let resistance of this.resistances) {

@@ -224,3 +224,38 @@ function blindingFlash(
     )
   );
 }
+function worldTransitionEffect(worldName, duration = 120){
+  //Create main effect
+  world.particles.push(new ShapeParticle(
+    960,
+    540,
+    Math.PI/2,
+    duration,
+    0,
+    0,
+    "rect",
+    [255, 255, 255, 255],
+    [255, 255, 255, 0],
+    1920,
+    1920,
+    1080,
+    1080,
+    0,
+    false
+  ),new TextParticle(
+    960,
+    540,
+    0,
+    duration,
+    0,
+    0,
+    worldName,
+    [0,0,0,255],
+    [0,0,0,0],
+    100,
+    100,
+    0,
+    false,
+    false
+  ))
+}

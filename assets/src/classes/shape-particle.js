@@ -1,5 +1,5 @@
 class ShapeParticle {
-  #rotOffset;
+  _rotOffset;
   constructor(
     x,
     y,
@@ -35,7 +35,7 @@ class ShapeParticle {
     this.sizeYTo = sizeYTo;
     this.sizeY = sizeYFrom;
     this.rotateSpeed = rotateSpeed;
-    this.#rotOffset = 0;
+    this._rotOffset = 0;
     this.moveWithBackground = moveWithBackground;
   }
   step(dt) {
@@ -61,7 +61,7 @@ class ShapeParticle {
         this.speed = 0;
       }
       if (this.rotateSpeed) {
-        this.#rotOffset += this.rotateSpeed * dt;
+        this._rotOffset += this.rotateSpeed * dt;
       }
       this.lifetime -= dt;
     } else {
@@ -88,7 +88,7 @@ class ShapeParticle {
       this.y,
       this.sizeX,
       this.sizeY,
-      this.direction + this.#rotOffset + HALF_PI
+      this.direction + this._rotOffset + HALF_PI
     );
     pop();
   }
