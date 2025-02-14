@@ -566,7 +566,7 @@ Registry.entities.add("robo-monkey", {
   turnWhileMoving: false,
   turnSpeed: 4,
   deathSound: "boss-death",
-  destinationWorld: "workshop",
+  // destinationWorld: "workshop", //Commented out for win condition
 });
 Registry.entities.add("robo-drone", {
   type: "boss",

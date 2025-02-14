@@ -317,6 +317,23 @@ function playerDies() {
   reset();
 }
 
+function playerWins() {
+  deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
+  deathStats.bloonstoneCounter.text =
+    "Bloonstones: " + shortenedNumber(game.bloonstones);
+  deathStats.damageDealt.text =
+    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  deathStats.damageTaken.text =
+    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
+  deathStats.destroyedBoxes.text =
+    "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
+  deathStats.destroyedBosses.text =
+    "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
+  ui.menuState = "you-win";
+  //Reset world and game
+  reset();
+}
+
 function reset() {
   world.entities.splice(0);
   world.particles.splice(0);
