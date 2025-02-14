@@ -10,14 +10,16 @@ class Timer {
   #operations = [];
   /** The next free ID number*/
   #nextId = 0;
+  /** The number of times this timer has ticked */
+  ticks = 0;
   /** The number of operations waiting for execution */
   get operationCount() {
     return this.#operations.length;
   }
   tick() {
+    this.ticks++;
     this.#operations.forEach((operation, index) => {
       operation.tick();
-      //execute if delay has run out
       if (operation.executed) {
         this.#operations.splice(index, 1);
       }
@@ -78,7 +80,7 @@ class Timer {
   cancel(id) {
     //If one is to be removed
     if (typeof id === "number") {
-      //Remove all operations with the specified id (should only be one, unless repeat() was used.)
+      //Remove all operations with the specified id (should only be one)
       this.#operations = this.#operations.filter((x) => x.id !== id);
     } else if (typeof id === "object" && Array.isArray(id)) {
       //Remove all operations with any specified id
@@ -111,7 +113,7 @@ class TimerOperation {
     this.params = params;
   }
   tick() {
-    //Don't run if already finished
+    //Don't run if already executed
     if (this.executed) return;
     //Reduce delay
     this.delay--;
