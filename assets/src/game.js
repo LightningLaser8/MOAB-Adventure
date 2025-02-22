@@ -394,3 +394,8 @@ function moveToWorld(worldName = "ocean-skies") {
   //Make the flash effect
   worldTransitionEffect(world.name);
 }
+
+function reload(){
+  noLoop();
+  loop();
+}
