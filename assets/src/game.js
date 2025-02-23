@@ -37,7 +37,7 @@ const difficulty = {
 };
 /** @type {World} */
 let world;
-moveToWorld("ocean-skies")
+moveToWorld("ocean-skies");
 //Initial values for canvas width and height
 const baseWidth = 1920;
 const baseHeight = 1080;
@@ -102,7 +102,7 @@ function draw() {
   clear();
   scale(contentScale);
   image(backgroundGradient, 960, 540, 1920, 1080);
-  if(world){
+  if (world) {
     if (ui.menuState === "in-game") {
       background.draw();
       gameFrame();
@@ -347,7 +347,7 @@ function reset() {
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
   }
-  moveToWorld("ocean-skies")
+  moveToWorld("ocean-skies");
 
   //garbage collect player
   game.player = null;
@@ -360,7 +360,7 @@ function keyPressed() {
     if (game.paused) unpause();
     else pause();
   }
-  if(key.toLowerCase() === "f12"){
+  if (key.toLowerCase() === "f12") {
     return true;
   }
   return false; //Prevent any default behaviour
@@ -377,7 +377,7 @@ function unpause() {
 }
 
 function moveToWorld(worldName = "ocean-skies") {
-  if(world?.bgm) stopSound(world.bgm);
+  if (world?.bgm) stopSound(world.bgm);
   //Construct registry item as a new World.
   let newWorld = construct(Registry.worlds.get(worldName), World);
   //If the player exists
@@ -395,7 +395,7 @@ function moveToWorld(worldName = "ocean-skies") {
   worldTransitionEffect(world.name);
 }
 
-function reload(){
+function reload() {
   noLoop();
   loop();
 }

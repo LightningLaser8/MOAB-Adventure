@@ -28,8 +28,8 @@ class World {
     this.#bossList = this.bosses.slice(0);
     //Throw if no bosses, to prevent a different error
     //Each world has to have a final anyway, or the player can't leave.
-    if(this.bosses.length === 0){
-      throw new Error("Each world must have at least one defined boss!")
+    if (this.bosses.length === 0) {
+      throw new Error("Each world must have at least one defined boss!");
     }
     //Get improper spawning array
     let spawns = this.spawning.slice(0);
@@ -121,9 +121,11 @@ class World {
     len = this.entities.length;
     for (let e = 0; e < len; e++) {
       let entity = this.entities[e];
-      if (entity?.dead && !entity.left) {
-        entity.onDeath(entity.lastHurtSource);
-        playSound(entity.deathSound);
+      if (entity?.dead) {
+        if (!entity.left) {
+          entity.onDeath(entity.lastHurtSource);
+          playSound(entity.deathSound);
+        }
         this.entities.splice(e, 1);
       }
     }

@@ -1,12 +1,13 @@
 Registry.weapons.add("chaingun", {
   name: "Chaingun",
   description:
-    "Shoots an ever-increasing number of bullets\nforwards. Cannot turn far.",
+    "Shoots an ever-increasing number of bullets\nforwards. Cannot turn far in either direction.",
   reload: 20,
   fireSound: "shoot",
   accel: 0.1,
-  maxAccel: 20,
+  maxAccel: 13,
   accelDecay: 0.2,
+  maxRotation: 10,
   cost: {
     shards: 27500,
     bloonstones: 500,
@@ -14,11 +15,11 @@ Registry.weapons.add("chaingun", {
   shoot: {
     bullet: {
       type: "Bullet",
-      lifetime: 40,
+      lifetime: 80,
       speed: 30,
       hitSize: 8,
       trail: false,
-      knockback: 2,
+      knockback: 4,
       damage: [
         {
           type: "ballistic",
