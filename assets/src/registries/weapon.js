@@ -22,7 +22,7 @@ Registry.weapons.add("tiny-shooter", {
       damage: [
         {
           type: "ballistic",
-          amount: 1,
+          amount: 2,
         },
       ],
       drawer: {
@@ -98,7 +98,7 @@ Registry.weapons.add("double-shooter", {
       damage: [
         {
           type: "ballistic",
-          amount: 1,
+          amount: 2,
         },
       ],
       drawer: {
