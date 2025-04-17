@@ -24,7 +24,7 @@ Registry.blimps.add("bfb", {
   },
   hitSize: 110,
   cost: {
-    shards: 10000,
+    shards: 2500,
     bloonstones: 0
   },
   path1: "zomg"
@@ -42,7 +42,7 @@ Registry.blimps.add("zomg", {
   },
   hitSize: 110,
   cost: {
-    shards: 60000,
+    shards: 15000,
     bloonstones: 0
   },
   path1: "bad"
@@ -66,7 +66,7 @@ Registry.blimps.add("ddt", {
   ],
   hitSize: 80,
   cost: {
-    shards: 15000,
+    shards: 3750,
     bloonstones: 0
   },
   path2: "bad"
@@ -84,7 +84,7 @@ Registry.blimps.add("bad", {
   },
   hitSize: 165,
   cost: {
-    shards: 200000,
+    shards: 50000,
     bloonstones: 0
   }
 })

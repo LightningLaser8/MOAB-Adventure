@@ -209,7 +209,7 @@ Registry.weapons.add("bomb-shooter", {
         {
           type: "explosion",
           area: 150,
-          amount: 3,
+          amount: 5,
         },
       ],
       drawer: {
@@ -359,7 +359,7 @@ Registry.weapons.add("heavy-shots", {
       damage: [
         {
           type: "ballistic",
-          amount: 2,
+          amount: 4,
         },
         {
           type: "explosion",
@@ -786,7 +786,7 @@ Registry.weapons.add("rifle", {
       damage: [
         {
           type: "ballistic",
-          amount: 2,
+          amount: 4,
         },
       ],
       drawer: {
@@ -898,7 +898,7 @@ Registry.weapons.add("incendiary", {
         {
           type: "explosion",
           area: 150,
-          amount: 3,
+          amount: 5,
           smokeColour: [255, 200, 100],
           smokeColourTo: [255, 0, 0, 0],
         },
@@ -1422,7 +1422,7 @@ Registry.weapons.add("kinetic-impactor", {
       damage: [
         {
           type: "ballistic",
-          amount: 2,
+          amount: 4,
         },
         {
           type: "explosion",
