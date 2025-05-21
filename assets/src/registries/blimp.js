@@ -62,6 +62,10 @@ Registry.blimps.add("ddt", {
     {
       type: "ballistic",
       amount: 1
+    },
+    {
+      type: "explosion",
+      amount: 1
     }
   ],
   hitSize: 80,
