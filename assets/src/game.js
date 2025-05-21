@@ -79,18 +79,22 @@ async function preload() {
 }
 //Set up the canvas, using the previous function
 function setup() {
-  createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
-  backgroundGradient = createGraphics(1, 100);
-  for (let y = 0; y < 100; y++) {
-    //For each vertical unit
-    let col = [0, (200 * y) / 100, (255 * y) / 100]; //Get colour interpolation
-    backgroundGradient.noStroke(); //Remove outline
-    backgroundGradient.fill(col); //Set fill colour to use
-    backgroundGradient.rect(0, y, 2, 1); //Draw the rectangle
+  try {
+    createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
+    backgroundGradient = createGraphics(1, 100);
+    for (let y = 0; y < 100; y++) {
+      //For each vertical unit
+      let col = [0, (200 * y) / 100, (255 * y) / 100]; //Get colour interpolation
+      backgroundGradient.noStroke(); //Remove outline
+      backgroundGradient.fill(col); //Set fill colour to use
+      backgroundGradient.rect(0, y, 2, 1); //Draw the rectangle
+    }
+    rectMode(CENTER);
+    imageMode(CENTER);
+    textFont(fonts.darktech);
+  } catch (e) {
+    crash(e);
   }
-  rectMode(CENTER);
-  imageMode(CENTER);
-  textFont(fonts.darktech);
 }
 //Change the size if the screen size changes
 function windowResized() {
@@ -99,18 +103,22 @@ function windowResized() {
 
 //p5's draw function - called 60 times per second
 function draw() {
-  clear();
-  scale(contentScale);
-  image(backgroundGradient, 960, 540, 1920, 1080);
-  if (world) {
-    if (ui.menuState === "in-game") {
-      background.draw();
-      gameFrame();
+  try {
+    clear();
+    scale(contentScale);
+    image(backgroundGradient, 960, 540, 1920, 1080);
+    if (world) {
+      if (ui.menuState === "in-game") {
+        background.draw();
+        gameFrame();
+      }
+      uiFrame();
+      if (!ui.waitingForMouseUp) fireIfPossible();
     }
-    uiFrame();
-    if (!ui.waitingForMouseUp) fireIfPossible();
+    if (!game.paused) Timer.main.tick();
+  } catch (e) {
+    crash(e);
   }
-  if (!game.paused) Timer.main.tick();
 }
 
 function uiFrame() {
@@ -214,7 +222,6 @@ function tickUI() {
   }
 }
 
-//Ignore for NEA Writeup - dev function
 function showMousePos() {
   push();
   textAlign(CENTER, CENTER);
@@ -318,16 +325,16 @@ function playerDies() {
 }
 
 function playerWins() {
-  deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  deathStats.bloonstoneCounter.text =
+  winStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
+  winStats.bloonstoneCounter.text =
     "Bloonstones: " + shortenedNumber(game.bloonstones);
-  deathStats.damageDealt.text =
+  winStats.damageDealt.text =
     "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  deathStats.damageTaken.text =
+  winStats.damageTaken.text =
     "Damage Taken: " + shortenedNumber(game.player.damageTaken);
-  deathStats.destroyedBoxes.text =
+  winStats.destroyedBoxes.text =
     "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
-  deathStats.destroyedBosses.text =
+  winStats.destroyedBosses.text =
     "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
   ui.menuState = "you-win";
   //Reset world and game
@@ -361,6 +368,10 @@ function keyPressed() {
     else pause();
   }
   if (key.toLowerCase() === "f12") {
+    return true;
+  }
+  if (key.toLowerCase() === "f11") {
+    //finally
     return true;
   }
   return false; //Prevent any default behaviour
