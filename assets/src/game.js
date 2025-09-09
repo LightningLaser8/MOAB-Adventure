@@ -1,6 +1,13 @@
 const game = {
   //Game options
-  difficulty: "normal",
+  _diff: "normal",
+  get difficulty() {
+    return this._diff;
+  },
+  set difficulty(_) {
+    this._diff = _;
+    world.updateDifficulty();
+  },
   mode: "adventure",
   saveslot: 1,
   //Control type
@@ -29,10 +36,16 @@ const difficulty = {
     bossHP: 1,
   },
   hard: {
-    spawnRateLowTier: 1.3,
+    spawnRateLowTier: 1.2,
     spawnRateHighTier: 2,
     boxHP: 1.25,
     bossHP: 1.3,
+  },
+  impossible: {
+    spawnRateLowTier: 1,
+    spawnRateHighTier: 1.5,
+    boxHP: 1,
+    bossHP: 1.5,
   },
 };
 /** @type {World} */
@@ -63,7 +76,10 @@ function getCanvasDimensions(baseWidth, baseHeight) {
 }
 
 let fonts = {};
-let backgroundGradient;
+let backgrounds = {
+  grad_normal: null,
+  grad_impossible: null,
+};
 
 async function preload() {
   await Registry.images.forEachAsync(async (name, item) => {
@@ -81,14 +97,42 @@ async function preload() {
 function setup() {
   try {
     createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
-    backgroundGradient = createGraphics(1, 100);
+    //Creates background stuff
+    backgrounds.grad_normal = createGraphics(1, 100);
     for (let y = 0; y < 100; y++) {
       //For each vertical unit
-      let col = [0, (200 * y) / 100, (255 * y) / 100]; //Get colour interpolation
-      backgroundGradient.noStroke(); //Remove outline
-      backgroundGradient.fill(col); //Set fill colour to use
-      backgroundGradient.rect(0, y, 2, 1); //Draw the rectangle
+      let col = colinterp(
+        [
+          [0, 0, 0],
+          [0, 200, 255],
+        ],
+        y / 100
+      ); //Get colour interpolation
+      backgrounds.grad_normal.noStroke(); //Remove outline
+      backgrounds.grad_normal.fill(col); //Set fill colour to use
+      backgrounds.grad_normal.rect(0, y, 2, 1); //Draw the rectangle
     }
+    backgrounds.grad_impossible = createGraphics(1, 100);
+    for (let y = 0; y < 100; y++) {
+      //For each vertical unit
+      let col = colinterp(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [64, 0, 0],
+          [128, 0, 0],
+          [255, 0, 0],
+          [255, 128, 0],
+          [255, 255, 0],
+          [255, 255, 255],
+        ],
+        y / 100
+      ); //you get it by now
+      backgrounds.grad_impossible.noStroke();
+      backgrounds.grad_impossible.fill(col);
+      backgrounds.grad_impossible.rect(0, y, 2, 1);
+    }
+    //p5 options
     rectMode(CENTER);
     imageMode(CENTER);
     textFont(fonts.darktech);
@@ -106,7 +150,15 @@ function draw() {
   try {
     clear();
     scale(contentScale);
-    image(backgroundGradient, 960, 540, 1920, 1080);
+    image(
+      game.difficulty === "impossible"
+        ? backgrounds.grad_impossible
+        : backgrounds.grad_normal,
+      960,
+      540,
+      1920,
+      1080
+    );
     if (world) {
       if (ui.menuState === "in-game") {
         background.draw();
@@ -115,7 +167,10 @@ function draw() {
       uiFrame();
       if (!ui.waitingForMouseUp) fireIfPossible();
     }
-    if (!game.paused) Timer.main.tick();
+    if (!game.paused) {
+      Timer.main.tick();
+      effectTimer.tick();
+    }
   } catch (e) {
     crash(e);
   }
@@ -211,6 +266,8 @@ function drawUI() {
       component.draw();
     }
   }
+  uiEffectTimer.tick();
+  ui.particles.forEach((p) => p && (p.draw() || p.step(1)));
 }
 
 function tickUI() {
@@ -218,6 +275,12 @@ function tickUI() {
   for (let component of ui.components) {
     if (component.active && component.isInteractive) {
       component.checkMouse();
+    }
+  }
+  len = ui.particles.length;
+  for (let p = 0; p < len; p++) {
+    if (ui.particles[p]?.remove) {
+      ui.particles.splice(p, 1);
     }
   }
 }

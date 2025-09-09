@@ -9,20 +9,28 @@ class LaserBullet extends Bullet {
   followsSource = false;
   /** @type {Weapon} */
   source = null;
+  #dirInited = false;
   init() {
     super.init();
     if (this.extendTime === -1) this.extendTime = this.maxLife * 0.2;
     if (this.despawnTime === -1) this.despawnTime = this.maxLife * 0.4;
   }
+  moveToSrc() {
+    if (this.followsSource && this.source) {
+      if (!this.#dirInited) {
+        this.#dirInited = true;
+        this.oldDir = this.direction - this.source.rotation;
+      }
+      this.x = this.source.x;
+      this.y = this.source.y;
+      this.direction = this.source.rotation + this.oldDir;
+    }
+  }
   step(dt) {
     //Not if dead
     if (!this.remove) {
       this.sound();
-      if(this.followsSource && this.source){
-        this.x = this.source.x;
-        this.y = this.source.y;
-        this.direction = this.source.rotation;
-      }
+      this.moveToSrc();
       this.intervalTick();
       if (this.lifetime >= this.maxLife - this.extendTime && this.canHurt) {
         //If spawning
@@ -32,6 +40,7 @@ class LaserBullet extends Bullet {
         //If despawning
         this.#widthFraction -= dt / this.despawnTime; //Slowly turn to zero
       }
+      this.direction += this.rotateSpeed;
       // Don't move
       //Tick lifetime
       if (this.lifetime <= 0) {
@@ -40,7 +49,7 @@ class LaserBullet extends Bullet {
         this.lifetime -= dt;
       }
       //Follow
-      if(this.followsScreen) this.x -= game.player?.speed ?? 0;
+      if (this.followsScreen) this.x -= game.player?.speed ?? 0;
     }
   }
   draw() {
@@ -81,9 +90,9 @@ class LaserBullet extends Bullet {
   collidesWith(obj) {
     let currentLength = this.length * this.#lengthFraction;
     let currentHitSize = this.hitSize * this.#widthFraction;
-    if(!this.canHurt) return false;
-    if(currentHitSize <= 0.01 || currentLength > 5000) return false; //Catch problem where hitsize = 0 causes infinite loop, and also performance stuff
-    if(currentHitSize < 1) currentHitSize = 1;
+    if (!this.canHurt) return false;
+    if (currentHitSize <= 0.01 || currentLength > 5000) return false; //Catch problem where hitsize = 0 causes infinite loop, and also performance stuff
+    if (currentHitSize < 1) currentHitSize = 1;
     let offset = {
       x: Math.cos(this.directionRad),
       y: Math.sin(this.directionRad),

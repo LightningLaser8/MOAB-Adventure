@@ -8,8 +8,10 @@ class Bullet {
   hitSize = 5;
   trail = true;
   trailColour = [255, 255, 255, 200];
+  trailLifeFactor = 1.2;
   remove = false;
   pierce = 0;
+  rotateSpeed = 0;
   drawer = {
     shape: "circle",
     fill: "red",
@@ -17,9 +19,9 @@ class Bullet {
     width: 10,
     height: 10,
   };
-  /** @type {World | null} */
+  /** @type {World?} */
   world = null;
-  /** @type {Entity | null} */
+  /** @type {Entity?} */
   entity = null;
   knockback = 0;
   kineticKnockback = false;
@@ -79,8 +81,8 @@ class Bullet {
     this.maxPierce = this.pierce;
     this.trailInterval = this.hitSize * 4;
   }
-  sound(){
-    if(!this.#sounded){
+  sound() {
+    if (!this.#sounded) {
       playSound(this.spawnSound);
       this.#sounded = true;
     }
@@ -90,7 +92,7 @@ class Bullet {
     this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {
-      if(this.followsSource && this.source){
+      if (this.followsSource && this.source) {
         this.x = this.source.x;
         this.y = this.source.y;
         this.direction = this.source.rotation;
@@ -104,6 +106,7 @@ class Bullet {
       //Move
       this.x += moveVector.x;
       this.y += moveVector.y;
+      this.direction += this.rotateSpeed;
       //Tick lifetime
       if (this.lifetime <= 0) {
         this.remove = true;
@@ -111,7 +114,7 @@ class Bullet {
         this.lifetime -= dt;
       }
       //Follow
-      if(this.followsScreen) this.x -= game.player?.speed ?? 0;
+      if (this.followsScreen) this.x -= game.player?.speed ?? 0;
     }
   }
   spawnTrail(dt) {
@@ -124,7 +127,7 @@ class Bullet {
               this.x - e * p5.Vector.fromAngle(this.directionRad).x,
               this.y - e * p5.Vector.fromAngle(this.directionRad).y,
               this.directionRad,
-              this.maxLife * 1.2,
+              this.maxLife * this.trailLifeFactor,
               0,
               0,
               "rhombus",
@@ -134,7 +137,8 @@ class Bullet {
               0,
               this.hitSize * this.trailInterval * 0.25,
               this.hitSize * this.trailInterval * 0.25,
-              0
+              0,
+              this.followsScreen
             )
           );
         }
@@ -207,7 +211,7 @@ class Bullet {
     }
   }
   //On top of damage
-  onHit(entity){
+  onHit(entity) {
     //Always spawn hit bullets
     patternedBulletExpulsion(
       this.x,
@@ -222,7 +226,7 @@ class Bullet {
       this.source
     );
     //If dead, spawn destroy bullets
-    if(entity.dead){
+    if (entity.dead) {
       patternedBulletExpulsion(
         this.x,
         this.y,
@@ -237,4 +241,18 @@ class Bullet {
       );
     }
   }
+}
+
+function telegraph(bullet, opts = { time: 20, width: 2 }) {
+  let ob = structuredClone(bullet);
+  delete ob.telegraph;
+  return {
+    type: "telegraph",
+    hitSize: opts.width ?? bullet.hitSize / 2,
+    lifetime: opts.time ?? bullet.lifetime,
+    fragNumber: 1,
+    followsSource: bullet.followsSource,
+    followsScreen: bullet.followsScreen,
+    fragBullet: ob,
+  };
 }

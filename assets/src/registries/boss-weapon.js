@@ -4,6 +4,133 @@
 
 //These aren't usually obtainable.
 
+//## BOXES ## (not really bosses, but  s h u t)
+
+Registry.weapons.add(".robox-gun", {
+  name: ".robox-gun",
+  fireSound: "laser-bolt",
+  reload: 180,
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 60,
+      speed: 30,
+      hitSize: 5,
+      damage: [
+        {
+          type: "laser",
+          amount: 1.5,
+          levelScaling: 0.5
+        },
+      ],
+      drawer: {
+        shape: "ellipse",
+        fill: "red",
+        width: 15,
+        height: 5,
+      },
+      trail: true,
+      trailColour: [255, 0, 0, 50],
+      trailLifeFactor: 0.2,
+      followsScreen: true,
+    },
+    pattern: {},
+  },
+  parts: [
+    {
+      type: "part",
+      x: 22.5,
+      y: 0,
+      width: 12,
+      height: 6,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+      recoilAnimations: [
+        { type: "recoil-animation", duration: 5, xOffset: -15 },
+      ],
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 21,
+      height: 21,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 13.5,
+      y: 0,
+      width: 6,
+      height: 11,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+    {
+      type: "part",
+      x: -13.25,
+      y: 0,
+      width: 5.5,
+      height: 15,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 19,
+      y: -7,
+      width: 14,
+      height: 4,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 19,
+      y: 7,
+      width: 14,
+      height: 4,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 17,
+      height: 17,
+      rotation: 0,
+      slide: 0,
+      colour: [255, 0, 0],
+      image: false,
+    },
+    {
+      type: "part",
+      x: 0,
+      y: 0,
+      width: 13,
+      height: 13,
+      rotation: 0,
+      slide: 0,
+      colour: [92, 92, 92],
+      image: false,
+    },
+  ],
+});
+
 //## MONKEY ACE ##
 Registry.weapons.add(".ace-radial-gun", {
   name: ".ace-radial-gun",
@@ -19,6 +146,38 @@ Registry.weapons.add(".ace-radial-gun", {
           type: "ballistic",
           amount: 3,
           levelScaling: 2,
+        },
+      ],
+      drawer: {
+        image: "bullet.dart",
+        width: 56,
+        height: 35,
+      },
+    },
+    pattern: {
+      amount: 8,
+      spacing: 45,
+    },
+  },
+});
+Registry.weapons.add(".ace-radial-gun-impos", {
+  name: ".ace-radial-gun",
+  shoot: {
+    bullet: {
+      type: "missile",
+      turnSpeed: 1.5,
+      targetType: "nearest",
+      lifetime: 80,
+      speed: 30,
+      hitSize: 10,
+      trail: true,
+      trailColour: [255, 255, 255],
+      trailColourTo: [255, 0, 0, 0],
+      damage: [
+        {
+          type: "ballistic",
+          amount: 5,
+          levelScaling: 3,
         },
       ],
       drawer: {
@@ -75,6 +234,34 @@ Registry.weapons.add(".ace-gatling-gun", {
     },
   },
 });
+Registry.weapons.add(".mini-ace-gatling-gun", {
+  name: ".ace-gatling-gun",
+  rotate: false,
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 120,
+      speed: 30,
+      hitSize: 8,
+      trail: false,
+      damage: [
+        {
+          type: "ballistic",
+          amount: 1,
+          levelScaling: 0.5,
+        },
+      ],
+      drawer: {
+        image: "bullet.normal",
+        width: 28,
+        height: 16,
+      },
+    },
+    pattern: {
+      spread: 3,
+    },
+  },
+});
 //## GIGANTIC BOX ##
 Registry.weapons.add(".box-impact", {
   name: ".box-impact",
@@ -101,6 +288,86 @@ Registry.weapons.add(".box-impact", {
     pattern: {},
   },
 });
+Registry.weapons.add(".box-impact-impos", {
+  name: ".box-impact",
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 0,
+      speed: 0,
+      hitSize: 0,
+      trail: false,
+      knockback: 200,
+      kineticKnockback: true,
+      damage: [
+        {
+          type: "impact",
+          amount: 25,
+          area: 200,
+          sparkColour: [0, 0, 0, 0],
+          sparkColourTo: [0, 0, 0, 0],
+          levelScaling: 10,
+        },
+      ],
+      fragNumber: 16,
+      fragSpacing: 22.5,
+      fragBullet: {
+        type: "bullet",
+        lifetime: 48,
+        speed: 40,
+        hitSize: 6,
+        trail: true,
+        trailLifeFactor: 0.2,
+        trailColour: [255, 128, 0],
+        followsScreen: true,
+        damage: [
+          {
+            type: "ballistic",
+            amount: 8,
+            levelScaling: 4,
+          },
+        ],
+        drawer: {
+          image: "box.wood",
+          width: 25,
+          height: 10,
+        },
+      },
+    },
+    pattern: {},
+  },
+});
+Registry.weapons.add(".box-rotary-pain", {
+  name: ".box-rotary-pain",
+  rotate: false,
+  shoot: {
+    bullet: {
+      type: "bullet",
+      lifetime: 64,
+      speed: 30,
+      hitSize: 6,
+      trail: true,
+      trailLifeFactor: 0.2,
+      trailColour: [255, 128, 0],
+      damage: [
+        {
+          type: "ballistic",
+          amount: 8,
+          levelScaling: 4,
+        },
+      ],
+      drawer: {
+        image: "box.wood",
+        width: 25,
+        height: 10,
+      },
+    },
+    pattern: {
+      amount: 3,
+      spacing: 120,
+    },
+  },
+});
 
 //## SUPER MONKEY ##
 Registry.weapons.add(".super-monkey-throw", {
@@ -119,6 +386,7 @@ Registry.weapons.add(".super-monkey-throw", {
         speed: 45,
         hitSize: 5,
         trail: true,
+        trailLifeFactor: 0.4,
         damage: [
           {
             type: "ballistic",
@@ -128,13 +396,13 @@ Registry.weapons.add(".super-monkey-throw", {
           {
             type: "no",
             amount: 0,
-            area: 40,
+            area: 20,
             smokeColour: [0, 0, 0, 0],
             smokeColourTo: [0, 0, 0, 0],
             waveColour: [255, 255, 255, -2000],
             sparkColour: [255, 255, 255],
-            sparkColourTo: [255, 255, 255]
-          }
+            sparkColourTo: [255, 255, 255],
+          },
         ],
         drawer: {
           image: "bullet.normal", //should really be a dart but i don't have the asset
@@ -144,6 +412,57 @@ Registry.weapons.add(".super-monkey-throw", {
       },
       intervalTime: 2,
       intervalNumber: 1,
+      followsSource: true,
+    },
+    pattern: {},
+  },
+});
+Registry.weapons.add(".super-monkey-shoot-laser", {
+  name: ".super-monkey-throw",
+  rotate: false,
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 40,
+      speed: 0,
+      pierce: 9999999,
+      hitSize: -1000,
+      trail: false,
+      //Gives the impression of many shots
+      intervalBullet: {
+        lifetime: 45,
+        speed: 45,
+        hitSize: 5,
+        trail: true,
+        trailLifeFactor: 0.4,
+        trailColour: [255, 0, 0],
+        damage: [
+          {
+            type: "laser",
+            amount: 1,
+            levelScaling: 1,
+          },
+          {
+            type: "no",
+            amount: 0,
+            area: 40,
+            smokeColour: [0, 0, 0, 0],
+            smokeColourTo: [0, 0, 0, 0],
+            waveColour: [255, 255, 255, -2000],
+            sparkColour: [255, 100, 100],
+            sparkColourTo: [255, 0, 0, 0],
+          },
+        ],
+        drawer: {
+          shape: "ellipse",
+          fill: "red",
+          width: 32,
+          height: 16,
+        },
+      },
+      intervalTime: 2,
+      intervalNumber: 2,
+      intervalSpread: 10,
       followsSource: true,
     },
     pattern: {},
@@ -186,8 +505,8 @@ Registry.weapons.add(".robo-monkey-throw", {
             smokeColourTo: [0, 0, 0, 0],
             waveColour: [255, 255, 255, -2000],
             sparkColour: [255, 169, 207],
-            sparkColourTo: [212, 0, 255]
-          }
+            sparkColourTo: [212, 0, 255],
+          },
         ],
         drawer: {
           image: "bullet.normal", //should really be a dart but i don't have the asset
@@ -209,44 +528,147 @@ Registry.weapons.add(".robo-monkey-laser", {
   fireSound: "whirr",
   shoot: {
     bullet: {
-      speed: 0,
+      type: "continuous-laser",
+      spawnSound: "laser-beam",
       lifetime: 30,
-      hitSize: -1000,
-      trail: false,
-      followsSource: true,
-      intervalTime: 15,
-      intervalNumber: 1,
-      intervalBullet: {
-        type: "laser",
-        lifetime: 5,
-        length: 2000,
-        pierce: 999,
-        hitSize: 2,
-        drawer: {
-          shape: "rect",
-          fill: [255, 255, 255]
-        },
-        followsSource: true
+      length: 2000,
+      pierce: 999,
+      hitSize: 15,
+      drawer: {
+        shape: "rect",
+        fill: [234, 84, 232],
       },
-      fragNumber: 1,
+      followsSource: true,
+      damage: [
+        {
+          amount: 2.5,
+          type: "laser",
+        },
+      ],
+      telegraph: {
+        time: 30,
+        follow: true,
+      },
+    },
+    pattern: {},
+  },
+});
+Registry.weapons.add(".robo-monkey-laser-impos", {
+  name: ".robo-monkey-laser",
+  rotate: false,
+  fireSound: "whirr",
+  shoot: {
+    bullet: {
+      type: "continuous-laser",
+      spawnSound: "laser-beam",
+      lifetime: 30,
+      length: 2000,
+      pierce: 999,
+      hitSize: 15,
+      drawer: {
+        shape: "rect",
+        fill: [234, 84, 232],
+      },
+      followsSource: true,
+      damage: [
+        {
+          amount: 8,
+          type: "laser",
+        },
+      ],
+      telegraph: {
+        time: 30,
+        follow: true,
+      },
+    },
+    pattern: {
+      amount: 3,
+      spacing: 20,
+    },
+  },
+});
+Registry.weapons.add(".robo-monkey-throw-impos", {
+  name: ".robo-monkey-throw",
+  shoot: {
+    bullet: {
+      type: "Bullet",
+      lifetime: 100,
+      speed: 10,
+      pierce: 9999999,
+      hitSize: 10,
+      trail: true,
+      intervalBullet: {
+        type: "missile",
+        turnSpeed: 360,
+        targetType: "nearest",
+        fragNumber: 1,
+        speed: 0,
+        lifetime: 1,
+        trail: false,
+        fragBullet: {
+          type: "missile",
+          trailColour: [255, 169, 207],
+          trailColourTo: [212, 0, 255],
+          trailShape: "rhombus",
+          targetType: "nearest",
+          turnSpeed: 0.5,
+          trailInterval: 5,
+          trailWidth: 5,
+          lifetime: 90,
+          speed: 25,
+          hitSize: 5,
+          trail: true,
+          damage: [
+            {
+              type: "ballistic",
+              amount: 10,
+            },
+            {
+              type: "no",
+              amount: 0,
+              area: 40,
+              smokeColour: [0, 0, 0, 0],
+              smokeColourTo: [0, 0, 0, 0],
+              waveColour: [255, 255, 255, -2000],
+              sparkColour: [255, 169, 207],
+              sparkColourTo: [212, 0, 255],
+            },
+          ],
+          drawer: {
+            image: "bullet.normal", //should really be a dart but i don't have the asset
+            width: 32,
+            height: 16,
+          },
+        },
+      },
+      intervalTime: 2,
+      intervalNumber: 1,
+      telegraph: {
+        time: 30,
+        width: 40,
+      },
+      fragSpacing: 72,
+      fragNumber: 5,
       fragBullet: {
         type: "continuous-laser",
         spawnSound: "laser-beam",
         lifetime: 30,
         length: 2000,
         pierce: 999,
-        hitSize: 15,
+        hitSize: 7.5,
         drawer: {
           shape: "rect",
-          fill: [234, 84, 232]
+          fill: [234, 84, 232],
         },
-        followsSource: true,
         damage: [
           {
-            amount: 2.5,
-            type: "laser"
-          }
-        ]
+            amount: 4,
+            type: "laser",
+          },
+        ],
+        telegraph: {
+          time: 15,
+        },
       },
     },
     pattern: {},

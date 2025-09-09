@@ -17,6 +17,8 @@ Registry.images.add("ui.clock", new ImageContainer("assets/textures/ui/clock.png
 Registry.images.add("ui.title", new ImageContainer("assets/textures/screens/title.png"));
 //boxes
 Registry.images.add("box.wood", new ImageContainer("assets/textures/entity/box/wood.svg"));
+Registry.images.add("box.hardwood", new ImageContainer("assets/textures/entity/box/hardwood.svg"));
+Registry.images.add("box.robox", new ImageContainer("assets/textures/entity/box/robox.svg"));
 Registry.images.add("box.metal", new ImageContainer("assets/textures/entity/box/metal.svg"));
 //idk
 Registry.images.add("effect.glare", new ImageContainer("assets/textures/effect/glare.png"));

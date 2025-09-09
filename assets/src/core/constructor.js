@@ -4,11 +4,13 @@
 function construct(object, defaultType = Object) {
   return constructFromRegistry(object, Registry.genericType, defaultType);
 }
-/** Bullet constructor. Only makes bullets, or generic objects if input type is invalid.
+/** Bullet constructor. Only makes bullets, or generic objects if input type is invalid.\
+ * Can make use of the 'telegraph' property on bullets.
  * @param {{type: string | undefined}} object Source to construct from. This object is left unchanged. Type must be present in `Registry.bulletType`, or else `Object` is used instead.
  */
 function bullet(object, defaultType = Bullet) {
-  return constructFromRegistry(object, Registry.bulletType, defaultType);
+  let b = object.telegraph ? telegraph(object, object.telegraph) : object;
+  return constructFromRegistry(b, Registry.bulletType, defaultType);
 }
 /** Weapon constructor. Only makes weapons, or generic objects if input type is invalid.
  * @param {{type: string | undefined}} object Source to construct from. This object is left unchanged. Type must be present in `Registry.weaponType`, or else `Object` is used instead.

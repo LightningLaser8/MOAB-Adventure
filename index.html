@@ -18,8 +18,9 @@
     //Disable p5's errors, they don't really help
     p5.disableFriendlyErrors = true;
     //Game info
-    const gameVersion = "0.0.99";
+    const gameVersion = "0.0.100";
     const isPreview = true;
+    let versionReplacementText = "";
   </script>
   <!-- Core -->
   <script src="./assets/src/core/ui.js"></script>
@@ -42,6 +43,7 @@
   <script src="./assets/src/classes/point-bullet.js"></script>
   <script src="./assets/src/classes/grab-bullet.js"></script>
   <script src="./assets/src/classes/laser-bullet.js"></script>
+  <script src="./assets/src/classes/telegraph.js"></script>
   <script src="./assets/src/classes/continuous-laser-bullet.js"></script>
   <script src="./assets/src/classes/critical.js"></script>
   <script src="./assets/src/classes/missile.js"></script>
@@ -55,6 +57,7 @@
   <script src="./assets/src/classes/box.js"></script>
   <!-- Special Effects -->
   <script src="./assets/src/effects.js"></script>
+  <script src="./assets/src/core/vfx.js"></script>
   <!-- Registries -->
   <script src="./assets/src/registries/images.js"></script>
   <script src="./assets/src/registries/sounds.js"></script>
@@ -67,6 +70,7 @@
   <script src="./assets/src/registries/blimp.js"></script>
   <script src="./assets/src/registries/status-effect.js"></script>
   <script src="./assets/src/registries/world.js"></script>
+  <script src="./assets/src/registries/vfx.js"></script>
   <!-- User interface -->
   <script src="./assets/src/ui/title.js"></script>
   <script src="./assets/src/ui/start.js"></script>

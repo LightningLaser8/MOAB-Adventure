@@ -37,13 +37,12 @@ class World {
     this.spawning = [];
     for (let spawner of spawns) {
       //Add the spawning group properly
-      this.addSpawn(
-        {
-          entity: Registry.entities.get(spawner.entity),
-          interval: spawner.interval,
-        },
-        spawner.isHighTier
-      );
+      this.addSpawn({
+        entity: Registry.entities.get(spawner.entity),
+        interval: spawner.interval,
+        isHighTier: spawner.isHighTier ?? false,
+        imposMode: spawner.imposMode ?? "ignore"
+      });
     }
   }
   tickAll() {
@@ -144,27 +143,53 @@ class World {
   }
   tickSpawns(dt) {
     for (let spawnGroup of this.spawning) {
+      if (
+        (spawnGroup.imposMode === "when-on" &&
+          game.difficulty !== "impossible") ||
+        (spawnGroup.imposMode === "when-off" &&
+          game.difficulty === "impossible")
+      )
+        continue;
       if (spawnGroup.$currentCooldown <= 0) {
         let ent = construct(spawnGroup.entity, Entity);
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -= dt * (this.reducedSpawns ? 0.33 : 1);
+        spawnGroup.$currentCooldown -=
+          dt *
+          (this.reducedSpawns
+            ? game.difficulty === "impossible"
+              ? 0
+              : 0.2
+            : 1);
       }
     }
   }
-  addSpawn(spawn = { entity: Box.default, interval: 60 }, isHighTier = false) {
+  addSpawn(
+    spawn = {
+      entity: Box.default,
+      interval: 60,
+      isHighTier: false,
+      imposMode: "ignore",
+    }
+  ) {
     //Handle bad properties like `null`
     spawn.entity ??= Box.default;
     spawn.interval ??= 60;
-    //Apply difficulty rules
-    spawn.interval /=
-      difficulty[game.difficulty][
-        isHighTier ? "spawnRateHighTier" : "spawnRateLowTier"
-      ] ?? 1;
+    spawn.oldinterval = spawn.interval;
     //Add group
     spawn.$currentCooldown = 0;
     this.spawning.push(spawn);
+  }
+  updateDifficulty() {
+    for (let spawn of this.spawning) {
+      //Apply difficulty rules
+      spawn.interval =
+        (spawn.oldinterval ?? 60) /
+          difficulty[game.difficulty][
+            spawn.isHighTier ? "spawnRateHighTier" : "spawnRateLowTier"
+          ] ?? 1;
+    }
   }
   spawnBoss(entity, bossClass = "o") {
     //bossClass shows a letter on the square part of the bossbar

@@ -16,6 +16,7 @@ class Registry {
   static entities = new this();
   static sounds = new this();
   static worlds = new this();
+  static vfx = new this();
   /** Adds an item to registry.
    * @param {string} name Registry name of item. This is not case sensitive.
    * @param {*} item Item to add to registry.
