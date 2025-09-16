@@ -14,12 +14,15 @@ const game = {
   control: "keyboard",
   /** @type {Entity | null} Player entity */
   player: null,
+  maxDV: 0,
+  totalBosses: 0,
   //Currency
-  shards: 0,
+  shards: 400,
   bloonstones: 0,
   level: 1,
-  bosstimer: 300,
-  bossinterval: 300,
+  bosstimer: 400,
+  bossdelay: 400,
+  bossinterval: 400,
   paused: false,
 };
 const difficulty = {
@@ -183,7 +186,7 @@ function uiFrame() {
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
-  if (keyIsDown(SHIFT)) showMousePos();
+  if (UIComponent.evaluateCondition("debug:true")) showMousePos();
 }
 
 function gameFrame() {
@@ -199,8 +202,10 @@ function gameFrame() {
 function tickBossEvent() {
   UIComponent.setCondition("boss:" + (world.getFirstBoss() ? "yes" : "no")); // Update condition
   if (UIComponent.evaluateCondition("boss:no")) {
+    //If initial delay
+    if (game.bossdelay > 0) game.bossdelay--;
     // If there's no boss active
-    if (game.bosstimer <= 0) {
+    else if (game.bosstimer <= 0) {
       //If timer has run out
       game.bosstimer = game.bossinterval; //Reset timer
       world.nextBoss();
@@ -413,6 +418,9 @@ function reset() {
   game.level = 1;
   unpause();
   game.bosstimer = game.bossinterval;
+  game.bossdelay = game.bossinterval;
+  game.maxDV = 0;
+  game.totalBosses = 0;
 
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
@@ -429,6 +437,11 @@ function keyPressed() {
     //Pause / unpause
     if (game.paused) unpause();
     else pause();
+  }
+  if (key.toLowerCase() === "f3") {
+    if (UIComponent.evaluateCondition("debug:true"))
+      UIComponent.setCondition("debug:false");
+    else UIComponent.setCondition("debug:true");
   }
   if (key.toLowerCase() === "f12") {
     return true;

@@ -871,8 +871,8 @@ Registry.weapons.add("rifle", {
   ],
 });
 //Tier 4
-Registry.weapons.add("incendiary", {
-  name: "Incendiary",
+Registry.weapons.add("napalm-bombs", {
+  name: "Napalm Bombs",
   description: "Explosions set targets on fire.",
   reload: 60,
   fireSound: "bomb-shoot",
@@ -3046,7 +3046,7 @@ Registry.weapons.add("nuke-launcher", {
           smokeColour: [100, 255, 50],
           smokeColourTo: [0, 255, 0, 0],
           blinds: true,
-          blindOpacity: 100,
+          blindOpacity: 60,
           blindDuration: 30,
         },
       ],
@@ -3683,14 +3683,14 @@ Registry.weapons.add("controlled-collision-device", {
       lifetime: 40,
       knockback: 150,
       kineticKnockback: true,
-      controlledKnockback: true, //The entire point of *this* weapon
+      controlledKnockback: true, //The entire point of this weapon
       speed: 30,
       hitSize: 10,
       trail: false,
       damage: [
         {
           type: "ballistic",
-          amount: 2,
+          amount: 4,
         },
         {
           type: "explosion",
@@ -5641,6 +5641,7 @@ Registry.weapons.add("du-rounds", {
       hitSize: 6,
       trail: true,
       trailColour: [0, 200, 0, 20],
+      trailLifeFactor: 0.3,
       pierce: 2,
       status: "irradiated",
       statusDuration: 600,
@@ -5916,7 +5917,7 @@ Registry.weapons.add("meltdown", {
             smokeColour: [255, 33, 50],
             smokeColourTo: [0, 255, 0, 0],
             blinds: true,
-            blindOpacity: 175, //More intense boooom
+            blindOpacity: 135, //More intense boooom
             blindDuration: 60,
           },
         ],
@@ -8075,7 +8076,7 @@ Registry.weapons.add("ray-of-frost", {
       ],
     },
     {
-      //Mini 'ray' - not actually fast-firing bullets anymore
+      //Mini ray - not actually fast-firing bullets anymore
       offset: 60,
       reload: 90,
       isAuto: true,
@@ -8087,8 +8088,8 @@ Registry.weapons.add("ray-of-frost", {
           lifetime: 60,
           length: 900,
           hitSize: 5,
-          status: "freezing",
-          statusDuration: 2,
+          status: "cold",
+          statusDuration: 1,
           followsSource: true,
           damage: [
             {
@@ -8262,7 +8263,7 @@ Registry.weapons.add("ray-of-frost", {
       ],
     },
     {
-      //Mini 'ray' #2
+      //Mini ray #2
       offset: 60,
       reload: 90,
       isAuto: true,
@@ -8274,8 +8275,8 @@ Registry.weapons.add("ray-of-frost", {
           lifetime: 60,
           length: 900,
           hitSize: 5,
-          status: "freezing",
-          statusDuration: 2,
+          status: "cold",
+          statusDuration: 1,
           followsSource: true,
           damage: [
             {
@@ -10313,9 +10314,8 @@ Registry.weapons.add("hunter", {
   fireSound: "sniper-shoot",
   cost: {
     shards: 35600,
-    bloonstones: 0,
+    bloonstones: 200,
   },
-  storesDV: true,
   dvRatio: 3 / 10,
   shoot: {
     bullet: {
@@ -10856,6 +10856,7 @@ Registry.weapons.add("super-shotgun", {
       hitSize: 6,
       trail: true,
       trailColour: [0, 0, 200, 20],
+      trailLifeFactor: 0.3,
       pierce: 2,
       status: "irradiated",
       statusDuration: 600,
@@ -11337,7 +11338,7 @@ Registry.weapons.add("solar-flare", {
           smokeColour: [255, 255, 150],
           smokeColourTo: [255, 255, 0, 0],
           blinds: true,
-          blindOpacity: 300, //literally could not be more intense
+          blindOpacity: 200,
           blindDuration: 180,
           glareSize: 1000,
         },
@@ -13996,7 +13997,6 @@ Registry.weapons.add("subzero", {
       ],
     },
     {
-      //Mini 'ray' - actually fast-firing bullets
       offset: 90,
       reload: 110,
       isAuto: true,
@@ -14008,7 +14008,7 @@ Registry.weapons.add("subzero", {
           lifetime: 60,
           length: 1200,
           hitSize: 6,
-          status: "freezing",
+          status: "cold",
           statusDuration: 1,
           followsSource: true,
           damage: [
@@ -14373,7 +14373,6 @@ Registry.weapons.add("subzero", {
       ],
     },
     {
-      //Mini 'ray' - actually fast-firing bullets
       offset: 90,
       reload: 110,
       isAuto: true,
@@ -14385,7 +14384,7 @@ Registry.weapons.add("subzero", {
           lifetime: 60,
           length: 1200,
           hitSize: 6,
-          status: "freezing",
+          status: "cold",
           statusDuration: 1,
           followsSource: true,
           damage: [
@@ -14750,7 +14749,6 @@ Registry.weapons.add("subzero", {
       ],
     },
     {
-      //Mini 'ray' - actually fast-firing bullets
       offset: 90,
       reload: 110,
       isAuto: true,
@@ -14762,7 +14760,7 @@ Registry.weapons.add("subzero", {
           lifetime: 60,
           length: 1200,
           hitSize: 6,
-          status: "freezing",
+          status: "cold",
           statusDuration: 1,
           followsSource: true,
           damage: [
@@ -15127,7 +15125,6 @@ Registry.weapons.add("subzero", {
       ],
     },
     {
-      //Mini 'ray' - actually fast-firing bullets
       offset: 90,
       reload: 110,
       isAuto: true,
@@ -15139,7 +15136,7 @@ Registry.weapons.add("subzero", {
           lifetime: 60,
           length: 1200,
           hitSize: 6,
-          status: "freezing",
+          status: "cold",
           statusDuration: 1,
           followsSource: true,
           damage: [
@@ -19036,7 +19033,6 @@ Registry.weapons.add("foreshadow", {
     shards: 75000,
     bloonstones: 1000,
   },
-  storesDV: true,
   dvRatio: 10, //needed to keep up with other t7s
   shoot: {
     bullet: {
@@ -19956,6 +19952,7 @@ Registry.weapons.add("diffuse", {
       hitSize: 6,
       trail: true,
       trailColour: [251, 157, 81, 20],
+      trailLifeFactor: 0.3,
       pierce: 5,
       status: "irradiated",
       statusDuration: 1200,
@@ -19982,6 +19979,7 @@ Registry.weapons.add("diffuse", {
         knockback: 35,
         pierce: 3,
         trailColour: [251, 157, 81, 200],
+        trailLifeFactor: 0.3,
         multiHit: true,
         damage: [
           {
@@ -19999,21 +19997,22 @@ Registry.weapons.add("diffuse", {
           type: "Bullet",
           lifetime: 20,
           speed: 30,
-          hitSize: 6,
-          knockback: 35,
+          hitSize: 4,
+          knockback: 30,
           pierce: 3,
           trailColour: [251, 157, 81, 200],
+          trailLifeFactor: 0.3,
           multiHit: true,
           damage: [
             {
               type: "ballistic",
-              amount: 300,
+              amount: 200,
             },
           ],
           drawer: {
             image: "box.wood",
-            width: 25,
-            height: 4,
+            width: 20,
+            height: 3,
           },
         },
         destroyNumber: 5,
@@ -20757,4 +20756,4 @@ Registry.weapons.add("diffuse", {
     },
   ],
 });
-//Finally, 20761 loc later, all weapons finished. Phew.
+//Finally, 20759 loc later, all weapons finished. Phew.

@@ -17,6 +17,9 @@ class Boss extends ScalingEntity {
   trackingOffsetX = 400;
   trackingOffsetY = 0;
   previousRot = 0;
+
+  isMinion = false; //Stops this counting for boss kills
+  dv = 250;
   init() {
     super.init();
     //Construct boss actions
@@ -150,7 +153,7 @@ class Boss extends ScalingEntity {
     game.bloonstones += this.reward.bloonstones ??= 0;
     if (!source) return;
     //Stats
-    source.destroyed.bosses++;
+    if (!this.isMinion) source.destroyed.bosses++;
   }
   getDraw() {
     return game.difficulty === "impossible"

@@ -123,38 +123,25 @@ UIComponent.invert(
   //Healthbar container
   createUIComponent(["in-game"], [], 400, 1020, 800, 125, "right")
 );
-UIComponent.setBackgroundOf(
-  UIComponent.invert(
-    //bit behind healthbar
-    createUIComponent(["in-game"], [], 370, 1020, 700, 64, "right")
-  ),
-  [0, 0, 0]
+
+UIComponent.invert(
+  createHealthbarComponent(
+    ["in-game"],
+    [],
+    365,
+    1020,
+    680,
+    64,
+    "right",
+    undefined,
+    undefined,
+    undefined,
+    20,
+    () => game.player,
+    [255, 0, 0]
+  )
 );
-Object.defineProperties(
-  UIComponent.removeOutline(
-    UIComponent.setBackgroundOf(
-      UIComponent.invert(
-        //Match shape of underlying bar
-        createUIComponent(["in-game"], [], 370, 1020, 700, 64, "right")
-      ),
-      [255, 0, 0] //Red bar
-    )
-  ),
-  {
-    width: {
-      get: () =>
-        //Width depends on player max hp %
-        game.player ? (700 * game.player.health) / game.player.maxHealth : 700,
-    },
-    x: {
-      get: () =>
-        //Move to stay left aligned
-        game.player
-          ? 20 + (700 * game.player.health) / game.player.maxHealth / 2
-          : 370,
-    },
-  }
-);
+
 //Name display
 let nameBG;
 UIComponent.setBackgroundOf(
@@ -221,7 +208,12 @@ UIComponent.alignLeft(
     }
   )
 );
-//Level Counter
+//###################################################################
+//
+// in-game UI > informative UI > LEVEL COUNTER
+//
+//###################################################################
+
 createUIComponent(["in-game"], [], 150, 175, 300, 90, "right");
 UIComponent.alignLeft(
   Object.defineProperty(
@@ -241,6 +233,36 @@ UIComponent.alignLeft(
     "text",
     {
       get: () => "LV " + game.level,
+    }
+  )
+);
+UIComponent.setCondition("debug:false");
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      ["in-game"],
+      ["debug:true"],
+      20,
+      145,
+      0,
+      0,
+      "right",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () =>
+        game.player.dv +
+        "/" +
+        game.maxDV +
+        " DV, " +
+        game.player.destroyed.bosses +
+        "/" +
+        game.totalBosses +
+        " bosses",
     }
   )
 );
@@ -266,36 +288,29 @@ UIComponent.invert(
     "left"
   )
 );
-UIComponent.setBackgroundOf(
-  UIComponent.invert(
-    //bit behind bar
-    createUIComponent(["in-game"], ["boss:no"], 1600, 50, 600, 50, "left")
-  ),
-  [0, 0, 0]
+
+//Timer
+UIComponent.invert(
+  createHealthbarComponent(
+    ["in-game"],
+    [],
+    1605,
+    50,
+    580,
+    50,
+    "left",
+    undefined,
+    undefined,
+    undefined,
+    20,
+    () => game,
+    [255, 0, 0]
+  )
+    .setGetters("bosstimer", "bossinterval")
+    .reverseBarDirection()
+    .setColours(null, null, [255, 0, 0])
 );
-Object.defineProperties(
-  UIComponent.removeOutline(
-    UIComponent.setBackgroundOf(
-      UIComponent.invert(
-        //Match shape of underlying bar
-        createUIComponent(["in-game"], ["boss:no"], 1600, 50, 600, 50, "left")
-      ),
-      [255, 0, 0] //Red bar
-    )
-  ),
-  {
-    width: {
-      get: () =>
-        //Width depends on boss timer %
-        (600 * game.bosstimer) / game.bossinterval,
-    },
-    x: {
-      get: () =>
-        //Move to stay right aligned
-        1900 - (300 * game.bosstimer) / game.bossinterval,
-    },
-  }
-);
+
 createUIImageComponent(
   ["in-game"],
   ["boss:no"],
@@ -317,7 +332,8 @@ createUIComponent(
   400,
   50,
   "left"
-)
+);
+//Name plate
 UIComponent.alignRight(
   Object.defineProperty(
     createUIComponent(
@@ -331,41 +347,27 @@ UIComponent.alignRight(
     ),
     "text",
     {
-      get: () => world.getFirstBoss()?.name ?? "Boss" //Text is name
+      get: () => world.getFirstBoss()?.name ?? "Boss", //Text is name
     }
   )
-)
-UIComponent.setBackgroundOf(
-  UIComponent.invert(
-    //bit behind bar
-    createUIComponent(["in-game"], ["boss:yes"], 1425, 200, 500, 50, "left")
-  ),
-  [0, 0, 0]
 );
-Object.defineProperties(
-  UIComponent.removeOutline(
-    UIComponent.setBackgroundOf(
-      UIComponent.invert(
-        //Match shape of underlying bar
-        createUIComponent(["in-game"], ["boss:yes"], 1425, 200, 500, 50, "left")
-      ),
-      [255, 0, 0] //Red bar
-    )
-  ),
-  {
-    width: {
-      get: () =>
-        //Width depends on boss health %
-        (500 * (world.getFirstBoss()?.health ?? 1)) / (world.getFirstBoss()?.maxHealth ?? 1),
-    },
-    x: {
-      get: () =>
-        //Move to stay right aligned
-        1725 - (300 * (world.getFirstBoss()?.health ?? 1)) / (world.getFirstBoss()?.maxHealth ?? 1),
-    },
-  }
+UIComponent.invert(
+  createHealthbarComponent(
+    ["in-game"],
+    ["boss:yes"],
+    1425,
+    200,
+    500,
+    50,
+    "left",
+    undefined,
+    undefined,
+    undefined,
+    20,
+    () => world.getFirstBoss(),
+    [255, 0, 0]
+  ).reverseBarDirection()
 );
-//bottom thing
 UIComponent.invert(
   createUIComponent(
     ["in-game"],
@@ -376,7 +378,7 @@ UIComponent.invert(
     20,
     "left"
   )
-)
+);
 //HP thing
 UIComponent.alignRight(
   Object.defineProperty(
@@ -396,12 +398,16 @@ UIComponent.alignRight(
     {
       get: () => {
         let boss = world.getFirstBoss();
-        if(!boss) return "unknown";
-        return (shortenedNumber(boss.health ?? 1) + "/" + shortenedNumber(boss.maxHealth ?? 1))
-      } //Text is hp / max hp
+        if (!boss) return "unknown";
+        return (
+          shortenedNumber(boss.health ?? 1) +
+          "/" +
+          shortenedNumber(boss.maxHealth ?? 1)
+        );
+      }, //Text is hp / max hp
     }
   )
-)
+);
 //square thing with boss class
 Object.defineProperty(
   createUIComponent(
@@ -416,17 +422,18 @@ Object.defineProperty(
     "o",
     false,
     60
-  ), "text", {
-    get: () => world.getFirstBoss()?.class??"o" //Show boss class if it exists, otherwise show "o"
+  ),
+  "text",
+  {
+    get: () => world.getFirstBoss()?.class ?? "o", //Show boss class if it exists, otherwise show "o"
   }
-)
+);
 
 //###################################################################
 //
 // in-game UI > interactable UI > UPGRADE MENU
 //
 //###################################################################
-
 
 //Translucent blue background
 UIComponent.removeOutline(
@@ -487,7 +494,7 @@ createUIComponent(
   "none",
   () => {
     //Return game to previous state
-    if(!UIComponent.evaluateCondition("was-game-paused:true")) unpause();
+    if (!UIComponent.evaluateCondition("was-game-paused:true")) unpause();
     UIComponent.setCondition("upgrade-menu-open:false");
   },
   "Close"
@@ -613,7 +620,6 @@ createUIComponent(
   true,
   40
 );
-
 
 //    Sub-menus
 function getSelectedSlotIndex() {
@@ -971,34 +977,34 @@ createUIComponent(
   false,
   40
 ),
-//Path 1
-Object.defineProperty(
-  createUIComponent(
-    //Name
-    ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
-    900,
-    380,
-    750,
-    40,
-    "none",
-    null,
-    "Not unlocked yet",
-    true,
-    30
-  ),
-  "text",
-  {
-    get: () => {
-      if (!game?.player) return "No player";
-      if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
-      let upgrade = game.player.blimp.path1
-      if(!upgrade || upgrade === "none") return "No Upgrade"
-      let blimp = Registry.blimps.get(upgrade)
-      return blimp.name;
-    },
-  }
-);
+  //Path 1
+  Object.defineProperty(
+    createUIComponent(
+      //Name
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:blimp"], //Assuming AP is available
+      900,
+      380,
+      750,
+      40,
+      "none",
+      null,
+      "Not unlocked yet",
+      true,
+      30
+    ),
+    "text",
+    {
+      get: () => {
+        if (!game?.player) return "No player";
+        if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
+        let upgrade = game.player.blimp.path1;
+        if (!upgrade || upgrade === "none") return "No Upgrade";
+        let blimp = Registry.blimps.get(upgrade);
+        return blimp.name;
+      },
+    }
+  );
 Object.defineProperty(
   createUIComponent(
     //Description
@@ -1019,10 +1025,11 @@ Object.defineProperty(
     get: () => {
       if (!game?.player) return "No player";
       if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
-      let upgrade = game.player.blimp.path1
-      if(!upgrade || upgrade === "none") return "This path has no upgrade for this blimp."
-      let blimp = Registry.blimps.get(upgrade)
-      return "Max HP: "+blimp.health+" | Speed: "+blimp.speed;
+      let upgrade = game.player.blimp.path1;
+      if (!upgrade || upgrade === "none")
+        return "This path has no upgrade for this blimp.";
+      let blimp = Registry.blimps.get(upgrade);
+      return "Max HP: " + blimp.health + " | Speed: " + blimp.speed;
     },
   }
 );
@@ -1060,9 +1067,9 @@ Object.defineProperty(
     get: () => {
       if (!game?.player) return "No player";
       if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
-      let upgrade = game.player.blimp.path2
-      if(!upgrade || upgrade === "none") return "No Upgrade"
-      let blimp = Registry.blimps.get(upgrade)
+      let upgrade = game.player.blimp.path2;
+      if (!upgrade || upgrade === "none") return "No Upgrade";
+      let blimp = Registry.blimps.get(upgrade);
       return blimp.name;
     },
   }
@@ -1087,10 +1094,11 @@ Object.defineProperty(
     get: () => {
       if (!game?.player) return "No player";
       if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
-      let upgrade = game.player.blimp.path2
-      if(!upgrade || upgrade === "none") return "This path has no upgrade for this blimp."
-      let blimp = Registry.blimps.get(upgrade)
-      return "Max HP: "+blimp.health+" | Speed: "+blimp.speed;
+      let upgrade = game.player.blimp.path2;
+      if (!upgrade || upgrade === "none")
+        return "This path has no upgrade for this blimp.";
+      let blimp = Registry.blimps.get(upgrade);
+      return "Max HP: " + blimp.health + " | Speed: " + blimp.speed;
     },
   }
 );
@@ -1154,10 +1162,10 @@ UIComponent.alignLeft(
       get: () => {
         if (!game?.player) return "⚠";
         if (!game?.player?.blimp) return "⚠"; //in case not
-        let upgrade = game.player.blimp.path1
-        if(!upgrade || upgrade === "none") return "..."
-        let blimp = Registry.blimps.get(upgrade)
-        return shortenedNumber(blimp?.cost?.shards??0);
+        let upgrade = game.player.blimp.path1;
+        if (!upgrade || upgrade === "none") return "...";
+        let blimp = Registry.blimps.get(upgrade);
+        return shortenedNumber(blimp?.cost?.shards ?? 0);
       },
     }
   )
@@ -1183,10 +1191,10 @@ UIComponent.alignLeft(
       get: () => {
         if (!game?.player) return "⚠";
         if (!game?.player?.blimp) return "⚠"; //in case not
-        let upgrade = game.player.blimp.path1
-        if(!upgrade || upgrade === "none") return "..."
-        let blimp = Registry.blimps.get(upgrade)
-        return shortenedNumber(blimp?.cost?.bloonstones??0);
+        let upgrade = game.player.blimp.path1;
+        if (!upgrade || upgrade === "none") return "...";
+        let blimp = Registry.blimps.get(upgrade);
+        return shortenedNumber(blimp?.cost?.bloonstones ?? 0);
       },
     }
   )
@@ -1252,10 +1260,10 @@ UIComponent.alignLeft(
       get: () => {
         if (!game?.player) return "⚠";
         if (!game?.player?.blimp) return "⚠"; //in case not
-        let upgrade = game.player.blimp.path2
-        if(!upgrade || upgrade === "none") return "..."
-        let blimp = Registry.blimps.get(upgrade)
-        return shortenedNumber(blimp?.cost?.shards??0);
+        let upgrade = game.player.blimp.path2;
+        if (!upgrade || upgrade === "none") return "...";
+        let blimp = Registry.blimps.get(upgrade);
+        return shortenedNumber(blimp?.cost?.shards ?? 0);
       },
     }
   )
@@ -1281,10 +1289,10 @@ UIComponent.alignLeft(
       get: () => {
         if (!game?.player) return "⚠";
         if (!game?.player?.blimp) return "⚠"; //in case not
-        let upgrade = game.player.blimp.path2
-        if(!upgrade || upgrade === "none") return "..."
-        let blimp = Registry.blimps.get(upgrade)
-        return shortenedNumber(blimp?.cost?.bloonstones??0);
+        let upgrade = game.player.blimp.path2;
+        if (!upgrade || upgrade === "none") return "...";
+        let blimp = Registry.blimps.get(upgrade);
+        return shortenedNumber(blimp?.cost?.bloonstones ?? 0);
       },
     }
   )
@@ -1301,16 +1309,16 @@ createUIComponent(
   () => {
     if (!game?.player) return;
     if (!game?.player?.blimp) return;
-    let upgrade = game.player.blimp.path1
-    if(!upgrade || upgrade === "none") return;
-    let blimp = Registry.blimps.get(upgrade)
+    let upgrade = game.player.blimp.path1;
+    if (!upgrade || upgrade === "none") return;
+    let blimp = Registry.blimps.get(upgrade);
     //Check cost and buy
-    let shards = (blimp?.cost?.shards??0),
-    bloonstones = (blimp?.cost?.bloonstones??0);
-    if(shards <= game.shards && bloonstones <= game.bloonstones){
+    let shards = blimp?.cost?.shards ?? 0,
+      bloonstones = blimp?.cost?.bloonstones ?? 0;
+    if (shards <= game.shards && bloonstones <= game.bloonstones) {
       game.shards -= shards;
       game.bloonstones -= bloonstones;
-      game.player.upgrade(upgrade)
+      game.player.upgrade(upgrade);
     }
   },
   "Upgrade\nPrimary",
@@ -1328,16 +1336,16 @@ createUIComponent(
   () => {
     if (!game?.player) return;
     if (!game?.player?.blimp) return;
-    let upgrade = game.player.blimp.path2
-    if(!upgrade || upgrade === "none") return;
-    let blimp = Registry.blimps.get(upgrade)
+    let upgrade = game.player.blimp.path2;
+    if (!upgrade || upgrade === "none") return;
+    let blimp = Registry.blimps.get(upgrade);
     //Check cost and buy
-    let shards = (blimp?.cost?.shards??0),
-    bloonstones = (blimp?.cost?.bloonstones??0);
-    if(shards <= game.shards && bloonstones <= game.bloonstones){
+    let shards = blimp?.cost?.shards ?? 0,
+      bloonstones = blimp?.cost?.bloonstones ?? 0;
+    if (shards <= game.shards && bloonstones <= game.bloonstones) {
       game.shards -= shards;
       game.bloonstones -= bloonstones;
-      game.player.upgrade(upgrade)
+      game.player.upgrade(upgrade);
     }
   },
   "Upgrade\nAlternative",

@@ -21,6 +21,7 @@ Registry.genericType.add("continuous-laser-bullet", ContinuousLaserBullet);
 Registry.genericType.add("laser-bullet", LaserBullet);
 Registry.genericType.add("telegraph", LineTelegraph);
 Registry.genericType.add("point-bullet", PointBullet);
+Registry.genericType.add("chained-bullet", ChainedBullet);
 Registry.genericType.add("radiation-zone", RadiationZone);
 //Boss Actions
 Registry.genericType.add("action.generic", BossAction);

@@ -1,6 +1,11 @@
 class Bullet {
-  x = 0;
-  y = 0;
+  pos = Vector.ZERO;
+  get x() {
+    return this.pos.x;
+  }
+  get y() {
+    return this.pos.y;
+  }
   direction = 0;
   damage = [];
   speed = 20;
@@ -8,11 +13,14 @@ class Bullet {
   hitSize = 5;
   trail = true;
   trailColour = [255, 255, 255, 200];
-  trailLifeFactor = 1.2;
+  trailColourTo = null;
+  trailLifeFactor = 0.75;
   remove = false;
+  collides = true;
   pierce = 0;
   rotateSpeed = 0;
   drawer = {
+    hidden: false,
     shape: "circle",
     fill: "red",
     image: "error",
@@ -30,7 +38,7 @@ class Bullet {
   multiHit = false;
   damaged = [];
   _trailCounter = 20;
-  trailInterval = 10;
+  trailInterval = -1;
   //Statuseseseseses
   status = "none";
   statusDuration = 0;
@@ -67,6 +75,7 @@ class Bullet {
   destroySpacing = 0;
 
   //Sounds
+  silent = false;
   hitSound = null;
   despawnSound = null;
   spawnSound = null;
@@ -79,7 +88,8 @@ class Bullet {
   init() {
     this.maxLife = this.lifetime;
     this.maxPierce = this.pierce;
-    this.trailInterval = this.hitSize * 4;
+    this.trailColourTo ??= this.trailColour;
+    if(this.trailInterval === -1) this.trailInterval = this.hitSize * 4;
   }
   sound() {
     if (!this.#sounded) {
@@ -93,19 +103,17 @@ class Bullet {
     //Not if dead
     if (!this.remove) {
       if (this.followsSource && this.source) {
-        this.x = this.source.x;
-        this.y = this.source.y;
+        this.pos = new Vector(this.source.x, this.source.y);
         this.direction = this.source.rotation;
       }
 
       this.intervalTick();
       //Which way to move
-      let moveVector = p5.Vector.fromAngle(this.directionRad);
+      let moveVector = new DirectionVector(this.direction);
       //Scale to speed
-      moveVector.mult(this.speed * dt);
+      moveVector = moveVector.scale(this.speed * dt);
       //Move
-      this.x += moveVector.x;
-      this.y += moveVector.y;
+      this.pos = this.pos.add(moveVector);
       this.direction += this.rotateSpeed;
       //Tick lifetime
       if (this.lifetime <= 0) {
@@ -114,7 +122,8 @@ class Bullet {
         this.lifetime -= dt;
       }
       //Follow
-      if (this.followsScreen) this.x -= game.player?.speed ?? 0;
+      if (this.followsScreen)
+        this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
     }
   }
   spawnTrail(dt) {
@@ -122,17 +131,18 @@ class Bullet {
     for (let e = 0; e < this.speed * dt; e++) {
       if (this._trailCounter <= 0) {
         if (this.world?.particles != null && this.trail) {
+          let v = new DirectionVector(this.direction, e);
           this.world.particles.push(
             new ShapeParticle(
-              this.x - e * p5.Vector.fromAngle(this.directionRad).x,
-              this.y - e * p5.Vector.fromAngle(this.directionRad).y,
+              this.x - v.x,
+              this.y - v.y,
               this.directionRad,
               this.maxLife * this.trailLifeFactor,
               0,
               0,
               "rhombus",
               this.trailColour,
-              this.trailColour,
+              this.trailColourTo,
               this.hitSize * 1.9,
               0,
               this.hitSize * this.trailInterval * 0.25,
@@ -149,6 +159,7 @@ class Bullet {
     }
   }
   draw() {
+    if(this.drawer.hidden) return;
     if (this.drawer.image) {
       rotatedImg(
         this.drawer.image,
@@ -171,8 +182,11 @@ class Bullet {
       );
     }
   }
+  distanceTo(x, y) {
+    return this.pos.distanceToXY(x, y)
+  }
   collidesWith(obj) {
-    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
+    return this.distanceTo(obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
   frag() {
     patternedBulletExpulsion(

@@ -4,7 +4,7 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "bomb-shooter",
-      "incendiary",
+      "napalm-bombs",
       "nuke-launcher",
       "meltdown",
       "solar-flare"

@@ -114,7 +114,7 @@ class ParticleEmissionEffect extends EmissionEffect {
   };
   create(world, x = 0, y = 0, direction = 0, scale = 1) {
     repeat(this.amount, () =>
-      (this.isUI ? ui.particles : world.particles).push(
+      (this.isUI ? ui.particles : world.particles).unshift(
         new ShapeParticle(
           x + this.x,
           y + this.y,
@@ -203,7 +203,7 @@ function repeat(n, func, ...params) {
  * @param {string | Object} effect Registry name of the visual effect, or a constructible visual effect.
  * @param {float} x X position of the effect's origin
  * @param {float} y Y position of the effect's origin
- * @param {float} direction Direction *in radians* of the effect. ONly for directed effects, such as `ParticleEmissionEffect`
+ * @param {float} direction Direction *in radians* of the effect. Only for directed effects, such as `ParticleEmissionEffect`
  * @param {float} scale Extra parameter to determine size of scalable effects
  * @param {() => {x: number, y: number, direction: number}} pos Function to get position for parentised effects.
  * @returns

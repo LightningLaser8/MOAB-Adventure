@@ -441,6 +441,7 @@ Registry.entities.add("monkey-ace", {
 Registry.entities.add("mini-ace", {
   type: "boss",
   name: "Mini Ace",
+  dv: 50,
   drawer: {
     image: "boss.monkey-ace",
     width: 68,
@@ -1286,6 +1287,7 @@ Registry.entities.add("robo-monkey", {
 });
 Registry.entities.add("robo-drone", {
   type: "boss",
+  dv: 50,
   name: "Laser Drone",
   drawer: {
     image: "minion.drone",

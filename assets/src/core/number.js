@@ -82,38 +82,40 @@ function colinterp(cols, factor, forceint = false) {
  * A class representing a 2D vector structure.
  */
 class Vector {
-  x = 0;
-  y = 0;
+  /**@readonly */
+  static ZERO = new this(0, 0);
+  get x(){
+    return this.#x;
+  }
+  get y(){
+    return this.#y;
+  }
+  #x = 0;
+  #y = 0;
   constructor(x = 0, y = 0) {
-    this.x = x;
-    this.y = y;
+    this.#x = x;
+    this.#y = y;
   }
   /** The length of the hypotenuse of the triangle formed by this vector's X- and Y-values as lengths. */
   get magnitude() {
-    return (this.x ** 2 + this.y ** 2) ** 0.5;
+    return (this.#x ** 2 + this.#y ** 2) ** 0.5;
   }
   /**
    * Adds 2 vectors.
    * @param {Vector} vct Vector to add.
-   * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the addition. Either this vector, or the new one.
    */
-  add(vct, mutate = false) {
-    return this.addXY(vct.x, vct.y, mutate);
+  add(vct) {
+    return this.addXY(vct.x, vct.y);
   }
   /**
    * Adds an x- and y-value to a vector.
    * @param {float} x X-value to add.
    * @param {float} y Y-value to add.
-   * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the addition. Either this vector, or the new one.
    */
-  addXY(x, y, mutate = false) {
-    if (mutate) {
-      this.x += x;
-      this.y += y;
-    }
-    return mutate ? this : new Vector(this.x + x, this.y + y);
+  addXY(x, y) {
+    return new Vector(this.#x + x, this.#y + y);
   }
   /**
    * Subtracts another vector from this one.
@@ -121,8 +123,8 @@ class Vector {
    * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the subtraction. Either this vector, or the new one.
    */
-  sub(vct, mutate = false) {
-    return this.subXY(vct.x, vct.y, mutate);
+  sub(vct) {
+    return this.subXY(vct.x, vct.y);
   }
   /**
    * Subtracts an x- and y-value from this vector.
@@ -131,8 +133,8 @@ class Vector {
    * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the subtraction. Either this vector, or the new one.
    */
-  subXY(x, y, mutate = false) {
-    return this.addXY(-x, -y, mutate);
+  subXY(x, y) {
+    return this.addXY(-x, -y);
   }
   /**
    * Scales this vector by an amount.
@@ -140,8 +142,8 @@ class Vector {
    * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the scaling. Either this vector, or the new one.
    */
-  scale(amt, mutate = false) {
-    return this.scaleAsymmetrical(amt, amt, mutate);
+  scale(amt) {
+    return this.scaleAsymmetrical(amt, amt);
   }
   /**
    * Scales this vector by an amount, using different amounts for the x- and y-direction.
@@ -150,12 +152,8 @@ class Vector {
    * @param {boolean} mutate Whether or not to change this vector's values.
    * @returns The result of the scaling. Either this vector, or the new one.
    */
-  scaleAsymmetrical(amtX, amtY, mutate = false) {
-    if (mutate) {
-      this.x *= amtX;
-      this.y *= amtY;
-    }
-    return mutate ? this : new Vector(this.x * amtX, this.y * amtY);
+  scaleAsymmetrical(amtX, amtY) {
+    return new Vector(this.#x * amtX, this.#y * amtY);
   }
   /** The angle in degrees this vector makes with the positive x-axis. */
   get angle() {
@@ -163,15 +161,33 @@ class Vector {
   }
   /** The angle in radians this vector makes with the positive x-axis. */
   get angleRad() {
-    return Math.atan2(this.y, this.x);
+    return Math.atan2(this.#y, this.#x);
   }
   /**
    * Returns the unit vector of this vector, i.e. this vector scaled by 1/magnitude.
    * @param {boolean} [mutate=false]  Whether or not to change this vector's values.
    * @returns The result of the scaling. Either this vector, or the new one.
    */
-  normalise(mutate = false) {
-    return this.scale(1 / this.magnitude, mutate);
+  normalise() {
+    return this.scale(1 / this.magnitude);
+  }
+  /**
+   * Rotates a vector around an angle, anticlockwise.
+   * @param {number} angle Angle in degrees to rotate the vector.
+   * @param {boolean} mutate Whether or not to change this vector's values.
+   * @returns The new rotated vector.
+   */
+  rotate(angle) {
+    return this.rotateRad((angle / 180) * Math.PI);
+  }
+  /**
+   * Rotates a vector around an angle, anticlockwise.
+   * @param {number} angle Angle in radians to rotate the vector.
+   * @param {boolean} mutate Whether or not to change this vector's values.
+   * @returns The new rotated vector.
+   */
+  rotateRad(angle) {
+    return new Vector(this.#x * Math.cos(angle) - this.#y * Math.sin(angle), this.#y * Math.cos(angle) + this.#x * Math.sin(angle));
   }
   /**
    * Finds the distance between this vector and another.
@@ -181,29 +197,128 @@ class Vector {
   distanceTo(vct) {
     return this.sub(vct).magnitude;
   }
+  /**
+   * Finds the distance between this vector and a position.
+   * @param {Vector} vct The other vector to get the distance to.
+   * @returns The Euclidean distance from this vector to the other one.
+   */
+  distanceToXY(x, y) {
+    return this.subXY(x, y).magnitude;
+  }
   /**Creates a vector from an angle *in degrees* */
   static fromAngle(angle) {
-    return this.fromAngleRad((angle / 180) * Math.PI);
+    return new DirectionVector(angle);
   }
   /**Creates a vector from an angle *in radians* */
   static fromAngleRad(angle) {
-    return new Vector(Math.cos(angle), Math.sin(angle));
+    return new DirectionVector(angle, 1, true);
   }
 
   /** Returns a p5.Vector object equivalent to this vector.\
-   * Use this class instead whenever possible.
+   * Use this class instead of p5.Vector whenever possible.
    */
   toP5() {
-    return new p5.Vector(this.x, this.y);
+    return new p5.Vector(this.#x, this.#y);
   }
   /**
    * Creates a vector from a p5.Vector object.\
-   * Work with this class when possible.\
+   * Work with this class, not p5.Vector when possible.\
    * Will not retain 3D values.
    * @param {p5.Vector} vct P5.Vector object to convert.
    * @returns A new Vector equivalent to the p5 vector.
    */
   static fromP5(vct) {
-    return new this();
+    return new this(vct.x, vct.y);
   }
+  /**
+   * Creates a vector from a single scalar.\
+   * The X and Y values will both equal this number.
+   * @param {number} size Size of each value.
+   * @returns A new Vector(size, size).
+   */
+  static fromScalar(size) {
+    return new this(size, size);
+  }
+  /**
+   * Creates a clone of this vector.
+   * @returns A different vector with the same value.
+   */
+  clone() {
+    return new Vector(this.#x, this.#y);
+  }
+  /**Returns this vector's equivalent direction vector. */
+  toDirectional() {
+    return new DirectionVector(this.angleRad, this.magnitude, true);
+  }
+}
+/**Immutable direction vector. Stores direction and magnitude, rather than x and y values. */
+class DirectionVector extends Vector {
+  get angle() {
+    return (this.angleRad / Math.PI) * 180;
+  }
+  angleRad = 0;
+  magnitude = 1;
+  get x() {
+    return Math.cos(this.angleRad) * this.magnitude;
+  }
+  get y() {
+    return Math.sin(this.angleRad) * this.magnitude;
+  }
+  constructor(direction, magnitude = 1, isRadian = false) {
+    super();
+    this.angleRad = isRadian ? direction : (direction / 180) * Math.PI;
+    this.magnitude = magnitude;
+    delete this.toDirectional;
+  }
+  add(vct) {
+    return super.add(vct).toDirectional();
+  }
+  sub(vct) {
+    return super.sub(vct).toDirectional();
+  }
+  scale(amt) {
+    return new DirectionVector(this.angleRad, this.magnitude * amt, true);
+  }
+  rotate(angle) {
+    return new DirectionVector(this.angle + angle, this.magnitude);
+  }
+  rotateRad(angle) {
+    return new DirectionVector(this.angleRad + angle, this.magnitude, true);
+  }
+  clone() {
+    return new DirectionVector(this.angleRad, this.magnitude, true);
+  }
+  /**Returns this vector's equivalent positional vector. */
+  toPositional() {
+    return new Vector(this.x, this.y);
+  }
+}
+
+function turn(direction, x, y, toX, toY, amount) {
+  let delta = new Vector(toX - x, toY - y);
+  //Define variables
+  let currentDirection = Vector.fromAngle(direction).angle; //Find current angle, standardised
+  let targetDirection = delta.angle; //Find target angle, standardised
+  if (targetDirection === currentDirection)
+    return { direction: direction, done: true }; //Do nothing if facing the right way
+  let deltaRot = targetDirection - currentDirection;
+  //Rotation correction
+  if (deltaRot < -180) {
+    deltaRot += 360;
+  } else if (deltaRot > 180) {
+    deltaRot -= 360;
+  }
+  let sign = deltaRot < 0 ? -1 : 1; //Get sign: -1 if negative, 1 if positive
+  let deltaD = 0;
+  let done = false;
+  //Choose smaller turn
+  if (Math.abs(deltaRot) > amount) {
+    deltaD = amount * sign;
+    done = true;
+  } else {
+    deltaD = deltaRot;
+    done = false;
+  }
+  //Turn
+  return { direction: direction + deltaD, done: done };
 }

@@ -41,7 +41,7 @@ class World {
         entity: Registry.entities.get(spawner.entity),
         interval: spawner.interval,
         isHighTier: spawner.isHighTier ?? false,
-        imposMode: spawner.imposMode ?? "ignore"
+        imposMode: spawner.imposMode ?? "ignore",
       });
     }
   }
@@ -104,7 +104,7 @@ class World {
             );
           }
         }
-        bullet.frag();
+        if (!bullet.fragDisabled) bullet.frag();
         //Sound time!
         playSound(bullet.despawnSound);
         //Delete the bullet
@@ -122,9 +122,12 @@ class World {
       let entity = this.entities[e];
       if (entity?.dead) {
         if (!entity.left) {
+          if (entity.lastHurtSource) entity.lastHurtSource.dv += entity.dv;
           entity.onDeath(entity.lastHurtSource);
           playSound(entity.deathSound);
         }
+        game.maxDV += entity.dv;
+        if (entity instanceof Boss && !entity.isMinion) game.totalBosses++;
         this.entities.splice(e, 1);
       }
     }

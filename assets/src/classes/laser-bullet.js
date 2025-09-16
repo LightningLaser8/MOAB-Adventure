@@ -21,8 +21,7 @@ class LaserBullet extends Bullet {
         this.#dirInited = true;
         this.oldDir = this.direction - this.source.rotation;
       }
-      this.x = this.source.x;
-      this.y = this.source.y;
+      this.pos = new Vector(this.source.x, this.source.y);
       this.direction = this.source.rotation + this.oldDir;
     }
   }
@@ -49,7 +48,7 @@ class LaserBullet extends Bullet {
         this.lifetime -= dt;
       }
       //Follow
-      if (this.followsScreen) this.x -= game.player?.speed ?? 0;
+      if (this.followsScreen) this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
     }
   }
   draw() {

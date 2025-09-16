@@ -31,6 +31,7 @@ class Entity {
     bosses: 0,
   };
   lastHurtSource = null;
+  dv = 0;
 
   //Status effects
   effectiveDamageMult = 1;
@@ -72,7 +73,7 @@ class Entity {
     return this;
   }
   damage(type = "normal", amount = 0, source = null) {
-    if(source) this.lastHurtSource = source;
+    if (source) this.lastHurtSource = source;
     let calcAmount =
       (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
     for (let resistance of this.resistances) {
@@ -95,7 +96,7 @@ class Entity {
     resolution = 1,
     collided = []
   ) {
-    if (resolution < 0) resolution *= -1; //Fix possilility of infinite loop
+    if (resolution < 0) resolution *= -1; //Fix possibility of infinite loop
     if (resolution == 0) resolution = 1;
     //so sin and cos only happen once
     let ymove = Math.sin(radians(direction));
@@ -206,6 +207,7 @@ class Entity {
     for (let bullet of this.world.bullets) {
       //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
       if (
+        bullet.collides &&
         !bullet.remove &&
         this.team !== bullet.entity.team &&
         !bullet.damaged.includes(this) &&
@@ -247,20 +249,16 @@ class Entity {
         //Make the bullet know
         bullet.damaged.push(this);
         bullet.onHit(this);
-        playSound(this.hitSound);
-        playSound(bullet.hitSound);
+        if (!bullet.silent) {
+          playSound(this.hitSound);
+          playSound(bullet.hitSound);
+        }
         //Reduce pierce
         bullet.pierce--;
         //If exhausted
         if (bullet.pierce < 0) {
           if (bullet instanceof LaserBullet) bullet.canHurt = false;
           else bullet.remove = true; //Delete
-        }
-        //Check death
-        if (this.dead) {
-          if (bullet.source) {
-            if (bullet.source.storesDV) bullet.source.absorbDVFrom(this); //Add the DV
-          }
         }
       } else {
         if (
@@ -284,6 +282,8 @@ class Entity {
         1;
     for (let status of this.statuses) {
       let effect = Registry.statuses.get(status.effect);
+      if (effect.vfx !== "none" && tru(effect.vfxChance))
+        emitEffect(effect.vfx, this, rnd(this.hitSize), rnd(this.hitSize));
       this.damage(effect.damageType, effect.damage);
       this.heal(effect.healing);
       this.effectiveSpeedMult *= effect.speedMult ?? 1;
@@ -298,10 +298,9 @@ class Entity {
     this.statuses.push({ effect: effect, time: time, timeLeft: time });
   }
   scaleToDifficulty() {
-    let diff = difficulty[game.difficulty]; //Get difficulty
     //Do nothing, as it doesn't matter for normal entities
   }
-  onDeath(){}
+  onDeath(source) {}
 }
 
 //Entity that scales health as the game's level increases.
