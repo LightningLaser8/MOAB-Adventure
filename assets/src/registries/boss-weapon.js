@@ -309,8 +309,8 @@ Registry.weapons.add(".box-impact-impos", {
           levelScaling: 10,
         },
       ],
-      fragNumber: 16,
-      fragSpacing: 22.5,
+      fragNumber: 8,
+      fragSpacing: 45,
       fragBullet: {
         type: "bullet",
         lifetime: 48,
@@ -485,7 +485,7 @@ Registry.weapons.add(".robo-monkey-throw", {
         trailColourTo: [212, 0, 255],
         trailShape: "rhombus",
         targetType: "nearest",
-        turnSpeed: 0.5,
+        turnSpeed: 0.25,
         trailInterval: 5,
         trailWidth: 5,
         lifetime: 90,
@@ -546,7 +546,7 @@ Registry.weapons.add(".robo-monkey-laser", {
         },
       ],
       telegraph: {
-        time: 30,
+        time: 45,
         follow: true,
       },
     },

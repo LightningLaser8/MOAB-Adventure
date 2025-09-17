@@ -293,7 +293,7 @@ UIComponent.invert(
 UIComponent.invert(
   createHealthbarComponent(
     ["in-game"],
-    [],
+    ["boss:no"],
     1605,
     50,
     580,
@@ -402,7 +402,10 @@ UIComponent.alignRight(
         return (
           shortenedNumber(boss.health ?? 1) +
           "/" +
-          shortenedNumber(boss.maxHealth ?? 1)
+          shortenedNumber(boss.maxHealth ?? 1) +
+          " (" +
+          roundNum(((boss.health ?? 1) / (boss.maxHealth ?? 1)) * 100, 1) +
+          "%)"
         );
       }, //Text is hp / max hp
     }

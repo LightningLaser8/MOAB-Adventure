@@ -43,12 +43,13 @@ class Box extends ScalingEntity {
 }
 class AngryBox extends Box {
   tick() {
-    super.tick();
     if (!this.dead) {
       this.target = game?.player;
-      this.weaponSlots.forEach((s) => {
-        if (s?.weapon) s.weapon.fire();
-      });
+      super.tick();
+      if (this.target)
+        this.weaponSlots.forEach((s) => {
+          if (s?.weapon) s.weapon.fire();
+        });
     }
   }
 }

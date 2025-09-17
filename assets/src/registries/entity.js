@@ -154,12 +154,12 @@ Registry.entities.add("gigantic-box", {
   type: "boss",
   name: "Gigantic Box",
   drawer: {
-    image: "box.hardwood",
+    image: "box.wood",
     width: 200,
     height: 200,
   },
   imposDrawer: {
-    image: "box.metal",
+    image: "box.hardwood",
     width: 200,
     height: 200,
   },
@@ -182,7 +182,7 @@ Registry.entities.add("gigantic-box", {
     },
     spin: {
       type: "action.move",
-      rot: 120,
+      rot: 140,
       duration: 8,
     },
     bonk: {
@@ -441,7 +441,8 @@ Registry.entities.add("monkey-ace", {
 Registry.entities.add("mini-ace", {
   type: "boss",
   name: "Mini Ace",
-  dv: 50,
+  dv: 0,
+  isMinion: true,
   drawer: {
     image: "boss.monkey-ace",
     width: 68,
@@ -493,7 +494,7 @@ Registry.entities.add("mini-ace", {
         },
         speed: 40,
         lifetime: 60,
-        hitSize: -1000,
+        collides: false,
         trail: false,
         intervalTime: 10,
         intervalNumber: 1,
@@ -501,7 +502,7 @@ Registry.entities.add("mini-ace", {
         intervalBullet: {
           lifetime: 35,
           speed: 1,
-          hitSize: -1000,
+          collides: false,
           pierce: 100,
           trail: false,
           damage: [
@@ -646,7 +647,7 @@ Registry.entities.add("super-monkey", {
         },
         speed: 80,
         lifetime: 30,
-        hitSize: -1000,
+        collides: false,
         trail: false,
         intervalTime: 5,
         intervalNumber: 4,
@@ -788,8 +789,8 @@ Registry.entities.add("super-monkey", {
     "enter",
   ],
   team: "enemy",
-  health: -150,
-  healthIncrease: 150,
+  health: 150,
+  healthIncrease: 100,
   trackingOffsetX: 0,
   turnWhileMoving: true,
   turnSpeed: 4,
@@ -810,7 +811,7 @@ Registry.entities.add("robo-monkey", {
   x: 1920,
   y: 0,
   reward: {
-    bloonstones: 100,
+    bloonstones: 500,
   },
   actions: {
     "dart-throw": {
@@ -904,7 +905,7 @@ Registry.entities.add("robo-monkey", {
         spawnSound: "whirr",
         speed: 0,
         lifetime: 120,
-        hitSize: -1000,
+        collides: false,
         trail: false,
         followsSource: true,
         intervalTime: 999,
@@ -927,7 +928,7 @@ Registry.entities.add("robo-monkey", {
             },
           ],
           telegraph: {
-            time: 45,
+            time: 75,
             width: 5,
           },
         },
@@ -947,8 +948,8 @@ Registry.entities.add("robo-monkey", {
         },
         spawnSound: "whirr",
         speed: 0,
-        lifetime: 60,
-        hitSize: -1000,
+        lifetime: 100,
+        collides: false,
         trail: false,
         followsSource: true,
         intervalTime: 99,
@@ -982,11 +983,11 @@ Registry.entities.add("robo-monkey", {
             },
             speed: 0,
             lifetime: 630,
-            hitSize: -1000,
+            collides: false,
             trail: false,
           },
           telegraph: {
-            time: 60,
+            time: 100,
             width: 8,
           },
         },
@@ -1007,7 +1008,7 @@ Registry.entities.add("robo-monkey", {
         spawnSound: "whirr",
         speed: 0,
         lifetime: 120,
-        hitSize: -1000,
+        collides: false,
         trail: false,
         followsSource: true,
         intervalTime: 999,
@@ -1034,7 +1035,7 @@ Registry.entities.add("robo-monkey", {
           intervalBullet: {
             lifetime: 45,
             speed: 24,
-            hitSize: -1000,
+            collides: false,
             trail: false,
             pierce: 100,
             intervalTime: 9,
@@ -1086,7 +1087,7 @@ Registry.entities.add("robo-monkey", {
         spawnSound: "whirr",
         speed: 0,
         lifetime: 60,
-        hitSize: -1000,
+        collides: false,
         trail: false,
         followsSource: true,
         intervalTime: 99,
@@ -1120,7 +1121,7 @@ Registry.entities.add("robo-monkey", {
             },
             speed: 0,
             lifetime: 630,
-            hitSize: -1000,
+            collides: false,
             trail: false,
           },
           telegraph: {
@@ -1277,7 +1278,7 @@ Registry.entities.add("robo-monkey", {
     "summon-bottom",
   ],
   team: "enemy",
-  health: 15000,
+  health: 2500,
   healthIncrease: 0,
   trackingOffsetX: 1000,
   turnWhileMoving: false,
@@ -1287,7 +1288,8 @@ Registry.entities.add("robo-monkey", {
 });
 Registry.entities.add("robo-drone", {
   type: "boss",
-  dv: 50,
+  dv: 0,
+  isMinion: true,
   name: "Laser Drone",
   drawer: {
     image: "minion.drone",
