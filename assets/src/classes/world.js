@@ -134,6 +134,9 @@ class World {
     //No search algorithms => faster
   }
   drawAll() {
+    for (let particle of this.particles) {
+      if (particle instanceof AfterImageParticle) particle.draw();
+    }
     for (let entity of this.entities) {
       entity.draw();
     }
@@ -141,7 +144,7 @@ class World {
       bullet.draw();
     }
     for (let particle of this.particles) {
-      particle.draw();
+      if (!(particle instanceof AfterImageParticle)) particle.draw();
     }
   }
   tickSpawns(dt) {

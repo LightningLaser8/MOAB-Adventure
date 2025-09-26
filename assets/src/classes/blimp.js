@@ -16,15 +16,18 @@ class Blimp {
   weaponSlots = [];
   hitSize = 75;
 
+  hasBooster = false;
+  boosterPos = {x: 0, y: 0}
+
   //Upgrade info
   path1 = "none";
   path2 = "none";
   cost = {
     shards: 0,
-    bloonstones: 0
-  }
+    bloonstones: 0,
+  };
 
-
+  /**@param {Entity} entity*/
   upgradeEntity(entity) {
     entity.maxHealth = this.health;
     entity.health = this.health; //Heal
@@ -32,7 +35,7 @@ class Blimp {
     entity.speed = this.speed;
     entity.hitSize = this.hitSize;
     //Make entity know it is this
-    entity.blimp = this
+    entity.blimp = this;
     //Delete old resistances
     entity.resistances.splice(0);
     //Put these resistances in there
@@ -46,7 +49,11 @@ class Blimp {
       entity.weaponSlots[i].posX = this.positions[i].x;
       entity.weaponSlots[i].posY = this.positions[i].y;
     }
-    if(entity !== game.player) return; //Only continue if player
+    if(entity.weaponSlots[5]) {
+      entity.weaponSlots[5].posX = this.boosterPos.x;
+      entity.weaponSlots[5].posY = this.boosterPos.y;
+    }
+    if (entity !== game.player) return; //Only continue if player
     //Set UI conditions
     UIComponent.setCondition(
       "is-ap1-available:" + this.weaponSlots.includes(1)
@@ -63,5 +70,6 @@ class Blimp {
     UIComponent.setCondition(
       "is-ap5-available:" + this.weaponSlots.includes(5)
     );
+    UIComponent.setCondition("is-booster-available:" + this.hasBooster);
   }
 }

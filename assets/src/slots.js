@@ -99,6 +99,12 @@ const aps = {
       "diffuse"
     ),
   },
+  booster: new WeaponSlot(
+    "pop-booster",
+    "double-booster",
+    "vector",
+    "afterburner"
+  ),
   error: new WeaponSlot(),
 };
 function getSelectedAP(ap) {

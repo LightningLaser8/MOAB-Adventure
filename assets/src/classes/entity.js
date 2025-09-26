@@ -3,6 +3,7 @@ class Entity {
   y = 0;
   direction = 0;
   //Slots only for players
+  /**@type {WeaponSlot[]} */
   weaponSlots = [];
   health = 100;
   maxHealth = 100;
@@ -113,7 +114,6 @@ class Entity {
             //If a valid collision
             entity !== this &&
             !entity.dead &&
-            this.team === entity.team &&
             !collided.includes(entity) && //Not if already hit
             this.collidesWith(entity)
           ) {

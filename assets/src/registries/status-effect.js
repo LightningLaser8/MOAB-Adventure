@@ -9,6 +9,16 @@ Registry.statuses.add(
   })
 );
 Registry.statuses.add(
+  "ignited",
+  construct({
+    type: "status-effect",
+    damage: 0.03,
+    damageType: "fire",
+    vfx: "fire",
+    vfxChance: 0.1,
+  })
+);
+Registry.statuses.add(
   "freezing",
   construct({
     type: "status-effect",

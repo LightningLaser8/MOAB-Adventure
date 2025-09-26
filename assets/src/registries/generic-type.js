@@ -8,6 +8,8 @@ Registry.genericType.add("shooting-box", AngryBox);
 Registry.genericType.add("boss", Boss);
 Registry.genericType.add("final-boss", FinalBoss);
 Registry.genericType.add("world", World);
+
+Registry.genericType.add("booster", Booster);
 //Animations
 Registry.genericType.add("animation", PartAnimation); //Who cares that the class is named something else?
 Registry.genericType.add("infinite-animation", InfiniteAnimation);

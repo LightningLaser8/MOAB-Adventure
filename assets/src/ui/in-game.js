@@ -624,6 +624,27 @@ createUIComponent(
   40
 );
 
+//Booster
+createUIComponent(
+  ["in-game"],
+  [
+    "upgrade-menu-open:true",
+    "is-booster-available:true",
+    "submenu-selected:none",
+  ],
+  645,
+  525,
+  200,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:booster");
+  },
+  "Booster",
+  true,
+  40
+);
+
 //    Sub-menus
 function getSelectedSlotIndex() {
   //Returns the index for the selected slot.
@@ -632,12 +653,16 @@ function getSelectedSlotIndex() {
   if (UIComponent.evaluateCondition("submenu-selected:ap3")) return 2;
   if (UIComponent.evaluateCondition("submenu-selected:ap4")) return 3;
   if (UIComponent.evaluateCondition("submenu-selected:ap5")) return 4;
+  if (UIComponent.evaluateCondition("submenu-selected:booster")) return 5;
   return -1;
 }
 //  Back button
 createUIComponent(
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|blimp"],
+  [
+    "upgrade-menu-open:true",
+    "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster|blimp",
+  ],
   525,
   225,
   50,
@@ -661,7 +686,7 @@ createUIComponent(
 Object.defineProperty(
   createUIComponent(
     ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"],
+    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"],
     900,
     325,
     0,
@@ -674,7 +699,10 @@ Object.defineProperty(
   ),
   "text",
   {
-    get: () => "Weapon: AP" + (getSelectedSlotIndex() + 1), //Dynamically change based on selected slot
+    get: () =>
+      getSelectedSlotIndex() === 5
+        ? "Booster"
+        : "Weapon: AP" + (getSelectedSlotIndex() + 1), //Dynamically change based on selected slot
   }
 );
 //Current upgrade info
@@ -682,7 +710,7 @@ Object.defineProperty(
   createUIComponent(
     //Name
     ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
     900,
     380,
     750,
@@ -713,7 +741,7 @@ Object.defineProperty(
   createUIComponent(
     //Description
     ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
     900,
     475,
     750,
@@ -744,7 +772,7 @@ Object.defineProperty(
 //Next upgrade info
 createUIComponent(
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"],
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"],
   900,
   565,
   0,
@@ -759,7 +787,7 @@ Object.defineProperty(
   createUIComponent(
     //Name
     ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
     900,
     625,
     750,
@@ -790,7 +818,7 @@ Object.defineProperty(
   createUIComponent(
     //Description
     ["in-game"],
-    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+    ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
     835,
     720,
     625,
@@ -823,7 +851,7 @@ Object.defineProperty(
 createUIComponent(
   //Cost background
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
   1225,
   720,
   100,
@@ -837,7 +865,7 @@ createUIComponent(
 createUIImageComponent(
   //Shard icon
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
   1200,
   700,
   30,
@@ -849,7 +877,7 @@ createUIImageComponent(
 createUIImageComponent(
   //Bloonstone icon
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
   1200,
   740,
   30,
@@ -863,7 +891,10 @@ UIComponent.alignLeft(
     createUIComponent(
       //Shard Cost
       ["in-game"],
-      ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+      [
+        "upgrade-menu-open:true",
+        "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster",
+      ], //Assuming AP is available
       1225,
       700,
       0,
@@ -896,7 +927,10 @@ UIComponent.alignLeft(
     createUIComponent(
       //Bloonstone Cost
       ["in-game"],
-      ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"], //Assuming AP is available
+      [
+        "upgrade-menu-open:true",
+        "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster",
+      ], //Assuming AP is available
       1225,
       740,
       0,
@@ -926,7 +960,7 @@ UIComponent.alignLeft(
 );
 createUIComponent(
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5"],
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"],
   900,
   825,
   700,
@@ -954,7 +988,7 @@ createUIComponent(
 createUIComponent(
   ["in-game"],
   ["upgrade-menu-open:true", "submenu-selected:none"],
-  1000,
+  1020,
   525,
   500,
   60,
@@ -1032,7 +1066,13 @@ Object.defineProperty(
       if (!upgrade || upgrade === "none")
         return "This path has no upgrade for this blimp.";
       let blimp = Registry.blimps.get(upgrade);
-      return "Max HP: " + blimp.health + " | Speed: " + blimp.speed;
+      return (
+        blimp.description +
+        "\nMax HP: " +
+        blimp.health +
+        " | Speed: " +
+        blimp.speed
+      );
     },
   }
 );
@@ -1101,7 +1141,13 @@ Object.defineProperty(
       if (!upgrade || upgrade === "none")
         return "This path has no upgrade for this blimp.";
       let blimp = Registry.blimps.get(upgrade);
-      return "Max HP: " + blimp.health + " | Speed: " + blimp.speed;
+      return (
+        blimp.description +
+        "\nMax HP: " +
+        blimp.health +
+        " | Speed: " +
+        blimp.speed
+      );
     },
   }
 );

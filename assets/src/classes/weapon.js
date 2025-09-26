@@ -32,7 +32,7 @@ class Weapon {
   #acceleration = 0;
   #accelerated = 0;
   //Death Value
-  dvRatio = 0; //Amount DV increases by per damage
+  dvRatio = 0; //Amount damage increases by per DV
   //Sound
   fireSound = null;
   //Recoil/Rotation
@@ -67,12 +67,10 @@ class Weapon {
       this.x = this.slot.entity.x + this.slot.posX;
       this.y = this.slot.entity.y + this.slot.posY;
       if (this.rotate) {
-        this.rotation = degrees(
-          p5.Vector.sub(
-            createVector(this.slot.entity.target.x, this.slot.entity.target.y), //Mouse pos 'B'
-            createVector(this.x, this.y) //Weapon pos 'A'
-          ).heading() //'A->B' = 'B' - 'A'
-        );
+        this.rotation = new Vector(
+          this.slot.entity.target.x,
+          this.slot.entity.target.y
+        ).subXY(this.x, this.y).angle;
         //If there is a rotation confinement
         if (this.maxRotation >= 0) {
           if (this.rotation > this.maxRotation + this.slot.entity.direction)

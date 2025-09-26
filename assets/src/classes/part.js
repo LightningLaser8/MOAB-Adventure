@@ -61,23 +61,23 @@ class Part {
     return totalOffset;
   }
   draw(weapon) {
-    let pos = createVector(weapon.x, weapon.y);
-    let angle =
-      weapon.rotationRadians +
-      this.rotationRadians +
-      radians(this.totalRotOffset);
+    let pos = new Vector(weapon.x, weapon.y);
+    let angle = weapon.rotation + this.rotation + this.totalRotOffset;
     //pos.add(createVector(this.x, this.y))
-    let xOffsetVct = p5.Vector.fromAngle(weapon.rotationRadians);
-    xOffsetVct.mult(this.x + this.totalXOffset); //Relative horizontal offset from weapon centre
-    let yOffsetVct = p5.Vector.fromAngle(weapon.rotationRadians + HALF_PI);
-    yOffsetVct.mult(this.y + this.totalYOffset); //Relative vertical offset from weapon centre
-    let slideVct = p5.Vector.fromAngle(angle);
-    slideVct.mult(this.slide + this.totalSlideOffset); //Offset in the direction of the part
-    let finalPos = p5.Vector.add(
-      p5.Vector.add(p5.Vector.add(yOffsetVct, xOffsetVct), slideVct),
-      pos
-    ); //Add them all up
-    if (this.image instanceof ImageContainer || typeof this.image === "string") {
+    let xOffsetVct = Vector.fromAngle(weapon.rotation).scale(
+      this.x + this.totalXOffset
+    ).toPositional(); //Relative horizontal offset from weapon centre
+    let yOffsetVct = Vector.fromAngle(weapon.rotation + 90).scale(
+      this.y + this.totalYOffset
+    ).toPositional(); //Relative vertical offset from weapon centre
+    let slideVct = Vector.fromAngle(angle).scale(
+      this.slide + this.totalSlideOffset
+    ).toPositional(); //Offset in the direction of the part
+    let finalPos = pos.add(yOffsetVct.add(xOffsetVct.add(slideVct))); //Add them all up
+    if (
+      this.image instanceof ImageContainer ||
+      typeof this.image === "string"
+    ) {
       //If it's an image, draw it
       rotatedImg(
         this.image,
@@ -85,7 +85,7 @@ class Part {
         finalPos.y,
         this.width,
         this.height,
-        angle
+        radians(angle)
       );
     } else {
       //If it isn't, draw a rectangle
@@ -97,7 +97,7 @@ class Part {
         finalPos.y,
         this.width,
         this.height,
-        angle
+        radians(angle)
       );
       pop();
     }

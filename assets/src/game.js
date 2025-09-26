@@ -27,9 +27,9 @@ const game = {
 };
 const difficulty = {
   easy: {
-    spawnRateLowTier: 0.75,
-    spawnRateHighTier: 0.67,
-    boxHP: 0.85,
+    spawnRateLowTier: 1.2,
+    spawnRateHighTier: 0.4,
+    boxHP: 0.6,
     bossHP: 0.85,
   },
   normal: {
@@ -41,11 +41,11 @@ const difficulty = {
   hard: {
     spawnRateLowTier: 1.2,
     spawnRateHighTier: 2,
-    boxHP: 1.25,
+    boxHP: 1.2,
     bossHP: 1.3,
   },
   impossible: {
-    spawnRateLowTier: 1,
+    spawnRateLowTier: 0.75,
     spawnRateHighTier: 1.5,
     boxHP: 1,
     bossHP: 1.5,
@@ -318,6 +318,7 @@ function createPlayer() {
   player.addWeaponSlot(getSelectedAP(3));
   player.addWeaponSlot(getSelectedAP(4));
   player.addWeaponSlot(getSelectedAP(5));
+  player.addWeaponSlot(aps.booster);
   player.addToWorld(world);
   game.player = player;
   //is moab
@@ -345,8 +346,9 @@ function createPlayer() {
 
 function fireIfPossible() {
   if (ui.menuState === "in-game" && mouseIsPressed) {
-    for (let slot of game.player.weaponSlots) {
-      if (slot.weapon) slot.weapon.fire();
+    for (let slotidx = 0; slotidx < 5; slotidx++) {
+      let weapon = game.player?.weaponSlots[slotidx]?.weapon;
+      if (weapon) weapon.fire();
     }
   }
 }
@@ -433,21 +435,30 @@ function reset() {
 
 //Triggers on any key press
 function keyPressed() {
-  if (key.toLowerCase() === "p") {
+  //ignore caps lock
+  let k = key.toLowerCase();
+  if (k === "p") {
     //Pause / unpause
     if (game.paused) unpause();
     else pause();
   }
-  if (key.toLowerCase() === "f3") {
+  if (k === " ") {
+    //Boost
+    if (game.player.blimp.hasBooster)
+      game.player.weaponSlots[5]?.weapon?.fire();
+  }
+  if (k === "f3") {
+    //Toggle debug mode
     if (UIComponent.evaluateCondition("debug:true"))
       UIComponent.setCondition("debug:false");
     else UIComponent.setCondition("debug:true");
   }
-  if (key.toLowerCase() === "f12") {
+  if (k === "f12") {
+    //devtools
     return true;
   }
-  if (key.toLowerCase() === "f11") {
-    //finally
+  if (k === "f11") {
+    //fullscreen
     return true;
   }
   return false; //Prevent any default behaviour

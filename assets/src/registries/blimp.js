@@ -3,6 +3,8 @@ Registry.blimps.add("moab", {
   health: 200,
   speed: 8,
   weaponSlots: [1],
+  hasBooster: true,
+  boosterPos: {x: -100, y: 0},
   drawer: {
     image: "blimp.moab",
     width: 230,

@@ -165,7 +165,7 @@ Registry.weapons.add(".ace-radial-gun-impos", {
   shoot: {
     bullet: {
       type: "missile",
-      turnSpeed: 1.5,
+      turnSpeed: 0.75,
       targetType: "nearest",
       lifetime: 80,
       speed: 30,
@@ -372,6 +372,7 @@ Registry.weapons.add(".box-rotary-pain", {
 //## SUPER MONKEY ##
 Registry.weapons.add(".super-monkey-throw", {
   name: ".super-monkey-throw",
+  rotate: false,
   shoot: {
     bullet: {
       type: "Bullet",

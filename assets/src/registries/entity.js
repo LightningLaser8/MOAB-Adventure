@@ -28,8 +28,8 @@ Registry.entities.add("wooden-box", {
     shards: 5,
   },
   team: "enemy",
-  health: 5,
-  healthIncrease: 1.25,
+  health: 4,
+  healthIncrease: 1,
   hitSound: "wood-hit",
   deathSound: "wood-break",
 });
@@ -64,8 +64,8 @@ Registry.entities.add("metal-box", {
     shards: 10, //Worth more
   },
   team: "enemy",
-  health: 20, //More HP
-  healthIncrease: 5,
+  health: 16, //More HP
+  healthIncrease: 2,
   hitSound: "metal-hit",
   deathSound: "metal-break",
 });
@@ -96,8 +96,8 @@ Registry.entities.add("hardwood-box", {
     shards: 5,
   },
   team: "enemy",
-  health: 7.5,
-  healthIncrease: 1.5,
+  health: 5,
+  healthIncrease: 1.25,
   hitSound: "wood-hit",
   deathSound: "wood-break",
 });
