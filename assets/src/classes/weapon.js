@@ -1,5 +1,6 @@
 class Weapon {
   reload = 1;
+  minReload = 0;
   barrel = 0;
   parts = [];
   shoot = {
@@ -31,9 +32,7 @@ class Weapon {
   #acceleration = 0;
   #accelerated = 0;
   //Death Value
-  storesDV = false; //Does this weapon store DV?
-  dvRatio = 0; //Amount DV increases by per damage
-  _dv = 0; //Stored DV.
+  dvRatio = 0; //Amount damage increases by per DV
   //Sound
   fireSound = null;
   //Recoil/Rotation
@@ -45,17 +44,10 @@ class Weapon {
     return (this.rotation / 180) * Math.PI;
   }
   getDVScale() {
-    return this._dv * this.dvRatio;
+    return this.slot.entity.dv * this.dvRatio;
   }
-  absorbDVFrom(entity) {
-    //Increases stored DV from defeating an entity
-    if (entity instanceof Boss) {
-      this._dv += 250; //Gain 250 DV from bosses
-    } else if (entity instanceof Box) {
-      this._dv++; //Gain 1 DV from boxes
-    } else {
-      this._dv += 25; //Gain 25 DV from random stuff
-    }
+  resetCD() {
+    this._cooldown = this.minReload;
   }
   init() {
     let np = [];
@@ -75,19 +67,18 @@ class Weapon {
       this.x = this.slot.entity.x + this.slot.posX;
       this.y = this.slot.entity.y + this.slot.posY;
       if (this.rotate) {
-        this.rotation = degrees(
-          p5.Vector.sub(
-            createVector(this.slot.entity.target.x, this.slot.entity.target.y), //Mouse pos 'B'
-            createVector(this.x, this.y) //Weapon pos 'A'
-          ).heading() //'A->B' = 'B' - 'A'
-        );
+        this.rotation = new Vector(
+          this.slot.entity.target.x,
+          this.slot.entity.target.y
+        ).subXY(this.x, this.y).angle;
         //If there is a rotation confinement
-        if(this.maxRotation >= 0){
-          if(this.rotation > this.maxRotation + this.slot.entity.direction) this.rotation = this.maxRotation + this.slot.entity.direction //Constrain positively
-          if(this.rotation < -this.maxRotation + this.slot.entity.direction) this.rotation = -this.maxRotation + this.slot.entity.direction //Constrain negatively
+        if (this.maxRotation >= 0) {
+          if (this.rotation > this.maxRotation + this.slot.entity.direction)
+            this.rotation = this.maxRotation + this.slot.entity.direction; //Constrain positively
+          if (this.rotation < -this.maxRotation + this.slot.entity.direction)
+            this.rotation = -this.maxRotation + this.slot.entity.direction; //Constrain negatively
         }
-      }
-      else{
+      } else {
         this.rotation = this.slot.entity.direction;
       }
     }
@@ -173,8 +164,7 @@ function patternedBulletExpulsion(
     /** @type {Bullet} */
     let bulletToFire = bullet(bulletToSpawn);
     //Put the bullet in position
-    bulletToFire.x = x;
-    bulletToFire.y = y;
+    bulletToFire.pos = new Vector(x, y);
     bulletToFire.direction = direction; //do the offset
     //Apply uniform spread
     bulletToFire.direction += currentAngle;

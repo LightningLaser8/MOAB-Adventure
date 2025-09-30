@@ -12,6 +12,8 @@ class Box extends ScalingEntity {
   destroyReward = structuredClone(this.reward);
   //No moving unless explicitly stated
   speed = 0;
+  square = true; //Can't rotate
+  dv = 1;
   onDeath(source) {
     //Give destroy reward
     game.shards += this.destroyReward.shards ??= 0;
@@ -30,11 +32,24 @@ class Box extends ScalingEntity {
         game.shards += this.reward.shards ??= 0;
         game.bloonstones += this.reward.bloonstones ??= 0;
       }
+      if (this.square) this.direction = 0;
       super.tick();
     }
   }
   scaleToDifficulty() {
     let diff = difficulty[game.difficulty]; //Get difficulty
     this.health *= diff.boxHP ?? 1; //Multiply HP by box HP multiplier
+  }
+}
+class AngryBox extends Box {
+  tick() {
+    if (!this.dead) {
+      this.target = game?.player;
+      super.tick();
+      if (this.target)
+        this.weaponSlots.forEach((s) => {
+          if (s?.weapon) s.weapon.fire();
+        });
+    }
   }
 }

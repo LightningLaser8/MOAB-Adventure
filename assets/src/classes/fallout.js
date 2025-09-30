@@ -3,6 +3,8 @@ class RadiationZone extends Bullet {
   damagePerTick = 0;
   damageRange = 200;
   damageType = "radiation";
+  status = "irradiated";
+  statusDuration = 400;
   colour = [50, 255, 0, 50];
   #timer = 0;
   #outlineColour = null;
@@ -28,7 +30,7 @@ class RadiationZone extends Bullet {
   }
   step(dt) {
     //Move with background
-    this.x -= game.player.speed;
+    this.pos = this.pos.subXY(game.player.speed, 0);
     if (this.#timer >= 20) {
       this.#timer = 0;
       //Inflict radiation damage
@@ -45,8 +47,8 @@ class RadiationZone extends Bullet {
         null,
         null,
         null,
-        "irradiated",
-        400
+        this.status,
+        this.statusDuration
       );
       this.world.particles.push(
         new WaveParticle(

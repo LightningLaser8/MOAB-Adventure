@@ -1,25 +1,35 @@
 const game = {
   //Game options
-  difficulty: "normal",
+  _diff: "normal",
+  get difficulty() {
+    return this._diff;
+  },
+  set difficulty(_) {
+    this._diff = _;
+    world.updateDifficulty();
+  },
   mode: "adventure",
   saveslot: 1,
   //Control type
   control: "keyboard",
   /** @type {Entity | null} Player entity */
   player: null,
+  maxDV: 0,
+  totalBosses: 0,
   //Currency
-  shards: 0,
+  shards: 400,
   bloonstones: 0,
   level: 1,
-  bosstimer: 300,
-  bossinterval: 300,
+  bosstimer: 400,
+  bossdelay: 400,
+  bossinterval: 400,
   paused: false,
 };
 const difficulty = {
   easy: {
-    spawnRateLowTier: 0.75,
-    spawnRateHighTier: 0.67,
-    boxHP: 0.85,
+    spawnRateLowTier: 1.2,
+    spawnRateHighTier: 0.4,
+    boxHP: 0.6,
     bossHP: 0.85,
   },
   normal: {
@@ -29,10 +39,16 @@ const difficulty = {
     bossHP: 1,
   },
   hard: {
-    spawnRateLowTier: 1.3,
+    spawnRateLowTier: 1.2,
     spawnRateHighTier: 2,
-    boxHP: 1.25,
+    boxHP: 1.2,
     bossHP: 1.3,
+  },
+  impossible: {
+    spawnRateLowTier: 0.75,
+    spawnRateHighTier: 1.5,
+    boxHP: 1,
+    bossHP: 1.5,
   },
 };
 /** @type {World} */
@@ -63,7 +79,10 @@ function getCanvasDimensions(baseWidth, baseHeight) {
 }
 
 let fonts = {};
-let backgroundGradient;
+let backgrounds = {
+  grad_normal: null,
+  grad_impossible: null,
+};
 
 async function preload() {
   await Registry.images.forEachAsync(async (name, item) => {
@@ -79,18 +98,50 @@ async function preload() {
 }
 //Set up the canvas, using the previous function
 function setup() {
-  createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
-  backgroundGradient = createGraphics(1, 100);
-  for (let y = 0; y < 100; y++) {
-    //For each vertical unit
-    let col = [0, (200 * y) / 100, (255 * y) / 100]; //Get colour interpolation
-    backgroundGradient.noStroke(); //Remove outline
-    backgroundGradient.fill(col); //Set fill colour to use
-    backgroundGradient.rect(0, y, 2, 1); //Draw the rectangle
+  try {
+    createCanvas(...getCanvasDimensions(baseWidth, baseHeight));
+    //Creates background stuff
+    backgrounds.grad_normal = createGraphics(1, 100);
+    for (let y = 0; y < 100; y++) {
+      //For each vertical unit
+      let col = colinterp(
+        [
+          [0, 0, 0],
+          [0, 200, 255],
+        ],
+        y / 100
+      ); //Get colour interpolation
+      backgrounds.grad_normal.noStroke(); //Remove outline
+      backgrounds.grad_normal.fill(col); //Set fill colour to use
+      backgrounds.grad_normal.rect(0, y, 2, 1); //Draw the rectangle
+    }
+    backgrounds.grad_impossible = createGraphics(1, 100);
+    for (let y = 0; y < 100; y++) {
+      //For each vertical unit
+      let col = colinterp(
+        [
+          [0, 0, 0],
+          [0, 0, 0],
+          [64, 0, 0],
+          [128, 0, 0],
+          [255, 0, 0],
+          [255, 128, 0],
+          [255, 255, 0],
+          [255, 255, 255],
+        ],
+        y / 100
+      ); //you get it by now
+      backgrounds.grad_impossible.noStroke();
+      backgrounds.grad_impossible.fill(col);
+      backgrounds.grad_impossible.rect(0, y, 2, 1);
+    }
+    //p5 options
+    rectMode(CENTER);
+    imageMode(CENTER);
+    textFont(fonts.darktech);
+  } catch (e) {
+    crash(e);
   }
-  rectMode(CENTER);
-  imageMode(CENTER);
-  textFont(fonts.darktech);
 }
 //Change the size if the screen size changes
 function windowResized() {
@@ -99,18 +150,33 @@ function windowResized() {
 
 //p5's draw function - called 60 times per second
 function draw() {
-  clear();
-  scale(contentScale);
-  image(backgroundGradient, 960, 540, 1920, 1080);
-  if (world) {
-    if (ui.menuState === "in-game") {
-      background.draw();
-      gameFrame();
+  try {
+    clear();
+    scale(contentScale);
+    image(
+      game.difficulty === "impossible"
+        ? backgrounds.grad_impossible
+        : backgrounds.grad_normal,
+      960,
+      540,
+      1920,
+      1080
+    );
+    if (world) {
+      if (ui.menuState === "in-game") {
+        background.draw();
+        gameFrame();
+      }
+      uiFrame();
+      if (!ui.waitingForMouseUp) fireIfPossible();
     }
-    uiFrame();
-    if (!ui.waitingForMouseUp) fireIfPossible();
+    if (!game.paused) {
+      Timer.main.tick();
+      effectTimer.tick();
+    }
+  } catch (e) {
+    crash(e);
   }
-  if (!game.paused) Timer.main.tick();
 }
 
 function uiFrame() {
@@ -120,7 +186,7 @@ function uiFrame() {
   drawUI();
   //Reset mouse held status
   if (ui.waitingForMouseUp && !mouseIsPressed) ui.waitingForMouseUp = false;
-  if (keyIsDown(SHIFT)) showMousePos();
+  if (UIComponent.evaluateCondition("debug:true")) showMousePos();
 }
 
 function gameFrame() {
@@ -136,8 +202,10 @@ function gameFrame() {
 function tickBossEvent() {
   UIComponent.setCondition("boss:" + (world.getFirstBoss() ? "yes" : "no")); // Update condition
   if (UIComponent.evaluateCondition("boss:no")) {
+    //If initial delay
+    if (game.bossdelay > 0) game.bossdelay--;
     // If there's no boss active
-    if (game.bosstimer <= 0) {
+    else if (game.bosstimer <= 0) {
       //If timer has run out
       game.bosstimer = game.bossinterval; //Reset timer
       world.nextBoss();
@@ -203,6 +271,8 @@ function drawUI() {
       component.draw();
     }
   }
+  uiEffectTimer.tick();
+  ui.particles.forEach((p) => p && (p.draw() || p.step(1)));
 }
 
 function tickUI() {
@@ -212,9 +282,14 @@ function tickUI() {
       component.checkMouse();
     }
   }
+  len = ui.particles.length;
+  for (let p = 0; p < len; p++) {
+    if (ui.particles[p]?.remove) {
+      ui.particles.splice(p, 1);
+    }
+  }
 }
 
-//Ignore for NEA Writeup - dev function
 function showMousePos() {
   push();
   textAlign(CENTER, CENTER);
@@ -243,6 +318,7 @@ function createPlayer() {
   player.addWeaponSlot(getSelectedAP(3));
   player.addWeaponSlot(getSelectedAP(4));
   player.addWeaponSlot(getSelectedAP(5));
+  player.addWeaponSlot(aps.booster);
   player.addToWorld(world);
   game.player = player;
   //is moab
@@ -270,8 +346,9 @@ function createPlayer() {
 
 function fireIfPossible() {
   if (ui.menuState === "in-game" && mouseIsPressed) {
-    for (let slot of game.player.weaponSlots) {
-      if (slot.weapon) slot.weapon.fire();
+    for (let slotidx = 0; slotidx < 5; slotidx++) {
+      let weapon = game.player?.weaponSlots[slotidx]?.weapon;
+      if (weapon) weapon.fire();
     }
   }
 }
@@ -318,16 +395,16 @@ function playerDies() {
 }
 
 function playerWins() {
-  deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  deathStats.bloonstoneCounter.text =
+  winStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
+  winStats.bloonstoneCounter.text =
     "Bloonstones: " + shortenedNumber(game.bloonstones);
-  deathStats.damageDealt.text =
+  winStats.damageDealt.text =
     "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  deathStats.damageTaken.text =
+  winStats.damageTaken.text =
     "Damage Taken: " + shortenedNumber(game.player.damageTaken);
-  deathStats.destroyedBoxes.text =
+  winStats.destroyedBoxes.text =
     "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
-  deathStats.destroyedBosses.text =
+  winStats.destroyedBosses.text =
     "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
   ui.menuState = "you-win";
   //Reset world and game
@@ -343,6 +420,9 @@ function reset() {
   game.level = 1;
   unpause();
   game.bosstimer = game.bossinterval;
+  game.bossdelay = game.bossinterval;
+  game.maxDV = 0;
+  game.totalBosses = 0;
 
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
@@ -355,12 +435,30 @@ function reset() {
 
 //Triggers on any key press
 function keyPressed() {
-  if (key.toLowerCase() === "p") {
+  //ignore caps lock
+  let k = key.toLowerCase();
+  if (k === "p") {
     //Pause / unpause
     if (game.paused) unpause();
     else pause();
   }
-  if (key.toLowerCase() === "f12") {
+  if (k === " ") {
+    //Boost
+    if (game.player.blimp.hasBooster)
+      game.player.weaponSlots[5]?.weapon?.fire();
+  }
+  if (k === "f3") {
+    //Toggle debug mode
+    if (UIComponent.evaluateCondition("debug:true"))
+      UIComponent.setCondition("debug:false");
+    else UIComponent.setCondition("debug:true");
+  }
+  if (k === "f12") {
+    //devtools
+    return true;
+  }
+  if (k === "f11") {
+    //fullscreen
     return true;
   }
   return false; //Prevent any default behaviour

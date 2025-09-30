@@ -2,16 +2,24 @@ class Boss extends ScalingEntity {
   reward = { shards: 0, bloonstones: 0 };
   /** @type {Array<BossAction>} */
   actions = {}; //Essentially a registry, holds items to be used in sequence
-  sequence = []; //Array of names of actions
+  sequence = []; //Array of names of actions.
+  imposSequence = null; //Array to be used in Impossible difficulty. Optional.
   #action = 0; //Current action being executed
   #timer = 0; //Time the current action has been executing for.
+
+  imposDrawer = null;
+
   //Movement
+  aiActive = true;
   turnSpeed = 5;
   turnWhileMoving = false;
   trackTarget = true;
   trackingOffsetX = 400;
   trackingOffsetY = 0;
   previousRot = 0;
+
+  isMinion = false; //Stops this counting for boss kills
+  dv = 250;
   init() {
     super.init();
     //Construct boss actions
@@ -19,47 +27,62 @@ class Boss extends ScalingEntity {
       this.actions[name] = construct(this.actions[name], BossAction);
     }
     //Instantly use first action
-    let currentAction = this.actions[this.sequence[this.#action]];
-    if (!currentAction) return; //Stop immediately if actions empty
-    currentAction.execute(this);
+    let currentAction = this.getAction();
+    if (currentAction) currentAction.execute(this);
     this.previousRot = this.direction;
   }
-  scaleToDifficulty() {
-    let diff = difficulty[game.difficulty]; //Get difficulty
-    this.health *= diff.bossHP ?? 1; //Multiply HP by boss HP multiplier
+  seq() {
+    return game.difficulty === "impossible"
+      ? this.imposSequence ?? this.sequence
+      : this.sequence;
   }
-  ai() {
-    //Temporarily, set target to player. This should almost always be the case, until player minions exist.
-    this.target = game?.player;
-
-    //Move towards tracking point
-    if (this.trackTarget)
-      if (this.target)
-        this.trackPoint(
-          this.target.x + this.trackingOffsetX,
-          this.target.y + this.trackingOffsetY
-        );
-
+  getAction() {
+    return this.actions[this.seq()[this.#action]];
+  }
+  tickSeq(seq, actIndex) {
     //Do the action thing
-    let currentAction = this.actions[this.sequence[this.#action]];
-    if (!currentAction) return; //Stop immediately if actions empty
-    if (this.#timer < currentAction.duration) {
+    /**@type {BossAction} */
+    let currentAction = this.actions[seq[actIndex]];
+    if (!currentAction) return 0; //Stop immediately if actions empty
+    if (!currentAction.complete) {
       currentAction.tick(this);
-      this.#timer++;
-    } else {
-      currentAction.end(this);
-      this.#action++;
-      this.#timer = 0;
-      if (this.#action >= this.sequence.length) {
-        this.#action = 0;
-      }
-      let next = this.actions[this.sequence[this.#action]];
-      if (!next) return; //Stop if only action has been done
-      next.execute(this);
-      next.tick(this);
+      return actIndex;
     }
+    //If action has finished
+    currentAction.end(this);
+    actIndex++;
+    if (actIndex >= seq.length) {
+      actIndex = 0;
+    }
+    let next = this.actions[seq[actIndex]];
+    if (!next) return actIndex; //Stop if the only action has been done
+    next.execute(this);
+    if (next.duration === 1 && actIndex !== 0) {
+      this.tickSeq(seq, actIndex); //skip through, unless all actions are 0 duration to avoid freezing
+    }
+    return actIndex;
+  }
+  tick() {
+    //Tick as normal
+    super.tick();
     //Corrective rotating
     this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading());
+  }
+  ai(){
+    if (!this.#action) this.#action = 0;
+    
+    if (this.aiActive) {
+      //Temporarily, set target to player. This should almost always be the case, until player minions exist.
+      this.target = game?.player;
+      //Move towards tracking point
+      if (this.trackTarget)
+        if (this.target)
+          this.trackPoint(
+            this.target.x + this.trackingOffsetX,
+            this.target.y + this.trackingOffsetY
+          );
+    }
+    this.#action = this.tickSeq(this.seq(), this.#action);
   }
   scaleToDifficulty() {
     let diff = difficulty[game.difficulty]; //Get difficulty
@@ -133,6 +156,30 @@ class Boss extends ScalingEntity {
     game.bloonstones += this.reward.bloonstones ??= 0;
     if (!source) return;
     //Stats
-    source.destroyed.bosses++;
+    if (!this.isMinion) source.destroyed.bosses++;
+  }
+  getDraw() {
+    return game.difficulty === "impossible"
+      ? this.imposDrawer ?? this.drawer
+      : this.drawer;
+  }
+  draw() {
+    let d = this.getDraw();
+    if (d.image) {
+      rotatedImg(d.image, this.x, this.y, d.width, d.height, this.directionRad);
+    } else {
+      //If no image, draw shape instead
+      rotatedShape(
+        d.shape,
+        this.x,
+        this.y,
+        d.width,
+        d.height,
+        this.directionRad
+      );
+    }
+    for (let slot of this.weaponSlots) {
+      slot.draw();
+    }
   }
 }

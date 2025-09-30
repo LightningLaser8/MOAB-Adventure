@@ -18,8 +18,9 @@
     //Disable p5's errors, they don't really help
     p5.disableFriendlyErrors = true;
     //Game info
-    const gameVersion = "0.0.97-ex";
+    const gameVersion = "0.0.103-ex";
     const isPreview = true;
+    let versionReplacementText = "";
   </script>
   <!-- Core -->
   <script src="./assets/src/core/ui.js"></script>
@@ -33,15 +34,19 @@
   <script src="./assets/src/classes/shape-particle.js"></script>
   <script src="./assets/src/classes/text-particle.js"></script>
   <script src="./assets/src/classes/wave-particle.js"></script>
+  <script src="./assets/src/classes/image-particle.js"></script>
   <script src="./assets/src/classes/part.js"></script>
   <script src="./assets/src/classes/weapon.js"></script>
+  <script src="./assets/src/classes/booster.js"></script>
   <script src="./assets/src/classes/multi-weapon.js"></script>
   <script src="./assets/src/classes/weapon-slot.js"></script>
   <script src="./assets/src/classes/status-effect.js"></script>
   <script src="./assets/src/classes/bullet.js"></script>
+  <script src="./assets/src/classes/chained-bullet.js"></script>
   <script src="./assets/src/classes/point-bullet.js"></script>
   <script src="./assets/src/classes/grab-bullet.js"></script>
   <script src="./assets/src/classes/laser-bullet.js"></script>
+  <script src="./assets/src/classes/telegraph.js"></script>
   <script src="./assets/src/classes/continuous-laser-bullet.js"></script>
   <script src="./assets/src/classes/critical.js"></script>
   <script src="./assets/src/classes/missile.js"></script>
@@ -56,6 +61,7 @@
   <script src="./assets/src/classes/box.js"></script>
   <!-- Special Effects -->
   <script src="./assets/src/effects.js"></script>
+  <script src="./assets/src/core/vfx.js"></script>
   <!-- Registries -->
   <script src="./assets/src/registries/images.js"></script>
   <script src="./assets/src/registries/sounds.js"></script>
@@ -65,10 +71,13 @@
   <script src="./assets/src/registries/weapon.js"></script>
   <script src="./assets/src/registries/boss-weapon.js"></script>
   <script src="./assets/src/registries/special-weapon.js"></script>
+  <script src="./assets/src/registries/player-boss-weapon.js"></script>
+  <script src="./assets/src/registries/support.js"></script>
   <script src="./assets/src/registries/entity.js"></script>
   <script src="./assets/src/registries/blimp.js"></script>
   <script src="./assets/src/registries/status-effect.js"></script>
   <script src="./assets/src/registries/world.js"></script>
+  <script src="./assets/src/registries/vfx.js"></script>
   <!-- User interface -->
   <script src="./assets/src/ui/title.js"></script>
   <script src="./assets/src/ui/start.js"></script>
@@ -78,6 +87,7 @@
   <script src="./assets/src/ui/in-game.js"></script>
   <script src="./assets/src/ui/you-died.js"></script>
   <script src="./assets/src/ui/you-win.js"></script>
+  <script src="./assets/src/ui/crash.js"></script>
   <!-- Slot setup -->
   <script src="./assets/src/slots.js"></script>
   <!-- Actual gameplay -->

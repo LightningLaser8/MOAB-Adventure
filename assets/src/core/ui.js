@@ -18,6 +18,8 @@ const ui = {
     weapons: 100,
     entities: 100,
   },
+  //particle
+  particles: [],
 };
 
 class UIComponent {
@@ -297,6 +299,238 @@ class ImageUIComponent extends UIComponent {
   }
 }
 
+class HealthbarComponent extends UIComponent {
+  /**@type {Entity?} */
+  source = null;
+  healthbarColour = [255, 255, 255];
+  backgroundColour = [0, 0, 0];
+  healthbarReversed = false;
+  sourceIsFunction = false;
+  textColour = this.outlineColour;
+  #current = "health";
+  #max = "maxHealth";
+  #frac = 0;
+  #painColour = null;
+  setGetters(current = "health", max = "maxHealth") {
+    this.#current = current;
+    this.#max = max;
+    return this;
+  }
+  reverseBarDirection() {
+    this.healthbarReversed = !this.healthbarReversed;
+    return this;
+  }
+  setColours(bg, main, pain) {
+    if (bg) this.backgroundColour = bg;
+    if (main) this.healthbarColour = main;
+    if (pain) this.#painColour = pain;
+    return this;
+  }
+  constructor(
+    x = 0,
+    y = 0,
+    width = 1,
+    height = 1,
+    bevel = "none",
+    onpress = () => {},
+    shownText = "",
+    useOCR = false,
+    shownTextSize = 20,
+    source = null,
+    healthcol = [255, 255, 0]
+  ) {
+    //Initialise component
+    super(
+      x,
+      y,
+      width,
+      height,
+      bevel,
+      onpress,
+      shownText,
+      useOCR,
+      shownTextSize
+    );
+    this.source = source;
+    this.sourceIsFunction = typeof this.source === "function";
+    this.healthbarColour = healthcol;
+    this.#painColour = healthcol.map((x) => Math.min(255, x + 220));
+  }
+  /**@returns {Entity?} */
+  getSource() {
+    return this.sourceIsFunction ? this.source() : this.source;
+  }
+  draw() {
+    let src = this.getSource();
+    //tick
+    let target = src
+      ? (this.width * src[this.#current]) / src[this.#max]
+      : 0;
+    this.#frac += (target - this.#frac) * 0.075;
+
+    push();
+    translate(this.x, this.y);
+    rotate(this.rotation);
+    translate(-this.x, -this.y);
+    noStroke();
+    push();
+    if (this.inverted) scale(1, -1);
+    if (this.invertedX) scale(-1, 1);
+    if (this.width > 0 && this.height > 0) {
+      //outline
+      if (this.outline && this.outlineColour) {
+        stroke(...this.outlineColour);
+        strokeWeight(20);
+        if (this.emphasised) stroke(...this.emphasisColour);
+        noFill();
+        this.#shape(
+          this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
+          this.y,
+          this.width,
+          this.height,
+          true,
+          false,
+          this.healthbarReversed
+        );
+      }
+      //bar
+      noStroke();
+      fill(...(this.backgroundColour ?? [95, 100, 100, 160]));
+      this.#shape(
+        this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
+        this.y,
+        this.width,
+        this.height,
+        true,
+        false,
+        this.healthbarReversed
+      );
+      //indicator
+      fill(this.#painColour);
+      this.#shape(
+        this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
+        this.y,
+        this.#frac,
+        this.height,
+        true,
+        false,
+        this.healthbarReversed
+      );
+      //health
+      fill(this.healthbarColour);
+      this.#shape(
+        this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
+        this.y,
+        target,
+        this.height,
+        true,
+        false,
+        this.healthbarReversed
+      );
+    }
+    pop();
+    //Draw optional text
+    noStroke();
+    textFont(this.ocr ? fonts.ocr : fonts.darktech);
+    if (this.ocr) {
+      stroke(...this.textColour);
+      strokeWeight(this.textSize / 15);
+    }
+    fill(...this.textColour);
+    textAlign(LEFT, CENTER);
+    textSize(this.textSize);
+    text(
+      " " + (src ? this.text : "No source"),
+      (this.x - this.width / 2) * (this.invertedX ? -1 : 1),
+      this.y * (this.inverted ? -1 : 1)
+    );
+    pop();
+  }
+  #shape(
+    x,
+    y,
+    width,
+    height,
+    realign = false,
+    realignV = false,
+    reverseX = false
+  ) {
+    if (realign) x += (width / 2) * (reverseX ? -1 : 1);
+    if (realignV) y += height / 2;
+
+    beginShape();
+    if (this.bevel === "none") {
+      vertex(x - width / 2, y + height / 2);
+      vertex(x + width / 2, y + height / 2);
+      vertex(x + width / 2, y - height / 2);
+      vertex(x - width / 2, y - height / 2);
+    } else if (this.bevel === "both") {
+      vertex(x - width / 2 - height / 2, y + height / 2);
+      vertex(x + width / 2 - height / 2, y + height / 2);
+      vertex(x + width / 2 + height / 2, y - height / 2);
+      vertex(x - width / 2 + height / 2, y - height / 2);
+    } else if (this.bevel === "trapezium") {
+      vertex(x - width / 2 - height / 2, y + height / 2);
+      vertex(x + width / 2 + height / 2, y + height / 2);
+      vertex(x + width / 2 - height / 2, y - height / 2);
+      vertex(x - width / 2 + height / 2, y - height / 2);
+    } else if (this.bevel === "right") {
+      vertex(x - width / 2, y + height / 2);
+      vertex(x + width / 2 - height / 2, y + height / 2);
+      vertex(x + width / 2 + height / 2, y - height / 2);
+      vertex(x - width / 2, y - height / 2);
+    } else if (this.bevel === "left") {
+      vertex(x - width / 2 - height / 2, y + height / 2);
+      vertex(x + width / 2, y + height / 2);
+      vertex(x + width / 2, y - height / 2);
+      vertex(x - width / 2 + height / 2, y - height / 2);
+    } else if (this.bevel === "reverse") {
+      vertex(x - width / 2 + height / 2, y + height / 2);
+      vertex(x + width / 2 + height / 2, y + height / 2);
+      vertex(x + width / 2 - height / 2, y - height / 2);
+      vertex(x - width / 2 - height / 2, y - height / 2);
+    }
+    endShape(CLOSE);
+  }
+}
+function createHealthbarComponent(
+  screens = [],
+  conditions = [],
+  x = 0,
+  y = 0,
+  width = 1,
+  height = 1,
+  bevel = "none",
+  onpress = () => {},
+  shownText = "",
+  useOCR = false,
+  shownTextSize = 20,
+  source = null,
+  healthcol = [255, 255, 0]
+) {
+  //Make component
+  const component = new HealthbarComponent(
+    x,
+    y,
+    width,
+    height,
+    bevel,
+    onpress,
+    shownText,
+    useOCR,
+    shownTextSize,
+    source,
+    healthcol
+  );
+  component.conditions = conditions;
+  //Set conditional things
+  component.acceptedScreens = screens;
+  component.isInteractive = !!onpress;
+  //Add to game
+  ui.components.push(component);
+  return component;
+}
+
 function drawImg(
   img = "error",
   x,
@@ -534,7 +768,8 @@ function createGamePropertySelector(
   defaultOption = null,
   shownTexts = [""],
   shownTextSize = 50,
-  onchange = (value) => {}
+  onchange = (value) => {},
+  selectionColour = [255, 255, 0]
 ) {
   //Create display name
   createUIComponent(
@@ -587,6 +822,8 @@ function createGamePropertySelector(
       true,
       shownTextSize
     );
+    //colour thing
+    component.emphasisColour = selectionColour;
     //Highlight if the diffindicator has chosen this button's option
     Object.defineProperty(component, "emphasised", {
       get: () => diffindicator.chosen === options[i],
@@ -695,8 +932,8 @@ class SoundContainer {
   #category = "none";
   #path;
   /**
-   * @param {string} path 
-   * @param {"weapons" | "entities" | "music"} category 
+   * @param {string} path
+   * @param {"weapons" | "entities" | "music"} category
    */
   constructor(path, category = "none") {
     this.#path = path;
@@ -715,8 +952,8 @@ class SoundContainer {
   }
 }
 /**
- * @param {SoundContainer | string} sound 
- * @param {boolean} waitForEnd 
+ * @param {SoundContainer | string} sound
+ * @param {boolean} waitForEnd
  */
 function playSound(sound = null, waitForEnd = false) {
   //So silence is an option
@@ -760,4 +997,187 @@ function pauseSound(sound = null) {
   } else {
     Registry.sounds.get(sound).sound.pause();
   }
+}
+
+class UIParticleEmitter extends UIComponent {
+  interval = 60;
+  scale = 1;
+  direction = 0;
+  #countdown = 0;
+  /**@type {string | VisualEffect} */
+  effect = "none";
+  draw() {
+    if (this.#countdown <= 0) {
+      this.#countdown = this.interval;
+      createEffect(
+        this.effect,
+        null,
+        this.x,
+        this.y,
+        this.direction,
+        this.scale
+      );
+    } else this.#countdown--;
+  }
+  checkMouse() {}
+  constructor(x, y, direction, scale, effect, interval) {
+    super(x, y, 0, 0, "none", () => null, "", false, 0);
+    this.effect = effect;
+    this.direction = direction;
+    this.scale = scale;
+    this.interval = interval;
+  }
+}
+
+function createParticleEmitter(
+  screens = [],
+  conditions = [],
+  x = 0,
+  y = 0,
+  direction = 0,
+  scale = 1,
+  effect = "none",
+  interval = 1
+) {
+  //Make component
+  const component = new UIParticleEmitter(
+    x,
+    y,
+    direction,
+    scale,
+    effect,
+    interval
+  );
+  component.conditions = conditions;
+  //Set conditional things
+  component.acceptedScreens = screens;
+  //Add to game
+  ui.components.push(component);
+  return component;
+}
+
+function uiBlindingFlash(
+  x = 0,
+  y = 0,
+  opacity = 255,
+  duration = 60,
+  glareSize = 600
+) {
+  ui.particles.push(
+    //Obscure screen
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      30,
+      0,
+      0,
+      "ellipse",
+      [255, 255, 255, opacity],
+      [255, 255, 255, 0],
+      0,
+      1920 * 3,
+      0,
+      1080 * 3,
+      0
+    ),
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      90,
+      0,
+      0,
+      "ellipse",
+      [255, 255, 255, opacity],
+      [255, 255, 255, 0],
+      0,
+      1920 * 5,
+      0,
+      1080 * 5,
+      0
+    ),
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      120,
+      0,
+      0,
+      "ellipse",
+      [255, 255, 255, opacity],
+      [255, 255, 255, 0],
+      0,
+      1920 * 8,
+      0,
+      1080 * 8,
+      0
+    ),
+    new ShapeParticle(
+      960,
+      540,
+      HALF_PI,
+      duration,
+      0,
+      0,
+      "rect",
+      [255, 255, 255, opacity],
+      [255, 255, 255, 0],
+      1920,
+      1920,
+      1080,
+      1080,
+      0,
+      false
+    ),
+    //Glare effect
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      duration * 0.5,
+      0,
+      0,
+      "rhombus",
+      [255, 255, 255, 150],
+      [255, 255, 255, 0],
+      glareSize / 3,
+      glareSize * 2,
+      glareSize / 5,
+      0,
+      0
+    ),
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      duration,
+      0,
+      0,
+      "rhombus",
+      [255, 255, 255, 200],
+      [255, 255, 255, 0],
+      glareSize / 6,
+      glareSize * 1.5,
+      (glareSize / 5) * 0.6,
+      0,
+      0
+    ),
+    new ShapeParticle(
+      x,
+      y,
+      HALF_PI,
+      duration * 1.5,
+      0,
+      0,
+      "rhombus",
+      [255, 255, 255, 255],
+      [255, 255, 255, 0],
+      glareSize / 9,
+      glareSize,
+      (glareSize / 5) * 0.3,
+      0,
+      0
+    )
+  );
 }

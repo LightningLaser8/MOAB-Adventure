@@ -1,5 +1,9 @@
 class BossAction {
   duration = 1;
+  #timer = 0;
+  get complete() {
+    return this.#timer >= this.duration;
+  }
   /**
    * @param {Entity} entity
    */
@@ -7,17 +11,22 @@ class BossAction {
   /**
    * @param {Entity} entity
    */
-  tick(entity) {} //Called every frame of this action
+  tick(entity) {
+    this.#timer++;
+  } //Called every frame of this action
   /**
    * @param {Entity} entity
    */
-  end(entity) {} //Called on the last frame of the action
+  end(entity) {
+    this.#timer = 0;
+  } //Called on the last frame of the action
 }
 class MovementAction extends BossAction {
   x = 0;
   y = 0;
   rot = 0;
   tick(entity) {
+    super.tick(entity);
     entity.x += this.x / (this.duration + 1);
     entity.y += this.y / (this.duration + 1);
     entity.direction += this.rot / (this.duration + 1);
@@ -51,6 +60,7 @@ class EntryAction extends BossAction {
 class RegenAction extends BossAction {
   amount = 0;
   tick(entity) {
+    super.tick(entity);
     entity.heal(this.amount / (this.duration + 1));
   }
 }
@@ -106,13 +116,18 @@ class SummonMinionAction extends BossAction {
   bossClass = "s";
   //Any differences?
   differences = {};
+  //Max summons at any one time from this action. 0 is unlimited
+  max = 0;
+  /**@type {Entity[]} */
+  #summoned = [];
   /**
    * @param {Entity} entity
    */
   execute(entity) {
+    if (this.max > 0 && this.#summoned.length >= this.max) return;
     //get the entity
     let toSpawn = structuredClone(Registry.entities.get(this.entity));
-    Object.assign(toSpawn, this.differences)
+    Object.assign(toSpawn, this.differences);
     //construct the entity
     /**@type {Entity} */
     let spawned = this.isBoss
@@ -132,6 +147,10 @@ class SummonMinionAction extends BossAction {
     spawned.direction = entity.direction + this.rotationOffset;
     //"I created you, now do my bidding!"
     spawned.team = entity.team;
+    if (this.max > 0) {
+      this.#summoned = this.#summoned.filter((x) => !x.dead);
+      this.#summoned.push(spawned);
+    }
   }
 }
 //Like having a weapon, but also not having one at the same time.
@@ -182,6 +201,7 @@ class ChangeSpeedAction extends BossAction {
     }
   }
   end(entity) {
+    super.end(entity);
     if (this.changesBack) {
       //Change it back
       if (this.speed >= 0) {
@@ -191,5 +211,39 @@ class ChangeSpeedAction extends BossAction {
         entity.turnSpeed = this.#oldTurnSpeed;
       }
     }
+  }
+}
+class DisableAIAction extends BossAction {
+  execute(entity) {
+    entity.aiActive = false;
+  }
+}
+class EnableAIAction extends BossAction {
+  execute(entity) {
+    entity.aiActive = true;
+  }
+}
+//Does a whole sequence of other actions.
+class CollapsedSequenceAction extends BossAction {
+  sequence = [];
+  init() {}
+}
+//Does other actions at once. Won't compute duration by itself, though.
+class MultiAction extends BossAction {
+  actions = [];
+  /**@param {Boss} entity  */
+  execute(entity) {
+    super.execute(entity);
+    this.actions.forEach((str) => entity.actions[str].execute(entity));
+  }
+  tick(entity) {
+    super.tick(entity);
+    this.actions.forEach((str) => {
+      if (!entity.actions[str].complete) entity.actions[str].tick(entity);
+    });
+  }
+  end(entity) {
+    super.end(entity);
+    this.actions.forEach((str) => entity.actions[str].end(entity));
   }
 }

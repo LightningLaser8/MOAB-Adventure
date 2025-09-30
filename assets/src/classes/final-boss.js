@@ -1,4 +1,5 @@
 class FinalBoss extends Boss {
+  dv = 1500;
   destinationWorld = "";
   //5s default delay
   transportDelay = 600;
@@ -9,25 +10,29 @@ class FinalBoss extends Boss {
     //If there is a next world
     if (Registry.worlds.has(this.destinationWorld)) {
       //Create an effect as a warning, 3/4 of the way through the transport delay
-      Timer.main.do(() => this.world.particles.push(
-        new ShapeParticle(
-          960,
-          540,
-          0,
-          this.transportDelay*0.25,
-          0,
-          0,
-          "rect",
-          [255, 255, 255, 0],
-          [255, 255, 255, 255],
-          1080,
-          1080,
-          1920,
-          1920,
-          0,
-          false
-        ),
-      ), this.transportDelay/4*3);
+      Timer.main.do(
+        () =>
+          this.world.particles.push(
+            new ShapeParticle(
+              960,
+              540,
+              0,
+              this.transportDelay * 0.25,
+              0,
+              0,
+              "rect",
+              [255, 255, 255, 0],
+              [255, 255, 255, 255],
+              1080,
+              1080,
+              1920,
+              1920,
+              0,
+              false
+            )
+          ),
+        (this.transportDelay / 4) * 3
+      );
       //And add an operation to the timer
       Timer.main.do(
         //To move the player to a world,
@@ -50,10 +55,10 @@ class FinalBoss extends Boss {
           "rect",
           [255, 255, 255, 0],
           [255, 255, 255, 255],
-          1920,
-          1920,
           1080,
           1080,
+          1920,
+          1920,
           0,
           false
         )

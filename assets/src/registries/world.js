@@ -5,13 +5,27 @@ Registry.worlds.add("ocean-skies", {
   spawning: [
     {
       entity: "wooden-box",
-      interval: 60,
+      interval: 90,
       isHighTier: false,
+      imposMode: "when-off"
+    },
+    {
+      entity: "hardwood-box",
+      interval: 90,
+      isHighTier: false,
+      imposMode: "when-on"
     },
     {
       entity: "metal-box",
-      interval: 300,
+      interval: 320,
       isHighTier: true,
+      imposMode: "when-off"
+    },
+    {
+      entity: "robox",
+      interval: 640,
+      isHighTier: true,
+      imposMode: "when-on"
     },
   ],
   bosses: [
@@ -34,7 +48,7 @@ Registry.worlds.add("workshop", {
   spawning: [
     {
       entity: "metal-box",
-      interval: 80,
+      interval: 100,
       isHighTier: false,
     },
     {

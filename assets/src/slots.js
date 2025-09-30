@@ -4,7 +4,7 @@ const aps = {
       "tiny-shooter",
       "double-shooter",
       "bomb-shooter",
-      "incendiary",
+      "napalm-bombs",
       "nuke-launcher",
       "meltdown",
       "solar-flare"
@@ -99,6 +99,12 @@ const aps = {
       "diffuse"
     ),
   },
+  booster: new WeaponSlot(
+    "pop-booster",
+    "double-booster",
+    "vector",
+    "afterburner"
+  ),
   error: new WeaponSlot(),
 };
 function getSelectedAP(ap) {

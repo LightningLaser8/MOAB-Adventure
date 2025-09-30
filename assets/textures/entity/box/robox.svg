@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="34.652885"
+   height="34.622417"
+   viewBox="0 0 34.652886 34.622418"
+   id="svg17"
+   sodipodi:docname="box metal robox.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs17" />
+  <sodipodi:namedview
+     id="namedview17"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="14.700185"
+     inkscape:cx="17.380734"
+     inkscape:cy="21.224223"
+     inkscape:window-width="1838"
+     inkscape:window-height="1057"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg17" />
+  <g
+     transform="matrix(0.8786826,0,0,0.84878799,-193.55739,-135.47063)"
+     id="g17">
+    <g
+       data-paper-data="{&quot;isPaintingLayer&quot;:true}"
+       fill-rule="nonzero"
+       stroke-linejoin="miter"
+       stroke-miterlimit="10"
+       stroke-dasharray="none"
+       stroke-dashoffset="0"
+       style="mix-blend-mode:normal"
+       id="g16">
+      <path
+         d="m 223.03138,197.6452 v -35.29041 h 33.93729 v 35.29041 z"
+         fill="#b8b8b8"
+         stroke="#616161"
+         stroke-width="5.5"
+         stroke-linecap="butt"
+         id="path1" />
+      <path
+         d="m 225.08597,187.61775 h 7.84574 v -4.85372"
+         fill="none"
+         stroke="#ff0000"
+         stroke-width="2"
+         stroke-linecap="round"
+         id="path2" />
+      <path
+         d="m 233.13118,194.99807 v -4.25532 h 4.05585"
+         fill="none"
+         stroke="#ff9400"
+         stroke-width="2"
+         stroke-linecap="round"
+         id="path3" />
+      <path
+         d="m 225.75086,192.40498 h 4.05585 v 2.5266"
+         fill="none"
+         stroke="#fff700"
+         stroke-width="2"
+         stroke-linecap="round"
+         id="path4" />
+      <path
+         d="M 223.03135,197.64521 V 162.3548 h 33.93729 v 35.29041 z"
+         fill="none"
+         stroke="#616161"
+         stroke-width="5.5"
+         stroke-linecap="butt"
+         id="path5" />
+      <path
+         d="m 240,163.14088 v 33.71824"
+         fill="none"
+         stroke="#616161"
+         stroke-width="5.5"
+         stroke-linecap="round"
+         id="path6" />
+      <path
+         d="m 239.64089,197.39727 16.99997,-34.79454"
+         fill="none"
+         stroke="#616161"
+         stroke-width="5.5"
+         stroke-linecap="round"
+         id="path7" />
+      <path
+         d="m 239.86217,198.66543 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path8" />
+      <path
+         d="m 239.92164,163.63656 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path9" />
+      <path
+         d="m 256.61967,163.8369 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path10" />
+      <path
+         d="m 257.04635,198.65965 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path11" />
+      <path
+         d="m 223.31805,180.06306 h 16.62818"
+         fill="none"
+         stroke="#616161"
+         stroke-width="5.5"
+         stroke-linecap="round"
+         id="path12" />
+      <path
+         d="m 240,181.25 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path13" />
+      <path
+         d="m 223.01632,181.14233 c -0.69036,0 -1.25,-0.55964 -1.25,-1.25 0,-0.69036 0.55964,-1.25 1.25,-1.25 0.69036,0 1.25,0.55964 1.25,1.25 0,0.69036 -0.55964,1.25 -1.25,1.25 z"
+         data-paper-data="{&quot;index&quot;:null}"
+         fill="#b8b8b8"
+         stroke="none"
+         stroke-width="0.5"
+         stroke-linecap="butt"
+         id="path14" />
+      <path
+         d="m 226.68171,168.50206 c 0,-1.37704 1.11631,-2.49335 2.49335,-2.49335 1.37704,0 2.49335,1.11631 2.49335,2.49335 0,1.37704 -1.11631,2.49335 -2.49335,2.49335 -1.37704,0 -2.49335,-1.11631 -2.49335,-2.49335 z"
+         fill="#ff6666"
+         stroke="#616161"
+         stroke-width="1.5"
+         stroke-linecap="butt"
+         id="path15" />
+      <path
+         d="m 231.1498,173.70152 c 0,-1.37704 1.11631,-2.49335 2.49335,-2.49335 1.37704,0 2.49335,1.11631 2.49335,2.49335 0,1.37704 -1.11631,2.49335 -2.49335,2.49335 -1.37704,0 -2.49335,-1.11631 -2.49335,-2.49335 z"
+         fill="#5eff63"
+         stroke="#616161"
+         stroke-width="1.5"
+         stroke-linecap="butt"
+         id="path16" />
+    </g>
+  </g>
+</svg>
+<!--rotationCenter:19.718645000000066:20.39520500000006-->
+

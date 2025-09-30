@@ -16,20 +16,14 @@ class PointBullet extends Bullet {
       if (this.entity) {
         //If a target exists
         if (this.entity.target) {
-          let tx = this.entity.target.x, ty = this.entity.target.y
+          let tpos = new Vector(this.entity.target.x, this.entity.target.y);
           //Point towards it, like a weapon
-          this.direction = degrees(
-            p5.Vector.sub(
-              createVector(tx, ty), //Target pos 'B'
-              createVector(this.x, this.y) //This pos 'A'
-            ).heading() //'A->B' = 'B' - 'A'
-          );
+          this.direction = this.pos.sub(tpos).angle;
           //Create line to it
-          this.createTrailTo(tx, ty)
+          this.createTrailTo(tpos.x, tpos.y);
           //Teleport to it
-          this.x = tx;
-          this.y = ty;
-          this.hitEffect()
+          this.pos = tpos;
+          this.hitEffect();
         } else {
           //Delete self
           this.remove = true;
@@ -39,14 +33,14 @@ class PointBullet extends Bullet {
     }
     super.step(dt);
   }
-  draw(){}; //Totally invisible
-  createTrailTo(x, y){
-    let distance = dist(this.x, this.y, x, y)
+  draw() {} //Totally invisible
+  createTrailTo(x, y) {
+    let distance = dist(this.x, this.y, x, y);
     this.world.particles.push(
       new ShapeParticle(
         //Find halfway point
-        (this.x + x)/2,
-        (this.y + y)/2,
+        (this.x + x) / 2,
+        (this.y + y) / 2,
         this.directionRad,
         30,
         0,
@@ -60,11 +54,11 @@ class PointBullet extends Bullet {
         distance,
         0,
         true
-      ),
-    )
+      )
+    );
   }
-  hitEffect(){
-    let direction = rnd(0, 360) //Random direction
+  hitEffect() {
+    let direction = rnd(0, 360); //Random direction
     this.world.particles.push(
       //Create hit effect
       new ShapeParticle(

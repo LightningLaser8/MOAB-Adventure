@@ -1,6 +1,11 @@
 class Bullet {
-  x = 0;
-  y = 0;
+  pos = Vector.ZERO;
+  get x() {
+    return this.pos.x;
+  }
+  get y() {
+    return this.pos.y;
+  }
   direction = 0;
   damage = [];
   speed = 20;
@@ -9,18 +14,23 @@ class Bullet {
   trail = true;
   trailColour = [255, 255, 255, 200];
   trailWidth = -1;
+  trailColourTo = null;
+  trailLifeFactor = 0.75;
   remove = false;
+  collides = true;
   pierce = 0;
+  rotateSpeed = 0;
   drawer = {
+    hidden: false,
     shape: "circle",
     fill: [255, 0, 0],
     image: "error",
     width: 10,
     height: 10,
   };
-  /** @type {World | null} */
+  /** @type {World?} */
   world = null;
-  /** @type {Entity | null} */
+  /** @type {Entity?} */
   entity = null;
   knockback = 0;
   kineticKnockback = false;
@@ -66,6 +76,7 @@ class Bullet {
   destroySpacing = 0;
 
   //Sounds
+  silent = false;
   hitSound = null;
   despawnSound = null;
   spawnSound = null;
@@ -79,12 +90,13 @@ class Bullet {
     this.maxLife = this.lifetime;
     this.maxPierce = this.pierce;
     if (this.trailInterval === -1) {
-      this.trailInterval = this.hitSize * 2;
+      this.trailInterval = this.hitSize * 4;
     }
     if(this.trailWidth === -1) this.trailWidth = this.hitSize * 1.9
+    this.trailColourTo ??= this.trailColour;
   }
-  sound(){
-    if(!this.#sounded){
+  sound() {
+    if (!this.#sounded) {
       playSound(this.spawnSound);
       this.#sounded = true;
     }
@@ -94,20 +106,19 @@ class Bullet {
     this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {
-      if(this.followsSource && this.source){
-        this.x = this.source.x;
-        this.y = this.source.y;
+      if (this.followsSource && this.source) {
+        this.pos = new Vector(this.source.x, this.source.y);
         this.direction = this.source.rotation;
       }
 
       this.intervalTick();
       //Which way to move
-      let moveVector = p5.Vector.fromAngle(this.directionRad);
+      let moveVector = new DirectionVector(this.direction);
       //Scale to speed
-      moveVector.mult(this.speed * dt);
+      moveVector = moveVector.scale(this.speed * dt);
       //Move
-      this.x += moveVector.x;
-      this.y += moveVector.y;
+      this.pos = this.pos.add(moveVector);
+      this.direction += this.rotateSpeed;
       //Tick lifetime
       if (this.lifetime <= 0) {
         this.remove = true;
@@ -115,7 +126,8 @@ class Bullet {
         this.lifetime -= dt;
       }
       //Follow
-      if(this.followsScreen) this.x -= game.player?.speed ?? 0;
+      if (this.followsScreen)
+        this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
     }
   }
   spawnTrail(dt) {
@@ -123,22 +135,24 @@ class Bullet {
     for (let e = 0; e < this.speed * dt; e++) {
       if (this._trailCounter <= 0) {
         if (this.world?.particles != null && this.trail) {
+          let v = new DirectionVector(this.direction, e);
           this.world.particles.push(
             new ShapeParticle(
-              this.x - e * p5.Vector.fromAngle(this.directionRad).x,
-              this.y - e * p5.Vector.fromAngle(this.directionRad).y,
+              this.x - v.x,
+              this.y - v.y,
               this.directionRad,
-              this.maxLife * 1.2,
+              this.maxLife * this.trailLifeFactor,
               0,
               0,
               "rhombus",
               this.trailColour,
-              this.trailColour,
+              this.trailColourTo,
               this.trailWidth,
               0,
               this.hitSize * this.trailInterval * 0.25,
               this.hitSize * this.trailInterval * 0.25,
-              0
+              0,
+              this.followsScreen
             )
           );
         }
@@ -172,8 +186,11 @@ class Bullet {
       );
     }
   }
+  distanceTo(x, y) {
+    return this.pos.distanceToXY(x, y)
+  }
   collidesWith(obj) {
-    return dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
+    return this.distanceTo(obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
   frag() {
     patternedBulletExpulsion(
@@ -212,7 +229,7 @@ class Bullet {
     }
   }
   //On top of damage
-  onHit(entity){
+  onHit(entity) {
     //Always spawn hit bullets
     patternedBulletExpulsion(
       this.x,
@@ -227,7 +244,7 @@ class Bullet {
       this.source
     );
     //If dead, spawn destroy bullets
-    if(entity.dead){
+    if (entity.dead) {
       patternedBulletExpulsion(
         this.x,
         this.y,
@@ -242,4 +259,18 @@ class Bullet {
       );
     }
   }
+}
+
+function telegraph(bullet, opts = { time: 20, width: 2 }) {
+  let ob = structuredClone(bullet);
+  delete ob.telegraph;
+  return {
+    type: "telegraph",
+    hitSize: opts.width ?? bullet.hitSize / 2,
+    lifetime: opts.time ?? bullet.lifetime,
+    fragNumber: 1,
+    followsSource: bullet.followsSource,
+    followsScreen: bullet.followsScreen,
+    fragBullet: ob,
+  };
 }
