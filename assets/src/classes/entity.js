@@ -45,12 +45,16 @@ class Entity {
   hitSound = null;
   deathSound = null;
 
+  blimp = null;
+  blimpName = "";
+
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
 
   constructor() {} //Because universal
   upgrade(blimp) {
+    this.blimpName = blimp;
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
   }
   init() {

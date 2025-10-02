@@ -336,7 +336,6 @@ createParticleEmitter(
     },
   }
 );
-
 createParticleEmitter(["in-game"], ["difficulty:impossible"], 960, 1080, 0, 1, {
   type: "vfx.particle",
   cone: 0,
@@ -423,3 +422,64 @@ Object.defineProperties(
     },
   }
 );
+
+//quickstart
+function getNextFreeSlot() {
+  for (let sl = 0; sl < 6; sl++) {
+    if (!Serialiser.get("save." + sl)) return sl;
+  }
+  return -1;
+}
+createUIComponent(
+  ["new-game"],
+  [],
+  1550,
+  830,
+  270,
+  60,
+  "none",
+  () => quickstart(1),
+  "Quickstart X.1",
+  true,
+  30
+);
+
+createUIComponent(
+  ["new-game"],
+  [],
+  1550,
+  920,
+  270,
+  60,
+  "none",
+  () => quickstart(2),
+  "Quickstart X.2",
+  true,
+  30
+);
+
+function quickstart(subslot) {
+  {
+    UIComponent.setCondition("difficulty:normal");
+    UIComponent.setCondition("saveslot:" + getNextFreeSlot());
+    UIComponent.setCondition("mode:adventure");
+    game.difficulty = "normal";
+    game.saveslot = getNextFreeSlot();
+    game.mode = "adventure";
+
+    UIComponent.setCondition("ap1-slot:" + subslot);
+    UIComponent.setCondition("ap2-slot:" + subslot);
+    UIComponent.setCondition("ap3/4-slot:" + subslot);
+    UIComponent.setCondition("ap5-slot:" + subslot);
+
+    ui.menuState = "in-game";
+    createPlayer();
+
+    if (game.saveslot === -1)
+      notifyEffect(
+        "All slots full, using temporary slot\nSaving will override previous temp. game",
+        360
+      );
+    else notifyEffect("Playing on slot " + game.saveslot);
+  }
+}

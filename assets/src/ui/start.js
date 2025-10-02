@@ -71,7 +71,9 @@ createUIComponent(
   400,
   80,
   "none",
-  undefined, //Decorative element - auto click suppression
+  () => {
+    ui.menuState = "load-game";
+  },
   "Load Game",
   true,
   60

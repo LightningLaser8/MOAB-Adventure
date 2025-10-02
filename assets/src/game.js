@@ -24,6 +24,9 @@ const game = {
   bossdelay: 400,
   bossinterval: 400,
   paused: false,
+  //progression
+  world: "",
+  achievements: [],
 };
 const difficulty = {
   easy: {
@@ -489,6 +492,7 @@ function moveToWorld(worldName = "ocean-skies") {
 
   //Set the game's world to the new one. The old one will be garbage collected.
   world = newWorld;
+  game.world = worldName;
   //Make the flash effect
   worldTransitionEffect(world.name);
 }
@@ -496,4 +500,65 @@ function moveToWorld(worldName = "ocean-skies") {
 function reload() {
   noLoop();
   loop();
+}
+
+function saveGame() {
+  if (ui.menuState !== "in-game")
+    console.warn("Player inaccessible, some progress may not save.");
+  let save = {
+    achs: game.achievements,
+    level: game.level,
+    zone: game.world,
+    difficulty: game.difficulty,
+    mode: game.mode,
+
+    shards: game.shards,
+    bloonstones: game.bloonstones,
+
+    levels: game.player.weaponSlots.map((x) => x.tier),
+    choices: [1, 2, "3/4", 5].map((s) =>
+      UIComponent.evaluateCondition("ap" + s + "-slot:2") ? 2 : 1
+    ),
+    blimp: game.player.blimpName,
+
+    health: game.player.health,
+    dv: game.player.dv,
+    maxDV: game.maxDV,
+  };
+  Serialiser.set("save." + game.saveslot, save);
+  notifyEffect("Game saved in slot " + game.saveslot);
+  regenSaveDescrs();
+}
+
+function deleteGame(slot) {
+  Serialiser.delete("save." + slot);
+  regenSaveDescrs();
+}
+
+function loadGame(slot) {
+  let save = Serialiser.get("save." + slot);
+  game.achievements = save.achs ?? [];
+  game.difficulty = save.difficulty ?? "easy";
+  game.mode = save.mode ?? "adventure";
+  moveToWorld(save.zone ?? "ocean-skies");
+  game.level = save.level ?? 1;
+  game.shards = save.shards ?? 400;
+  game.bloonstones = save.bloonstones ?? 0;
+  game.maxDV = save.maxDV ?? 0;
+  game.player.dv = save.dv ?? 0;
+  game.player.upgrade(save.blimp ?? "moab");
+  game.player.health = save.health ?? game.player.maxHealth ?? 0;
+  game.player.weaponSlots = [];
+  [1, 2, "3/4", 5].forEach((sl) =>
+    setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[sl - 1] ?? 1)
+  );
+  game.player.weaponSlots = [];
+  game.player.addWeaponSlot(getSelectedAP(1));
+  game.player.addWeaponSlot(getSelectedAP(2));
+  game.player.addWeaponSlot(getSelectedAP(3));
+  game.player.addWeaponSlot(getSelectedAP(4));
+  game.player.addWeaponSlot(getSelectedAP(5));
+  game.player.addWeaponSlot(aps.booster);
+  for (let sl = 0; sl < 6; sl++)
+    game.player.weaponSlots[sl].setTier(save.levels[sl] ?? 0);
 }

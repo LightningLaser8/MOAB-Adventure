@@ -224,38 +224,84 @@ function blindingFlash(
     )
   );
 }
-function worldTransitionEffect(worldName, duration = 120){
+function worldTransitionEffect(worldName, duration = 120) {
   //Create main effect
-  world.particles.push(new ShapeParticle(
-    960,
-    540,
-    0,
-    duration,
-    0,
-    0,
-    "rect",
-    [255, 255, 255, 255],
-    [255, 255, 255, 0],
-    1080,
-    1080,
-    1920,
-    1920,
-    0,
-    false
-  ),new TextParticle(
-    960,
-    540,
-    0,
-    duration,
-    0,
-    0,
-    worldName,
-    [0,0,0,255],
-    [0,0,0,0],
-    100,
-    100,
-    0,
-    false,
-    false
-  ))
+  world.particles.push(
+    new ShapeParticle(
+      960,
+      540,
+      0,
+      duration,
+      0,
+      0,
+      "rect",
+      [255, 255, 255, 255],
+      [255, 255, 255, 0],
+      1080,
+      1080,
+      1920,
+      1920,
+      0,
+      false
+    ),
+    new TextParticle(
+      960,
+      540,
+      0,
+      duration,
+      0,
+      0,
+      worldName,
+      [0, 0, 0, 255],
+      [0, 0, 0, 0],
+      100,
+      100,
+      0,
+      false,
+      false
+    )
+  );
+}
+function notifyEffect(text, duration = 120) {
+  textFont(fonts.ocr);
+  textSize(30);
+  let lines = text.split("\n");
+  //Create main effect for each line
+  lines.forEach((ln, i) => {
+    world.particles.push(
+      new ShapeParticle(
+        960,
+        130 + 40 * i,
+        0,
+        duration,
+        0,
+        0,
+        "rect",
+        [100, 100, 100, 255],
+        [100, 100, 100, 0],
+        40,
+        40,
+        textWidth(ln) + 60,
+        textWidth(ln) + 60,
+        0,
+        false
+      ),
+      new TextParticle(
+        960,
+        125 + 40 * i,
+        0,
+        duration,
+        0,
+        0,
+        ln,
+        [0, 0, 0, 255],
+        [0, 0, 0, 0],
+        30,
+        30,
+        0,
+        false,
+        true
+      )
+    );
+  });
 }

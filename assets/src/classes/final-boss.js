@@ -35,12 +35,14 @@ class FinalBoss extends Boss {
       );
       //And add an operation to the timer
       Timer.main.do(
-        //To move the player to a world,
-        moveToWorld,
+        () => {
+          //To move the player to a world,
+          moveToWorld(this.destinationWorld);
+          //And save progress (again)
+          saveGame();
+        },
         //After the specified delay.
-        this.transportDelay,
-        //Passing in the next world to go to.
-        this.destinationWorld
+        this.transportDelay
       );
     } else {
       //Create an effect as a warning, but don't wait

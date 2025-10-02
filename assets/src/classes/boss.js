@@ -148,6 +148,8 @@ class Boss extends ScalingEntity {
   }
   onDeath(source) {
     game.level++;
+    //Save progress
+    saveGame();
     //Give destroy reward
     game.shards += this.reward.shards ??= 0;
     game.bloonstones += this.reward.bloonstones ??= 0;

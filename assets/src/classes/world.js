@@ -161,13 +161,7 @@ class World {
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -=
-          dt *
-          (this.reducedSpawns
-            ? game.difficulty === "impossible"
-              ? 0
-              : 0.2
-            : 1);
+        if (!this.reducedSpawns) spawnGroup.$currentCooldown -= dt;
       }
     }
   }

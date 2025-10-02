@@ -28,6 +28,17 @@ class WeaponSlot {
     this.weapon.slot = this; //Set the slot
     return true; //It worked!
   }
+  setTier(tier){
+    let index = tier - 1;
+    if (!this.upgrades[index]) return false; //Index 0 is tier 1, stop if no later upgrade
+    let nextWeapon = Registry.weapons.get(this.upgrades[index]); //Load next weapon from registry
+    //Ignore cost
+    //Give them the weapon
+    this.tier = tier;
+    this.weapon = weapon(nextWeapon); //Construct as weapon
+    this.weapon.slot = this; //Set the slot
+    return true; //It worked!
+  }
   clear() {
     this.weapon = null; //Remove weapon
     this.tier = 0; //Reset tier
