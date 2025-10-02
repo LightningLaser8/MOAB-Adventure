@@ -1372,15 +1372,8 @@ Registry.entities.add("short-circuit", {
   hitSize: 50,
   x: 0,
   y: 1080,
-  reward: {
-    shards: 2,
-  },
-  destroyReward: {
-    shards: 5,
-  },
   team: "enemy",
-  health: 150000,
-  healthIncrease: 80000,
+  health: 30000,
   direction: -33,
   segmentType: {
     drawer: {

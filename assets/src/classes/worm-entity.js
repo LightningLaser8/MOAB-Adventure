@@ -1,3 +1,4 @@
+// WORM BROKE
 class SegmentedEntity extends Entity {
   segmentType = {};
   segmentCount = 1;
@@ -29,11 +30,8 @@ class SegmentedEntity extends Entity {
         spaces--;
         segment.weaponSlots = [];
       }
-      //track exact center of head
-      segment.trackingOffsetX = 0;
-      segment.trackingOffsetY = 0;
       segment.tooFarThreshold = this.maxSegmentSpacing;
-      this.segments.push(segment);
+      this.segments[i] = segment;
     }
   }
   addToWorld(world) {
@@ -68,7 +66,7 @@ class SegmentedEntity extends Entity {
     });
     //Fire segment weapons
     this.segments.forEach((segment) => {
-      segment.weaponSlots.forEach((slot) => {
+      segment?.weaponSlots.forEach((slot) => {
         slot.weapon?.fire();
       });
     });
@@ -81,20 +79,12 @@ class Segment extends Entity {
   tooFarThreshold = 0;
   tick() {
     //kill self if head is dead or missing
-    if (!this.head || this.head.dead) this.dead = true;
-    //retarget next segment along, or head if no next segment
-    this.target = this.head.segments[this.index + 1] || this.head;
+    if (!this.head || this.head.dead) {
+      this.dead = true;
+    }
 
     this.checkBullets();
     this.tickStatuses();
-    if (!this.target) return;
-    //shoot at head's target
-    let t = this.target;
-    this.target = this.head.target;
-    for (let slot of this.weaponSlots) {
-      slot.tick();
-    }
-    this.target = t;
     this.ai();
   }
   damage(type, amount, source) {
@@ -108,11 +98,23 @@ class Segment extends Entity {
   //knockback immunity
   knock() {}
   ai() {
-    //Move towards tracking point
-    if (this.target)
-      this.trackPoint(
-        this.target.x + this.trackingOffsetX,
-        this.target.y + this.trackingOffsetY
-      );
+    //store next segment or head
+    let t = this.head.segments[this.index + 1] || this.head;
+    if (t === this) t = this.head.segments[this.index + 2];
+    //shoot at head's target
+    this.target = this.head.target;
+    for (let slot of this.weaponSlots) {
+      slot.tick();
+    }
+    //Move towards next segment
+    this.target = t;
+    if (t) {
+      this.trackPoint(t.x, t.y);
+
+      if (dist(this.x, this.y, t.x, t.y) > this.tooFarThreshold) {
+        this.x = t.x;
+        this.y = t.y;
+      }
+    } else this.dead = true;
   }
 }
