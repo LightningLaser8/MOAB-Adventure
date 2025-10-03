@@ -302,6 +302,11 @@ Registry.entities.add("monkey-ace", {
     width: 272,
     height: 336,
   },
+  imposDrawer: {
+    image: "boss.monkey-ace.impos",
+    width: 272,
+    height: 336,
+  },
   hitSize: 136,
   x: 0,
   y: 540,
@@ -444,7 +449,7 @@ Registry.entities.add("mini-ace", {
   dv: 0,
   isMinion: true,
   drawer: {
-    image: "boss.monkey-ace",
+    image: "minion.plane",
     width: 68,
     height: 84,
   },
@@ -587,6 +592,11 @@ Registry.entities.add("super-monkey", {
   name: "Super Monkey",
   drawer: {
     image: "boss.super-monkey",
+    width: 276,
+    height: 160,
+  },
+  imposDrawer: {
+    image: "boss.super-monkey.impos",
     width: 276,
     height: 160,
   },

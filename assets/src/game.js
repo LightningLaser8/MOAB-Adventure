@@ -420,6 +420,18 @@ function keyPressed() {
     if (game.paused) unpause();
     else pause();
   }
+  // if (k === "q") {
+  //   if (game.player.blimp.minion) {
+  //     let minion = construct(
+  //       Registry.entities.get(game.player.blimp.minion),
+  //       Entity
+  //     );
+  //     minion.x = game.player.x;
+  //     minion.y = game.player.y;
+  //     minion.team = game.player.team;
+  //     minion.addToWorld(world);
+  //   }
+  // }
   if (k === " ") {
     //Boost
     if (game.player.blimp.hasBooster)
@@ -556,6 +568,15 @@ function saveGame() {
     health: game.player.health,
     dv: game.player.dv,
     maxDV: game.maxDV,
+
+    destroyed: {
+      boxes: game.player.destroyed.boxes,
+      bosses: game.player.destroyed.bosses,
+    },
+    damage: {
+      dealt: game.player.damageDealt,
+      taken: game.player.damageTaken,
+    },
   };
   Serialiser.set("save." + game.saveslot, save);
   notifyEffect("Game saved in slot " + game.saveslot);
@@ -597,4 +618,8 @@ function loadGame(slot) {
   //blomp
   game.player.upgrade(save.blimp ?? "moab");
   game.player.health = save.health ?? game.player.maxHealth ?? 0;
+  //stats
+  game.player.destroyed = save.destroyed ?? { bosses: 0, boxes: 0 };
+  game.player.damageDealt = save.damage?.dealt ?? 0;
+  game.player.damageTaken = save.damage?.taken ?? 0;
 }

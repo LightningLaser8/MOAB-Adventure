@@ -27,6 +27,9 @@ class Blimp {
     bloonstones: 0,
   };
 
+  minion = null;
+  minionCooldown = 1200;
+
   /**@param {Entity} entity*/
   upgradeEntity(entity) {
     entity.maxHealth = this.health;
