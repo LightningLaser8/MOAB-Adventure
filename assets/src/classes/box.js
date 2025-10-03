@@ -37,7 +37,7 @@ class Box extends ScalingEntity {
     }
   }
   scaleToDifficulty() {
-    let diff = difficulty[game.difficulty]; //Get difficulty
+    let diff = Registry.difficulties.get(game.difficulty); //Get difficulty
     this.health *= diff.boxHP ?? 1; //Multiply HP by box HP multiplier
   }
 }

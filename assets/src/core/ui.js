@@ -69,6 +69,15 @@ class UIComponent {
     }
     return true; //If unsure, ignore
   }
+  //Gets the value of a condition
+  static getCondition(condition) {
+    if (ui.conditions[condition]) {
+      //Separate property values
+      //If property exists
+      return ui.conditions[condition]; //Check it and return
+    }
+    return null; //If unsure, ignore
+  }
   //Sets property:value on game ui: input "slot:1" => sets "slot" to "1"
   static setCondition(condition) {
     const parts = condition.split(":"); //Separate property <- : -> value
@@ -824,9 +833,9 @@ function createGamePropertySelector(
     );
     //colour thing
     component.emphasisColour = selectionColour;
-    //Highlight if the diffindicator has chosen this button's option
+    //Highlight if the game has this option
     Object.defineProperty(component, "emphasised", {
-      get: () => diffindicator.chosen === options[i],
+      get: () => game[property] === options[i],
     });
   }
 }

@@ -49,7 +49,7 @@ class World {
     this.#actualTick();
     this.#removeDead();
     this.tickSpawns(game.player.speed);
-    if (Math.random() < this.ambienceChance) {
+    if (this.ambientSound && Math.random() < this.ambienceChance) {
       playSound(this.ambientSound);
     }
     playSound(this.bgm, true);
@@ -89,7 +89,7 @@ class World {
               instance.sparkColourTo, // |
               instance.smokeColour, //   |- These are optional, but can be set per instance
               instance.smokeColourTo, // |
-              instance.waveColour, //     /
+              instance.waveColour, //    /
               bullet.status,
               bullet.statusDuration,
               instance.bossDamageMultiplier ?? 1
@@ -186,7 +186,7 @@ class World {
       //Apply difficulty rules
       spawn.interval =
         (spawn.oldinterval ?? 60) /
-          difficulty[game.difficulty][
+          Registry.difficulties.get(game.difficulty)[
             spawn.isHighTier ? "spawnRateHighTier" : "spawnRateLowTier"
           ] ?? 1;
     }

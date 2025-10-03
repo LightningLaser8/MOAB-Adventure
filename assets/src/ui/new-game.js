@@ -3,7 +3,7 @@ UIComponent.setCondition("difficulty:none");
 //Difficulty selector
 createGamePropertySelector(
   ["new-game"],
-  ["difficulty:none|easy|normal|hard"],
+  [],
   250,
   260,
   100,
@@ -13,25 +13,7 @@ createGamePropertySelector(
   ["easy", "normal", "hard"],
   null,
   ["Easy", "Normal", "Hard"],
-  50,
-  (value) => UIComponent.setCondition("difficulty:" + value)
-);
-//selector, dummy edition
-createGamePropertySelector(
-  ["new-game"],
-  ["difficulty:impossible"],
-  250,
-  260,
-  100,
-  250,
-  60,
-  "difficulty",
-  ["impossible", "impossible", "impossible"],
-  0,
-  ["Easy", "Normal", "Hard"],
-  50,
-  () => {},
-  [255, 0, 0]
+  50
 );
 createUIComponent(
   ["new-game"],
@@ -46,16 +28,6 @@ createUIComponent(
   true,
   50
 ).outlineColour = [255, 255, 0];
-createUIComponent(
-  ["new-game"],
-  ["difficulty:impossible"],
-  1530,
-  260,
-  55,
-  60,
-  "both",
-  null
-).outlineColour = [255, 0, 0];
 UIComponent.setCondition("mode:none");
 //Game mode selector
 createGamePropertySelector(
@@ -187,9 +159,7 @@ createUIComponent(
   "none",
   () => {
     game.difficulty = "impossible";
-    UIComponent.setCondition("difficulty:impossible");
     uiBlindingFlash(1925, 60, 255, 100, 1500);
-    versionReplacementText = "Version 6.6.6 - No escape.";
   },
   ""
 );

@@ -31,7 +31,7 @@ createUIComponent(
 Object.defineProperty(
   UIComponent.alignLeft(
     createUIComponent(
-      ["title", "options", "start-menu", "new-game", "weapon-slots"],
+      ["title", "options", "start-menu", "new-game", "load-game", "weapon-slots"],
       [],
       10,
       1050,

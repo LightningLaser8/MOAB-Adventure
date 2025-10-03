@@ -82,7 +82,7 @@ class Boss extends ScalingEntity {
     this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading());
   }
   scaleToDifficulty() {
-    let diff = difficulty[game.difficulty]; //Get difficulty
+    let diff = Registry.difficulties.get(game.difficulty); //Get difficulty
     this.health *= diff.bossHP ?? 1; //Multiply HP by boss HP multiplier
   }
   moveTowards(x, y, rotate = false) {

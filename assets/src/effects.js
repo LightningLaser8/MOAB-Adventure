@@ -263,6 +263,7 @@ function worldTransitionEffect(worldName, duration = 120) {
   );
 }
 function notifyEffect(text, duration = 120) {
+  push();
   textFont(fonts.ocr);
   textSize(30);
   let lines = text.split("\n");
@@ -304,4 +305,5 @@ function notifyEffect(text, duration = 120) {
       )
     );
   });
+  pop();
 }

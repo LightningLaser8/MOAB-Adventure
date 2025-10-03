@@ -1,15 +1,16 @@
 const game = {
   //Game options
-  _diff: "normal",
+  _diff: "none",
   get difficulty() {
     return this._diff;
   },
   set difficulty(_) {
     this._diff = _;
     world.updateDifficulty();
+    UIComponent.setCondition("difficulty:" + _);
   },
-  mode: "adventure",
-  saveslot: 1,
+  mode: "none",
+  saveslot: -1,
   //Control type
   control: "keyboard",
   /** @type {Entity | null} Player entity */
@@ -27,32 +28,6 @@ const game = {
   //progression
   world: "",
   achievements: [],
-};
-const difficulty = {
-  easy: {
-    spawnRateLowTier: 1.2,
-    spawnRateHighTier: 0.4,
-    boxHP: 0.6,
-    bossHP: 0.85,
-  },
-  normal: {
-    spawnRateLowTier: 1,
-    spawnRateHighTier: 1,
-    boxHP: 1,
-    bossHP: 1,
-  },
-  hard: {
-    spawnRateLowTier: 1.2,
-    spawnRateHighTier: 2,
-    boxHP: 1.2,
-    bossHP: 1.3,
-  },
-  impossible: {
-    spawnRateLowTier: 0.75,
-    spawnRateHighTier: 1.5,
-    boxHP: 1,
-    bossHP: 1.5,
-  },
 };
 /** @type {World} */
 let world;
@@ -235,7 +210,7 @@ function movePlayer() {
   }
   if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
     //If 'D' pressed
-    game.player.x += game.player.speed * 0.5;
+    game.player.x += game.player.speed * 0.67;
   }
   //If the player is out of bounds, then damage rapidly
   if (game.player.x > 1920 - game.player.hitSize + game.player.speed * 2) {
@@ -464,6 +439,65 @@ function keyPressed() {
     //fullscreen
     return true;
   }
+  //Upgrade Shortcuts
+  let alting = keyIsDown(18);
+  if (alting && ui.menuState === "in-game") {
+    if (["1", "2", "3", "4", "5"].includes(k)) {
+      if (UIComponent.evaluateCondition("is-ap" + k + "-available:true")) {
+        if (game.player.weaponSlots[+k - 1].attemptUpgrade())
+          notifyEffect("Upgraded AP" + k);
+        else if (
+          game.player.weaponSlots[+k - 1].tier <
+          game.player.weaponSlots[+k - 1].upgrades.length
+        )
+          notifyEffect("AP" + k + " upgrade is too expensive");
+        else notifyEffect("Maximum AP" + k + " tier reached");
+      } else notifyEffect("AP" + k + " is not available");
+    } else if (k === "b") {
+      if (UIComponent.evaluateCondition("is-booster-available:true")) {
+        if (game.player.weaponSlots[5].attemptUpgrade())
+          notifyEffect("Upgraded Booster");
+        else if (
+          game.player.weaponSlots[5].tier <
+          game.player.weaponSlots[5].upgrades.length
+        )
+          notifyEffect("Booster upgrade is too expensive");
+        else notifyEffect("Maximum Booster tier reached");
+      } else notifyEffect("Booster is not available");
+    } else if (k === "n") {
+      let upgrade = game.player.blimp.path1;
+      if (!upgrade || upgrade === "none") {
+        notifyEffect("Blimp has no primary path upgrade");
+        return false;
+      }
+      let blimp = Registry.blimps.get(upgrade);
+      //Check cost and buy
+      let shards = blimp?.cost?.shards ?? 0,
+        bloonstones = blimp?.cost?.bloonstones ?? 0;
+      if (shards <= game.shards && bloonstones <= game.bloonstones) {
+        game.shards -= shards;
+        game.bloonstones -= bloonstones;
+        game.player.upgrade(upgrade);
+        notifyEffect("Upgraded blimp along primary path");
+      } else notifyEffect("Blimp primary upgrade is too expensive");
+    } else if (k === "m") {
+      let upgrade = game.player.blimp.path2;
+      if (!upgrade || upgrade === "none") {
+        notifyEffect("Blimp has no alternative path upgrade");
+        return false;
+      }
+      let blimp = Registry.blimps.get(upgrade);
+      //Check cost and buy
+      let shards = blimp?.cost?.shards ?? 0,
+        bloonstones = blimp?.cost?.bloonstones ?? 0;
+      if (shards <= game.shards && bloonstones <= game.bloonstones) {
+        game.shards -= shards;
+        game.bloonstones -= bloonstones;
+        game.player.upgrade(upgrade);
+        notifyEffect("Upgraded blimp along alternative path");
+      } else notifyEffect("Blimp alternative upgrade is too expensive");
+    }
+  }
   return false; //Prevent any default behaviour
 }
 
@@ -503,8 +537,6 @@ function reload() {
 }
 
 function saveGame() {
-  if (ui.menuState !== "in-game")
-    console.warn("Player inaccessible, some progress may not save.");
   let save = {
     achs: game.achievements,
     level: game.level,
@@ -516,8 +548,8 @@ function saveGame() {
     bloonstones: game.bloonstones,
 
     levels: game.player.weaponSlots.map((x) => x.tier),
-    choices: [1, 2, "3/4", 5].map((s) =>
-      UIComponent.evaluateCondition("ap" + s + "-slot:2") ? 2 : 1
+    choices: [1, 2, "3/4", 5].map(
+      (s) => +UIComponent.getCondition("ap" + s + "-slot")
     ),
     blimp: game.player.blimpName,
 
@@ -537,20 +569,21 @@ function deleteGame(slot) {
 
 function loadGame(slot) {
   let save = Serialiser.get("save." + slot);
-  game.achievements = save.achs ?? [];
+  //settings
   game.difficulty = save.difficulty ?? "easy";
   game.mode = save.mode ?? "adventure";
+  //Progress
+  game.achievements = save.achs ?? [];
   moveToWorld(save.zone ?? "ocean-skies");
   game.level = save.level ?? 1;
   game.shards = save.shards ?? 400;
   game.bloonstones = save.bloonstones ?? 0;
   game.maxDV = save.maxDV ?? 0;
   game.player.dv = save.dv ?? 0;
-  game.player.upgrade(save.blimp ?? "moab");
-  game.player.health = save.health ?? game.player.maxHealth ?? 0;
+  //Choices
   game.player.weaponSlots = [];
-  [1, 2, "3/4", 5].forEach((sl) =>
-    setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[sl - 1] ?? 1)
+  [1, 2, "3/4", 5].forEach((sl, i) =>
+    setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1)
   );
   game.player.weaponSlots = [];
   game.player.addWeaponSlot(getSelectedAP(1));
@@ -561,4 +594,7 @@ function loadGame(slot) {
   game.player.addWeaponSlot(aps.booster);
   for (let sl = 0; sl < 6; sl++)
     game.player.weaponSlots[sl].setTier(save.levels[sl] ?? 0);
+  //blomp
+  game.player.upgrade(save.blimp ?? "moab");
+  game.player.health = save.health ?? game.player.maxHealth ?? 0;
 }

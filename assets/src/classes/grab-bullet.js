@@ -7,12 +7,17 @@ class GrabBullet extends PointBullet {
       //for each bullet in the same world
       for (let bullet of this.world.bullets) {
         //if the bullet is: alive, from someone else, and hitting this bullet:
-        if (!this.remove && !bullet.remove && bullet.entity !== this.entity && bullet.collidesWith(this)) {
+        if (
+          !this.remove &&
+          !bullet.remove &&
+          bullet.entity !== this.entity &&
+          bullet.collidesWith(this)
+        ) {
           bullet.direction += 180; //reverse direction
           bullet.entity = this.entity; //yoink bullet
           bullet.lifetime = bullet.maxLife; //reset lifetime because funny
-          this.pierce --
-          if(this.pierce < 0){
+          this.pierce--;
+          if (this.pierce < 0) {
             this.remove = true; //kill this bullet
           }
         }
@@ -44,8 +49,6 @@ class GrabBullet extends PointBullet {
         //Copy entity
         drawer: entity.drawer,
         direction: entity.direction,
-        x: entity.x,
-        y: entity.y,
         hitSize: entity.hitSize,
         //Damage and pierce
         damage: [
@@ -57,6 +60,7 @@ class GrabBullet extends PointBullet {
         pierce: Math.ceil(entity.health ** 0.5),
         multiHit: true,
       });
+      bulletToMake.pos = new Vector(entity.x, entity.y);
       bulletToMake.entity = this.entity;
       bulletToMake.world = entity.world;
       entity.world.bullets.push(bulletToMake);

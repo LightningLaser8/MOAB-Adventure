@@ -2,5 +2,5 @@ body {
   margin: 0px;
   padding: 0px;
   overflow: hidden;
-  cursor: url(./cursor_select.svg) 15 15, crosshair;
+  cursor: url(./cursor_select.svg) 22 22, crosshair;
 }

@@ -122,7 +122,7 @@ function getSelectedAP(ap) {
   return aps.error;
 }
 function setSelectedAP(ap, option) {
-  if (![1, 2, 3, 4, 5].includes(ap)) return;
+  if (![1, 2, 3, 4, 5, "3/4"].includes(ap)) return;
   let conditionSlot = ap;
   if (ap === 4 || ap === 3) conditionSlot = "3/4"; //Internally ap3 and 4 are stored together
   if (UIComponent.setCondition("ap" + conditionSlot + "-slot:" + option));

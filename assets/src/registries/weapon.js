@@ -10316,7 +10316,7 @@ Registry.weapons.add("hunter", {
     shards: 35600,
     bloonstones: 200,
   },
-  dvRatio: 3 / 10,
+  dvRatio: 3 / 100,
   shoot: {
     bullet: {
       type: "critical",
@@ -19033,7 +19033,7 @@ Registry.weapons.add("foreshadow", {
     shards: 75000,
     bloonstones: 1000,
   },
-  dvRatio: 10, //needed to keep up with other t7s
+  dvRatio: 1, //needed to keep up with other t7s
   shoot: {
     bullet: {
       type: "critical",
@@ -19045,7 +19045,7 @@ Registry.weapons.add("foreshadow", {
         damage: [
           {
             type: "ballistic",
-            amount: 9000, //that's a LOT of damage
+            amount: 900,
           },
         ],
         hitColour: [255, 0, 0],
@@ -19058,7 +19058,7 @@ Registry.weapons.add("foreshadow", {
         damage: [
           {
             type: "ballistic",
-            amount: 3000,
+            amount: 300,
           },
         ],
         hitColour: [255, 255, 0],
