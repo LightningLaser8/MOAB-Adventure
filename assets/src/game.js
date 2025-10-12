@@ -153,6 +153,7 @@ function draw() {
       effectTimer.tick();
     }
   } catch (e) {
+    console.error(e);
     crash(e);
   }
 }
@@ -244,6 +245,7 @@ function updateUIActivity() {
 
 function drawUI() {
   background.image = world.background;
+  showOffscreenBosses();
   for (let component of ui.components) {
     if (component.active) {
       component.draw();
@@ -276,6 +278,7 @@ function showMousePos() {
   stroke(0);
   strokeWeight(2);
   textSize(40);
+  let mpos = nearestOnScreenPosition(ui.mouse, 60);
   text(
     "X:" + Math.round(ui.mouse.x) + " Y:" + Math.round(ui.mouse.y),
     ui.mouse.x,
@@ -285,7 +288,82 @@ function showMousePos() {
   strokeWeight(2);
   line(ui.mouse.x - 20, ui.mouse.y, ui.mouse.x + 20, ui.mouse.y);
   line(ui.mouse.x, ui.mouse.y - 20, ui.mouse.x, ui.mouse.y + 20);
+
+  line(ui.mouse.x, ui.mouse.y, mpos.x, mpos.y);
+  circle(mpos.x, mpos.y, 10);
   pop();
+}
+
+function isOffscreen(entity) {
+  return (
+    entity.x < -entity.hitSize ||
+    entity.x > 1920 + entity.hitSize ||
+    entity.y < -entity.hitSize ||
+    entity.y > 1080 + entity.hitSize
+  );
+}
+
+function distanceOffscreen(entity) {
+  return new Vector(
+    entity.x < -entity.hitSize
+      ? entity.x + entity.hitSize
+      : entity.x + entity.hitSize - 1920,
+    entity.y < -entity.hitSize
+      ? entity.y + entity.hitSize
+      : entity.y + entity.hitSize - 1080
+  ).magnitude;
+}
+
+/**@param {Vector} pos  */
+function nearestOnScreenPosition(pos, onScreenBy = 0) {
+  let centre = new Vector(960, 540);
+  // direction to middle
+  let direction = pos.sub(centre).normalise();
+  // find max scales to make the point onscreen
+  let sizeX = Math.abs((960 - onScreenBy) / direction.x);
+  let sizeY = Math.abs((540 - onScreenBy) / direction.y);
+  // return shit
+  let npos = centre.add(direction.scale(Math.min(sizeX, sizeY)));
+
+  return npos;
+}
+
+function showOffscreenBosses() {
+  world.getAllBosses().forEach((boss) => {
+    if (boss && isOffscreen(boss)) {
+      let circlepos = nearestOnScreenPosition(new Vector(boss.x, boss.y), 180);
+      push();
+      fill(100, 100, 100);
+      stroke(50, 50, 50);
+      strokeWeight(30);
+      line(boss.x, boss.y, circlepos.x + 25, circlepos.y);
+      line(boss.x, boss.y, circlepos.x - 25, circlepos.y);
+      line(boss.x, boss.y, circlepos.x, circlepos.y + 25);
+      line(boss.x, boss.y, circlepos.x, circlepos.y - 25);
+      stroke(100, 100, 100);
+      strokeWeight(10);
+      line(boss.x, boss.y, circlepos.x + 10, circlepos.y);
+      line(boss.x, boss.y, circlepos.x - 10, circlepos.y);
+      line(boss.x, boss.y, circlepos.x, circlepos.y + 10);
+      line(boss.x, boss.y, circlepos.x, circlepos.y - 10);
+      stroke(50, 50, 50);
+      circle(circlepos.x, circlepos.y, 120);
+      strokeWeight(5);
+      circle(circlepos.x, circlepos.y, 90);
+      let size = new Vector(boss.drawer.width, boss.drawer.height);
+      let scaled =
+        size.x > size.y
+          ? new Vector(110, (size.y * 110) / size.x)
+          : new Vector((size.x * 110) / size.y, 110);
+      rotatedImg(boss.drawer.image, circlepos.x, circlepos.y, scaled.x, scaled.y, boss.directionRad);
+      textFont(fonts.ocr);
+      fill(150, 150, 150);
+      textSize(30);
+      let dst = roundNum(distanceOffscreen(boss) / 10);
+      text(dst, circlepos.x - textWidth(dst) / 2, circlepos.y + 50);
+      pop();
+    }
+  });
 }
 
 function createPlayer() {
@@ -553,6 +631,7 @@ function saveGame() {
     achs: game.achievements,
     level: game.level,
     zone: game.world,
+    znlvl: world.getBossIndex(),
     difficulty: game.difficulty,
     mode: game.mode,
 
@@ -596,6 +675,7 @@ function loadGame(slot) {
   //Progress
   game.achievements = save.achs ?? [];
   moveToWorld(save.zone ?? "ocean-skies");
+  world.setBossIndex(save.znlvl ?? 1);
   game.level = save.level ?? 1;
   game.shards = save.shards ?? 400;
   game.bloonstones = save.bloonstones ?? 0;

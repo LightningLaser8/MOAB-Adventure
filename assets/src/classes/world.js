@@ -207,6 +207,9 @@ class World {
     }
     return null;
   }
+  getAllBosses() {
+    return this.entities.filter(entity => entity.isBoss && !entity.hidden);
+  }
   setBossList(...bosses) {
     this.#bossList = bosses;
   }
@@ -217,5 +220,11 @@ class World {
     this.#currentBossIndex++;
     if (this.#currentBossIndex >= this.#bossList.length)
       this.#currentBossIndex = 0;
+  }
+  getBossIndex() {
+    return this.#currentBossIndex;
+  }
+  setBossIndex(idx) {
+    this.#currentBossIndex = idx;
   }
 }

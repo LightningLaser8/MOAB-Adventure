@@ -2,10 +2,7 @@ const ui = {
   menuState: "title",
   waitingForMouseUp: false,
   get mouse() {
-    return {
-      x: mouseX / contentScale,
-      y: mouseY / contentScale,
-    };
+    return new Vector(mouseX / contentScale, mouseY / contentScale);
   },
   conditions: {},
   components: [],
@@ -372,9 +369,7 @@ class HealthbarComponent extends UIComponent {
   draw() {
     let src = this.getSource();
     //tick
-    let target = src
-      ? (this.width * src[this.#current]) / src[this.#max]
-      : 0;
+    let target = src ? (this.width * src[this.#current]) / src[this.#max] : 0;
     this.#frac += (target - this.#frac) * 0.075;
 
     push();
