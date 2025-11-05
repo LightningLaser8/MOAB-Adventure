@@ -161,7 +161,7 @@ class Vector {
   }
   /** The angle in radians this vector makes with the positive x-axis. */
   get angleRad() {
-    return Math.atan2(this.#y, this.#x);
+    return this.#x == 0 && this.#y == 0 ? 0 : Math.atan2(this.#y, this.#x);
   }
   /**
    * Returns the unit vector of this vector, i.e. this vector scaled by 1/magnitude.

@@ -48,6 +48,11 @@ class Entity {
   blimp = null;
   blimpName = "";
 
+  lastPos = Vector.ZERO;
+  get velocity() {
+    return this.lastPos.subXY(this.x, this.y).scale(-1);
+  }
+
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
@@ -169,6 +174,7 @@ class Entity {
     for (let slot of this.weaponSlots) {
       slot.tick();
     }
+    this.lastPos = new Vector(this.x, this.y);
     //this.checkBullets();
     this.tickStatuses();
   }

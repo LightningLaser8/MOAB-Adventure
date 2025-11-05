@@ -49,7 +49,7 @@ class MASoundEngine {
       let file = await fetch(path);
       let buf = await file.arrayBuffer();
       let sound = await this.context.decodeAudioData(buf);
-      console.log(`Loaded sound from ${path}`, sound);
+      console.log(`Loaded sound from ${path}`);
       return sound;
     } catch (e) {
       return false;

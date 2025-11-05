@@ -8,9 +8,7 @@ class RadiationZone extends Bullet {
   colour = [50, 255, 0, 50];
   #timer = 0;
   #outlineColour = null;
-  collidesWith(obj) {
-    return false; //Collides with nothing
-  }
+  checkEntities(){} //Collides with nothing, also makes these surprisingly performant
   init() {
     //No movement here
     this.speed = 0;

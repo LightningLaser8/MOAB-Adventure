@@ -102,8 +102,9 @@ const aps = {
   booster: new WeaponSlot(
     "pop-booster",
     "double-booster",
+    "scalar",
     "vector",
-    "afterburner"
+    "matrix"
   ),
   error: new WeaponSlot(),
 };

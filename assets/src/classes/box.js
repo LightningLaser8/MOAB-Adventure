@@ -22,6 +22,7 @@ class Box extends ScalingEntity {
   }
   tick() {
     if (!this.dead) {
+      super.tick();
       //Move
       this.x -= game.player.speed + this.speed;
       if (this.x < -this.hitSize) {
@@ -32,7 +33,6 @@ class Box extends ScalingEntity {
         game.bloonstones += this.reward.bloonstones ??= 0;
       }
       if (this.square) this.direction = 0;
-      super.tick();
     }
   }
   scaleToDifficulty() {
