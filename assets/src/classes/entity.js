@@ -169,7 +169,7 @@ class Entity {
     for (let slot of this.weaponSlots) {
       slot.tick();
     }
-    this.checkBullets();
+    //this.checkBullets();
     this.tickStatuses();
   }
   getClosestEnemy() {
@@ -207,77 +207,77 @@ class Entity {
       dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
     );
   }
-  checkBullets() {
-    for (let bullet of this.world.bullets) {
-      //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
-      if (
-        bullet.collides &&
-        !bullet.remove &&
-        this.team !== bullet.entity.team &&
-        !bullet.damaged.includes(this) &&
-        bullet.collidesWith(this) //check collisions last for performance reasons
-      ) {
-        //Take all damage instances
-        for (let instance of bullet.damage) {
-          if (!instance.area)
-            this.damage(
-              instance.type,
-              (instance.amount +
-                (bullet.source ? bullet.source.getDVScale() : 0) +
-                (instance.levelScaling ?? 0) * game.level) *
-                //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
-                (this instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
-              bullet.entity
-            ); //Wait if kaboom
-          this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;
-        }
-        if (bullet.controlledKnockback) {
-          //Get direction to the target
-          let direction = degrees(
-            p5.Vector.sub(
-              createVector(bullet.entity.target.x, bullet.entity.target.y), //Target pos 'B'
-              createVector(bullet.x, bullet.y) //Bullet pos 'A'
-            ).heading() //'A->B' = 'B' - 'A'
-          );
-          this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
-        } else {
-          this.knock(
-            bullet.knockback,
-            bullet.direction,
-            bullet.kineticKnockback
-          ); //Knock with default resolution
-        }
-        if (bullet.status !== "none") {
-          this.applyStatus(bullet.status, bullet.statusDuration);
-        }
-        //Make the bullet know
-        bullet.damaged.push(this);
-        bullet.onHit(this);
-        if (!bullet.silent) {
-          playSound(this.hitSound);
-          playSound(bullet.hitSound);
-        }
-        //Reduce pierce
-        bullet.pierce--;
-        //If exhausted
-        if (bullet.pierce < 0) {
-          if (bullet instanceof LaserBullet) bullet.canHurt = false;
-          else bullet.remove = true; //Delete
-        }
-      } else {
-        if (
-          !bullet.remove &&
-          this.team !== bullet.entity.team &&
-          bullet.damaged.includes(this)
-        ) {
-          if (bullet.multiHit && !bullet.collidesWith(this)) {
-            //Unpierce it
-            bullet.damaged.splice(bullet.damaged.indexOf(this), 1);
-          }
-        }
-      }
-    }
-  }
+  // checkBullets() {
+  //   for (let bullet of this.world.bullets) {
+  //     //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
+  //     if (
+  //       bullet.collides &&
+  //       !bullet.remove &&
+  //       this.team !== bullet.entity.team &&
+  //       !bullet.damaged.includes(this) &&
+  //       bullet.collidesWith(this) //check collisions last for performance reasons
+  //     ) {
+  //       //Take all damage instances
+  //       for (let instance of bullet.damage) {
+  //         if (!instance.area)
+  //           this.damage(
+  //             instance.type,
+  //             (instance.amount +
+  //               (bullet.source ? bullet.source.getDVScale() : 0) +
+  //               (instance.levelScaling ?? 0) * game.level) *
+  //               //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
+  //               (this instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
+  //             bullet.entity
+  //           ); //Wait if kaboom
+  //         this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;
+  //       }
+  //       if (bullet.controlledKnockback) {
+  //         //Get direction to the target
+  //         let direction = degrees(
+  //           p5.Vector.sub(
+  //             createVector(bullet.entity.target.x, bullet.entity.target.y), //Target pos 'B'
+  //             createVector(bullet.x, bullet.y) //Bullet pos 'A'
+  //           ).heading() //'A->B' = 'B' - 'A'
+  //         );
+  //         this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
+  //       } else {
+  //         this.knock(
+  //           bullet.knockback,
+  //           bullet.direction,
+  //           bullet.kineticKnockback
+  //         ); //Knock with default resolution
+  //       }
+  //       if (bullet.status !== "none") {
+  //         this.applyStatus(bullet.status, bullet.statusDuration);
+  //       }
+  //       //Make the bullet know
+  //       bullet.damaged.push(this);
+  //       bullet.onHit(this);
+  //       if (!bullet.silent) {
+  //         playSound(this.hitSound);
+  //         playSound(bullet.hitSound);
+  //       }
+  //       //Reduce pierce
+  //       bullet.pierce--;
+  //       //If exhausted
+  //       if (bullet.pierce < 0) {
+  //         if (bullet instanceof LaserBullet) bullet.canHurt = false;
+  //         else bullet.remove = true; //Delete
+  //       }
+  //     } else {
+  //       if (
+  //         !bullet.remove &&
+  //         this.team !== bullet.entity.team &&
+  //         bullet.damaged.includes(this)
+  //       ) {
+  //         if (bullet.multiHit && !bullet.collidesWith(this)) {
+  //           //Unpierce it
+  //           bullet.damaged.splice(bullet.damaged.indexOf(this), 1);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   tickStatuses() {
     this.effectiveSpeedMult =
       this.effectiveDamageMult =

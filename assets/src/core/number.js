@@ -84,10 +84,10 @@ function colinterp(cols, factor, forceint = false) {
 class Vector {
   /**@readonly */
   static ZERO = new this(0, 0);
-  get x(){
+  get x() {
     return this.#x;
   }
-  get y(){
+  get y() {
     return this.#y;
   }
   #x = 0;
@@ -187,7 +187,10 @@ class Vector {
    * @returns The new rotated vector.
    */
   rotateRad(angle) {
-    return new Vector(this.#x * Math.cos(angle) - this.#y * Math.sin(angle), this.#y * Math.cos(angle) + this.#x * Math.sin(angle));
+    return new Vector(
+      this.#x * Math.cos(angle) - this.#y * Math.sin(angle),
+      this.#y * Math.cos(angle) + this.#x * Math.sin(angle)
+    );
   }
   /**
    * Finds the distance between this vector and another.
@@ -249,6 +252,20 @@ class Vector {
   /**Returns this vector's equivalent direction vector. */
   toDirectional() {
     return new DirectionVector(this.angleRad, this.magnitude, true);
+  }
+  /**@param {Vector} other */
+  lerp(other, factor) {
+    return new Vector(
+      other.x * factor + this.#x * (1 - factor),
+      other.y * factor + this.#y * (1 - factor)
+    );
+  }
+  multiLerp(other, divisions) {
+    let a = [];
+    for (let i = 0; i <= 1; i += 1 / divisions) {
+      a.push(this.lerp(other, i));
+    }
+    return a;
   }
 }
 /**Immutable direction vector. Stores direction and magnitude, rather than x and y values. */

@@ -79,8 +79,11 @@ class SelfDestructAction extends BossAction {
   blindDuration = 0;
   glareSize = 0;
   givesRewards = true;
+
+  isLeaving = false;
   execute(entity) {
     entity.dead = true;
+    entity.left = this.isLeaving;
     splashDamageInstance(
       entity.x,
       entity.y,
@@ -95,7 +98,7 @@ class SelfDestructAction extends BossAction {
       this.smokeColourTo,
       this.waveColour
     );
-    if (this.givesRewards) {
+    if (!this.isLeaving && this.givesRewards) {
       //Give destroy rewards if there's a difference, regular rewards if not
       game.shards += (entity.destroyReward ?? entity.reward)?.shards ?? 0;
       game.bloonstones +=
@@ -106,8 +109,12 @@ class SelfDestructAction extends BossAction {
 //Creates an entity with an offset.
 class SummonMinionAction extends BossAction {
   entity = "none";
+  isPositionAbsolute = false;
+  count = 1;
   offsetX = 0;
+  randomOffsetX = 0;
   offsetY = 0;
+  randomOffsetY = 0;
   rotationOffset = 0;
   //Displacement in the direction of the source + offset rotation
   slide = 0;
@@ -124,32 +131,42 @@ class SummonMinionAction extends BossAction {
    * @param {Entity} entity
    */
   execute(entity) {
-    if (this.max > 0 && this.#summoned.length >= this.max) return;
-    //get the entity
-    let toSpawn = structuredClone(Registry.entities.get(this.entity));
-    Object.assign(toSpawn, this.differences);
-    //construct the entity
-    /**@type {Entity} */
-    let spawned = this.isBoss
-      ? //Spawn it as a boss, if isBoss is true
-        entity.world.spawnBoss(toSpawn, this.bossClass)
-      : //If not, spawn it normally
-        construct(toSpawn, Entity).addToWorld(entity.world);
-    //Position and rotate the entity with trigonometry
-    spawned.x =
-      entity.x +
-      this.offsetX +
-      Math.cos(degrees(this.rotationOffset)) * this.slide;
-    spawned.y =
-      entity.y +
-      this.offsetY +
-      Math.sin(degrees(this.rotationOffset)) * this.slide;
-    spawned.direction = entity.direction + this.rotationOffset;
-    //"I created you, now do my bidding!"
-    spawned.team = entity.team;
-    if (this.max > 0) {
-      this.#summoned = this.#summoned.filter((x) => !x.dead);
-      this.#summoned.push(spawned);
+    for (let i = 0; i < this.count; i++) {
+      if (this.max > 0 && this.#summoned.length >= this.max) return;
+      //get the entity
+      let toSpawn = structuredClone(Registry.entities.get(this.entity));
+      Object.assign(toSpawn, this.differences);
+      //construct the entity
+      /**@type {Entity} */
+      let spawned = this.isBoss
+        ? //Spawn it as a boss, if isBoss is true
+          entity.world.spawnBoss(toSpawn, this.bossClass)
+        : //If not, spawn it normally
+          construct(toSpawn, Entity).addToWorld(entity.world);
+      //Position and rotate the entity with trigonometry
+      let xo =
+          this.randomOffsetX * rnd(1, -1) +
+          this.offsetX +
+          Math.cos(degrees(this.rotationOffset)) * this.slide,
+        yo =
+          this.randomOffsetY * rnd(1, -1) +
+          this.offsetY +
+          Math.sin(degrees(this.rotationOffset)) * this.slide;
+      if (this.isPositionAbsolute) {
+        spawned.x = xo;
+        spawned.y = yo;
+        spawned.direction = this.rotationOffset;
+      } else {
+        spawned.x = entity.x + xo;
+        spawned.y = entity.y + yo;
+        spawned.direction = entity.direction + this.rotationOffset;
+      }
+      //"I created you, now do my bidding!"
+      spawned.team = entity.team;
+      if (this.max > 0) {
+        this.#summoned = this.#summoned.filter((x) => !x.dead);
+        this.#summoned.push(spawned);
+      }
     }
   }
 }
@@ -245,5 +262,41 @@ class MultiAction extends BossAction {
   end(entity) {
     super.end(entity);
     this.actions.forEach((str) => entity.actions[str].end(entity));
+  }
+}
+
+class SetDataAction extends BossAction {
+  name = "data";
+  value = 1;
+  /**@param {Boss} entity  */
+  execute(entity) {
+    entity.data.set(this.name, this.value);
+  }
+}
+
+class ChangeVisualAction extends BossAction {
+  drawer = {
+    shape: "circle",
+    fill: "red",
+    image: "error",
+    width: 100,
+    height: 100,
+  };
+  changesBack = true;
+  #olddrawer = null;
+  /**@param {Boss} entity  */
+  execute(entity) {
+    if (this.changesBack) this.#olddrawer = entity.overrideDrawer;
+    entity.overrideDrawer = this.drawer;
+  }
+  /**@param {Boss} entity  */
+  end(entity) {
+    if (this.changesBack) entity.overrideDrawer = this.#olddrawer;
+  }
+}
+class ResetVisualAction extends BossAction {
+  /**@param {Boss} entity  */
+  execute(entity) {
+    entity.overrideDrawer = null;
   }
 }

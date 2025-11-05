@@ -40,6 +40,19 @@ Registry.genericType.add("action.enable-ai", EnableAIAction);
 Registry.genericType.add("action.disable-ai", DisableAIAction);
 Registry.genericType.add("action.sequence", CollapsedSequenceAction);
 Registry.genericType.add("action.multi", MultiAction);
+Registry.genericType.add("action.data", SetDataAction);
+Registry.genericType.add("action.change-visual", ChangeVisualAction);
+Registry.genericType.add("action.reset-visual", ResetVisualAction);
+//Boss Triggers
+Registry.genericType.add("trigger.tick", ActionTrigger);
+Registry.genericType.add("trigger.single-hp", SingleHPPointTrigger);
+Registry.genericType.add("trigger.multi-hp", MultiHPPointTrigger);
+Registry.genericType.add("trigger.action-ended", ActionEndedTrigger);
+Registry.genericType.add("trigger.data", DataValueTrigger);
+Registry.genericType.add("trigger.h-pos", HorizontalPositionTrigger);
+Registry.genericType.add("trigger.v-pos", VerticalPositionTrigger);
+Registry.genericType.add("trigger.rect-pos", RectPositionTrigger);
+Registry.genericType.add("trigger.circle-pos", CirclePositionTrigger);
 //vfx
 Registry.genericType.add("vfx.particle", ParticleEmissionEffect);
 Registry.genericType.add("vfx.text", TextParticleEmissionEffect);

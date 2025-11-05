@@ -12,7 +12,8 @@ createUIComponent(
   "Volume",
   false,
   30
-)
+);
+SoundCTX.volume.gain.setValueAtTime(0.5, 0);
 createSliderComponent(
   ["options"],
   [],
@@ -27,6 +28,7 @@ createSliderComponent(
   30,
   (value) => {
     ui.volume = value;
+    SoundCTX.volume.gain.setValueAtTime(value / 100, 0);
   },
   0,
   100
@@ -45,6 +47,7 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.entities = value;
+    SoundCTX.piecewiseVolume.entities.gain.setValueAtTime(value / 100, 0);
   },
   0,
   100,
@@ -64,11 +67,13 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.weapons = value;
+    SoundCTX.piecewiseVolume.weapons.gain.setValueAtTime(value / 100, 0);
   },
   0,
   100,
   100
 );
+SoundCTX.piecewiseVolume.music.gain.setValueAtTime(2, 0);
 createSliderComponent(
   ["options"],
   [],
@@ -83,13 +88,14 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.music = value;
+    SoundCTX.piecewiseVolume.music.gain.setValueAtTime(value / 50, 0);
   },
   0,
   100,
   100
 );
 createSliderComponent(
-  ["//options"],
+  ["options"],
   [],
   1100,
   500,
@@ -102,6 +108,7 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.other = value;
+    SoundCTX.piecewiseVolume.other.gain.setValueAtTime(value / 100, 0);
   },
   0,
   100,

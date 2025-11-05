@@ -50,14 +50,16 @@ class World {
     this.#removeDead();
     this.tickSpawns(game.player.speed);
     if (this.ambientSound && Math.random() < this.ambienceChance) {
-      playSound(this.ambientSound);
+      SoundCTX.play(this.ambientSound);
     }
-    playSound(this.bgm, true);
+    SoundCTX.play(this.bgm, true);
   }
   #actualTick() {
     //Tick *everything*
     for (let bullet of this.bullets) {
-      bullet.step(1);
+      for (let i = 0; i < bullet.updates; i++) {
+        bullet.step(1);
+      }
     }
     for (let particle of this.particles) {
       particle.step(1);
@@ -106,7 +108,7 @@ class World {
         }
         if (!bullet.fragDisabled) bullet.frag();
         //Sound time!
-        playSound(bullet.despawnSound);
+        SoundCTX.play(bullet.despawnSound);
         //Delete the bullet
         this.bullets.splice(b, 1);
       }
@@ -124,7 +126,7 @@ class World {
         if (!entity.left) {
           if (entity.lastHurtSource) entity.lastHurtSource.dv += entity.dv;
           entity.onDeath(entity.lastHurtSource);
-          playSound(entity.deathSound);
+          SoundCTX.play(entity.deathSound);
         }
         game.maxDV += entity.dv;
         if (entity instanceof Boss && !entity.isMinion) game.totalBosses++;
@@ -170,7 +172,7 @@ class World {
       entity: Box.default,
       interval: 60,
       isHighTier: false,
-      imposMode: "ignore",
+      imposMode: "ignore", // "when-on", "when-off" or "ignore"
     }
   ) {
     //Handle bad properties like `null`
@@ -208,7 +210,7 @@ class World {
     return null;
   }
   getAllBosses() {
-    return this.entities.filter(entity => entity.isBoss && !entity.hidden);
+    return this.entities.filter((entity) => entity.isBoss && !entity.hidden);
   }
   setBossList(...bosses) {
     this.#bossList = bosses;

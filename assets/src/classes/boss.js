@@ -1,13 +1,16 @@
 class Boss extends ScalingEntity {
   reward = { shards: 0, bloonstones: 0 };
-  /** @type {Array<BossAction>} */
-  actions = {}; //Essentially a registry, holds items to be used in sequence
-  sequence = []; //Array of names of actions.
+  /** @type {Object<string, BossAction>} */
+  actions = {}; // Essentially a registry, holds actions that this boss can perform
+  /**@type {ActionTrigger[]} */
+  triggers = []; // Stores triggers, which allow conditional execution of actions
+  /** @type {string[]} */
+  sequence = []; // Array of names of actions. These will be executed in order.
   imposSequence = null; //Array to be used in Impossible difficulty. Optional.
   #action = 0; //Current action being executed
-  #timer = 0; //Time the current action has been executing for.
 
   imposDrawer = null;
+  overrideDrawer = null;
 
   //Movement
   aiActive = true;
@@ -18,6 +21,8 @@ class Boss extends ScalingEntity {
   trackingOffsetY = 0;
   previousRot = 0;
 
+  data = new Map();
+
   isMinion = false; //Stops this counting for boss kills
   dv = 250;
   init() {
@@ -26,6 +31,8 @@ class Boss extends ScalingEntity {
     for (let name in this.actions) {
       this.actions[name] = construct(this.actions[name], BossAction);
     }
+    this.triggers = this.triggers.map((x) => construct(x, ActionTrigger));
+
     //Instantly use first action
     let currentAction = this.getAction();
     if (currentAction) currentAction.execute(this);
@@ -41,8 +48,9 @@ class Boss extends ScalingEntity {
   }
   tickSeq(seq, actIndex) {
     //Do the action thing
+    let actName = seq[actIndex];
     /**@type {BossAction} */
-    let currentAction = this.actions[seq[actIndex]];
+    let currentAction = this.actions[actName];
     if (!currentAction) return 0; //Stop immediately if actions empty
     if (!currentAction.complete) {
       currentAction.tick(this);
@@ -50,6 +58,9 @@ class Boss extends ScalingEntity {
     }
     //If action has finished
     currentAction.end(this);
+
+    this.triggerEnd(actName);
+
     actIndex++;
     if (actIndex >= seq.length) {
       actIndex = 0;
@@ -61,6 +72,11 @@ class Boss extends ScalingEntity {
       this.tickSeq(seq, actIndex); //skip through, unless all actions are 0 duration to avoid freezing
     }
     return actIndex;
+  }
+  triggerEnd(action) {
+    this.triggers.forEach((t) => {
+      if (t instanceof ActionEndedTrigger && t.actionEnding == action) t.go();
+    });
   }
   tick() {
     if (!this.#action) this.#action = 0;
@@ -78,6 +94,8 @@ class Boss extends ScalingEntity {
           );
     }
     this.#action = this.tickSeq(this.seq(), this.#action);
+    //check triggers
+    this.triggers.forEach((t) => t.tick(this));
     //Corrective rotating
     this.direction = degrees(p5.Vector.fromAngle(this.directionRad).heading());
   }
@@ -158,9 +176,12 @@ class Boss extends ScalingEntity {
     if (!this.isMinion) source.destroyed.bosses++;
   }
   getDraw() {
-    return game.difficulty === "impossible"
-      ? this.imposDrawer ?? this.drawer
-      : this.drawer;
+    return (
+      this.overrideDrawer ??
+      (game.difficulty === "impossible"
+        ? this.imposDrawer ?? this.drawer
+        : this.drawer)
+    );
   }
   draw() {
     let d = this.getDraw();

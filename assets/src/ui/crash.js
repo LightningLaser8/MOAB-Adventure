@@ -30,6 +30,7 @@ createUIComponent(
  */
 function crash(error) {
   reload();
+  SoundCTX.stop(world.bgm);
   ui.menuState = "crash";
   crashStats.type.text = error.constructor.name + ":";
   crashStats.message.text = error.message;

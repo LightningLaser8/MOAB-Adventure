@@ -486,6 +486,7 @@ Registry.weapons.add("laser-blaster", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -779,7 +780,8 @@ Registry.weapons.add("rifle", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: false,
       pierce: 1,
@@ -2008,6 +2010,7 @@ Registry.weapons.add("accelerator", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -2831,7 +2834,8 @@ Registry.weapons.add("shotgun", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: false,
       pierce: 1,
@@ -4499,6 +4503,7 @@ Registry.weapons.add("greenbeam", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -5637,7 +5642,8 @@ Registry.weapons.add("du-rounds", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [0, 200, 0, 20],
@@ -10852,7 +10858,8 @@ Registry.weapons.add("super-shotgun", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [0, 0, 200, 20],
@@ -13011,6 +13018,7 @@ Registry.weapons.add("hive", {
           trailColour: [187, 255, 0],
           trailColourTo: [255, 255, 0, 0],
           targetType: "nearest",
+          retarget: false,
           turnSpeed: 4.5,
           despawnSound: "explosion",
           damage: [
@@ -16333,28 +16341,38 @@ Registry.weapons.add("ultraviolet-obliterator", {
           //Extra damage, i guess
           type: "missile",
           trailShape: "rhombus",
-          lifetime: 20,
-          speed: 40,
-          hitSize: 7,
+          lifetime: 60,
+          speed: 30,
+          hitSize: 14,
           trail: true,
-          knockback: 90,
+          knockback: 60,
           multiHit: true,
-          pierce: 10,
+          pierce: 3,
           trailColour: [200, 0, 255, 200],
           trailColourTo: [0, 0, 255, 50],
+          trailWidth: 7,
           targetType: "nearest",
-          turnSpeed: 3,
+          trackingRange: 400,
+          retarget: false,
+          turnSpeed: 4,
           flameLength: 1000,
           damage: [
             {
               type: "laser",
               amount: 100,
+              area: 60,
+              //Purple to blue explosion
+              smokeColour: [150, 0, 200, 200],
+              smokeColourTo: [0, 0, 100, 0],
+              sparkColour: [200, 100, 255],
+              sparkColourTo: [0, 0, 255],
+              waveColour: [200, 0, 255],
             },
           ],
           drawer: {
-            shape: "ellipse",
-            width: 14,
-            height: 7,
+            shape: "moved-back-triangle",
+            width: 42,
+            height: 21,
             fill: [255, 255, 255],
           },
         },
@@ -17601,7 +17619,8 @@ Registry.weapons.add("crucify", {
         intervalDirection: 180, //Fire extras behind laser
         intervalBullet: {
           lifetime: 15,
-          speed: 50,
+          speed: 30,
+          updates: 2,
           hitSize: 7,
           trail: true,
           knockback: 90,
@@ -19948,7 +19967,8 @@ Registry.weapons.add("diffuse", {
     bullet: {
       type: "Bullet",
       lifetime: 50,
-      speed: 55,
+      speed: 25,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [251, 157, 81, 20],
@@ -20756,4 +20776,4 @@ Registry.weapons.add("diffuse", {
     },
   ],
 });
-//Finally, 20759 loc later, all weapons finished. Phew.
+//Finally, 20765 loc later, all weapons finished. Phew.

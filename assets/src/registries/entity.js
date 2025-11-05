@@ -227,6 +227,16 @@ Registry.entities.add("gigantic-box", {
       offsetY: 60,
       duration: 0,
     },
+    summonRand: {
+      type: "action.summon",
+      entity: "wooden-box",
+      duration: 0,
+      count: 4,
+      offsetX: 1920,
+      offsetY: 540,
+      randomOffsetY: 540,
+      isPositionAbsolute: true,
+    },
     aim: {
       type: "action.disable-ai",
       // speed: 0,
@@ -237,6 +247,22 @@ Registry.entities.add("gigantic-box", {
       type: "action.enable-ai",
       // speed: 8,
       // turnSpeed: 4,
+      // changesBack: false,
+    },
+    "feck-off": {
+      type: "action.move",
+      duration: 20,
+      x: -350,
+    },
+    leave: {
+      type: "action.self-destruct",
+      isLeaving: true,
+    },
+    stop: {
+      type: "action.disable-ai",
+      duration: 0,
+      // speed: 0,
+      // turnSpeed: 0,
       // changesBack: false,
     },
   },
@@ -252,6 +278,35 @@ Registry.entities.add("gigantic-box", {
     {
       upgrades: [".box-rotary-pain"],
       tier: 1,
+    },
+  ],
+  triggers: [
+    {
+      type: "trigger.multi-hp",
+      actionName: "summonRand",
+      inclusive: false,
+      divisions: 20,
+    },
+    {
+      type: "trigger.action-ended",
+      actionName: "spin",
+      actionEnding: "summonRand",
+    },
+    {
+      type: "trigger.h-pos",
+      actionName: "stop",
+      x: 150,
+      invertDetection: true,
+    },
+    {
+      type: "trigger.action-ended",
+      actionEnding: "stop",
+      actionName: "feck-off",
+    },
+    {
+      type: "trigger.action-ended",
+      actionEnding: "feck-off",
+      actionName: "leave",
     },
   ],
   sequence: ["wait", "charge", "bonk"],

@@ -13,7 +13,6 @@ class Box extends ScalingEntity {
   //No moving unless explicitly stated
   speed = 0;
   square = true; //Can't rotate
-  dv = 1;
   onDeath(source) {
     //Give destroy reward
     game.shards += this.destroyReward.shards ??= 0;

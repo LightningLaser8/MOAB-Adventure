@@ -49,6 +49,7 @@ class LaserBullet extends Bullet {
       }
       //Follow
       if (this.followsScreen) this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
+      this.checkEntities();
     }
   }
   draw() {

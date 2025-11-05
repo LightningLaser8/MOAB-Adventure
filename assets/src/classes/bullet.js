@@ -15,6 +15,10 @@ class Bullet {
   trailColour = [255, 255, 255, 200];
   trailColourTo = null;
   trailLifeFactor = 0.75;
+  trailShape = "rhombus";
+  trailWidth = -1;
+  /** @type {"dotted"|"linear"|"lightning"} */
+  trailType = "dotted";
   remove = false;
   collides = true;
   pierce = 0;
@@ -27,6 +31,7 @@ class Bullet {
     width: 10,
     height: 10,
   };
+  updates = 1;
   /** @type {World?} */
   world = null;
   /** @type {Entity?} */
@@ -81,6 +86,7 @@ class Bullet {
   spawnSound = null;
   #sounded = false;
 
+  prev = null;
   //Main stuff
   get directionRad() {
     return (this.direction / 180) * Math.PI;
@@ -89,17 +95,19 @@ class Bullet {
     this.maxLife = this.lifetime;
     this.maxPierce = this.pierce;
     this.trailColourTo ??= this.trailColour;
-    if(this.trailInterval === -1) this.trailInterval = this.hitSize * 4;
+    if (this.trailInterval === -1) this.trailInterval = this.hitSize * 4;
+    if (this.trailWidth === -1) this.trailWidth = this.hitSize;
   }
   sound() {
     if (!this.#sounded) {
-      playSound(this.spawnSound);
+      SoundCTX.play(this.spawnSound);
       this.#sounded = true;
     }
   }
   step(dt) {
+    if (this.prev) this.spawnTrail(dt);
+    this.prev = this.pos.clone();
     this.sound();
-    this.spawnTrail(dt);
     //Not if dead
     if (!this.remove) {
       if (this.followsSource && this.source) {
@@ -124,42 +132,71 @@ class Bullet {
       //Follow
       if (this.followsScreen)
         this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
+      this.checkEntities();
     }
   }
   spawnTrail(dt) {
-    //This got too long
-    for (let e = 0; e < this.speed * dt; e++) {
-      if (this._trailCounter <= 0) {
-        if (this.world?.particles != null && this.trail) {
-          let v = new DirectionVector(this.direction, e);
-          this.world.particles.push(
-            new ShapeParticle(
-              this.x - v.x,
-              this.y - v.y,
-              this.directionRad,
-              this.maxLife * this.trailLifeFactor,
-              0,
-              0,
-              "rhombus",
-              this.trailColour,
-              this.trailColourTo,
-              this.hitSize * 1.9,
-              0,
-              this.hitSize * this.trailInterval * 0.25,
-              this.hitSize * this.trailInterval * 0.25,
-              0,
-              this.followsScreen
-            )
-          );
+    if (this.trailType === "dotted") {
+      //This got too long
+      for (let e = 0; e < this.speed * dt; e++) {
+        if (this._trailCounter <= 0) {
+          if (this.world?.particles != null && this.trail) {
+            let v = new DirectionVector(this.direction, e);
+            this.world.particles.push(
+              new ShapeParticle(
+                this.x - v.x,
+                this.y - v.y,
+                this.directionRad,
+                this.getTrailLife(),
+                0,
+                0,
+                this.trailShape,
+                this.trailColour,
+                this.trailColourTo,
+                this.trailWidth * 1.9,
+                0,
+                this.hitSize * this.trailInterval * 0.25,
+                this.hitSize * this.trailInterval * 0.25,
+                0,
+                this.followsScreen
+              )
+            );
+          }
+          this._trailCounter = this.trailInterval;
+        } else {
+          this._trailCounter--;
         }
-        this._trailCounter = this.trailInterval;
-      } else {
-        this._trailCounter--;
       }
+    } else if (this.trailType === "linear") {
+      this.world.particles.push(
+        new LinearParticle(
+          [this.prev, this.pos],
+          this.getTrailLife(),
+          [this.trailColour, this.trailColourTo],
+          0,
+          this.trailWidth * 1.9,
+          0
+        )
+      );
+    } else if (this.trailType === "lightning") {
+      this.world.particles.push(
+        new LightningParticle(
+          this.pos.multiLerp(this.prev, Math.ceil(this.speed / this.trailInterval * 5)),
+          this.getTrailLife(),
+          [this.trailColour, this.trailColourTo],
+          0,
+          this.trailWidth,
+          0,
+          this.trailWidth
+        )
+      );
     }
   }
+  getTrailLife() {
+    return this.maxLife * this.trailLifeFactor;
+  }
   draw() {
-    if(this.drawer.hidden) return;
+    if (this.drawer.hidden) return;
     if (this.drawer.image) {
       rotatedImg(
         this.drawer.image,
@@ -183,7 +220,7 @@ class Bullet {
     }
   }
   distanceTo(x, y) {
-    return this.pos.distanceToXY(x, y)
+    return this.pos.distanceToXY(x, y);
   }
   collidesWith(obj) {
     return this.distanceTo(obj.x, obj.y) <= this.hitSize + obj.hitSize;
@@ -253,6 +290,74 @@ class Bullet {
         this.entity,
         this.source
       );
+    }
+  }
+  
+  checkEntities() {
+    for (let entity of this.world.entities) {
+      //If colliding with a this on different team, that it hasn't already been hit by and that still exists
+      if (
+        this.collides &&
+        !this.remove &&
+        entity.team !== this.entity.team &&
+        !this.damaged.includes(entity) &&
+        this.collidesWith(entity) //check collisions last for performance reasons
+      ) {
+        //Take all damage instances
+        for (let instance of this.damage) {
+          if (!instance.area)
+            entity.damage(
+              instance.type,
+              (instance.amount +
+                (this.source ? this.source.getDVScale() : 0) +
+                (instance.levelScaling ?? 0) * game.level) *
+                //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
+                (entity instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
+              this.entity
+            ); //Wait if kaboom
+          entity.maxHealth -= instance.amount * this.maxHPReductionFactor;
+        }
+        if (this.controlledKnockback) {
+          //Get direction to the target
+          let direction = 
+          this.pos.sub(this.entity.target).angleRad
+          entity.knock(this.knockback, direction, this.kineticKnockback); //Knock with default resolution
+        } else {
+          entity.knock(
+            this.knockback,
+            this.direction,
+            this.kineticKnockback
+          ); //Knock with default resolution
+        }
+        if (this.status !== "none") {
+          entity.applyStatus(this.status, this.statusDuration);
+        }
+        //Make the this know
+        this.damaged.push(entity);
+        this.onHit(entity);
+        if (!this.silent) {
+          SoundCTX.play(entity.hitSound);
+          SoundCTX.play(this.hitSound);
+        }
+        //Reduce pierce
+        this.pierce--;
+        //If exhausted
+        if (this.pierce < 0) {
+          if (this instanceof LaserBullet) this.canHurt = false;
+          else this.remove = true; //Delete
+        }
+      } else {
+        if (
+          !this.remove &&
+          entity.team !== this.entity.team &&
+          this.damaged.includes(entity)
+        ) {
+          if (this.multiHit && !this.collidesWith(entity)) {
+            //Unpierce it
+            this.damaged.splice(this.damaged.indexOf(entity), 1);
+          }
+        }
+      }
     }
   }
 }

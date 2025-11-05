@@ -5,7 +5,19 @@ const ui = {
     return new Vector(mouseX / contentScale, mouseY / contentScale);
   },
   conditions: {},
-  components: [],
+  get components() {
+    return this.screens[this.menuState] ?? [];
+  },
+  addTo(component, ...screens) {
+    screens.forEach((s) => {
+      this.screens[s] ??= [];
+      this.screens[s].push(component);
+    });
+  },
+  /**@type {Object.<string, UIComponent[]>} */
+  screens: {
+    title: [],
+  },
   //Volume percentage
   volume: 50,
   //Percentages for different parts
@@ -84,7 +96,6 @@ class UIComponent {
     }
     ui.conditions[parts[0]] = parts[1]; //Set the property
   }
-  acceptedScreens = [];
   conditions = [];
   interactive = false;
   active = false;
@@ -93,8 +104,7 @@ class UIComponent {
   backgroundColour = null;
   updateActivity() {
     //It's active if it should show *and* all the conditions are met
-    this.active =
-      this.acceptedScreens.includes(ui.menuState) && this.getActivity();
+    this.active = this.getActivity();
   }
   getActivity() {
     if (this.conditions[0] === "any") {
@@ -528,10 +538,9 @@ function createHealthbarComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -586,6 +595,15 @@ function rotatedShape(shape = "circle", x, y, width, height, angle) {
       break;
     case "rect":
       rect(0, 0, width, height);
+      break;
+    case "triangle":
+      triangle(-width/2, height / 2, -width/2, -height / 2, width/2, 0);
+      break;
+    case "moved-triangle":
+      triangle(0, height / 2, 0, -height / 2, width, 0);
+      break;
+    case "moved-back-triangle":
+      triangle(-width, height / 2, -width, -height / 2, 0, 0);
       break;
     case "rhombus":
       scale(width, height); //Change the size
@@ -722,10 +740,9 @@ function createUIComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -752,10 +769,9 @@ function createUIImageComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -870,10 +886,9 @@ function createSliderComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onchange;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -931,30 +946,6 @@ class ImageContainer {
   }
 }
 
-class SoundContainer {
-  #sound = null;
-  #category = "none";
-  #path;
-  /**
-   * @param {string} path
-   * @param {"weapons" | "entities" | "music"} category
-   */
-  constructor(path, category = "none") {
-    this.#path = path;
-    this.#category = category;
-  }
-  async load() {
-    this.#sound = await loadSound(this.#path);
-    console.log("Loaded sound from " + this.#path);
-    return true;
-  }
-  get sound() {
-    return this.#sound;
-  }
-  get category() {
-    return this.#category;
-  }
-}
 /**
  * @param {SoundContainer | string} sound
  * @param {boolean} waitForEnd

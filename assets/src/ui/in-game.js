@@ -1401,3 +1401,48 @@ createUIComponent(
   false,
   20
 );
+
+//###################################################################
+//
+// in-game UI > indicative UI > PAUSE INDICATOR
+//
+//###################################################################
+UIComponent.setCondition("paused:false");
+createUIComponent(["in-game"], ["paused:true", "upgrade-menu-open:false"], 960, 275, 1920, 20);
+UIComponent.setBackgroundOf(
+  createUIComponent(
+    ["in-game"],
+    ["paused:true", "difficulty:easy|normal|hard", "upgrade-menu-open:false"],
+    960,
+    275,
+    400,
+    50,
+    "both"
+  ),
+  [0, 200, 255]
+);
+UIComponent.setBackgroundOf(
+  createUIComponent(
+    ["in-game"],
+    ["paused:true", "difficulty:impossible", "upgrade-menu-open:false"],
+    960,
+    275,
+    400,
+    50,
+    "both"
+  ),
+  [255, 70, 0]
+);
+createUIComponent(
+  ["in-game"],
+  ["paused:true", "upgrade-menu-open:false"],
+  960,
+  275,
+  350,
+  80,
+  "both",
+  null,
+  "Paused",
+  true,
+  55
+);

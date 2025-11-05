@@ -12,7 +12,7 @@ class Booster extends Weapon {
   }
   fire() {
     if (this._cooldown <= 0) {
-      playSound(this.fireSound);
+      SoundCTX.play(this.fireSound);
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate(); //Apply acceleration effects
 

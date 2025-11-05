@@ -67,8 +67,7 @@ async function preload() {
     await item.load();
   });
   await Registry.sounds.forEachAsync(async (name, item) => {
-    await item.load();
-    item.sound.playMode("restart");
+    if(!await item.load()) console.error("Failed to load "+name)
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
@@ -432,7 +431,7 @@ function checkBoxCollisions() {
 }
 
 function playerDies() {
-  playSound("player-death");
+  SoundCTX.play("player-death");
   deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
   deathStats.bloonstoneCounter.text =
     "Bloonstones: " + shortenedNumber(game.bloonstones);
@@ -593,12 +592,14 @@ function keyPressed() {
 
 function pause() {
   game.paused = true;
-  pauseSound(world.bgm);
+  UIComponent.setCondition("paused:true");
+  SoundCTX.stop(world.bgm);
 }
 
 function unpause() {
   game.paused = false;
-  playSound(world.bgm, true);
+  UIComponent.setCondition("paused:false");
+  SoundCTX.play(world.bgm, true);
 }
 
 function moveToWorld(worldName = "ocean-skies") {

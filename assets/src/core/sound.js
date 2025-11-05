@@ -1,0 +1,107 @@
+// Fairly minimal 2-stage volume-controllable sound system
+
+class SoundContainer {
+  /** @type {AudioBuffer?} */
+  #sound = null;
+  /** @type {"weapons" | "entities" | "music" | "other"} */
+  #category = "none";
+  #path;
+  /**
+   * @param {string} path
+   * @param {"weapons" | "entities" | "music" | "other"} category
+   */
+  constructor(path, category = "none") {
+    this.#path = path;
+    this.#category = category;
+  }
+  async load() {
+    this.#sound = await SoundCTX.load(this.#path);
+    return this.#sound != null;
+  }
+  get sound() {
+    return this.#sound;
+  }
+  get category() {
+    return this.#category;
+  }
+}
+
+class MASoundEngine {
+  context = new AudioContext();
+  volume = this.context.createGain();
+  piecewiseVolume = {
+    weapons: this.context.createGain(),
+    entities: this.context.createGain(),
+    music: this.context.createGain(),
+    other: this.context.createGain(),
+  };
+  // Add this line to track active sounds
+  #activeSounds = new Map();
+  constructor() {
+    this.piecewiseVolume.weapons.connect(this.volume);
+    this.piecewiseVolume.entities.connect(this.volume);
+    this.piecewiseVolume.music.connect(this.volume);
+    this.piecewiseVolume.other.connect(this.volume);
+    this.volume.connect(this.context.destination);
+  }
+  async load(path) {
+    try {
+      let file = await fetch(path);
+      let buf = await file.arrayBuffer();
+      let sound = await this.context.decodeAudioData(buf);
+      console.log(`Loaded sound from ${path}`, sound);
+      return sound;
+    } catch (e) {
+      return false;
+    }
+  }
+  /**
+   * @param {SoundContainer | string} sound
+   * @param {boolean} waitForEnd
+   */
+  play(sound, waitForEnd) {
+    if (!sound) return;
+    if (typeof sound === "string") sound = Registry.sounds.get(sound);
+    // Now that it's a sound container, play it
+
+    if (this.#activeSounds.has(sound)) {
+      if (waitForEnd) return;
+      else this.#activeSounds.get(sound).stop();
+    }
+
+    const bufnode = this.context.createBufferSource();
+    bufnode.buffer = sound.sound;
+    bufnode.connect(
+      this.piecewiseVolume[sound.category] ?? this.piecewiseVolume.other
+    );
+    bufnode.onended = () => {
+      bufnode.disconnect();
+        this.#activeSounds.delete(sound);
+    };
+    bufnode.start(0);
+
+    // Store the buffer node
+    this.#activeSounds.set(sound, bufnode);
+  }
+  /**
+   * @param {SoundContainer | string} sound
+   * @param {boolean} waitForEnd
+   */
+  stop(sound, waitForEnd) {
+    if (!sound) return;
+    if (typeof sound === "string") sound = Registry.sounds.get(sound);
+
+    const bufnode = this.#activeSounds.get(sound);
+    if (bufnode) {
+      try {
+        bufnode.stop();
+        bufnode.disconnect();
+        this.#activeSounds.delete(sound);
+      } catch (e) {
+        console.warn("Failed to stop sound:", e);
+      }
+    }
+  }
+}
+
+const SoundCTX = new MASoundEngine();
