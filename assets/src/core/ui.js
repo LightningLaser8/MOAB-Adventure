@@ -1,37 +1,70 @@
-const ui = {
-  menuState: "title",
-  waitingForMouseUp: false,
+class UserInterfaceController {
+  set menuState(_) {
+    this.#ms = _;
+    this.components.forEach((x) => x.updateActivity());
+  }
+  get menuState() {
+    return this.#ms;
+  }
+  #ms = "title";
+  waitingForMouseUp = false;
   get mouse() {
     return new Vector(mouseX / contentScale, mouseY / contentScale);
-  },
-  conditions: {},
+  }
+  conditions = {};
   get components() {
     return this.screens[this.menuState] ?? [];
-  },
+  }
   addTo(component, ...screens) {
     screens.forEach((s) => {
       this.screens[s] ??= [];
       this.screens[s].push(component);
     });
-  },
+  }
   /**@type {Object.<string, UIComponent[]>} */
-  screens: {
+  screens = {
     title: [],
-  },
+  };
   //Volume percentage
-  volume: 50,
+  volume = 50;
   //Percentages for different parts
   //Multiplicative with `volume`
-  piecewiseVolume: {
+  piecewiseVolume = {
     music: 100,
     weapons: 100,
     entities: 100,
-  },
+  };
   //particle
-  particles: [],
-};
+  particles = [];
+  keybinds = new KeybindHandler();
+  /** Handles UI keytype events. Returns true if something happened. */
+  type(key) {
+    return false;
+  }
+  tick() {
+    for (let component of this.components) {
+      component.updateActivity();
+      if (component.active && component.isInteractive) {
+        component.checkMouse();
+      }
+    }
+    let len = this.particles.length;
+    for (let p = 0; p < len; p++) {
+      if (this.particles[p]?.remove) {
+        this.particles.splice(p, 1);
+      }
+    }
+    this.keybinds.tick();
+  }
+}
+
+const ui = new UserInterfaceController();
 
 class UIComponent {
+  static setKeyboardShortcut(uicomponent, shortcut) {
+    uicomponent.shortcutKey = shortcut;
+    return uicomponent;
+  }
   static invert(uicomponent) {
     uicomponent.inverted = true;
     uicomponent.y *= -1;
@@ -98,6 +131,7 @@ class UIComponent {
   }
   conditions = [];
   interactive = false;
+  isBackButton = false;
   active = false;
   inverted = false;
   outline = true;
@@ -187,8 +221,7 @@ class UIComponent {
         }
         //Draw outline behind background
         rect(
-          this.x +
-            (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
+          this.x + (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
           this.y,
           this.width +
             (this.bevel === "right" || this.bevel === "left"
@@ -356,17 +389,7 @@ class HealthbarComponent extends UIComponent {
     healthcol = [255, 255, 0]
   ) {
     //Initialise component
-    super(
-      x,
-      y,
-      width,
-      height,
-      bevel,
-      onpress,
-      shownText,
-      useOCR,
-      shownTextSize
-    );
+    super(x, y, width, height, bevel, onpress, shownText, useOCR, shownTextSize);
     this.source = source;
     this.sourceIsFunction = typeof this.source === "function";
     this.healthbarColour = healthcol;
@@ -460,15 +483,7 @@ class HealthbarComponent extends UIComponent {
     );
     pop();
   }
-  #shape(
-    x,
-    y,
-    width,
-    height,
-    realign = false,
-    realignV = false,
-    reverseX = false
-  ) {
+  #shape(x, y, width, height, realign = false, realignV = false, reverseX = false) {
     if (realign) x += (width / 2) * (reverseX ? -1 : 1);
     if (realignV) y += height / 2;
 
@@ -597,7 +612,7 @@ function rotatedShape(shape = "circle", x, y, width, height, angle) {
       rect(0, 0, width, height);
       break;
     case "triangle":
-      triangle(-width/2, height / 2, -width/2, -height / 2, width/2, 0);
+      triangle(-width / 2, height / 2, -width / 2, -height / 2, width / 2, 0);
       break;
     case "moved-triangle":
       triangle(0, height / 2, 0, -height / 2, width, 0);
@@ -635,17 +650,7 @@ class SliderUIComponent extends UIComponent {
     max = 100,
     current = null
   ) {
-    super(
-      x,
-      y,
-      width,
-      height,
-      bevel,
-      undefined,
-      shownText,
-      useOCR,
-      shownTextSize
-    );
+    super(x, y, width, height, bevel, undefined, shownText, useOCR, shownTextSize);
     //Change callback
     this.change = onchange;
     this.length = sliderLength;
@@ -819,8 +824,7 @@ function createGamePropertySelector(
     false,
     shownTextSize
   );
-  diffindicator.chosen =
-    defaultOption in options ? options[defaultOption] : null;
+  diffindicator.chosen = defaultOption in options ? options[defaultOption] : null;
   let len = Math.min(options.length, shownTexts.length); //Get smallest array, don't use blanks
   for (let i = 0; i < len; i++) {
     //For each option or text
@@ -1004,14 +1008,7 @@ class UIParticleEmitter extends UIComponent {
   draw() {
     if (this.#countdown <= 0) {
       this.#countdown = this.interval;
-      createEffect(
-        this.effect,
-        null,
-        this.x,
-        this.y,
-        this.direction,
-        this.scale
-      );
+      createEffect(this.effect, null, this.x, this.y, this.direction, this.scale);
     } else this.#countdown--;
   }
   checkMouse() {}
@@ -1035,14 +1032,7 @@ function createParticleEmitter(
   interval = 1
 ) {
   //Make component
-  const component = new UIParticleEmitter(
-    x,
-    y,
-    direction,
-    scale,
-    effect,
-    interval
-  );
+  const component = new UIParticleEmitter(x, y, direction, scale, effect, interval);
   component.conditions = conditions;
   //Set conditional things
   component.acceptedScreens = screens;
@@ -1051,13 +1041,7 @@ function createParticleEmitter(
   return component;
 }
 
-function uiBlindingFlash(
-  x = 0,
-  y = 0,
-  opacity = 255,
-  duration = 60,
-  glareSize = 600
-) {
+function uiBlindingFlash(x = 0, y = 0, opacity = 255, duration = 60, glareSize = 600) {
   ui.particles.push(
     //Obscure screen
     new ShapeParticle(

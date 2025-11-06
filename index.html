@@ -8,9 +8,8 @@
   <title>MOAB Adventure</title>
   <link rel="icon" type="image/x-icon" href="./assets/textures/ui/moab.png">
   <link href="./style.css" rel="stylesheet" type="text/css" />
-  <!-- Import p5 -->
+  <!-- Import p5, but not sound -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
 
 <body>
@@ -18,13 +17,15 @@
     //Disable p5's errors, they don't really help
     p5.disableFriendlyErrors = true;
     //Game info
-    const gameVersion = "0.0.108";
+    const gameVersion = "0.0.109";
     const isPreview = true;
     let versionReplacementText = "";
   </script>
   <!-- Core -->
+  <script src="./assets/src/core/hotkey.js"></script>
   <script src="./assets/src/core/ui.js"></script>
   <script src="./assets/src/core/constructor.js"></script>
+  <script src="./assets/src/core/text.js"></script>
   <script src="./assets/src/core/number.js"></script>
   <script src="./assets/src/core/sound.js"></script>
   <script src="./assets/src/core/registry.js"></script>
@@ -98,6 +99,10 @@
   <script src="./assets/src/slots.js"></script>
   <!-- Actual gameplay -->
   <script src="./assets/src/game.js"></script>
+  <!-- Controls -->
+  <script src="./assets/src/controls/ui-hotkeys.js"></script>
+  <script src="./assets/src/controls/game-controls.js"></script>
+  <script src="./assets/src/controls/game-hotkeys.js"></script>
 </body>
 
 </html>

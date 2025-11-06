@@ -35,7 +35,7 @@ class MASoundEngine {
     music: this.context.createGain(),
     other: this.context.createGain(),
   };
-  // Add this line to track active sounds
+  /** @type {Map<SoundContainer,AudioBufferSourceNode>} */
   #activeSounds = new Map();
   constructor() {
     this.piecewiseVolume.weapons.connect(this.volume);
@@ -76,7 +76,7 @@ class MASoundEngine {
     );
     bufnode.onended = () => {
       bufnode.disconnect();
-        this.#activeSounds.delete(sound);
+      this.#activeSounds.delete(sound);
     };
     bufnode.start(0);
 
@@ -89,6 +89,15 @@ class MASoundEngine {
    */
   stop(sound, waitForEnd) {
     if (!sound) return;
+    //stop all
+    if (sound === "*") {
+      this.#activeSounds.forEach((b) => {
+        b.stop();
+        b.disconnect();
+        this.#activeSounds.delete(sound);
+      });
+      return;
+    }
     if (typeof sound === "string") sound = Registry.sounds.get(sound);
 
     const bufnode = this.#activeSounds.get(sound);
@@ -98,7 +107,7 @@ class MASoundEngine {
         bufnode.disconnect();
         this.#activeSounds.delete(sound);
       } catch (e) {
-        console.warn("Failed to stop sound:", e);
+        console.warn("Failed to stop sound "+sound+":", e);
       }
     }
   }

@@ -3,6 +3,7 @@
 class Blimp {
   health = 200;
   name = "MOAB";
+  description = "";
   speed = 6;
   resistances = [];
   drawer = {

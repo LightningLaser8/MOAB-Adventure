@@ -1,5 +1,5 @@
 // Different enough to not extend
-class LinearEffect extends RegisteredItem {
+class LinearEffect {
   create(world, positions = [], impact = false) {}
   execute(world, positions = [], pos = () => [], impact = false) {
     if (this.parentise) this.create(world, pos(), impact);

@@ -5,7 +5,7 @@
 //Tier 1 - 2
 Registry.weapons.add("tiny-shooter", {
   name: "Tiny Shooter",
-  description: "Shoots a single, low damage bullet directly\nforwards.",
+  description: "Shoots a single, low damage bullet directly forwards.",
   reload: 20,
   fireSound: "shoot",
   cost: {
@@ -341,7 +341,7 @@ Registry.weapons.add("bomb-shooter", {
 });
 Registry.weapons.add("heavy-shots", {
   name: "Heavy Shots",
-  description: "Large bullets deal more damage, and knock boxes\nback.",
+  description: "Large bullets deal more damage, and knock boxes back.",
   reload: 30,
   fireSound: "shoot",
   cost: {
@@ -769,7 +769,7 @@ Registry.weapons.add("laser-blaster", {
 });
 Registry.weapons.add("rifle", {
   name: "Rifle",
-  description: "Shoots a single, fast-moving bullet.\nPierces one box.",
+  description: "Shoots a single, fast-moving bullet. Pierces one box.",
   reload: 30,
   fireSound: "shoot",
   cost: {
@@ -1695,7 +1695,7 @@ Registry.weapons.add("kinetic-impactor", {
 });
 Registry.weapons.add("cryo-cannon", {
   name: "Cryo Cannon",
-  description: "Shoots freezing ice bombs that slow down targets'\nweapons",
+  description: "Shoots freezing ice bombs that slow down targets' weapons",
   reload: 45,
   fireSound: "bomb-shoot",
   cost: {
@@ -2635,7 +2635,7 @@ Registry.weapons.add("lancer", {
 Registry.weapons.add("sniper", {
   name: "Sniper",
   description:
-    "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
+    "Shots travel to the mouse pointer instantly, dealing high damage to a single target.",
   reload: 60,
   fireSound: "sniper-shoot",
   recoil: 5,
@@ -3020,7 +3020,7 @@ Registry.weapons.add("shotgun", {
 Registry.weapons.add("nuke-launcher", {
   name: "Nuke Launcher",
   description:
-    "Shoots nuclear explosives, dealing great damage in\na much larger area, leaving radioactive fallout.",
+    "Shoots nuclear explosives, dealing great damage in a much larger area, leaving radioactive fallout.",
   reload: 90,
   fireSound: "bomb-shoot",
   recoil: 5,
@@ -3341,7 +3341,7 @@ Registry.weapons.add("nuke-launcher", {
 });
 Registry.weapons.add("missile-battery", {
   name: "Missile Battery",
-  description: "Launches 6 smaller missiles, following the mouse\ncursor.",
+  description: "Launches 6 smaller missiles, following the mouse cursor.",
   reload: 90,
   fireSound: "bomb-shoot",
   cost: {
@@ -3674,7 +3674,7 @@ Registry.weapons.add("missile-battery", {
 Registry.weapons.add("controlled-collision-device", {
   name: "Controlled Collision Device",
   description:
-    "Finer control over directional displacement.\n(Knockback acts towards mouse)",
+    "Finer control over directional displacement. (Knockback acts towards mouse)",
   reload: 45,
   fireSound: "shoot",
   cost: {
@@ -3975,7 +3975,7 @@ Registry.weapons.add("controlled-collision-device", {
 Registry.weapons.add("shattering-shells", {
   name: "Shattering Shells",
   description:
-    "Ice bombs release many low damage shards,\nwith a lesser effect",
+    "Ice bombs release many low damage shards, with a lesser effect",
   reload: 45,
   fireSound: "bomb-shoot",
   cost: {
@@ -4489,7 +4489,7 @@ Registry.weapons.add("shattering-shells", {
 Registry.weapons.add("greenbeam", {
   name: "Greenbeam™",
   description:
-    "Shorter wavelength of lasers increases photon\nenergy, dealing increased damage.",
+    "Shorter wavelength of lasers increases photon energy, dealing increased damage.",
   reload: 45,
   accel: 0.2,
   accelDecay: 0.03,
@@ -4883,7 +4883,7 @@ Registry.weapons.add("greenbeam", {
 });
 Registry.weapons.add("spike", {
   name: "Spike",
-  description: "Bigger laser that travels farther and knocks boxes\nback.",
+  description: "Bigger laser that travels farther and knocks boxes back.",
   reload: 90,
   fireSound: "laser",
   recoil: 15,
@@ -5336,7 +5336,7 @@ Registry.weapons.add("spike", {
 Registry.weapons.add("sharp-shooter", {
   name: "Sharp Shooter",
   description:
-    "30% chance to fire a powerful critical shot,\ndealing triple damage.",
+    "30% chance to fire a powerful critical shot, dealing triple damage.",
   reload: 60,
   fireSound: "sniper-shoot",
   cost: {
@@ -5630,7 +5630,7 @@ Registry.weapons.add("sharp-shooter", {
 Registry.weapons.add("du-rounds", {
   name: "DU Rounds",
   description:
-    "Depleted uranium rounds pierce enemies of any type,\nand irradiate them!",
+    "Depleted uranium rounds pierce enemies of any type, and irradiate them!",
   reload: 50,
   fireSound: "shoot",
   recoil: 20,
@@ -5881,7 +5881,7 @@ Registry.weapons.add("du-rounds", {
 //Tier 6
 Registry.weapons.add("meltdown", {
   name: "Meltdown",
-  description: "Explosions have more fallout, and fire radioactive\nlasers.",
+  description: "Explosions have more fallout, and fire radioactive lasers.",
   reload: 220,
   fireSound: "bomb-shoot",
   recoil: 15,
@@ -6938,7 +6938,7 @@ Registry.weapons.add("swarmer", {
 Registry.weapons.add("telekinetic-transporter", {
   name: "Telekinetic Transporter",
   description:
-    "Main attack replaced with a telekinetic grab\nability, capable of smashing boxes into each other.\nMultiple boxes can be held at once.",
+    "Main attack replaced with a telekinetic grab ability, capable of smashing boxes into each other. Multiple boxes can be held at once.",
   reload: 60,
   fireSound: "laser-bolt",
   cost: {
@@ -7332,7 +7332,7 @@ Registry.weapons.add("telekinetic-transporter", {
 Registry.weapons.add("ray-of-frost", {
   type: "multi",
   name: "Ray of Frost",
-  description: "Shoots 2 secondary ice beams which independently\ntarget.",
+  description: "Shoots 2 secondary ice beams which independently target.",
   cost: {
     shards: 32500,
     bloonstones: 200,

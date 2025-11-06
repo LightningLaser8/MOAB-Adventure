@@ -7,7 +7,7 @@ Registry.weapons.add("pop-booster", {
   type: "booster",
   name: "Pop Booster",
   description:
-    "Gives you a quick burst of speed. Cannot be aimed.\nWhile dashing, boxes are knocked with the player.",
+    "Gives you a quick burst of speed. Cannot be aimed. While dashing, boxes are knocked with the player.",
   // Weirdly enough, holding [Left] while dashing will stop you getting hit by boxes you dash into.
   // Don't worry, this will be in the wiki too
   reload: 60,
@@ -259,7 +259,7 @@ Registry.weapons.add("double-booster", {
 Registry.weapons.add("scalar", {
   type: "booster",
   name: "Scalar",
-  description: "Allows reverse boosting by holding [A].\nAlso boosts further.",
+  description: "Allows reverse boosting by holding [A]. Also boosts further.",
   directions: 2,
   reload: 45,
   boostPower: 40,

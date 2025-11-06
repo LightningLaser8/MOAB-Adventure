@@ -1,22 +1,6 @@
 const background = {
-  bg1: new ImageUIComponent(
-    960,
-    540,
-    1920,
-    1080,
-    null,
-    "background.sea",
-    false
-  ),
-  bg2: new ImageUIComponent(
-    960 * 3 - 4,
-    540,
-    1920,
-    1080,
-    null,
-    "background.sea",
-    false
-  ),
+  bg1: new ImageUIComponent(960, 540, 1920, 1080, null, "background.sea", false),
+  bg2: new ImageUIComponent(960 * 3 - 4, 540, 1920, 1080, null, "background.sea", false),
   draw() {
     this.bg1.draw();
     this.bg2.draw();
@@ -45,33 +29,11 @@ const background = {
 
 createUIComponent(["in-game"], [], 350, 55, 700, 125, "right");
 //Shards
-createUIImageComponent(
-  ["in-game"],
-  [],
-  40,
-  60,
-  65,
-  75,
-  null,
-  "ui.shard",
-  false
-);
+createUIImageComponent(["in-game"], [], 40, 60, 65, 75, null, "ui.shard", false);
 //Overwrite text
 UIComponent.alignLeft(
   Object.defineProperty(
-    createUIComponent(
-      ["in-game"],
-      [],
-      80,
-      60,
-      0,
-      0,
-      "none",
-      null,
-      "shards",
-      true,
-      60
-    ),
+    createUIComponent(["in-game"], [], 80, 60, 0, 0, "none", null, "shards", true, 60),
     "text",
     {
       get: () => shortenedNumber(game.shards),
@@ -79,33 +41,11 @@ UIComponent.alignLeft(
   )
 );
 //Bloonstones
-createUIImageComponent(
-  ["in-game"],
-  [],
-  330,
-  60,
-  60,
-  75,
-  null,
-  "ui.bloonstone",
-  false
-);
+createUIImageComponent(["in-game"], [], 330, 60, 60, 75, null, "ui.bloonstone", false);
 //Overwrite text
 UIComponent.alignLeft(
   Object.defineProperty(
-    createUIComponent(
-      ["in-game"],
-      [],
-      370,
-      60,
-      0,
-      0,
-      "none",
-      null,
-      "bloonstones",
-      true,
-      60
-    ),
+    createUIComponent(["in-game"], [], 370, 60, 0, 0, "none", null, "bloonstones", true, 60),
     "text",
     {
       get: () => shortenedNumber(game.bloonstones),
@@ -171,34 +111,19 @@ UIComponent.setBackgroundOf(
 UIComponent.removeOutline(
   UIComponent.invert(
     //Upside-down on top of healthbar
-    Object.defineProperties(
-      createUIComponent(["in-game"], [], 200, 905, 400, 80, "right"),
-      {
-        width: {
-          get: () => nameBG.width - 20,
-        },
-        x: {
-          get: () => nameBG.x - 20,
-        },
-      }
-    )
+    Object.defineProperties(createUIComponent(["in-game"], [], 200, 905, 400, 80, "right"), {
+      width: {
+        get: () => nameBG.width - 20,
+      },
+      x: {
+        get: () => nameBG.x - 20,
+      },
+    })
   )
 );
 UIComponent.alignLeft(
   Object.defineProperties(
-    createUIComponent(
-      ["in-game"],
-      [],
-      20,
-      905,
-      0,
-      0,
-      "none",
-      null,
-      "e",
-      false,
-      60
-    ),
+    createUIComponent(["in-game"], [], 20, 905, 0, 0, "none", null, "e", false, 60),
     {
       text: {
         get: () =>
@@ -217,19 +142,7 @@ UIComponent.alignLeft(
 createUIComponent(["in-game"], [], 150, 175, 300, 90, "right");
 UIComponent.alignLeft(
   Object.defineProperty(
-    createUIComponent(
-      ["in-game"],
-      [],
-      20,
-      175,
-      0,
-      0,
-      "right",
-      null,
-      "",
-      true,
-      60
-    ),
+    createUIComponent(["in-game"], [], 20, 175, 0, 0, "right", null, "", true, 60),
     "text",
     {
       get: () => "LV " + game.level,
@@ -239,19 +152,7 @@ UIComponent.alignLeft(
 UIComponent.setCondition("debug:false");
 UIComponent.alignLeft(
   Object.defineProperty(
-    createUIComponent(
-      ["in-game"],
-      ["debug:true"],
-      20,
-      145,
-      0,
-      0,
-      "right",
-      null,
-      "",
-      true,
-      20
-    ),
+    createUIComponent(["in-game"], ["debug:true"], 20, 145, 0, 0, "right", null, "", true, 20),
     "text",
     {
       get: () =>
@@ -311,17 +212,7 @@ UIComponent.invert(
     .setColours(null, null, [255, 0, 0])
 );
 
-createUIImageComponent(
-  ["in-game"],
-  ["boss:no"],
-  1240,
-  50,
-  80,
-  80,
-  null,
-  "ui.clock",
-  false
-);
+createUIImageComponent(["in-game"], ["boss:no"], 1240, 50, 80, 80, null, "ui.clock", false);
 //  When boss active
 //Boss healthbar
 createUIComponent(
@@ -441,28 +332,14 @@ Object.defineProperty(
 //Translucent blue background
 UIComponent.removeOutline(
   UIComponent.setBackgroundOf(
-    createUIComponent(
-      ["in-game"],
-      ["upgrade-menu-open:true"],
-      900,
-      575,
-      800,
-      700
-    ),
+    createUIComponent(["in-game"], ["upgrade-menu-open:true"], 900, 575, 800, 700),
     [0, 255, 255, 100]
   )
 );
 //Vertical line bit
 UIComponent.removeOutline(
   UIComponent.setBackgroundOf(
-    createUIComponent(
-      ["in-game"],
-      ["upgrade-menu-open:true"],
-      900,
-      110,
-      50,
-      125
-    ),
+    createUIComponent(["in-game"], ["upgrade-menu-open:true"], 900, 110, 50, 125),
     [0, 255, 255, 100]
   )
 );
@@ -479,28 +356,11 @@ createUIComponent(
   "none",
   () => {
     //Store current pause state under `was-game-paused`
-    UIComponent.setCondition(
-      "was-game-paused:" + (game.paused ? "true" : "false")
-    );
+    UIComponent.setCondition("was-game-paused:" + (game.paused ? "true" : "false"));
     pause(); //Pause the game
     UIComponent.setCondition("upgrade-menu-open:true");
   },
   "Upgrades"
-);
-createUIComponent(
-  ["in-game"],
-  ["upgrade-menu-open:true"],
-  900,
-  25,
-  250,
-  50,
-  "none",
-  () => {
-    //Return game to previous state
-    if (!UIComponent.evaluateCondition("was-game-paused:true")) unpause();
-    UIComponent.setCondition("upgrade-menu-open:false");
-  },
-  "Close"
 );
 //Header bar
 createUIComponent(
@@ -627,11 +487,7 @@ createUIComponent(
 //Booster
 createUIComponent(
   ["in-game"],
-  [
-    "upgrade-menu-open:true",
-    "is-booster-available:true",
-    "submenu-selected:none",
-  ],
+  ["upgrade-menu-open:true", "is-booster-available:true", "submenu-selected:none"],
   645,
   525,
   200,
@@ -659,10 +515,7 @@ function getSelectedSlotIndex() {
 //  Back button
 createUIComponent(
   ["in-game"],
-  [
-    "upgrade-menu-open:true",
-    "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster|blimp",
-  ],
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster|blimp"],
   525,
   225,
   50,
@@ -674,7 +527,7 @@ createUIComponent(
   "<",
   false,
   60
-);
+).isBackButton = true;
 
 //###################################################################
 //
@@ -700,9 +553,7 @@ Object.defineProperty(
   "text",
   {
     get: () =>
-      getSelectedSlotIndex() === 5
-        ? "Booster"
-        : "Weapon: AP" + (getSelectedSlotIndex() + 1), //Dynamically change based on selected slot
+      getSelectedSlotIndex() === 5 ? "Booster" : "Weapon: AP" + (getSelectedSlotIndex() + 1), //Dynamically change based on selected slot
   }
 );
 //Current upgrade info
@@ -761,11 +612,11 @@ Object.defineProperty(
         return "This weapon slot is not present on\nthe current blimp.";
       let upgrade = game.player.weaponSlots[slot].tier - 1;
       let regname = game.player.weaponSlots[slot].upgrades[upgrade] ?? "";
-      let weapon = { name: "No weapon is present. Upgrade to add one." };
+      let weapon = { description: "No weapon is present. Upgrade to add one." };
       if (Registry.weapons.has(regname)) {
         weapon = Registry.weapons.get(regname);
       }
-      return weapon.description;
+      return wrapWords(weapon.description, 60);
     },
   }
 );
@@ -844,7 +695,7 @@ Object.defineProperty(
       if (Registry.weapons.has(regname)) {
         weapon = Registry.weapons.get(regname);
       }
-      return weapon.description;
+      return wrapWords(weapon.description, 50);
     },
   }
 );
@@ -891,10 +742,7 @@ UIComponent.alignLeft(
     createUIComponent(
       //Shard Cost
       ["in-game"],
-      [
-        "upgrade-menu-open:true",
-        "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster",
-      ], //Assuming AP is available
+      ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
       1225,
       700,
       0,
@@ -927,10 +775,7 @@ UIComponent.alignLeft(
     createUIComponent(
       //Bloonstone Cost
       ["in-game"],
-      [
-        "upgrade-menu-open:true",
-        "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster",
-      ], //Assuming AP is available
+      ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster"], //Assuming AP is available
       1225,
       740,
       0,
@@ -1055,7 +900,7 @@ Object.defineProperty(
     null,
     "No weapon is present. Upgrade to add one.",
     true,
-    25
+    20
   ),
   "text",
   {
@@ -1063,16 +908,9 @@ Object.defineProperty(
       if (!game?.player) return "No player";
       if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
       let upgrade = game.player.blimp.path1;
-      if (!upgrade || upgrade === "none")
-        return "This path has no upgrade for this blimp.";
+      if (!upgrade || upgrade === "none") return "This path has no upgrade for this blimp.";
       let blimp = Registry.blimps.get(upgrade);
-      return (
-        blimp.description +
-        "\nMax HP: " +
-        blimp.health +
-        " | Speed: " +
-        blimp.speed
-      );
+      return wrapWords(blimp.description, 50);
     },
   }
 );
@@ -1130,7 +968,7 @@ Object.defineProperty(
     null,
     "Maximum upgrade level for this blimp\nhas been reached.",
     true,
-    25
+    20
   ),
   "text",
   {
@@ -1138,16 +976,9 @@ Object.defineProperty(
       if (!game?.player) return "No player";
       if (!game?.player?.blimp) return "No Blimp (something went wrong)"; //in case not
       let upgrade = game.player.blimp.path2;
-      if (!upgrade || upgrade === "none")
-        return "This path has no upgrade for this blimp.";
+      if (!upgrade || upgrade === "none") return "This path has no upgrade for this blimp.";
       let blimp = Registry.blimps.get(upgrade);
-      return (
-        blimp.description +
-        "\nMax HP: " +
-        blimp.health +
-        " | Speed: " +
-        blimp.speed
-      );
+      return wrapWords(blimp.description, 50);
     },
   }
 );
@@ -1446,3 +1277,20 @@ createUIComponent(
   true,
   55
 );
+
+// menu close button
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true"],
+  900,
+  25,
+  250,
+  50,
+  "none",
+  () => {
+    //Return game to previous state
+    if (!UIComponent.evaluateCondition("was-game-paused:true")) unpause();
+    UIComponent.setCondition("upgrade-menu-open:false");
+  },
+  "Close"
+).isBackButton = true;

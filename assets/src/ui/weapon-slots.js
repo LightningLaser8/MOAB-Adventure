@@ -26,7 +26,7 @@ createUIComponent(
   "< Back",
   false,
   30
-);
+).isBackButton = true;
 createUIImageComponent(
   ["weapon-slots"],
   [],

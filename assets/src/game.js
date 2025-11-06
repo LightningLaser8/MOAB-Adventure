@@ -28,6 +28,8 @@ const game = {
   //progression
   world: "",
   achievements: [],
+  //keys
+  keybinds: new KeybindHandler
 };
 /** @type {World} */
 let world;
@@ -71,7 +73,6 @@ async function preload() {
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
-  await userStartAudio();
 }
 //Set up the canvas, using the previous function
 function setup() {
@@ -159,7 +160,6 @@ function draw() {
 
 function uiFrame() {
   //Tick, then draw the UI
-  updateUIActivity();
   tickUI();
   drawUI();
   //Reset mouse held status
@@ -169,6 +169,7 @@ function uiFrame() {
 
 function gameFrame() {
   if (!game.paused) {
+    game.keybinds.tick();
     movePlayer();
     world.tickAll();
     tickBossEvent();
@@ -196,22 +197,23 @@ function tickBossEvent() {
 }
 
 function movePlayer() {
-  if (keyIsDown(87) && game.player.y > game.player.hitSize) {
-    //If 'W' pressed
-    game.player.y -= game.player.speed;
-  }
-  if (keyIsDown(83) && game.player.y < 1080 - game.player.hitSize) {
-    //If 'S' pressed
-    game.player.y += game.player.speed;
-  }
-  if (keyIsDown(65) && game.player.x > game.player.hitSize) {
-    //If 'A' pressed
-    game.player.x -= game.player.speed * 1.5;
-  }
-  if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
-    //If 'D' pressed
-    game.player.x += game.player.speed * 0.67;
-  }
+  // who needs this anymore?
+  // if (keyIsDown(87) && game.player.y > game.player.hitSize) {
+  //   //If 'W' pressed
+  //   game.player.y -= game.player.speed;
+  // }
+  // if (keyIsDown(83) && game.player.y < 1080 - game.player.hitSize) {
+  //   //If 'S' pressed
+  //   game.player.y += game.player.speed;
+  // }
+  // if (keyIsDown(65) && game.player.x > game.player.hitSize) {
+  //   //If 'A' pressed
+  //   game.player.x -= game.player.speed * 1.5;
+  // }
+  // if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
+  //   //If 'D' pressed
+  //   game.player.x += game.player.speed * 0.67;
+  // }
   //If the player is out of bounds, then damage rapidly
   if (game.player.x > 1920 - game.player.hitSize + game.player.speed * 2) {
     game.player.x -= game.player.speed * 4;
@@ -234,14 +236,6 @@ function movePlayer() {
     game.player.heal(0.0003 * game.player.maxHealth);
   }
 }
-
-function updateUIActivity() {
-  //Check each component, but only do it once.
-  for (let component of ui.components) {
-    component.updateActivity();
-  }
-}
-
 function drawUI() {
   background.image = world.background;
   showOffscreenBosses();
@@ -256,17 +250,7 @@ function drawUI() {
 
 function tickUI() {
   if (!game.paused) background.tick(game.player?.speed ?? 0);
-  for (let component of ui.components) {
-    if (component.active && component.isInteractive) {
-      component.checkMouse();
-    }
-  }
-  len = ui.particles.length;
-  for (let p = 0; p < len; p++) {
-    if (ui.particles[p]?.remove) {
-      ui.particles.splice(p, 1);
-    }
-  }
+  ui.tick();
 }
 
 function showMousePos() {
@@ -471,7 +455,7 @@ function reset() {
   world.particles.splice(0);
   world.bullets.splice(0);
   game.bloonstones = 0;
-  game.shards = 0;
+  game.shards = 400;
   game.level = 1;
   unpause();
   game.bosstimer = game.bossinterval;
@@ -492,28 +476,9 @@ function reset() {
 function keyPressed() {
   //ignore caps lock
   let k = key.toLowerCase();
-  if (k === "p") {
-    //Pause / unpause
-    if (game.paused) unpause();
-    else pause();
-  }
-  // if (k === "q") {
-  //   if (game.player.blimp.minion) {
-  //     let minion = construct(
-  //       Registry.entities.get(game.player.blimp.minion),
-  //       Entity
-  //     );
-  //     minion.x = game.player.x;
-  //     minion.y = game.player.y;
-  //     minion.team = game.player.team;
-  //     minion.addToWorld(world);
-  //   }
-  // }
-  if (k === " ") {
-    //Boost
-    if (game.player.blimp.hasBooster)
-      game.player.weaponSlots[5]?.weapon?.fire();
-  }
+  if(ui.keybinds.down(k)) return false;
+  if(game.keybinds.down(k)) return false;
+  
   if (k === "f3") {
     //Toggle debug mode
     if (UIComponent.evaluateCondition("debug:true"))
@@ -528,66 +493,18 @@ function keyPressed() {
     //fullscreen
     return true;
   }
-  //Upgrade Shortcuts
-  let alting = keyIsDown(18);
-  if (alting && ui.menuState === "in-game") {
-    if (["1", "2", "3", "4", "5"].includes(k)) {
-      if (UIComponent.evaluateCondition("is-ap" + k + "-available:true")) {
-        if (game.player.weaponSlots[+k - 1].attemptUpgrade())
-          notifyEffect("Upgraded AP" + k);
-        else if (
-          game.player.weaponSlots[+k - 1].tier <
-          game.player.weaponSlots[+k - 1].upgrades.length
-        )
-          notifyEffect("AP" + k + " upgrade is too expensive");
-        else notifyEffect("Maximum AP" + k + " tier reached");
-      } else notifyEffect("AP" + k + " is not available");
-    } else if (k === "b") {
-      if (UIComponent.evaluateCondition("is-booster-available:true")) {
-        if (game.player.weaponSlots[5].attemptUpgrade())
-          notifyEffect("Upgraded Booster");
-        else if (
-          game.player.weaponSlots[5].tier <
-          game.player.weaponSlots[5].upgrades.length
-        )
-          notifyEffect("Booster upgrade is too expensive");
-        else notifyEffect("Maximum Booster tier reached");
-      } else notifyEffect("Booster is not available");
-    } else if (k === "n") {
-      let upgrade = game.player.blimp.path1;
-      if (!upgrade || upgrade === "none") {
-        notifyEffect("Blimp has no primary path upgrade");
-        return false;
-      }
-      let blimp = Registry.blimps.get(upgrade);
-      //Check cost and buy
-      let shards = blimp?.cost?.shards ?? 0,
-        bloonstones = blimp?.cost?.bloonstones ?? 0;
-      if (shards <= game.shards && bloonstones <= game.bloonstones) {
-        game.shards -= shards;
-        game.bloonstones -= bloonstones;
-        game.player.upgrade(upgrade);
-        notifyEffect("Upgraded blimp along primary path");
-      } else notifyEffect("Blimp primary upgrade is too expensive");
-    } else if (k === "m") {
-      let upgrade = game.player.blimp.path2;
-      if (!upgrade || upgrade === "none") {
-        notifyEffect("Blimp has no alternative path upgrade");
-        return false;
-      }
-      let blimp = Registry.blimps.get(upgrade);
-      //Check cost and buy
-      let shards = blimp?.cost?.shards ?? 0,
-        bloonstones = blimp?.cost?.bloonstones ?? 0;
-      if (shards <= game.shards && bloonstones <= game.bloonstones) {
-        game.shards -= shards;
-        game.bloonstones -= bloonstones;
-        game.player.upgrade(upgrade);
-        notifyEffect("Upgraded blimp along alternative path");
-      } else notifyEffect("Blimp alternative upgrade is too expensive");
-    }
-  }
   return false; //Prevent any default behaviour
+}
+function keyReleased(){
+  let k = key.toLowerCase();
+  ui.keybinds.up(k);
+  game.keybinds.up(k);
+}
+
+function keyTyped(){
+  let k = key.toLowerCase();
+  if(ui.type(k)) return false;
+  return false;
 }
 
 function pause() {
@@ -603,7 +520,7 @@ function unpause() {
 }
 
 function moveToWorld(worldName = "ocean-skies") {
-  if (world?.bgm) stopSound(world.bgm);
+  if (world?.bgm) SoundCTX.stop(world.bgm);
   //Construct registry item as a new World.
   let newWorld = construct(Registry.worlds.get(worldName), World);
   //If the player exists
@@ -674,6 +591,7 @@ function loadGame(slot) {
   game.difficulty = save.difficulty ?? "easy";
   game.mode = save.mode ?? "adventure";
   //Progress
+  game.bossdelay = 0;
   game.achievements = save.achs ?? [];
   moveToWorld(save.zone ?? "ocean-skies");
   world.setBossIndex(save.znlvl ?? 1);

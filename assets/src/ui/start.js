@@ -30,7 +30,7 @@ createUIComponent(
   "< Back",
   false,
   30
-);
+).isBackButton = true;
 
 //Options Buttons
 createUIComponent(
@@ -128,4 +128,4 @@ createUIComponent(
   "< Back",
   false,
   30
-);
+).isBackButton = true;

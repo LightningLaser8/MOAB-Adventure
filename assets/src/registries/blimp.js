@@ -15,6 +15,7 @@ Registry.blimps.add("moab", {
 });
 Registry.blimps.add("bfb", {
   name: "BFB",
+  description: "Larger but slower blimp, capable of carrying an second weapon.",
   health: 700,
   speed: 6,
   weaponSlots: [1, 2],
@@ -38,6 +39,7 @@ Registry.blimps.add("bfb", {
 });
 Registry.blimps.add("zomg", {
   name: "ZOMG",
+  description: "Even bigger blimp. Slow, but has 3 weapon slots.",
   health: 4000,
   speed: 3,
   weaponSlots: [1, 2, 3],
@@ -62,6 +64,7 @@ Registry.blimps.add("zomg", {
 });
 Registry.blimps.add("ddt", {
   name: "DDT",
+  description: "Very fast blimp, ditching the booster for immunity to explosives and sharp objects. Also gains AP5.",
   health: 400,
   speed: 16,
   weaponSlots: [1, 5],
@@ -96,6 +99,7 @@ Registry.blimps.add("ddt", {
 });
 Registry.blimps.add("bad", {
   name: "BAD",
+  description: "The largest blimp, armed with 4 weapons.",
   health: 20000,
   speed: 3,
   weaponSlots: [1, 2, 3, 4],
@@ -122,6 +126,7 @@ Registry.blimps.add("bad", {
 
 Registry.blimps.add("bloonarius", {
   name: "Bloonarius",
+  description: "<<Boss>>\nThe slowest of them all, capable of wielding all 5 weapon slots simultaneously.",
   health: 100000,
   speed: 2,
   weaponSlots: [1, 2, 3, 4, 5],

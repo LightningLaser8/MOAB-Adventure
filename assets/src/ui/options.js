@@ -1,5 +1,6 @@
 //    Options menu 'options'
-//Volume
+
+//Volume sliders
 createUIComponent(
   ["options"],
   [],
@@ -33,6 +34,7 @@ createSliderComponent(
   0,
   100
 );
+SoundCTX.piecewiseVolume.entities.gain.setValueAtTime(0.5, 0);
 createSliderComponent(
   ["options"],
   [],
@@ -47,7 +49,7 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.entities = value;
-    SoundCTX.piecewiseVolume.entities.gain.setValueAtTime(value / 100, 0);
+    SoundCTX.piecewiseVolume.entities.gain.setValueAtTime(value / 200, 0);
   },
   0,
   100,
@@ -73,7 +75,6 @@ createSliderComponent(
   100,
   100
 );
-SoundCTX.piecewiseVolume.music.gain.setValueAtTime(2, 0);
 createSliderComponent(
   ["options"],
   [],
@@ -88,7 +89,7 @@ createSliderComponent(
   20,
   (value) => {
     ui.piecewiseVolume.music = value;
-    SoundCTX.piecewiseVolume.music.gain.setValueAtTime(value / 50, 0);
+    SoundCTX.piecewiseVolume.music.gain.setValueAtTime(value / 100, 0);
   },
   0,
   100,
@@ -114,7 +115,8 @@ createSliderComponent(
   100,
   100
 );
-//Controls
+
+//Control Scheme
 createGamePropertySelector(
   ["options"],
   [],
