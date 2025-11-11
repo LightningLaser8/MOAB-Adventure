@@ -99,32 +99,45 @@ const aps = {
       "diffuse"
     ),
   },
-  booster: new WeaponSlot(
-    "pop-booster",
-    "double-booster",
-    "scalar",
-    "vector",
-    "matrix"
-  ),
+  booster: new WeaponSlot("pop-booster", "double-booster", "scalar", "vector", "matrix"),
+  sp1: new WeaponSlot("deflector", "shield-projector", "protector", "super-shield", "spike-shield"),
   error: new WeaponSlot(),
 };
-function getSelectedAP(ap) {
-  if (![1, 2, 3, 4, 5].includes(ap)) return aps.error; //If invalid ap, return blank slot.
-  let conditionSlot = ap;
-  if (ap === 4 || ap === 3) conditionSlot = "3/4"; //Internally ap3 and 4 are stored together
-  //If valid:
-  if (UIComponent.evaluateCondition("ap" + conditionSlot + "-slot:1"))
-    //If selected slot has first option
-    return aps["ap" + ap].opt1;
-  if (UIComponent.evaluateCondition("ap" + conditionSlot + "-slot:2"))
-    //If selected slot has second option
-    return aps["ap" + ap].opt2;
-  //If nothing returned (should be impossible, but just in case)
-  return aps.error;
-}
-function setSelectedAP(ap, option) {
-  if (![1, 2, 3, 4, 5, "3/4"].includes(ap)) return;
-  let conditionSlot = ap;
-  if (ap === 4 || ap === 3) conditionSlot = "3/4"; //Internally ap3 and 4 are stored together
-  if (UIComponent.setCondition("ap" + conditionSlot + "-slot:" + option));
-}
+
+const selector = {
+  option(type, ap, valid, conditionrepl) {
+    if (!valid.includes(ap)) return aps.error; //If invalid ap, return blank slot.
+    let conditionSlot = ap;
+    if (ap in conditionrepl) conditionSlot = conditionrepl[ap]; //Internally ap3 and 4 are stored together
+    return { condition: type + conditionSlot, selection: aps[type + ap] };
+  },
+  get(obj) {
+    //If valid:
+    if (UIComponent.evaluateCondition(obj.condition + "-slot:1"))
+      //If selected slot has first option
+      return obj.selection.opt1;
+    if (UIComponent.evaluateCondition(obj.condition + "-slot:2"))
+      //If selected slot has second option
+      return obj.selection.opt2;
+    //If nothing returned (should be impossible, but just in case)
+    return aps.error;
+  },
+  set(obj, val) {
+    if (UIComponent.setCondition(obj.condition + "-slot:" + val));
+  },
+  getAP(ap) {
+    return selector.get(selector.option("ap", ap, [1, 2, 3, 4, 5, "3/5"], { 3: "3/4", 4: "3/4" }));
+  },
+  setAP(ap, val) {
+    return selector.set(
+      selector.option("ap", ap, [1, 2, 3, 4, 5, "3/5"], { 3: "3/4", 4: "3/4" }),
+      val
+    );
+  },
+  booster() {
+    return aps.booster;
+  },
+  sp1() {
+    return aps.sp1;
+  },
+};

@@ -128,6 +128,9 @@ class World {
           entity.onDeath(entity.lastHurtSource);
           SoundCTX.play(entity.deathSound);
         }
+        else {
+          entity.onDespawn();
+        }
         game.maxDV += entity.dv;
         if (entity instanceof Boss && !entity.isMinion) game.totalBosses++;
         this.entities.splice(e, 1);

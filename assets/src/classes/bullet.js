@@ -7,6 +7,7 @@ class Bullet {
     return this.pos.y;
   }
   direction = 0;
+  /**@type {{amount:number,type:string,area:number}[]} */
   damage = [];
   speed = 20;
   lifetime = 60;
@@ -87,6 +88,7 @@ class Bullet {
   #sounded = false;
 
   prev = null;
+  bounceable = true;
   //Main stuff
   get directionRad() {
     return (this.direction / 180) * Math.PI;

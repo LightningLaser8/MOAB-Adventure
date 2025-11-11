@@ -10,6 +10,7 @@ class LaserBullet extends Bullet {
   /** @type {Weapon} */
   source = null;
   #dirInited = false;
+  bounceable = false;
   init() {
     super.init();
     if (this.extendTime === -1) this.extendTime = this.maxLife * 0.2;

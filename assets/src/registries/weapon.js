@@ -20776,4 +20776,4 @@ Registry.weapons.add("diffuse", {
     },
   ],
 });
-//Finally, 20765 loc later, all weapons finished. Phew.
+//Finally, 20765 loc later, all 38 weapons finished. Phew.

@@ -15,6 +15,8 @@ const game = {
   control: "keyboard",
   /** @type {Entity | null} Player entity */
   player: null,
+  /** @type {Entity | null} Support blimp entity */
+  support: null,
   maxDV: 0,
   totalBosses: 0,
   //Currency
@@ -28,8 +30,9 @@ const game = {
   //progression
   world: "",
   achievements: [],
+  won: false,
   //keys
-  keybinds: new KeybindHandler
+  keybinds: new KeybindHandler(),
 };
 /** @type {World} */
 let world;
@@ -44,10 +47,7 @@ let contentScale = 1;
 function getCanvasDimensions(baseWidth, baseHeight) {
   const aspectRatio = baseWidth / baseHeight;
   let [canvasWidth, canvasHeight] = [windowWidth, windowHeight];
-  let [widthRatio, heightRatio] = [
-    canvasWidth / baseWidth,
-    canvasHeight / baseHeight,
-  ];
+  let [widthRatio, heightRatio] = [canvasWidth / baseWidth, canvasHeight / baseHeight];
   if (widthRatio < heightRatio) {
     [canvasWidth, canvasHeight] = [windowWidth, windowWidth / aspectRatio];
     contentScale = canvasWidth / baseWidth;
@@ -69,7 +69,7 @@ async function preload() {
     await item.load();
   });
   await Registry.sounds.forEachAsync(async (name, item) => {
-    if(!await item.load()) console.error("Failed to load "+name)
+    if (!(await item.load())) console.error("Failed to load " + name);
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
@@ -132,9 +132,7 @@ function draw() {
     clear();
     scale(contentScale);
     image(
-      game.difficulty === "impossible"
-        ? backgrounds.grad_impossible
-        : backgrounds.grad_normal,
+      game.difficulty === "impossible" ? backgrounds.grad_impossible : backgrounds.grad_normal,
       960,
       540,
       1920,
@@ -262,11 +260,7 @@ function showMousePos() {
   strokeWeight(2);
   textSize(40);
   let mpos = nearestOnScreenPosition(ui.mouse, 60);
-  text(
-    "X:" + Math.round(ui.mouse.x) + " Y:" + Math.round(ui.mouse.y),
-    ui.mouse.x,
-    ui.mouse.y - 50
-  );
+  text("X:" + Math.round(ui.mouse.x) + " Y:" + Math.round(ui.mouse.y), ui.mouse.x, ui.mouse.y - 50);
   stroke(255);
   strokeWeight(2);
   line(ui.mouse.x - 20, ui.mouse.y, ui.mouse.x + 20, ui.mouse.y);
@@ -288,12 +282,8 @@ function isOffscreen(entity) {
 
 function distanceOffscreen(entity) {
   return new Vector(
-    entity.x < -entity.hitSize
-      ? entity.x + entity.hitSize
-      : entity.x + entity.hitSize - 1920,
-    entity.y < -entity.hitSize
-      ? entity.y + entity.hitSize
-      : entity.y + entity.hitSize - 1080
+    entity.x < -entity.hitSize ? entity.x + entity.hitSize : entity.x + entity.hitSize - 1920,
+    entity.y < -entity.hitSize ? entity.y + entity.hitSize : entity.y + entity.hitSize - 1080
   ).magnitude;
 }
 
@@ -338,7 +328,14 @@ function showOffscreenBosses() {
         size.x > size.y
           ? new Vector(110, (size.y * 110) / size.x)
           : new Vector((size.x * 110) / size.y, 110);
-      rotatedImg(boss.drawer.image, circlepos.x, circlepos.y, scaled.x, scaled.y, boss.directionRad);
+      rotatedImg(
+        boss.drawer.image,
+        circlepos.x,
+        circlepos.y,
+        scaled.x,
+        scaled.y,
+        boss.directionRad
+      );
       textFont(fonts.ocr);
       fill(150, 150, 150);
       textSize(30);
@@ -352,11 +349,11 @@ function showOffscreenBosses() {
 function createPlayer() {
   let player = construct(Registry.entities.get("player"));
   //Add all slots: not all of them will be accessible
-  player.addWeaponSlot(getSelectedAP(1));
-  player.addWeaponSlot(getSelectedAP(2));
-  player.addWeaponSlot(getSelectedAP(3));
-  player.addWeaponSlot(getSelectedAP(4));
-  player.addWeaponSlot(getSelectedAP(5));
+  player.addWeaponSlot(selector.getAP(1));
+  player.addWeaponSlot(selector.getAP(2));
+  player.addWeaponSlot(selector.getAP(3));
+  player.addWeaponSlot(selector.getAP(4));
+  player.addWeaponSlot(selector.getAP(5));
   player.addWeaponSlot(aps.booster);
   player.addToWorld(world);
   game.player = player;
@@ -368,18 +365,31 @@ function createPlayer() {
       return ui.mouse;
     }, //This way, I only have to set it once.
   });
+
   world.particles.push(
-    new WaveParticle(
-      player.x,
-      player.y,
-      120,
-      0,
-      1920,
-      [255, 0, 0],
-      [255, 0, 0, 0],
-      100,
-      0
-    )
+    new WaveParticle(player.x, player.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
+  );
+}
+
+function createSupport() {
+  let suppor = construct(Registry.entities.get("support"));
+  //Add all slots: not all of them will be accessible
+  suppor.addWeaponSlot(selector.sp1());
+  suppor.addToWorld(world);
+  game.support = suppor;
+
+  suppor.upgrade("support-moab");
+  //is moab
+  //Change to an accessor property
+  game.support.target = game.player;
+  // Object.defineProperty(suppor, "target", {
+  //   get: () => {
+  //     return game.player;
+  //   }, //This way, I only have to set it once.
+  // });
+
+  world.particles.push(
+    new WaveParticle(suppor.x, suppor.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
   );
 }
 
@@ -417,13 +427,10 @@ function checkBoxCollisions() {
 function playerDies() {
   SoundCTX.play("player-death");
   deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  deathStats.bloonstoneCounter.text =
-    "Bloonstones: " + shortenedNumber(game.bloonstones);
+  deathStats.bloonstoneCounter.text = "Bloonstones: " + shortenedNumber(game.bloonstones);
   deathStats.progress.text = "Zone: " + world.name + " | Level " + game.level;
-  deathStats.damageDealt.text =
-    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  deathStats.damageTaken.text =
-    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
+  deathStats.damageDealt.text = "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  deathStats.damageTaken.text = "Damage Taken: " + shortenedNumber(game.player.damageTaken);
   deathStats.destroyedBoxes.text =
     "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
   deathStats.destroyedBosses.text =
@@ -435,14 +442,10 @@ function playerDies() {
 
 function playerWins() {
   winStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  winStats.bloonstoneCounter.text =
-    "Bloonstones: " + shortenedNumber(game.bloonstones);
-  winStats.damageDealt.text =
-    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  winStats.damageTaken.text =
-    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
-  winStats.destroyedBoxes.text =
-    "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
+  winStats.bloonstoneCounter.text = "Bloonstones: " + shortenedNumber(game.bloonstones);
+  winStats.damageDealt.text = "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  winStats.damageTaken.text = "Damage Taken: " + shortenedNumber(game.player.damageTaken);
+  winStats.destroyedBoxes.text = "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
   winStats.destroyedBosses.text =
     "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
   ui.menuState = "you-win";
@@ -466,6 +469,7 @@ function reset() {
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
   }
+  //back to start
   moveToWorld("ocean-skies");
 
   //garbage collect player
@@ -476,13 +480,12 @@ function reset() {
 function keyPressed() {
   //ignore caps lock
   let k = key.toLowerCase();
-  if(ui.keybinds.down(k)) return false;
-  if(game.keybinds.down(k)) return false;
-  
+  if (ui.keybinds.down(k)) return false;
+  if (ui.menuState === "in-game" && game.keybinds.down(k)) return false;
+
   if (k === "f3") {
     //Toggle debug mode
-    if (UIComponent.evaluateCondition("debug:true"))
-      UIComponent.setCondition("debug:false");
+    if (UIComponent.evaluateCondition("debug:true")) UIComponent.setCondition("debug:false");
     else UIComponent.setCondition("debug:true");
   }
   if (k === "f12") {
@@ -495,15 +498,15 @@ function keyPressed() {
   }
   return false; //Prevent any default behaviour
 }
-function keyReleased(){
+function keyReleased() {
   let k = key.toLowerCase();
   ui.keybinds.up(k);
   game.keybinds.up(k);
 }
 
-function keyTyped(){
+function keyTyped() {
   let k = key.toLowerCase();
-  if(ui.type(k)) return false;
+  if (ui.type(k)) return false;
   return false;
 }
 
@@ -557,9 +560,8 @@ function saveGame() {
     bloonstones: game.bloonstones,
 
     levels: game.player.weaponSlots.map((x) => x.tier),
-    choices: [1, 2, "3/4", 5].map(
-      (s) => +UIComponent.getCondition("ap" + s + "-slot")
-    ),
+    support: game.support.weaponSlots.map((x) => x.tier),
+    choices: [1, 2, "3/4", 5].map((s) => +UIComponent.getCondition("ap" + s + "-slot")),
     blimp: game.player.blimpName,
 
     health: game.player.health,
@@ -574,6 +576,8 @@ function saveGame() {
       dealt: game.player.damageDealt,
       taken: game.player.damageTaken,
     },
+
+    won: game.won,
   };
   Serialiser.set("save." + game.saveslot, save);
   notifyEffect("Game saved in slot " + game.saveslot);
@@ -602,18 +606,19 @@ function loadGame(slot) {
   game.player.dv = save.dv ?? 0;
   //Choices
   game.player.weaponSlots = [];
-  [1, 2, "3/4", 5].forEach((sl, i) =>
-    setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1)
-  );
+  [1, 2, "3/4", 5].forEach((sl, i) => setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1));
   game.player.weaponSlots = [];
-  game.player.addWeaponSlot(getSelectedAP(1));
-  game.player.addWeaponSlot(getSelectedAP(2));
-  game.player.addWeaponSlot(getSelectedAP(3));
-  game.player.addWeaponSlot(getSelectedAP(4));
-  game.player.addWeaponSlot(getSelectedAP(5));
-  game.player.addWeaponSlot(aps.booster);
-  for (let sl = 0; sl < 6; sl++)
-    game.player.weaponSlots[sl].setTier(save.levels[sl] ?? 0);
+  game.player.addWeaponSlot(selector.getAP(1));
+  game.player.addWeaponSlot(selector.getAP(2));
+  game.player.addWeaponSlot(selector.getAP(3));
+  game.player.addWeaponSlot(selector.getAP(4));
+  game.player.addWeaponSlot(selector.getAP(5));
+  game.player.addWeaponSlot(selector.booster());
+  for (let sl = 0; sl < 6; sl++) game.player.weaponSlots[sl].setTier((save.levels ?? [])[sl] ?? 0);
+
+  game.support.addWeaponSlot(selector.sp1());
+  for (let sl = 0; sl < 1; sl++)
+    game.support.weaponSlots[sl].setTier((save.support ?? [])[sl] ?? 0);
   //blomp
   game.player.upgrade(save.blimp ?? "moab");
   game.player.health = save.health ?? game.player.maxHealth ?? 0;

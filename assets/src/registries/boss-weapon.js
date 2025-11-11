@@ -205,8 +205,8 @@ Registry.weapons.add(".ace-gatling-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 1,
-          levelScaling: 0.5,
+          amount: 1.5,
+          levelScaling: 0.75,
         },
       ],
       drawer: {
@@ -391,7 +391,7 @@ Registry.weapons.add(".super-monkey-throw", {
         damage: [
           {
             type: "ballistic",
-            amount: -1,
+            amount: 0.5,
             levelScaling: 0.5,
           },
           {

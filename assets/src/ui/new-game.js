@@ -97,6 +97,7 @@ createUIComponent(
   () => {
     ui.menuState = "in-game";
     createPlayer();
+    createSupport();
   },
   "Start!",
   false,
@@ -113,17 +114,7 @@ createUIComponent(
   null,
   "Choose All\nWeapon Slots"
 );
-createUIComponent(
-  ["new-game"],
-  ["mode:none"],
-  960,
-  840,
-  0,
-  0,
-  "none",
-  null,
-  "Choose Game Mode"
-);
+createUIComponent(["new-game"], ["mode:none"], 960, 840, 0, 0, "none", null, "Choose Game Mode");
 createUIComponent(
   ["new-game"],
   ["saveslot:none"],
@@ -194,36 +185,28 @@ createParticleEmitter(
     },
   }
 );
-createParticleEmitter(
-  ["start-menu"],
-  ["difficulty:impossible"],
-  960,
-  1000,
-  0,
-  1,
-  {
-    type: "vfx.particle",
-    cone: 0,
-    maxXOffset: 360,
-    emissions: 1,
-    particle: {
-      //All
-      lifetime: 180,
-      direction: -90,
-      speed: 5,
-      decel: 0.015,
-      rotateSpeed: 0,
-      moveWithBackground: false,
-      shape: "rhombus",
-      widthFrom: 60,
-      widthTo: 0,
-      heightFrom: 120,
-      heightTo: 200,
-      colourFrom: [255, 255, 50, 50],
-      colourTo: [255, 0, 0, 0],
-    },
-  }
-);
+createParticleEmitter(["start-menu"], ["difficulty:impossible"], 960, 1000, 0, 1, {
+  type: "vfx.particle",
+  cone: 0,
+  maxXOffset: 360,
+  emissions: 1,
+  particle: {
+    //All
+    lifetime: 180,
+    direction: -90,
+    speed: 5,
+    decel: 0.015,
+    rotateSpeed: 0,
+    moveWithBackground: false,
+    shape: "rhombus",
+    widthFrom: 60,
+    widthTo: 0,
+    heightFrom: 120,
+    heightTo: 200,
+    colourFrom: [255, 255, 50, 50],
+    colourTo: [255, 0, 0, 0],
+  },
+});
 createParticleEmitter(["title"], ["difficulty:impossible"], 960, 800, 0, 1, {
   type: "vfx.particle",
   cone: 0,
@@ -444,6 +427,7 @@ function quickstart(subslot) {
 
     ui.menuState = "in-game";
     createPlayer();
+    createSupport();
 
     if (game.saveslot === -1)
       notifyEffect(

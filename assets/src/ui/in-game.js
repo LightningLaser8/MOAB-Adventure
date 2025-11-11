@@ -64,6 +64,7 @@ UIComponent.invert(
   createUIComponent(["in-game"], [], 400, 1020, 800, 125, "right")
 );
 
+// Normal HP
 UIComponent.invert(
   createHealthbarComponent(
     ["in-game"],
@@ -81,6 +82,60 @@ UIComponent.invert(
     [255, 0, 0]
   )
 );
+
+// Shield
+UIComponent.removeOutline(
+  UIComponent.invert(
+    createHealthbarComponent(
+      ["in-game"],
+      [],
+      365 - 12,
+      1020 - 24,
+      680 - 24,
+      16,
+      "right",
+      undefined,
+      undefined,
+      undefined,
+      20,
+      () => game.player._shield
+    )
+      .setGetters("strength", "maxStrength")
+      .setColours(
+        [0, 0, 0, 75],
+        () => game.player._shield.trailColourTo,
+        () => game.player._shield.colourTo
+      )
+  )
+).getActivity = function () {
+  return ui.menuState === "in-game" && game.player?._shield;
+};
+// Shield CD
+UIComponent.removeOutline(
+  UIComponent.invert(
+    createHealthbarComponent(
+      ["in-game"],
+      [],
+      365 + 12,
+      1020 + 24,
+      680 + 24,
+      16,
+      "right",
+      undefined,
+      undefined,
+      undefined,
+      20,
+      () => (game.support ? game.support?.weaponSlots[0]?.weapon : null)
+    )
+      .setGetters("_cooldown", "reload")
+      .setColours([0, 0, 0, 75], [255, 178, 100], [0, 0, 0, 0])
+      .reverseBarFraction()
+  )
+).getActivity = function () {
+  return (
+    ui.menuState === "in-game" && game.support?.weaponSlots && game.support?.weaponSlots[0]?.weapon
+  );
+};
 
 //Name display
 let nameBG;
@@ -395,12 +450,14 @@ createUIComponent(
 //Buttons
 //Space them 150px apart => 100px wide => 50px separation?
 //AP3 at x = 900
-// Set conditions: All available
+// Set conditions: Nothing available
 UIComponent.setCondition("is-ap1-available:false");
 UIComponent.setCondition("is-ap2-available:false");
 UIComponent.setCondition("is-ap3-available:false");
 UIComponent.setCondition("is-ap4-available:false"); //AP3 and 4 are separate
 UIComponent.setCondition("is-ap5-available:false");
+
+UIComponent.setCondition("is-sp1-available:false"); // support
 //Sub-menu
 UIComponent.setCondition("submenu-selected:none");
 //AP1
@@ -500,6 +557,22 @@ createUIComponent(
   true,
   40
 );
+//SP1
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "is-sp1-available:true", "submenu-selected:none"],
+  600,
+  625,
+  100,
+  60,
+  "none",
+  () => {
+    UIComponent.setCondition("submenu-selected:sp1");
+  },
+  "SP1",
+  true,
+  40
+);
 
 //    Sub-menus
 function getSelectedSlotIndex() {
@@ -510,12 +583,14 @@ function getSelectedSlotIndex() {
   if (UIComponent.evaluateCondition("submenu-selected:ap4")) return 3;
   if (UIComponent.evaluateCondition("submenu-selected:ap5")) return 4;
   if (UIComponent.evaluateCondition("submenu-selected:booster")) return 5;
+
+  if (UIComponent.evaluateCondition("submenu-selected:sp1")) return -2;
   return -1;
 }
 //  Back button
 createUIComponent(
   ["in-game"],
-  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster|blimp"],
+  ["upgrade-menu-open:true", "submenu-selected:ap1|ap2|ap3|ap4|ap5|booster|blimp|sp1"],
   525,
   225,
   50,
@@ -1229,6 +1304,299 @@ createUIComponent(
     }
   },
   "Upgrade\nAlternative",
+  false,
+  20
+);
+
+//###################################################################
+//
+// in-game UI > interactable UI > upgrade menu > SUPPORT UPGRADE MENU
+//
+//###################################################################
+
+//Title
+Object.defineProperty(
+  createUIComponent(
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:sp1"],
+    900,
+    325,
+    0,
+    0,
+    "none",
+    null,
+    "ERROR",
+    false,
+    40
+  ),
+  "text",
+  {
+    get: () => "Weapon: SP" + (-1 - getSelectedSlotIndex()), //Dynamically change based on selected slot
+  }
+);
+//Current upgrade info
+Object.defineProperty(
+  createUIComponent(
+    //Name
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+    900,
+    380,
+    750,
+    40,
+    "none",
+    null,
+    "Not unlocked yet",
+    true,
+    30
+  ),
+  "text",
+  {
+    get: () => {
+      const slot = -2 - getSelectedSlotIndex();
+      if (!game?.support) return "No support blimp";
+      if (!game?.support?.weaponSlots[slot]) return "Slot Unavailable"; //in case not
+      let upgrade = game.support.weaponSlots[slot].tier - 1;
+      let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+      let weapon = { name: "Not unlocked" };
+      if (Registry.weapons.has(regname)) {
+        weapon = Registry.weapons.get(regname);
+      }
+      return weapon.name;
+    },
+  }
+);
+Object.defineProperty(
+  createUIComponent(
+    //Description
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+    900,
+    475,
+    750,
+    100,
+    "none",
+    null,
+    "No weapon is present. Upgrade to add one.",
+    true,
+    20
+  ),
+  "text",
+  {
+    get: () => {
+      const slot = -2 - getSelectedSlotIndex();
+      if (!game?.support) return "No support";
+      if (!game?.support?.weaponSlots[slot])
+        return "This weapon slot is not present on\nthe current blimp.";
+      let upgrade = game.support.weaponSlots[slot].tier - 1;
+      let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+      let weapon = { description: "No weapon is present. Upgrade to add one." };
+      if (Registry.weapons.has(regname)) {
+        weapon = Registry.weapons.get(regname);
+      }
+      return wrapWords(weapon.description, 60);
+    },
+  }
+);
+//Next upgrade info
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:sp1"],
+  900,
+  565,
+  0,
+  0,
+  "none",
+  null,
+  "Upgrade To:",
+  false,
+  35
+);
+Object.defineProperty(
+  createUIComponent(
+    //Name
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+    900,
+    625,
+    750,
+    40,
+    "none",
+    null,
+    "Max Upgrades",
+    true,
+    30
+  ),
+  "text",
+  {
+    get: () => {
+      const slot = -2 - getSelectedSlotIndex();
+      if (!game?.support) return "No player";
+      if (!game?.support?.weaponSlots[slot]) return "Slot Unavailable";
+      let upgrade = game.support.weaponSlots[slot].tier;
+      let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+      let weapon = { name: "Max Upgrades" };
+      if (Registry.weapons.has(regname)) {
+        weapon = Registry.weapons.get(regname);
+      }
+      return weapon.name;
+    },
+  }
+);
+Object.defineProperty(
+  createUIComponent(
+    //Description
+    ["in-game"],
+    ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+    835,
+    720,
+    625,
+    100,
+    "none",
+    null,
+    "Maximum upgrade level for this blimp\nhas been reached.",
+    true,
+    20
+  ),
+  "text",
+  {
+    get: () => {
+      const slot = -2 - getSelectedSlotIndex();
+      if (!game?.support) return "No player";
+      if (!game?.support?.weaponSlots[slot])
+        return "This weapon slot is not present on\nthe current blimp.";
+      let upgrade = game.support.weaponSlots[slot].tier;
+      let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+      let weapon = {
+        name: "Maximum upgrade level for this blimp\nhas been reached.",
+      };
+      if (Registry.weapons.has(regname)) {
+        weapon = Registry.weapons.get(regname);
+      }
+      return wrapWords(weapon.description, 50);
+    },
+  }
+);
+createUIComponent(
+  //Cost background
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+  1225,
+  720,
+  100,
+  100,
+  "none",
+  null,
+  "",
+  true,
+  20
+);
+createUIImageComponent(
+  //Shard icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+  1200,
+  700,
+  30,
+  30,
+  null,
+  "ui.shard",
+  false
+);
+createUIImageComponent(
+  //Bloonstone icon
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+  1200,
+  740,
+  30,
+  30,
+  null,
+  "ui.bloonstone",
+  false
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Shard Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+      1225,
+      700,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        const slot = -2 - getSelectedSlotIndex();
+        if (!game?.support) return "⚠";
+        if (!game?.support?.weaponSlots[slot]) return "⚠";
+        let upgrade = game.support.weaponSlots[slot].tier;
+        let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+        let weapon = {};
+        if (Registry.weapons.has(regname)) {
+          weapon = Registry.weapons.get(regname);
+        }
+        return shortenedNumber(weapon.cost?.shards ?? 0);
+      },
+    }
+  )
+);
+UIComponent.alignLeft(
+  Object.defineProperty(
+    createUIComponent(
+      //Bloonstone Cost
+      ["in-game"],
+      ["upgrade-menu-open:true", "submenu-selected:sp1"], //Assuming AP is available
+      1225,
+      740,
+      0,
+      0,
+      "none",
+      null,
+      "",
+      true,
+      20
+    ),
+    "text",
+    {
+      get: () => {
+        const slot = -2 - getSelectedSlotIndex();
+        if (!game?.support) return "⚠";
+        if (!game?.support?.weaponSlots[slot]) return "⚠";
+        let upgrade = game.support.weaponSlots[slot].tier;
+        let regname = game.support.weaponSlots[slot].upgrades[upgrade] ?? "";
+        let weapon = {};
+        if (Registry.weapons.has(regname)) {
+          weapon = Registry.weapons.get(regname);
+        }
+        return shortenedNumber(weapon.cost?.bloonstones ?? 0);
+      },
+    }
+  )
+);
+createUIComponent(
+  ["in-game"],
+  ["upgrade-menu-open:true", "submenu-selected:sp1"],
+  900,
+  825,
+  700,
+  60,
+  "none",
+  () => {
+    const slot = -2 - getSelectedSlotIndex();
+    if (!game?.support) return;
+    if (!game?.support?.weaponSlots[slot]) return;
+    game.support.weaponSlots[slot].attemptUpgrade();
+    game.support.weaponSlots[slot].tick(1); //Make the game realise the weapon got upgraded
+  },
+  "Upgrade!",
   false,
   20
 );

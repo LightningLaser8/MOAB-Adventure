@@ -23,6 +23,9 @@ class Boss extends ScalingEntity {
 
   data = new Map();
 
+  shieldDamageOverride = 50;
+  shieldReboundOverride = 10;
+
   isMinion = false; //Stops this counting for boss kills
   dv = 250;
   init() {
@@ -39,9 +42,7 @@ class Boss extends ScalingEntity {
     this.previousRot = this.direction;
   }
   seq() {
-    return game.difficulty === "impossible"
-      ? this.imposSequence ?? this.sequence
-      : this.sequence;
+    return game.difficulty === "impossible" ? this.imposSequence ?? this.sequence : this.sequence;
   }
   getAction() {
     return this.actions[this.seq()[this.#action]];
@@ -68,6 +69,7 @@ class Boss extends ScalingEntity {
     let next = this.actions[seq[actIndex]];
     if (!next) return actIndex; //Stop if the only action has been done
     next.execute(this);
+    next.tick(this); // correction for ticking actions
     if (next.duration === 1 && actIndex !== 0) {
       this.tickSeq(seq, actIndex); //skip through, unless all actions are 0 duration to avoid freezing
     }
@@ -165,22 +167,28 @@ class Boss extends ScalingEntity {
     return done; // Tell caller its done
   }
   onDeath(source) {
-    game.level++;
-    //Save progress
-    saveGame();
     //Give destroy reward
     game.shards += this.reward.shards ??= 0;
     game.bloonstones += this.reward.bloonstones ??= 0;
     if (!source) return;
     //Stats
     if (!this.isMinion) source.destroyed.bosses++;
+    //Save progress
+    if (!this.isMinion) {
+      game.level++;
+      saveGame();
+    }
+  }
+  onDespawn() {
+    if (!this.isMinion) {
+      game.level++;
+      saveGame();
+    }
   }
   getDraw() {
     return (
       this.overrideDrawer ??
-      (game.difficulty === "impossible"
-        ? this.imposDrawer ?? this.drawer
-        : this.drawer)
+      (game.difficulty === "impossible" ? this.imposDrawer ?? this.drawer : this.drawer)
     );
   }
   draw() {
@@ -189,14 +197,7 @@ class Boss extends ScalingEntity {
       rotatedImg(d.image, this.x, this.y, d.width, d.height, this.directionRad);
     } else {
       //If no image, draw shape instead
-      rotatedShape(
-        d.shape,
-        this.x,
-        this.y,
-        d.width,
-        d.height,
-        this.directionRad
-      );
+      rotatedShape(d.shape, this.x, this.y, d.width, d.height, this.directionRad);
     }
     for (let slot of this.weaponSlots) {
       slot.draw();

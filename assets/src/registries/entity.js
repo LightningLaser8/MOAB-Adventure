@@ -5,6 +5,16 @@ Registry.entities.add("player", {
   y: 540,
   team: "player",
   deathSound: "player-death",
+  shieldDamageOverride: 1,
+});
+Registry.entities.add("support", {
+  type: "Entity",
+  x: 300,
+  y: 740,
+  team: "player",
+  deathSound: "player-death",
+  shieldDamageOverride: 1,
+  collides: false
 });
 //### BOXES ###
 Registry.entities.add("wooden-box", {
@@ -488,6 +498,7 @@ Registry.entities.add("monkey-ace", {
     "wait-short",
     "gatling",
   ],
+  bounceable: false,
   team: "enemy",
   health: 100,
   healthIncrease: 150,
@@ -503,6 +514,7 @@ Registry.entities.add("mini-ace", {
   name: "Mini Ace",
   dv: 0,
   isMinion: true,
+  bounceable: false,
   drawer: {
     image: "minion.plane",
     width: 68,
@@ -655,6 +667,9 @@ Registry.entities.add("super-monkey", {
     width: 276,
     height: 160,
   },
+  bounceable: true,
+  shieldDamageOverride: 10,
+  shieldReboundOverride: 30,
   hitSize: 120,
   direction: 180,
   speed: 32,
@@ -870,6 +885,7 @@ Registry.entities.add("robo-monkey", {
     width: 276,
     height: 160,
   },
+  bounceable: false,
   hitSize: 120,
   direction: 180,
   speed: 10,
@@ -923,7 +939,7 @@ Registry.entities.add("robo-monkey", {
     "speed.aim": {
       type: "action.change-speed",
       speed: 2,
-      turnSpeed: 0.8,
+      turnSpeed: 0,
       changesBack: false,
     },
     "speed.normal": {
@@ -1002,60 +1018,18 @@ Registry.entities.add("robo-monkey", {
     gate: {
       type: "action.spawn-bullet",
       x: 800,
-      y: 0,
+      y: 540,
       xVar: 800,
       direction: 90,
       bullet: {
-        drawer: {
-          image: "minion.drone",
-          width: 159,
-          height: 180,
-        },
-        spawnSound: "whirr",
-        speed: 0,
-        lifetime: 100,
-        collides: false,
-        trail: false,
-        followsSource: true,
-        intervalTime: 99,
-        intervalNumber: 1,
-        intervalBullet: {
-          type: "continuous-laser",
-          spawnSound: "laser-beam",
-          extendTime: 10,
-          despawnTime: 20,
-          lifetime: 600,
-          length: 1080,
-          pierce: 999,
-          hitSize: 40,
-          drawer: {
-            shape: "rect",
-            fill: [255, 255, 50],
-          },
-          damage: [
-            {
-              amount: 10,
-              type: "laser",
-            },
-          ],
-          intervalTime: 999,
-          intervalNumber: 1,
-          intervalBullet: {
-            drawer: {
-              image: "minion.drone",
-              width: 159,
-              height: 180,
-            },
-            speed: 0,
-            lifetime: 630,
-            collides: false,
-            trail: false,
-          },
-          telegraph: {
-            time: 100,
-            width: 8,
-          },
-        },
+        type: "shield-wall",
+        strength: 300,
+        lifetime: 15,
+        growth: 10,
+        width: 50,
+        colourTo: [234, 74, 214, 150],
+        trailColourFrom: [255, 144, 175],
+        trailColourTo: [121, 0, 255],
       },
     },
     "airlaser-impos": {
@@ -1140,60 +1114,18 @@ Registry.entities.add("robo-monkey", {
     "gate-impos": {
       type: "action.spawn-bullet",
       x: 800,
-      y: 0,
+      y: 540,
       xVar: 800,
       direction: 90,
       bullet: {
-        drawer: {
-          image: "minion.drone",
-          width: 159,
-          height: 180,
-        },
-        spawnSound: "whirr",
-        speed: 0,
-        lifetime: 60,
-        collides: false,
-        trail: false,
-        followsSource: true,
-        intervalTime: 99,
-        intervalNumber: 1,
-        intervalBullet: {
-          type: "continuous-laser",
-          spawnSound: "laser-beam",
-          extendTime: 10,
-          despawnTime: 20,
-          lifetime: 600,
-          length: 1080,
-          pierce: 999,
-          hitSize: 40,
-          drawer: {
-            shape: "rect",
-            fill: [255, 255, 50],
-          },
-          damage: [
-            {
-              amount: 10,
-              type: "laser",
-            },
-          ],
-          intervalTime: 999,
-          intervalNumber: 1,
-          intervalBullet: {
-            drawer: {
-              image: "minion.drone",
-              width: 159,
-              height: 180,
-            },
-            speed: 0,
-            lifetime: 630,
-            collides: false,
-            trail: false,
-          },
-          telegraph: {
-            time: 60,
-            width: 8,
-          },
-        },
+        type: "shield-wall",
+        strength: 500,
+        lifetime: 15,
+        growth: 10,
+        width: 50,
+        colourTo: [234, 74, 214, 150],
+        trailColourFrom: [255, 144, 175],
+        trailColourTo: [121, 0, 255],
       },
     },
   },
@@ -1271,9 +1203,11 @@ Registry.entities.add("robo-monkey", {
     "laser-beam",
     "speed.normal",
     //3 times
+    "speed.aim",
     "spin",
     "summon-top",
     "summon-bottom",
+    "speed.normal",
   ],
   imposSequence: [
     //Main loop
@@ -1338,9 +1272,11 @@ Registry.entities.add("robo-monkey", {
     "laser-beam-impos",
     "speed.normal",
     //3 times
+    "speed.aim",
     "spin",
     "summon-top",
     "summon-bottom",
+    "speed.normal",
   ],
   team: "enemy",
   health: 2500,
@@ -1356,6 +1292,7 @@ Registry.entities.add("robo-drone", {
   dv: 0,
   isMinion: true,
   name: "Laser Drone",
+  bounceable: false,
   drawer: {
     image: "minion.drone",
     width: 106,
@@ -1370,12 +1307,12 @@ Registry.entities.add("robo-drone", {
     "laser-beam": {
       type: "action.fire-weapon",
       slotIndex: 0,
-      duration: 60,
+      duration: 90,
     },
     "laser-beam-impos": {
       type: "action.fire-weapon",
       slotIndex: 1,
-      duration: 60,
+      duration: 90,
     },
     "wait-3s": {
       type: "action.generic",
@@ -1409,13 +1346,7 @@ Registry.entities.add("robo-drone", {
     },
   ],
   sequence: ["wait-3s", "speed.aim", "laser-beam", "speed.normal"],
-  imposSequence: [
-    "wait-1s",
-    "wait-1s",
-    "speed.aim",
-    "laser-beam-impos",
-    "speed.normal",
-  ],
+  imposSequence: ["wait-1s", "wait-1s", "speed.aim", "laser-beam-impos", "speed.normal"],
   team: "enemy",
   health: 250,
   healthIncrease: 0,

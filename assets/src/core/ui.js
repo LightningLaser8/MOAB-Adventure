@@ -354,6 +354,7 @@ class HealthbarComponent extends UIComponent {
   healthbarColour = [255, 255, 255];
   backgroundColour = [0, 0, 0];
   healthbarReversed = false;
+  fracReversed = false;
   sourceIsFunction = false;
   textColour = this.outlineColour;
   #current = "health";
@@ -367,6 +368,10 @@ class HealthbarComponent extends UIComponent {
   }
   reverseBarDirection() {
     this.healthbarReversed = !this.healthbarReversed;
+    return this;
+  }
+  reverseBarFraction() {
+    this.fracReversed = !this.fracReversed;
     return this;
   }
   setColours(bg, main, pain) {
@@ -402,8 +407,17 @@ class HealthbarComponent extends UIComponent {
   draw() {
     let src = this.getSource();
     //tick
-    let target = src ? (this.width * src[this.#current]) / src[this.#max] : 0;
+    let fr = src[this.#current] / src[this.#max];
+
+    let target = src ? this.width * (this.fracReversed ? 1 - fr : fr) : 0;
     this.#frac += (target - this.#frac) * 0.075;
+
+    let bgc = (typeof this.backgroundColour === "function"
+      ? this.backgroundColour()
+      : this.backgroundColour) ?? [95, 100, 100, 160];
+    let pc = typeof this.#painColour === "function" ? this.#painColour() : this.#painColour;
+    let hbc =
+      typeof this.healthbarColour === "function" ? this.healthbarColour() : this.healthbarColour;
 
     push();
     translate(this.x, this.y);
@@ -432,7 +446,7 @@ class HealthbarComponent extends UIComponent {
       }
       //bar
       noStroke();
-      fill(...(this.backgroundColour ?? [95, 100, 100, 160]));
+      fill(...bgc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,
@@ -443,7 +457,7 @@ class HealthbarComponent extends UIComponent {
         this.healthbarReversed
       );
       //indicator
-      fill(this.#painColour);
+      fill(pc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,
@@ -454,7 +468,7 @@ class HealthbarComponent extends UIComponent {
         this.healthbarReversed
       );
       //health
-      fill(this.healthbarColour);
+      fill(hbc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,

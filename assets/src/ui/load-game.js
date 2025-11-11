@@ -34,9 +34,9 @@ function getSaveDescription(slot) {
   let sv = Serialiser.get("save." + slot);
   if (!sv) return "No data";
   return (
-    Registry.worlds.get(sv?.world ?? "ocean-skies").name +
-    ", Level " +
-    (sv?.level ?? 0) +
+    (sv?.won
+      ? "< Completed >"
+      : Registry.worlds.get(sv?.world ?? "ocean-skies").name + ", Level " + (sv?.level ?? 0)) +
     "\n" +
     (sv?.difficulty ?? "easy").substring(0, 4).toUpperCase() +
     "-" +
@@ -89,6 +89,7 @@ function regenSaveDescrs() {
           UIComponent.setCondition("saveslot:" + i);
           game.saveslot = i;
           createPlayer();
+          createSupport();
           loadGame(i);
         }
       : () => {};

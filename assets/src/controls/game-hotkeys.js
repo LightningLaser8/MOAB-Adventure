@@ -7,6 +7,13 @@ game.keybinds.shortcut("boost", " ", {}, () => {
   if (game.player.blimp.hasBooster) game.player.weaponSlots[5]?.weapon?.fire();
 });
 
+game.keybinds.shortcut("shield", "q", {}, () => {
+  for (let slotidx = 0; slotidx < 1; slotidx++) {
+    let weapon = game.support?.weaponSlots[slotidx]?.weapon;
+    if (weapon) weapon.fire();
+  }
+});
+
 for (let k of [1, 2, 3, 4, 5]) {
   game.keybinds.shortcut("upgrade-ap" + k, k, { alt: true }, () => {
     if (UIComponent.evaluateCondition("is-ap" + k + "-available:true")) {
@@ -17,6 +24,18 @@ for (let k of [1, 2, 3, 4, 5]) {
         notifyEffect("AP" + k + " upgrade is too expensive");
       else notifyEffect("Maximum AP" + k + " tier reached");
     } else notifyEffect("AP" + k + " is not available");
+  });
+}
+for (let k of [1]) {
+  game.keybinds.shortcut("upgrade-sp" + k, k, { alt: true, ctrl: true }, () => {
+    if (UIComponent.evaluateCondition("is-sp" + k + "-available:true")) {
+      if (game.support.weaponSlots[+k - 1].attemptUpgrade()) notifyEffect("Upgraded SP" + k);
+      else if (
+        game.support.weaponSlots[+k - 1].tier < game.support.weaponSlots[+k - 1].upgrades.length
+      )
+        notifyEffect("SP" + k + " upgrade is too expensive");
+      else notifyEffect("Maximum SP" + k + " tier reached");
+    } else notifyEffect("SP" + k + " is not available");
   });
 }
 game.keybinds.shortcut("upgrade-booster", "b", { alt: true }, () => {

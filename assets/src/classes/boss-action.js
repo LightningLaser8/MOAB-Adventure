@@ -2,7 +2,7 @@ class BossAction {
   duration = 1;
   #timer = 0;
   get complete() {
-    return this.#timer >= this.duration;
+    return this.#timer > this.duration;
   }
   /**
    * @param {Entity} entity
@@ -61,7 +61,7 @@ class RegenAction extends BossAction {
   amount = 0;
   tick(entity) {
     super.tick(entity);
-    entity.heal(this.amount / (this.duration + 1));
+    entity.heal(this.amount / this.duration);
   }
 }
 //boom
@@ -101,8 +101,10 @@ class SelfDestructAction extends BossAction {
     if (!this.isLeaving && this.givesRewards) {
       //Give destroy rewards if there's a difference, regular rewards if not
       game.shards += (entity.destroyReward ?? entity.reward)?.shards ?? 0;
-      game.bloonstones +=
-        (entity.destroyReward ?? entity.reward)?.bloonstones ?? 0;
+      game.bloonstones += (entity.destroyReward ?? entity.reward)?.bloonstones ?? 0;
+    }
+    if (this.isLeaving) {
+      game.level++;
     }
   }
 }
@@ -131,6 +133,7 @@ class SummonMinionAction extends BossAction {
    * @param {Entity} entity
    */
   execute(entity) {
+    this.#summoned = this.#summoned.filter((x) => !x.dead);
     for (let i = 0; i < this.count; i++) {
       if (this.max > 0 && this.#summoned.length >= this.max) return;
       //get the entity
@@ -164,7 +167,6 @@ class SummonMinionAction extends BossAction {
       //"I created you, now do my bidding!"
       spawned.team = entity.team;
       if (this.max > 0) {
-        this.#summoned = this.#summoned.filter((x) => !x.dead);
         this.#summoned.push(spawned);
       }
     }

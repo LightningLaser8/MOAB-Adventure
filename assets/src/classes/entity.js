@@ -24,6 +24,10 @@ class Entity {
   team = "enemy";
   target = { x: 0, y: 0 };
 
+  bounceable = true;
+  shieldDamageOverride = 0;
+  shieldReboundOverride = 0;
+
   //Stats
   damageDealt = 0;
   damageTaken = 0;
@@ -48,6 +52,9 @@ class Entity {
   blimp = null;
   blimpName = "";
 
+  /** @type {Shield?} */
+  _shield = null;
+
   lastPos = Vector.ZERO;
   get velocity() {
     return this.lastPos.subXY(this.x, this.y).scale(-1);
@@ -58,6 +65,35 @@ class Entity {
   }
 
   constructor() {} //Because universal
+  shield(strength = 200, spawnTime = 15, options = {}) {
+    if (this._shield) {
+      // make transparent deflection from old shield
+      let bulletToFire = bullet({
+        type: "deflect",
+        lifetime: this._shield.maxLife,
+        hitSize: this._shield.hitSize,
+        colour: [0, 0, 0, 0],
+        colourTo: [0, 0, 0, 0],
+        trailColour: this._shield.trailColourTo,
+        trailColourTo: this._shield.trailColour,
+      });
+      bulletToFire.entity = this;
+      bulletToFire.world = this.world;
+      this.world.bullets.push(bulletToFire);
+      // is mine
+      this._shield.remove = true;
+    }
+
+    // create shield
+    let o = Object.assign(options, { type: "shield", lifetime: spawnTime, strength: strength });
+    // Spawn it in
+    let bulletToFire = bullet(o);
+    bulletToFire.entity = this;
+    bulletToFire.world = this.world;
+    this.world.bullets.push(bulletToFire);
+    // is mine
+    this._shield = bulletToFire;
+  }
   upgrade(blimp) {
     this.blimpName = blimp;
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
@@ -84,8 +120,7 @@ class Entity {
   }
   damage(type = "normal", amount = 0, source = null) {
     if (source) this.lastHurtSource = source;
-    let calcAmount =
-      (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
+    let calcAmount = (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
     for (let resistance of this.resistances) {
       if (resistance.type === type) {
         calcAmount -= amount * resistance.amount; //Negative resistance would actually make it do more damage
@@ -155,11 +190,8 @@ class Entity {
     }
   }
   takeDamage(amount = 0, source = null) {
-    this.damageTaken +=
-      Math.min(amount, this.health) * this.effectiveHealthMult;
-    if (source)
-      source.damageDealt +=
-        Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
+    this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;
+    if (source) source.damageDealt += Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
@@ -177,6 +209,7 @@ class Entity {
     this.lastPos = new Vector(this.x, this.y);
     //this.checkBullets();
     this.tickStatuses();
+    if (this._shield?.remove) this._shield = null;
   }
   getClosestEnemy() {
     /*Don't actually need this yet*/
@@ -208,10 +241,7 @@ class Entity {
   }
   collidesWith(obj) {
     //No collisions if dead
-    return (
-      !this.dead &&
-      dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
-    );
+    return !this.dead && dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
   // checkBullets() {
   //   for (let bullet of this.world.bullets) {
@@ -311,6 +341,7 @@ class Entity {
     //Do nothing, as it doesn't matter for normal entities
   }
   onDeath(source) {}
+  onDespawn(){}
 }
 
 //Entity that scales health as the game's level increases.

@@ -150,3 +150,17 @@ Registry.blimps.add("bloonarius", {
     bloonstones: 1000,
   },
 });
+
+// ####   Support   ####
+
+Registry.blimps.add("support-moab", {
+  name: "Support MOAB",
+  weaponSlots: [1],
+  drawer: {
+    image: "blimp.moab",
+    width: 115,
+    height: 75,
+  },
+  // path1: "bfb",
+  // path2: "ddt",
+});
