@@ -212,17 +212,18 @@ class Entity {
     slot.entity = this;
   }
   tick() {
-    if (this.trackTarget)
-      if (this.target)
-        this.trackPoint(this.target.x + this.trackingOffsetX, this.target.y + this.trackingOffsetY);
+    this.ai();
     for (let slot of this.weaponSlots) {
       slot.tick();
     }
     this.lastPos = new Vector(this.x, this.y);
-    //Move towards tracking point
     this.tickStatuses();
     if (this._shield?.remove) this._shield = null;
-    this.ai();
+  }
+  ai() {
+    if (this.trackTarget)
+      if (this.target)
+        this.trackPoint(this.target.x + this.trackingOffsetX, this.target.y + this.trackingOffsetY);
   }
   getClosestEnemy() {
     /*Don't actually need this yet*/

@@ -169,6 +169,7 @@ class Boss extends ScalingEntity {
     this.triggers.forEach((t) => t.tick(this));
     //Corrective rotating
     this.direction = Vector.fromAngleRad(this.directionRad).angle;
+    super.ai()
   }
   scaleToDifficulty() {
     let diff = Registry.difficulties.get(game.difficulty); //Get difficulty
