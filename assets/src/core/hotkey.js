@@ -46,6 +46,7 @@ class ShortcutBinding {
    * @param {{key: string?, ctrl: boolean?, shift: boolean?, alt: boolean?}} [mods={}]
    */
   modify(mods = {}) {
+    mods ??= {};
     this.#original = this.shortcut;
     this.shortcut = new ModifiedKey(
       mods.key ?? this.shortcut.key,
@@ -158,5 +159,30 @@ class KeybindHandler {
     return b
       ? `${b.ctrl ? "Ctrl + " : ""}${b.shift ? "Shitf + " : ""}${b.alt ? "Alt + " : ""}${b.key}`
       : "None";
+  }
+  /** Returns the key associated with the specified binding. */
+  key(name) {
+    let b = this.#scuts.get(name)?.shortcut;
+    return b.key;
+  }
+  /** Returns whether or not the specified binding requires the `ctrl` key to be held. */
+  ctrl(name) {
+    let b = this.#scuts.get(name)?.shortcut;
+    return b.ctrl;
+  }
+  /** Returns whether or not the specified binding requires the `shift` key to be held. */
+  shift(name) {
+    let b = this.#scuts.get(name)?.shortcut;
+    return b.shift;
+  }
+  /** Returns whether or not the specified binding requires the `alt` key to be held. */
+  alt(name) {
+    let b = this.#scuts.get(name)?.shortcut;
+    return b.alt;
+  }
+  /** Returns the key and modifiers associated with the specified binding, as a `ModifiedKey` object. */
+  descriptor(name) {
+    let b = this.#scuts.get(name)?.shortcut;
+    return b;
   }
 }

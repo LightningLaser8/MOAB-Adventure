@@ -1,16 +1,6 @@
 //   Title Screen 'title-screen'
 
-createUIImageComponent(
-  ["title"],
-  [],
-  960,
-  540,
-  1120,
-  420,
-  null,
-  "ui.title",
-  false
-);
+createUIImageComponent(["title"], [], 960, 540, 1120, 420, null, "ui.title", false);
 
 //Play button on title screen
 createUIComponent(
@@ -28,10 +18,36 @@ createUIComponent(
   false,
   60
 );
+createUIComponent(
+  ["title"],
+  [],
+  1260,
+  870,
+  100,
+  100,
+  "none",
+  () => {
+    ui.menuState = "how-to-play";
+  },
+  "?",
+  true,
+  100
+);
 Object.defineProperty(
   UIComponent.alignLeft(
     createUIComponent(
-      ["title", "options", "start-menu", "new-game", "load-game", "weapon-slots"],
+      [
+        "title",
+        "options",
+        "start-menu",
+        "new-game",
+        "load-game",
+        "weapon-slots",
+        "you-win",
+        "you-died",
+        "crash",
+        "how-to-play",
+      ],
       [],
       10,
       1050,

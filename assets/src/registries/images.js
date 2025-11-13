@@ -21,6 +21,10 @@ Registry.images.add("ui.shard", new ImageContainer("assets/textures/ui/shard.svg
 Registry.images.add("ui.bloonstone", new ImageContainer("assets/textures/ui/bloonstone.svg"));
 Registry.images.add("ui.clock", new ImageContainer("assets/textures/ui/clock.png"));
 Registry.images.add("ui.title", new ImageContainer("assets/textures/screens/title.png"));
+Registry.images.add("ui.movement", new ImageContainer("assets/textures/ui/move-indicator.png"));
+Registry.images.add("ui.4-move", new ImageContainer("assets/textures/ui/4-move-indicator.png"));
+Registry.images.add("ui.shotgun", new ImageContainer("assets/textures/ui/shotgun.png"));
+Registry.images.add("ui.shoot", new ImageContainer("assets/textures/ui/shoot-indicator.png"));
 //boxes
 Registry.images.add("box.wood", new ImageContainer("assets/textures/entity/box/wood.svg"));
 Registry.images.add("box.hardwood", new ImageContainer("assets/textures/entity/box/hardwood.svg"));

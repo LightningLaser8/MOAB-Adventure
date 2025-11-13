@@ -136,6 +136,7 @@ class UIComponent {
   inverted = false;
   outline = true;
   backgroundColour = null;
+  textColour = 0;
   updateActivity() {
     //It's active if it should show *and* all the conditions are met
     this.active = this.getActivity();
@@ -288,7 +289,7 @@ class UIComponent {
       stroke(0);
       strokeWeight(this.textSize / 15);
     }
-    fill(0);
+    fill(this.textColour);
     textAlign(CENTER, CENTER);
     textSize(this.textSize);
     text(this.text, this.x, this.y);
@@ -322,6 +323,7 @@ class UIComponent {
 }
 
 class ImageUIComponent extends UIComponent {
+  angle = 0;
   constructor(
     x = 0,
     y = 0,
@@ -343,7 +345,7 @@ class ImageUIComponent extends UIComponent {
     //Draw outline behind background
     if (this.outline) rect(this.x, this.y, this.width + 18, this.height + 18);
     //Draw image
-    drawImg(this.image, this.x, this.y, this.width - 2, this.height - 2);
+    rotatedImg(this.image, this.x, this.y, this.width - 2, this.height - 2, this.angle);
     pop();
   }
 }
