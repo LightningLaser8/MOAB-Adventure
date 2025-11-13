@@ -39,6 +39,9 @@ class PartialWeapon extends Weapon {
   total = 1;
   isAuto = false; //Will this weapon fire automatically every tick?
   range = Infinity;
+  getDVScale() {
+    return this.parent.slot.entity.dv * this.dvRatio;
+  }
   tick() {
     let target = this.parent.slot.entity.target;
     if (this.isAuto) {
@@ -86,7 +89,7 @@ class PartialWeapon extends Weapon {
   }
   fire() {
     if (this._cooldown <= 0) {
-      playSound(this.fireSound);
+      SoundCTX.play(this.fireSound);
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate(); //Apply acceleration effects
       //Resolve nonexistent properties

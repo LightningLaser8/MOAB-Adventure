@@ -5,14 +5,35 @@ class Booster extends Weapon {
   knockOthers = true;
   hasFireTrail = true;
   trailBullet = null;
+
+  directions = 1;
   init() {
     super.init();
     delete this.shoot;
     delete this.recoil;
   }
+  tick() {
+    if (!this.slot) return;
+    if (this.slot.entity) {
+      this.x = this.slot.entity.x + this.slot.posX;
+      this.y = this.slot.entity.y + this.slot.posY;
+      if (this.rotate) {
+        let d = this.slot.entity.velocity.angle;
+        let dirInterval = 360 / this.directions;
+        this.rotation = Math.round(d / dirInterval) * dirInterval;
+      } else {
+        this.rotation = this.slot.entity.direction;
+      }
+    }
+    this.decelerate();
+    if (this._cooldown > 0) {
+      this._cooldown--;
+    }
+    this.parts.forEach((x) => x.tick()); //Tick all parts
+  }
   fire() {
     if (this._cooldown <= 0) {
-      playSound(this.fireSound);
+      SoundCTX.play(this.fireSound);
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate(); //Apply acceleration effects
 

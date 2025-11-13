@@ -205,8 +205,8 @@ Registry.weapons.add(".ace-gatling-gun", {
       damage: [
         {
           type: "ballistic",
-          amount: 1,
-          levelScaling: 0.5,
+          amount: 1.5,
+          levelScaling: 0.75,
         },
       ],
       drawer: {
@@ -318,7 +318,7 @@ Registry.weapons.add(".box-impact-impos", {
         hitSize: 6,
         trail: true,
         trailLifeFactor: 0.2,
-        trailColour: [255, 128, 0],
+        trailColour: [183, 142, 71],
         followsScreen: true,
         damage: [
           {
@@ -329,8 +329,8 @@ Registry.weapons.add(".box-impact-impos", {
         ],
         drawer: {
           image: "box.wood",
-          width: 25,
-          height: 10,
+          width: 50,
+          height: 20,
         },
       },
     },
@@ -348,7 +348,7 @@ Registry.weapons.add(".box-rotary-pain", {
       hitSize: 6,
       trail: true,
       trailLifeFactor: 0.2,
-      trailColour: [255, 128, 0],
+      trailColour: [183, 142, 71],
       damage: [
         {
           type: "ballistic",
@@ -358,8 +358,8 @@ Registry.weapons.add(".box-rotary-pain", {
       ],
       drawer: {
         image: "box.wood",
-        width: 25,
-        height: 10,
+        width: 50,
+        height: 20,
       },
     },
     pattern: {
@@ -391,7 +391,7 @@ Registry.weapons.add(".super-monkey-throw", {
         damage: [
           {
             type: "ballistic",
-            amount: -1,
+            amount: 0.5,
             levelScaling: 0.5,
           },
           {

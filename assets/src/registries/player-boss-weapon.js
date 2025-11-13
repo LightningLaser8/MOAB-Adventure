@@ -5,7 +5,7 @@
 Registry.weapons.add("boxer", {
   name: "Boxer",
   description:
-    "Shoots a metal box on a chain a short distance.\nDamage of the box scales with player level.\nHitting something with one box 4 times breaks it,\nand will take a long time to regenerate.",
+    "Shoots a metal box on a chain a short distance. Damage of the box scales with player level. Hitting something with one box 4 times breaks it, and will take a long time to regenerate.",
   fireSound: "shoot",
   reload: 360,
   minReload: 10,
@@ -71,7 +71,7 @@ Registry.weapons.add("boxer", {
 Registry.weapons.add("chaingun", {
   name: "Chaingun",
   description:
-    "Shoots an ever-increasing number of bullets\nforwards. Cannot turn far in either direction.",
+    "Shoots an ever-increasing number of bullets forwards. Cannot turn far in either direction.",
   reload: 20,
   fireSound: "shoot",
   accel: 0.1,
@@ -330,7 +330,7 @@ Registry.weapons.add("dissection", {
 Registry.weapons.add("polariser", {
   name: "Polariser",
   description:
-    "Shots are attracted back and bounce off enemies,\nand make debuffing pulses on enemy contact.\nDestroyed enemies make bigger damaging pulses.\nLarge pulses spawn small powerup orbs.",
+    "Shots are attracted back and bounce off enemies, and make debuffing pulses on enemy contact. Destroyed enemies make bigger damaging pulses. Large pulses spawn small powerup orbs.",
   fireSound: "shoot",
   reload: 60,
   minReload: 5,

@@ -1,28 +1,70 @@
-const ui = {
-  menuState: "title",
-  waitingForMouseUp: false,
+class UserInterfaceController {
+  set menuState(_) {
+    this.#ms = _;
+    this.components.forEach((x) => x.updateActivity());
+  }
+  get menuState() {
+    return this.#ms;
+  }
+  #ms = "title";
+  waitingForMouseUp = false;
   get mouse() {
-    return {
-      x: mouseX / contentScale,
-      y: mouseY / contentScale,
-    };
-  },
-  conditions: {},
-  components: [],
+    return new Vector(mouseX / contentScale, mouseY / contentScale);
+  }
+  conditions = {};
+  get components() {
+    return this.screens[this.menuState] ?? [];
+  }
+  addTo(component, ...screens) {
+    screens.forEach((s) => {
+      this.screens[s] ??= [];
+      this.screens[s].push(component);
+    });
+  }
+  /**@type {Object.<string, UIComponent[]>} */
+  screens = {
+    title: [],
+  };
   //Volume percentage
-  volume: 50,
+  volume = 50;
   //Percentages for different parts
   //Multiplicative with `volume`
-  piecewiseVolume: {
+  piecewiseVolume = {
     music: 100,
     weapons: 100,
     entities: 100,
-  },
+  };
   //particle
-  particles: [],
-};
+  particles = [];
+  keybinds = new KeybindHandler();
+  /** Handles UI keytype events. Returns true if something happened. */
+  type(key) {
+    return false;
+  }
+  tick() {
+    for (let component of this.components) {
+      component.updateActivity();
+      if (component.active && component.isInteractive) {
+        component.checkMouse();
+      }
+    }
+    let len = this.particles.length;
+    for (let p = 0; p < len; p++) {
+      if (this.particles[p]?.remove) {
+        this.particles.splice(p, 1);
+      }
+    }
+    this.keybinds.tick();
+  }
+}
+
+const ui = new UserInterfaceController();
 
 class UIComponent {
+  static setKeyboardShortcut(uicomponent, shortcut) {
+    uicomponent.shortcutKey = shortcut;
+    return uicomponent;
+  }
   static invert(uicomponent) {
     uicomponent.inverted = true;
     uicomponent.y *= -1;
@@ -69,6 +111,15 @@ class UIComponent {
     }
     return true; //If unsure, ignore
   }
+  //Gets the value of a condition
+  static getCondition(condition) {
+    if (ui.conditions[condition]) {
+      //Separate property values
+      //If property exists
+      return ui.conditions[condition]; //Check it and return
+    }
+    return null; //If unsure, ignore
+  }
   //Sets property:value on game ui: input "slot:1" => sets "slot" to "1"
   static setCondition(condition) {
     const parts = condition.split(":"); //Separate property <- : -> value
@@ -78,17 +129,17 @@ class UIComponent {
     }
     ui.conditions[parts[0]] = parts[1]; //Set the property
   }
-  acceptedScreens = [];
   conditions = [];
   interactive = false;
+  isBackButton = false;
   active = false;
   inverted = false;
   outline = true;
   backgroundColour = null;
+  textColour = 0;
   updateActivity() {
     //It's active if it should show *and* all the conditions are met
-    this.active =
-      this.acceptedScreens.includes(ui.menuState) && this.getActivity();
+    this.active = this.getActivity();
   }
   getActivity() {
     if (this.conditions[0] === "any") {
@@ -171,8 +222,7 @@ class UIComponent {
         }
         //Draw outline behind background
         rect(
-          this.x +
-            (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
+          this.x + (this.bevel === "right" ? 10 : this.bevel === "left" ? -10 : 0),
           this.y,
           this.width +
             (this.bevel === "right" || this.bevel === "left"
@@ -239,7 +289,7 @@ class UIComponent {
       stroke(0);
       strokeWeight(this.textSize / 15);
     }
-    fill(0);
+    fill(this.textColour);
     textAlign(CENTER, CENTER);
     textSize(this.textSize);
     text(this.text, this.x, this.y);
@@ -273,6 +323,7 @@ class UIComponent {
 }
 
 class ImageUIComponent extends UIComponent {
+  angle = 0;
   constructor(
     x = 0,
     y = 0,
@@ -294,7 +345,7 @@ class ImageUIComponent extends UIComponent {
     //Draw outline behind background
     if (this.outline) rect(this.x, this.y, this.width + 18, this.height + 18);
     //Draw image
-    drawImg(this.image, this.x, this.y, this.width - 2, this.height - 2);
+    rotatedImg(this.image, this.x, this.y, this.width - 2, this.height - 2, this.angle);
     pop();
   }
 }
@@ -305,6 +356,7 @@ class HealthbarComponent extends UIComponent {
   healthbarColour = [255, 255, 255];
   backgroundColour = [0, 0, 0];
   healthbarReversed = false;
+  fracReversed = false;
   sourceIsFunction = false;
   textColour = this.outlineColour;
   #current = "health";
@@ -318,6 +370,10 @@ class HealthbarComponent extends UIComponent {
   }
   reverseBarDirection() {
     this.healthbarReversed = !this.healthbarReversed;
+    return this;
+  }
+  reverseBarFraction() {
+    this.fracReversed = !this.fracReversed;
     return this;
   }
   setColours(bg, main, pain) {
@@ -340,17 +396,7 @@ class HealthbarComponent extends UIComponent {
     healthcol = [255, 255, 0]
   ) {
     //Initialise component
-    super(
-      x,
-      y,
-      width,
-      height,
-      bevel,
-      onpress,
-      shownText,
-      useOCR,
-      shownTextSize
-    );
+    super(x, y, width, height, bevel, onpress, shownText, useOCR, shownTextSize);
     this.source = source;
     this.sourceIsFunction = typeof this.source === "function";
     this.healthbarColour = healthcol;
@@ -363,10 +409,17 @@ class HealthbarComponent extends UIComponent {
   draw() {
     let src = this.getSource();
     //tick
-    let target = src
-      ? (this.width * src[this.#current]) / src[this.#max]
-      : 0;
+    let fr = src[this.#current] / src[this.#max];
+
+    let target = src ? this.width * (this.fracReversed ? 1 - fr : fr) : 0;
     this.#frac += (target - this.#frac) * 0.075;
+
+    let bgc = (typeof this.backgroundColour === "function"
+      ? this.backgroundColour()
+      : this.backgroundColour) ?? [95, 100, 100, 160];
+    let pc = typeof this.#painColour === "function" ? this.#painColour() : this.#painColour;
+    let hbc =
+      typeof this.healthbarColour === "function" ? this.healthbarColour() : this.healthbarColour;
 
     push();
     translate(this.x, this.y);
@@ -395,7 +448,7 @@ class HealthbarComponent extends UIComponent {
       }
       //bar
       noStroke();
-      fill(...(this.backgroundColour ?? [95, 100, 100, 160]));
+      fill(...bgc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,
@@ -406,7 +459,7 @@ class HealthbarComponent extends UIComponent {
         this.healthbarReversed
       );
       //indicator
-      fill(this.#painColour);
+      fill(pc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,
@@ -417,7 +470,7 @@ class HealthbarComponent extends UIComponent {
         this.healthbarReversed
       );
       //health
-      fill(this.healthbarColour);
+      fill(hbc);
       this.#shape(
         this.x - (this.healthbarReversed ? -this.width / 2 : this.width / 2),
         this.y,
@@ -446,15 +499,7 @@ class HealthbarComponent extends UIComponent {
     );
     pop();
   }
-  #shape(
-    x,
-    y,
-    width,
-    height,
-    realign = false,
-    realignV = false,
-    reverseX = false
-  ) {
+  #shape(x, y, width, height, realign = false, realignV = false, reverseX = false) {
     if (realign) x += (width / 2) * (reverseX ? -1 : 1);
     if (realignV) y += height / 2;
 
@@ -524,10 +569,9 @@ function createHealthbarComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -583,6 +627,15 @@ function rotatedShape(shape = "circle", x, y, width, height, angle) {
     case "rect":
       rect(0, 0, width, height);
       break;
+    case "triangle":
+      triangle(-width / 2, height / 2, -width / 2, -height / 2, width / 2, 0);
+      break;
+    case "moved-triangle":
+      triangle(0, height / 2, 0, -height / 2, width, 0);
+      break;
+    case "moved-back-triangle":
+      triangle(-width, height / 2, -width, -height / 2, 0, 0);
+      break;
     case "rhombus":
       scale(width, height); //Change the size
       rotate(QUARTER_PI); //turn it
@@ -613,17 +666,7 @@ class SliderUIComponent extends UIComponent {
     max = 100,
     current = null
   ) {
-    super(
-      x,
-      y,
-      width,
-      height,
-      bevel,
-      undefined,
-      shownText,
-      useOCR,
-      shownTextSize
-    );
+    super(x, y, width, height, bevel, undefined, shownText, useOCR, shownTextSize);
     //Change callback
     this.change = onchange;
     this.length = sliderLength;
@@ -718,10 +761,9 @@ function createUIComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -748,10 +790,9 @@ function createUIImageComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onpress;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -799,8 +840,7 @@ function createGamePropertySelector(
     false,
     shownTextSize
   );
-  diffindicator.chosen =
-    defaultOption in options ? options[defaultOption] : null;
+  diffindicator.chosen = defaultOption in options ? options[defaultOption] : null;
   let len = Math.min(options.length, shownTexts.length); //Get smallest array, don't use blanks
   for (let i = 0; i < len; i++) {
     //For each option or text
@@ -824,9 +864,9 @@ function createGamePropertySelector(
     );
     //colour thing
     component.emphasisColour = selectionColour;
-    //Highlight if the diffindicator has chosen this button's option
+    //Highlight if the game has this option
     Object.defineProperty(component, "emphasised", {
-      get: () => diffindicator.chosen === options[i],
+      get: () => game[property] === options[i],
     });
   }
 }
@@ -866,10 +906,9 @@ function createSliderComponent(
   );
   component.conditions = conditions;
   //Set conditional things
-  component.acceptedScreens = screens;
   component.isInteractive = !!onchange;
   //Add to game
-  ui.components.push(component);
+  ui.addTo(component, ...screens);
   return component;
 }
 
@@ -927,78 +966,6 @@ class ImageContainer {
   }
 }
 
-class SoundContainer {
-  #sound = null;
-  #category = "none";
-  #path;
-  /**
-   * @param {string} path
-   * @param {"weapons" | "entities" | "music"} category
-   */
-  constructor(path, category = "none") {
-    this.#path = path;
-    this.#category = category;
-  }
-  async load() {
-    this.#sound = await loadSound(this.#path);
-    console.log("Loaded sound from " + this.#path);
-    return true;
-  }
-  get sound() {
-    return this.#sound;
-  }
-  get category() {
-    return this.#category;
-  }
-}
-/**
- * @param {SoundContainer | string} sound
- * @param {boolean} waitForEnd
- */
-function playSound(sound = null, waitForEnd = false) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    //Set the sound volume to configured one
-    sound.sound.setVolume(
-      //Default volume * the category's volume.
-      (ui.volume / 100) * ((ui.piecewiseVolume[sound.category] ?? 0) / 100)
-    );
-    //Start playing, if not already
-    if (!sound.sound.isPlaying() || !waitForEnd) sound.sound.play();
-  } else {
-    let snd = Registry.sounds.get(sound);
-    //Set the sound volume to configured one
-    //No container, so no category
-    snd.sound.setVolume(
-      //Default volume * the category's volume.
-      (ui.volume / 100) * ((ui.piecewiseVolume[snd.category] ?? 0) / 100)
-    );
-    //Start playing, if not already
-    if (!snd.sound.isPlaying() || !waitForEnd) snd.sound.play();
-  }
-}
-
-function stopSound(sound = null) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    sound.sound.stop();
-  } else {
-    Registry.sounds.get(sound).sound.stop();
-  }
-}
-
-function pauseSound(sound = null) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    sound.sound.pause();
-  } else {
-    Registry.sounds.get(sound).sound.pause();
-  }
-}
-
 class UIParticleEmitter extends UIComponent {
   interval = 60;
   scale = 1;
@@ -1009,14 +976,7 @@ class UIParticleEmitter extends UIComponent {
   draw() {
     if (this.#countdown <= 0) {
       this.#countdown = this.interval;
-      createEffect(
-        this.effect,
-        null,
-        this.x,
-        this.y,
-        this.direction,
-        this.scale
-      );
+      createEffect(this.effect, null, this.x, this.y, this.direction, this.scale);
     } else this.#countdown--;
   }
   checkMouse() {}
@@ -1040,29 +1000,14 @@ function createParticleEmitter(
   interval = 1
 ) {
   //Make component
-  const component = new UIParticleEmitter(
-    x,
-    y,
-    direction,
-    scale,
-    effect,
-    interval
-  );
+  const component = new UIParticleEmitter(x, y, direction, scale, effect, interval);
   component.conditions = conditions;
-  //Set conditional things
-  component.acceptedScreens = screens;
-  //Add to game
-  ui.components.push(component);
+  //add
+  ui.addTo(component, ...screens);
   return component;
 }
 
-function uiBlindingFlash(
-  x = 0,
-  y = 0,
-  opacity = 255,
-  duration = 60,
-  glareSize = 600
-) {
+function uiBlindingFlash(x = 0, y = 0, opacity = 255, duration = 60, glareSize = 600) {
   ui.particles.push(
     //Obscure screen
     new ShapeParticle(

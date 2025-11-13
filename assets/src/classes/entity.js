@@ -24,6 +24,11 @@ class Entity {
   team = "enemy";
   target = { x: 0, y: 0 };
 
+  collides = true;
+  bounceable = true;
+  shieldDamageOverride = 0;
+  shieldReboundOverride = 0;
+
   //Stats
   damageDealt = 0;
   damageTaken = 0;
@@ -44,20 +49,62 @@ class Entity {
   //Sounds
   hitSound = null;
   deathSound = null;
+
+  blimp = null;
+  blimpName = "";
+
+  /** @type {Shield?} */
+  _shield = null;
+
   //Movement
-  turnSpeed = 1;
+  aiActive = true;
+  turnSpeed = 5;
   turnWhileMoving = false;
-  trackTarget = true;
-  trackingOffsetX = 0;
+  trackTarget = false;
+  trackingOffsetX = 400;
   trackingOffsetY = 0;
   previousRot = 0;
+  lastPos = Vector.ZERO;
+  get velocity() {
+    return this.lastPos.subXY(this.x, this.y).scale(-1);
+  }
 
   get directionRad() {
     return (this.direction / 180) * Math.PI;
   }
 
   constructor() {} //Because universal
+  shield(strength = 200, spawnTime = 15, options = {}) {
+    if (this._shield) {
+      // make transparent deflection from old shield
+      let bulletToFire = bullet({
+        type: "deflect",
+        lifetime: this._shield.maxLife,
+        hitSize: this._shield.hitSize,
+        colour: [0, 0, 0, 0],
+        colourTo: [0, 0, 0, 0],
+        trailColour: this._shield.trailColourTo,
+        trailColourTo: this._shield.trailColour,
+      });
+      bulletToFire.entity = this;
+      bulletToFire.world = this.world;
+      this.world.bullets.push(bulletToFire);
+      // is mine
+      this._shield.remove = true;
+    }
+
+    // create shield
+    let o = Object.assign(options, { type: "shield", lifetime: spawnTime, strength: strength });
+    // Spawn it in
+    let bulletToFire = bullet(o);
+    bulletToFire.entity = this;
+    bulletToFire.world = this.world;
+    this.world.bullets.push(bulletToFire);
+    // is mine
+    this._shield = bulletToFire;
+  }
   upgrade(blimp) {
+    this.blimpName = blimp;
     construct(Registry.blimps.get(blimp), Blimp).upgradeEntity(this);
   }
   init() {
@@ -82,8 +129,7 @@ class Entity {
   }
   damage(type = "normal", amount = 0, source = null) {
     if (source) this.lastHurtSource = source;
-    let calcAmount =
-      (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
+    let calcAmount = (amount / this.effectiveHealthMult) * (source?.effectiveDamageMult ?? 1); //Get damage multiplier of source, if there is one
     for (let resistance of this.resistances) {
       if (resistance.type === type) {
         calcAmount -= amount * resistance.amount; //Negative resistance would actually make it do more damage
@@ -153,11 +199,8 @@ class Entity {
     }
   }
   takeDamage(amount = 0, source = null) {
-    this.damageTaken +=
-      Math.min(amount, this.health) * this.effectiveHealthMult;
-    if (source)
-      source.damageDealt +=
-        Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
+    this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;
+    if (source) source.damageDealt += Math.min(amount, this.health) * this.effectiveHealthMult; //Stats pretend health was higher
     this.health -= amount;
     if (this.health <= 0) {
       this.health = 0;
@@ -169,11 +212,16 @@ class Entity {
     slot.entity = this;
   }
   tick() {
+    if (this.trackTarget)
+      if (this.target)
+        this.trackPoint(this.target.x + this.trackingOffsetX, this.target.y + this.trackingOffsetY);
     for (let slot of this.weaponSlots) {
       slot.tick();
     }
-    this.checkBullets();
+    this.lastPos = new Vector(this.x, this.y);
+    //Move towards tracking point
     this.tickStatuses();
+    if (this._shield?.remove) this._shield = null;
     this.ai();
   }
   getClosestEnemy() {
@@ -206,82 +254,79 @@ class Entity {
   }
   collidesWith(obj) {
     //No collisions if dead
-    return (
-      !this.dead &&
-      dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize
-    );
+    return !this.dead && dist(this.x, this.y, obj.x, obj.y) <= this.hitSize + obj.hitSize;
   }
-  checkBullets() {
-    for (let bullet of this.world.bullets) {
-      //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
-      if (
-        bullet.collides &&
-        !bullet.remove &&
-        this.team !== bullet.entity.team &&
-        !bullet.damaged.includes(this) &&
-        bullet.collidesWith(this) //check collisions last for performance reasons
-      ) {
-        //Take all damage instances
-        for (let instance of bullet.damage) {
-          if (!instance.area)
-            this.damage(
-              instance.type,
-              (instance.amount +
-                (bullet.source ? bullet.source.getDVScale() : 0) +
-                (instance.levelScaling ?? 0) * game.level) *
-                //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
-                (this instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
-              bullet.entity
-            ); //Wait if kaboom
-          this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;
-        }
-        if (bullet.controlledKnockback) {
-          //Get direction to the target
-          let direction = degrees(
-            p5.Vector.sub(
-              createVector(bullet.entity.target.x, bullet.entity.target.y), //Target pos 'B'
-              createVector(bullet.x, bullet.y) //Bullet pos 'A'
-            ).heading() //'A->B' = 'B' - 'A'
-          );
-          this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
-        } else {
-          this.knock(
-            bullet.knockback,
-            bullet.direction,
-            bullet.kineticKnockback
-          ); //Knock with default resolution
-        }
-        if (bullet.status !== "none") {
-          this.applyStatus(bullet.status, bullet.statusDuration);
-        }
-        //Make the bullet know
-        bullet.damaged.push(this);
-        bullet.onHit(this);
-        if (!bullet.silent) {
-          playSound(this.hitSound);
-          playSound(bullet.hitSound);
-        }
-        //Reduce pierce
-        bullet.pierce--;
-        //If exhausted
-        if (bullet.pierce < 0) {
-          if (bullet instanceof LaserBullet) bullet.canHurt = false;
-          else bullet.remove = true; //Delete
-        }
-      } else {
-        if (
-          !bullet.remove &&
-          this.team !== bullet.entity.team &&
-          bullet.damaged.includes(this)
-        ) {
-          if (bullet.multiHit && !bullet.collidesWith(this)) {
-            //Unpierce it
-            bullet.damaged.splice(bullet.damaged.indexOf(this), 1);
-          }
-        }
-      }
-    }
-  }
+  // checkBullets() {
+  //   for (let bullet of this.world.bullets) {
+  //     //If colliding with a bullet on different team, that it hasn't already been hit by and that still exists
+  //     if (
+  //       bullet.collides &&
+  //       !bullet.remove &&
+  //       this.team !== bullet.entity.team &&
+  //       !bullet.damaged.includes(this) &&
+  //       bullet.collidesWith(this) //check collisions last for performance reasons
+  //     ) {
+  //       //Take all damage instances
+  //       for (let instance of bullet.damage) {
+  //         if (!instance.area)
+  //           this.damage(
+  //             instance.type,
+  //             (instance.amount +
+  //               (bullet.source ? bullet.source.getDVScale() : 0) +
+  //               (instance.levelScaling ?? 0) * game.level) *
+  //               //If boss, multiply damage by boss damage multiplier, if present, or else 1. If not boss, multiply by 1.
+  //               (this instanceof Boss ? instance.bossDamageMultiplier ?? 1 : 1),
+  //             bullet.entity
+  //           ); //Wait if kaboom
+  //         this.maxHealth -= instance.amount * bullet.maxHPReductionFactor;
+  //       }
+  //       if (bullet.controlledKnockback) {
+  //         //Get direction to the target
+  //         let direction = degrees(
+  //           p5.Vector.sub(
+  //             createVector(bullet.entity.target.x, bullet.entity.target.y), //Target pos 'B'
+  //             createVector(bullet.x, bullet.y) //Bullet pos 'A'
+  //           ).heading() //'A->B' = 'B' - 'A'
+  //         );
+  //         this.knock(bullet.knockback, direction, bullet.kineticKnockback); //Knock with default resolution
+  //       } else {
+  //         this.knock(
+  //           bullet.knockback,
+  //           bullet.direction,
+  //           bullet.kineticKnockback
+  //         ); //Knock with default resolution
+  //       }
+  //       if (bullet.status !== "none") {
+  //         this.applyStatus(bullet.status, bullet.statusDuration);
+  //       }
+  //       //Make the bullet know
+  //       bullet.damaged.push(this);
+  //       bullet.onHit(this);
+  //       if (!bullet.silent) {
+  //         playSound(this.hitSound);
+  //         playSound(bullet.hitSound);
+  //       }
+  //       //Reduce pierce
+  //       bullet.pierce--;
+  //       //If exhausted
+  //       if (bullet.pierce < 0) {
+  //         if (bullet instanceof LaserBullet) bullet.canHurt = false;
+  //         else bullet.remove = true; //Delete
+  //       }
+  //     } else {
+  //       if (
+  //         !bullet.remove &&
+  //         this.team !== bullet.entity.team &&
+  //         bullet.damaged.includes(this)
+  //       ) {
+  //         if (bullet.multiHit && !bullet.collidesWith(this)) {
+  //           //Unpierce it
+  //           bullet.damaged.splice(bullet.damaged.indexOf(this), 1);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   tickStatuses() {
     this.effectiveSpeedMult =
       this.effectiveDamageMult =
@@ -308,36 +353,9 @@ class Entity {
   scaleToDifficulty() {
     //Do nothing, as it doesn't matter for normal entities
   }
-  onDeath() {}
-  rotateTowards(x, y, amount) {
-    let done = false;
-    let maxRotateAmount = radians(amount); //use p5 to get radians
-    let delta = { x: x - this.x, y: y - this.y };
-    //Define variables
-    let currentDirection = p5.Vector.fromAngle(this.directionRad).heading(); //Find current angle, standardised
-    let targetDirection = Math.atan2(delta.y, delta.x); //Find target angle, standardised
-    if (targetDirection === currentDirection) return; //Do nothing if facing the right way
-    let deltaRot = targetDirection - currentDirection;
-    //Rotation correction
-    if (deltaRot < -PI) {
-      deltaRot += TWO_PI;
-    } else if (deltaRot > PI) {
-      deltaRot -= TWO_PI;
-    }
-    let sign = deltaRot < 0 ? -1 : 1; //Get sign: -1 if negative, 1 if positive
-    let deltaD = 0;
-    //Choose smaller turn
-    if (Math.abs(deltaRot) > maxRotateAmount) {
-      deltaD = maxRotateAmount * sign;
-      done = true; //Done turning
-    } else {
-      deltaD = deltaRot;
-      done = false;
-    }
-    //Turn
-    this.direction += degrees(deltaD);
-    return done; // Tell caller its done
-  }
+  onDeath(source) {}
+  onDespawn() {}
+
   moveTowards(x, y, rotate = false) {
     if (!rotate) {
       let oldRot = this.direction;
@@ -370,8 +388,34 @@ class Entity {
           // and target exists
           this.rotateTowards(this.target.x, this.target.y, this.turnSpeed); //turn towards it.
   }
-  ai() {
-    //Do nothing by default
+  rotateTowards(x, y, amount) {
+    let done = false;
+    let maxRotateAmount = radians(amount); //use p5 to get radians
+    let delta = { x: x - this.x, y: y - this.y };
+    //Define variables
+    let currentDirection = Vector.fromAngleRad(this.directionRad).angleRad; //Find current angle, standardised
+    let targetDirection = Math.atan2(delta.y, delta.x); //Find target angle, standardised
+    if (targetDirection === currentDirection) return; //Do nothing if facing the right way
+    let deltaRot = targetDirection - currentDirection;
+    //Rotation correction
+    if (deltaRot < -PI) {
+      deltaRot += TWO_PI;
+    } else if (deltaRot > PI) {
+      deltaRot -= TWO_PI;
+    }
+    let sign = deltaRot < 0 ? -1 : 1; //Get sign: -1 if negative, 1 if positive
+    let deltaD = 0;
+    //Choose smaller turn
+    if (Math.abs(deltaRot) > maxRotateAmount) {
+      deltaD = maxRotateAmount * sign;
+      done = true; //Done turning
+    } else {
+      deltaD = deltaRot;
+      done = false;
+    }
+    //Turn
+    this.direction += degrees(deltaD);
+    return done; // Tell caller its done
   }
 }
 

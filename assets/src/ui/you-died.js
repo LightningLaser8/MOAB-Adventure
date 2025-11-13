@@ -121,4 +121,4 @@ createUIComponent(
   "Return",
   false,
   50
-).interactive = true;
+).isBackButton = true;

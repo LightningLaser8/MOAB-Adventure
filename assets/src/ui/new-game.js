@@ -3,7 +3,7 @@ UIComponent.setCondition("difficulty:none");
 //Difficulty selector
 createGamePropertySelector(
   ["new-game"],
-  ["difficulty:none|easy|normal|hard"],
+  [],
   250,
   260,
   100,
@@ -13,25 +13,7 @@ createGamePropertySelector(
   ["easy", "normal", "hard"],
   null,
   ["Easy", "Normal", "Hard"],
-  50,
-  (value) => UIComponent.setCondition("difficulty:" + value)
-);
-//selector, dummy edition
-createGamePropertySelector(
-  ["new-game"],
-  ["difficulty:impossible"],
-  250,
-  260,
-  100,
-  250,
-  60,
-  "difficulty",
-  ["impossible", "impossible", "impossible"],
-  0,
-  ["Easy", "Normal", "Hard"],
-  50,
-  () => {},
-  [255, 0, 0]
+  50
 );
 createUIComponent(
   ["new-game"],
@@ -46,16 +28,6 @@ createUIComponent(
   true,
   50
 ).outlineColour = [255, 255, 0];
-createUIComponent(
-  ["new-game"],
-  ["difficulty:impossible"],
-  1530,
-  260,
-  55,
-  60,
-  "both",
-  null
-).outlineColour = [255, 0, 0];
 UIComponent.setCondition("mode:none");
 //Game mode selector
 createGamePropertySelector(
@@ -125,6 +97,7 @@ createUIComponent(
   () => {
     ui.menuState = "in-game";
     createPlayer();
+    createSupport();
   },
   "Start!",
   false,
@@ -141,17 +114,7 @@ createUIComponent(
   null,
   "Choose All\nWeapon Slots"
 );
-createUIComponent(
-  ["new-game"],
-  ["mode:none"],
-  960,
-  840,
-  0,
-  0,
-  "none",
-  null,
-  "Choose Game Mode"
-);
+createUIComponent(["new-game"], ["mode:none"], 960, 840, 0, 0, "none", null, "Choose Game Mode");
 createUIComponent(
   ["new-game"],
   ["saveslot:none"],
@@ -187,9 +150,7 @@ createUIComponent(
   "none",
   () => {
     game.difficulty = "impossible";
-    UIComponent.setCondition("difficulty:impossible");
     uiBlindingFlash(1925, 60, 255, 100, 1500);
-    versionReplacementText = "Version 6.6.6 - No escape.";
   },
   ""
 );
@@ -224,36 +185,28 @@ createParticleEmitter(
     },
   }
 );
-createParticleEmitter(
-  ["start-menu"],
-  ["difficulty:impossible"],
-  960,
-  1000,
-  0,
-  1,
-  {
-    type: "vfx.particle",
-    cone: 0,
-    maxXOffset: 360,
-    emissions: 1,
-    particle: {
-      //All
-      lifetime: 180,
-      direction: -90,
-      speed: 5,
-      decel: 0.015,
-      rotateSpeed: 0,
-      moveWithBackground: false,
-      shape: "rhombus",
-      widthFrom: 60,
-      widthTo: 0,
-      heightFrom: 120,
-      heightTo: 200,
-      colourFrom: [255, 255, 50, 50],
-      colourTo: [255, 0, 0, 0],
-    },
-  }
-);
+createParticleEmitter(["start-menu"], ["difficulty:impossible"], 960, 1000, 0, 1, {
+  type: "vfx.particle",
+  cone: 0,
+  maxXOffset: 360,
+  emissions: 1,
+  particle: {
+    //All
+    lifetime: 180,
+    direction: -90,
+    speed: 5,
+    decel: 0.015,
+    rotateSpeed: 0,
+    moveWithBackground: false,
+    shape: "rhombus",
+    widthFrom: 60,
+    widthTo: 0,
+    heightFrom: 120,
+    heightTo: 200,
+    colourFrom: [255, 255, 50, 50],
+    colourTo: [255, 0, 0, 0],
+  },
+});
 createParticleEmitter(["title"], ["difficulty:impossible"], 960, 800, 0, 1, {
   type: "vfx.particle",
   cone: 0,
@@ -336,7 +289,6 @@ createParticleEmitter(
     },
   }
 );
-
 createParticleEmitter(["in-game"], ["difficulty:impossible"], 960, 1080, 0, 1, {
   type: "vfx.particle",
   cone: 0,
@@ -423,3 +375,65 @@ Object.defineProperties(
     },
   }
 );
+
+//quickstart
+function getNextFreeSlot() {
+  for (let sl = 0; sl < 6; sl++) {
+    if (!Serialiser.get("save." + sl)) return sl;
+  }
+  return -1;
+}
+createUIComponent(
+  ["new-game"],
+  [],
+  1550,
+  830,
+  270,
+  60,
+  "none",
+  () => quickstart(1),
+  "Quickstart X.1",
+  true,
+  30
+);
+
+createUIComponent(
+  ["new-game"],
+  [],
+  1550,
+  920,
+  270,
+  60,
+  "none",
+  () => quickstart(2),
+  "Quickstart X.2",
+  true,
+  30
+);
+
+function quickstart(subslot) {
+  {
+    UIComponent.setCondition("difficulty:normal");
+    UIComponent.setCondition("saveslot:" + getNextFreeSlot());
+    UIComponent.setCondition("mode:adventure");
+    game.difficulty = "normal";
+    game.saveslot = getNextFreeSlot();
+    game.mode = "adventure";
+
+    UIComponent.setCondition("ap1-slot:" + subslot);
+    UIComponent.setCondition("ap2-slot:" + subslot);
+    UIComponent.setCondition("ap3/4-slot:" + subslot);
+    UIComponent.setCondition("ap5-slot:" + subslot);
+
+    ui.menuState = "in-game";
+    createPlayer();
+    createSupport();
+
+    if (game.saveslot === -1)
+      notifyEffect(
+        "All slots full, using temporary slot\nSaving will override previous temp. game",
+        360
+      );
+    else notifyEffect("Playing on slot " + game.saveslot);
+  }
+}

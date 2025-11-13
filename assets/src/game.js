@@ -1,19 +1,22 @@
 const game = {
   //Game options
-  _diff: "normal",
+  _diff: "none",
   get difficulty() {
     return this._diff;
   },
   set difficulty(_) {
     this._diff = _;
     world.updateDifficulty();
+    UIComponent.setCondition("difficulty:" + _);
   },
-  mode: "adventure",
-  saveslot: 1,
+  mode: "none",
+  saveslot: -1,
   //Control type
   control: "keyboard",
   /** @type {Entity | null} Player entity */
   player: null,
+  /** @type {Entity | null} Support blimp entity */
+  support: null,
   maxDV: 0,
   totalBosses: 0,
   //Currency
@@ -24,32 +27,12 @@ const game = {
   bossdelay: 400,
   bossinterval: 400,
   paused: false,
-};
-const difficulty = {
-  easy: {
-    spawnRateLowTier: 1.2,
-    spawnRateHighTier: 0.4,
-    boxHP: 0.6,
-    bossHP: 0.85,
-  },
-  normal: {
-    spawnRateLowTier: 1,
-    spawnRateHighTier: 1,
-    boxHP: 1,
-    bossHP: 1,
-  },
-  hard: {
-    spawnRateLowTier: 1.2,
-    spawnRateHighTier: 2,
-    boxHP: 1.2,
-    bossHP: 1.3,
-  },
-  impossible: {
-    spawnRateLowTier: 0.75,
-    spawnRateHighTier: 1.5,
-    boxHP: 1,
-    bossHP: 1.5,
-  },
+  //progression
+  world: "",
+  achievements: [],
+  won: false,
+  //keys
+  keybinds: new KeybindHandler(),
 };
 /** @type {World} */
 let world;
@@ -64,10 +47,7 @@ let contentScale = 1;
 function getCanvasDimensions(baseWidth, baseHeight) {
   const aspectRatio = baseWidth / baseHeight;
   let [canvasWidth, canvasHeight] = [windowWidth, windowHeight];
-  let [widthRatio, heightRatio] = [
-    canvasWidth / baseWidth,
-    canvasHeight / baseHeight,
-  ];
+  let [widthRatio, heightRatio] = [canvasWidth / baseWidth, canvasHeight / baseHeight];
   if (widthRatio < heightRatio) {
     [canvasWidth, canvasHeight] = [windowWidth, windowWidth / aspectRatio];
     contentScale = canvasWidth / baseWidth;
@@ -89,12 +69,10 @@ async function preload() {
     await item.load();
   });
   await Registry.sounds.forEachAsync(async (name, item) => {
-    await item.load();
-    item.sound.playMode("restart");
+    if (!(await item.load())) console.error("Failed to load " + name);
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
   fonts.darktech = await loadFont("assets/font/darktech_ldr.ttf");
-  await userStartAudio();
 }
 //Set up the canvas, using the previous function
 function setup() {
@@ -154,9 +132,7 @@ function draw() {
     clear();
     scale(contentScale);
     image(
-      game.difficulty === "impossible"
-        ? backgrounds.grad_impossible
-        : backgrounds.grad_normal,
+      game.difficulty === "impossible" ? backgrounds.grad_impossible : backgrounds.grad_normal,
       960,
       540,
       1920,
@@ -175,13 +151,13 @@ function draw() {
       effectTimer.tick();
     }
   } catch (e) {
+    console.error(e);
     crash(e);
   }
 }
 
 function uiFrame() {
   //Tick, then draw the UI
-  updateUIActivity();
   tickUI();
   drawUI();
   //Reset mouse held status
@@ -191,7 +167,9 @@ function uiFrame() {
 
 function gameFrame() {
   if (!game.paused) {
-    movePlayer();
+    game.keybinds.tick();
+    validatePlayerPos();
+    passivePlayerTick();
     world.tickAll();
     tickBossEvent();
     checkBoxCollisions();
@@ -217,55 +195,34 @@ function tickBossEvent() {
   }
 }
 
-function movePlayer() {
-  if (keyIsDown(87) && game.player.y > game.player.hitSize) {
-    //If 'W' pressed
-    game.player.y -= game.player.speed;
-  }
-  if (keyIsDown(83) && game.player.y < 1080 - game.player.hitSize) {
-    //If 'S' pressed
-    game.player.y += game.player.speed;
-  }
-  if (keyIsDown(65) && game.player.x > game.player.hitSize) {
-    //If 'A' pressed
-    game.player.x -= game.player.speed * 1.5;
-  }
-  if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
-    //If 'D' pressed
-    game.player.x += game.player.speed * 0.5;
-  }
-  //If the player is out of bounds, then damage rapidly
+function validatePlayerPos() {
+  //If the player is out of bounds, then remove //damage rapidly
   if (game.player.x > 1920 - game.player.hitSize + game.player.speed * 2) {
-    game.player.x -= game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.x = 1920 - game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.x < game.player.hitSize - game.player.speed * 4) {
-    game.player.x += game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.x = game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.y < game.player.hitSize - game.player.speed * 3) {
-    game.player.y += game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.y = game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.y > 1080 - game.player.hitSize + game.player.speed * 3) {
-    game.player.y -= game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.y = 1080 - game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
+}
+function passivePlayerTick() {
   //regen
   if (game.player.health < game.player.maxHealth) {
-    game.player.heal(0.0003 * game.player.maxHealth);
+    game.player.heal(0.0002 * game.player.maxHealth);
   }
 }
-
-function updateUIActivity() {
-  //Check each component, but only do it once.
-  for (let component of ui.components) {
-    component.updateActivity();
-  }
-}
-
 function drawUI() {
   background.image = world.background;
+  showOffscreenBosses();
   for (let component of ui.components) {
     if (component.active) {
       component.draw();
@@ -277,17 +234,7 @@ function drawUI() {
 
 function tickUI() {
   if (!game.paused) background.tick(game.player?.speed ?? 0);
-  for (let component of ui.components) {
-    if (component.active && component.isInteractive) {
-      component.checkMouse();
-    }
-  }
-  len = ui.particles.length;
-  for (let p = 0; p < len; p++) {
-    if (ui.particles[p]?.remove) {
-      ui.particles.splice(p, 1);
-    }
-  }
+  ui.tick();
 }
 
 function showMousePos() {
@@ -298,26 +245,101 @@ function showMousePos() {
   stroke(0);
   strokeWeight(2);
   textSize(40);
-  text(
-    "X:" + Math.round(ui.mouse.x) + " Y:" + Math.round(ui.mouse.y),
-    ui.mouse.x,
-    ui.mouse.y - 50
-  );
+  let mpos = nearestOnScreenPosition(ui.mouse, 60);
+  text("X:" + Math.round(ui.mouse.x) + " Y:" + Math.round(ui.mouse.y), ui.mouse.x, ui.mouse.y - 50);
   stroke(255);
   strokeWeight(2);
   line(ui.mouse.x - 20, ui.mouse.y, ui.mouse.x + 20, ui.mouse.y);
   line(ui.mouse.x, ui.mouse.y - 20, ui.mouse.x, ui.mouse.y + 20);
+
+  line(ui.mouse.x, ui.mouse.y, mpos.x, mpos.y);
+  circle(mpos.x, mpos.y, 10);
   pop();
+}
+
+function isOffscreen(entity) {
+  return (
+    entity.x < -entity.hitSize ||
+    entity.x > 1920 + entity.hitSize ||
+    entity.y < -entity.hitSize ||
+    entity.y > 1080 + entity.hitSize
+  );
+}
+
+function distanceOffscreen(entity) {
+  return new Vector(
+    entity.x < -entity.hitSize ? entity.x + entity.hitSize : entity.x + entity.hitSize - 1920,
+    entity.y < -entity.hitSize ? entity.y + entity.hitSize : entity.y + entity.hitSize - 1080
+  ).magnitude;
+}
+
+/**@param {Vector} pos  */
+function nearestOnScreenPosition(pos, onScreenBy = 0) {
+  let centre = new Vector(960, 540);
+  // direction to middle
+  let direction = pos.sub(centre).normalise();
+  // find max scales to make the point onscreen
+  let sizeX = Math.abs((960 - onScreenBy) / direction.x);
+  let sizeY = Math.abs((540 - onScreenBy) / direction.y);
+  // return shit
+  let npos = centre.add(direction.scale(Math.min(sizeX, sizeY)));
+
+  return npos;
+}
+
+function showOffscreenBosses() {
+  world.getAllBosses().forEach((boss) => {
+    if (boss && isOffscreen(boss)) {
+      let circlepos = nearestOnScreenPosition(new Vector(boss.x, boss.y), 180);
+      push();
+      fill(100, 100, 100);
+      stroke(50, 50, 50);
+      strokeWeight(30);
+      line(boss.x, boss.y, circlepos.x + 25, circlepos.y);
+      line(boss.x, boss.y, circlepos.x - 25, circlepos.y);
+      line(boss.x, boss.y, circlepos.x, circlepos.y + 25);
+      line(boss.x, boss.y, circlepos.x, circlepos.y - 25);
+      stroke(100, 100, 100);
+      strokeWeight(10);
+      line(boss.x, boss.y, circlepos.x + 10, circlepos.y);
+      line(boss.x, boss.y, circlepos.x - 10, circlepos.y);
+      line(boss.x, boss.y, circlepos.x, circlepos.y + 10);
+      line(boss.x, boss.y, circlepos.x, circlepos.y - 10);
+      stroke(50, 50, 50);
+      circle(circlepos.x, circlepos.y, 120);
+      strokeWeight(5);
+      circle(circlepos.x, circlepos.y, 90);
+      let size = new Vector(boss.drawer.width, boss.drawer.height);
+      let scaled =
+        size.x > size.y
+          ? new Vector(110, (size.y * 110) / size.x)
+          : new Vector((size.x * 110) / size.y, 110);
+      rotatedImg(
+        boss.drawer.image,
+        circlepos.x,
+        circlepos.y,
+        scaled.x,
+        scaled.y,
+        boss.directionRad
+      );
+      textFont(fonts.ocr);
+      fill(150, 150, 150);
+      textSize(30);
+      let dst = roundNum(distanceOffscreen(boss) / 10);
+      text(dst, circlepos.x - textWidth(dst) / 2, circlepos.y + 50);
+      pop();
+    }
+  });
 }
 
 function createPlayer() {
   let player = construct(Registry.entities.get("player"));
   //Add all slots: not all of them will be accessible
-  player.addWeaponSlot(getSelectedAP(1));
-  player.addWeaponSlot(getSelectedAP(2));
-  player.addWeaponSlot(getSelectedAP(3));
-  player.addWeaponSlot(getSelectedAP(4));
-  player.addWeaponSlot(getSelectedAP(5));
+  player.addWeaponSlot(selector.getAP(1));
+  player.addWeaponSlot(selector.getAP(2));
+  player.addWeaponSlot(selector.getAP(3));
+  player.addWeaponSlot(selector.getAP(4));
+  player.addWeaponSlot(selector.getAP(5));
   player.addWeaponSlot(aps.booster);
   player.addToWorld(world);
   game.player = player;
@@ -327,21 +349,28 @@ function createPlayer() {
   Object.defineProperty(player, "target", {
     get: () => {
       return ui.mouse;
-    }, //This way, I only have to set it once.
+    }, //This way, I only have to set it once, and it's responsive.
   });
+
   world.particles.push(
-    new WaveParticle(
-      player.x,
-      player.y,
-      120,
-      0,
-      1920,
-      [255, 0, 0],
-      [255, 0, 0, 0],
-      100,
-      0
-    )
+    new WaveParticle(player.x, player.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
   );
+}
+
+function createSupport() {
+  let suppor = construct(Registry.entities.get("support"));
+  //Add all slots: not all of them will be accessible
+  suppor.addWeaponSlot(selector.sp1());
+  suppor.addToWorld(world);
+  game.support = suppor;
+
+  suppor.upgrade("support-moab");
+  suppor.target = game.player;
+
+  world.particles.push(
+    new WaveParticle(suppor.x, suppor.y, 60, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
+  );
+  console.log("spawned support blimp", game.support)
 }
 
 function fireIfPossible() {
@@ -376,15 +405,12 @@ function checkBoxCollisions() {
 }
 
 function playerDies() {
-  playSound("player-death");
+  SoundCTX.play("player-death");
   deathStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  deathStats.bloonstoneCounter.text =
-    "Bloonstones: " + shortenedNumber(game.bloonstones);
+  deathStats.bloonstoneCounter.text = "Bloonstones: " + shortenedNumber(game.bloonstones);
   deathStats.progress.text = "Zone: " + world.name + " | Level " + game.level;
-  deathStats.damageDealt.text =
-    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  deathStats.damageTaken.text =
-    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
+  deathStats.damageDealt.text = "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  deathStats.damageTaken.text = "Damage Taken: " + shortenedNumber(game.player.damageTaken);
   deathStats.destroyedBoxes.text =
     "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
   deathStats.destroyedBosses.text =
@@ -396,14 +422,10 @@ function playerDies() {
 
 function playerWins() {
   winStats.shardCounter.text = "Shards: " + shortenedNumber(game.shards);
-  winStats.bloonstoneCounter.text =
-    "Bloonstones: " + shortenedNumber(game.bloonstones);
-  winStats.damageDealt.text =
-    "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
-  winStats.damageTaken.text =
-    "Damage Taken: " + shortenedNumber(game.player.damageTaken);
-  winStats.destroyedBoxes.text =
-    "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
+  winStats.bloonstoneCounter.text = "Bloonstones: " + shortenedNumber(game.bloonstones);
+  winStats.damageDealt.text = "Damage Dealt: " + shortenedNumber(game.player.damageDealt);
+  winStats.damageTaken.text = "Damage Taken: " + shortenedNumber(game.player.damageTaken);
+  winStats.destroyedBoxes.text = "Boxes Destroyed: " + shortenedNumber(game.player.destroyed.boxes);
   winStats.destroyedBosses.text =
     "Bosses Destroyed: " + shortenedNumber(game.player.destroyed.bosses);
   ui.menuState = "you-win";
@@ -416,7 +438,7 @@ function reset() {
   world.particles.splice(0);
   world.bullets.splice(0);
   game.bloonstones = 0;
-  game.shards = 0;
+  game.shards = 400;
   game.level = 1;
   unpause();
   game.bosstimer = game.bossinterval;
@@ -427,7 +449,11 @@ function reset() {
   for (let slot of game.player.weaponSlots) {
     slot.clear(); //Remove any weapons
   }
+  //back to start
   moveToWorld("ocean-skies");
+
+  // Reset some UI
+  UIComponent.setCondition("boss:no");
 
   //garbage collect player
   game.player = null;
@@ -437,20 +463,12 @@ function reset() {
 function keyPressed() {
   //ignore caps lock
   let k = key.toLowerCase();
-  if (k === "p") {
-    //Pause / unpause
-    if (game.paused) unpause();
-    else pause();
-  }
-  if (k === " ") {
-    //Boost
-    if (game.player.blimp.hasBooster)
-      game.player.weaponSlots[5]?.weapon?.fire();
-  }
+  if (ui.keybinds.down(k)) return false;
+  if (ui.menuState === "in-game" && game.keybinds.down(k)) return false;
+
   if (k === "f3") {
     //Toggle debug mode
-    if (UIComponent.evaluateCondition("debug:true"))
-      UIComponent.setCondition("debug:false");
+    if (UIComponent.evaluateCondition("debug:true")) UIComponent.setCondition("debug:false");
     else UIComponent.setCondition("debug:true");
   }
   if (k === "f12") {
@@ -463,19 +481,32 @@ function keyPressed() {
   }
   return false; //Prevent any default behaviour
 }
+function keyReleased() {
+  let k = key.toLowerCase();
+  ui.keybinds.up(k);
+  game.keybinds.up(k);
+}
+
+function keyTyped() {
+  let k = key.toLowerCase();
+  if (ui.type(k)) return false;
+  return false;
+}
 
 function pause() {
   game.paused = true;
-  pauseSound(world.bgm);
+  UIComponent.setCondition("paused:true");
+  SoundCTX.stop(world.bgm);
 }
 
 function unpause() {
   game.paused = false;
-  playSound(world.bgm, true);
+  UIComponent.setCondition("paused:false");
+  SoundCTX.play(world.bgm, true);
 }
 
 function moveToWorld(worldName = "ocean-skies") {
-  if (world?.bgm) stopSound(world.bgm);
+  if (world?.bgm) SoundCTX.stop(world.bgm);
   //Construct registry item as a new World.
   let newWorld = construct(Registry.worlds.get(worldName), World);
   //If the player exists
@@ -486,9 +517,18 @@ function moveToWorld(worldName = "ocean-skies") {
     game.player.x = 200;
     game.player.y = 540;
   }
+  //If support exists
+  if (game.support) {
+    //Put it in world too
+    game.support.addToWorld(newWorld);
+    //Reset player position
+    game.support.x = 300;
+    game.support.y = 740;
+  }
 
   //Set the game's world to the new one. The old one will be garbage collected.
   world = newWorld;
+  game.world = worldName;
   //Make the flash effect
   worldTransitionEffect(world.name);
 }
@@ -496,4 +536,85 @@ function moveToWorld(worldName = "ocean-skies") {
 function reload() {
   noLoop();
   loop();
+}
+
+function saveGame() {
+  let save = {
+    achs: game.achievements,
+    level: game.level,
+    zone: game.world,
+    znlvl: world.getBossIndex(),
+    difficulty: game.difficulty,
+    mode: game.mode,
+
+    shards: game.shards,
+    bloonstones: game.bloonstones,
+
+    levels: game.player.weaponSlots.map((x) => x.tier),
+    support: game.support.weaponSlots.map((x) => x.tier),
+    choices: [1, 2, "3/4", 5].map((s) => +UIComponent.getCondition("ap" + s + "-slot")),
+    blimp: game.player.blimpName,
+
+    health: game.player.health,
+    dv: game.player.dv,
+    maxDV: game.maxDV,
+
+    destroyed: {
+      boxes: game.player.destroyed.boxes,
+      bosses: game.player.destroyed.bosses,
+    },
+    damage: {
+      dealt: game.player.damageDealt,
+      taken: game.player.damageTaken,
+    },
+
+    won: game.won,
+  };
+  Serialiser.set("save." + game.saveslot, save);
+  notifyEffect("Game saved in slot " + game.saveslot);
+  regenSaveDescrs();
+}
+
+function deleteGame(slot) {
+  Serialiser.delete("save." + slot);
+  regenSaveDescrs();
+}
+
+function loadGame(slot) {
+  let save = Serialiser.get("save." + slot);
+  //settings
+  game.difficulty = save.difficulty ?? "easy";
+  game.mode = save.mode ?? "adventure";
+  //Progress
+  game.bossdelay = 0;
+  game.achievements = save.achs ?? [];
+  moveToWorld(save.zone ?? "ocean-skies");
+  world.setBossIndex(save.znlvl ?? 1);
+  game.level = save.level ?? 1;
+  game.shards = save.shards ?? 400;
+  game.bloonstones = save.bloonstones ?? 0;
+  game.maxDV = save.maxDV ?? 0;
+  game.player.dv = save.dv ?? 0;
+  //Choices
+  game.player.weaponSlots = [];
+  [1, 2, "3/4", 5].forEach((sl, i) => selector.setAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1));
+  game.player.weaponSlots = [];
+  game.player.addWeaponSlot(selector.getAP(1));
+  game.player.addWeaponSlot(selector.getAP(2));
+  game.player.addWeaponSlot(selector.getAP(3));
+  game.player.addWeaponSlot(selector.getAP(4));
+  game.player.addWeaponSlot(selector.getAP(5));
+  game.player.addWeaponSlot(selector.booster());
+  for (let sl = 0; sl < 6; sl++) game.player.weaponSlots[sl].setTier((save.levels ?? [])[sl] ?? 0);
+
+  game.support.addWeaponSlot(selector.sp1());
+  for (let sl = 0; sl < 1; sl++)
+    game.support.weaponSlots[sl].setTier((save.support ?? [])[sl] ?? 0);
+  //blomp
+  game.player.upgrade(save.blimp ?? "moab");
+  game.player.health = save.health ?? game.player.maxHealth ?? 0;
+  //stats
+  game.player.destroyed = save.destroyed ?? { bosses: 0, boxes: 0 };
+  game.player.damageDealt = save.damage?.dealt ?? 0;
+  game.player.damageTaken = save.damage?.taken ?? 0;
 }

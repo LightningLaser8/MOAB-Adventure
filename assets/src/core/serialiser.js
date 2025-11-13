@@ -1,85 +1,3 @@
-//### Interface ###
-const Serialiser = {
-  get available() {
-    return ResourceLocation.storageAvailable;
-  },
-  /**
-   * Gets some data from a qualified path. Useful for getting data from a single string.
-   * @param {string} qualifier Full path to the saved data. Does not require the namespace (`ma: ...`)
-   * @returns The data stored.
-   */
-  get(qualifier) {
-    return new ResourceLocation(qualifier).get();
-  },
-  /**
-   * Saves some data to localStorage.
-   * @param {Object} data The object to save to localStorage.
-   * @param {string} qualifier Where to save these data.
-   * @returns {Boolean} Whether or not the operation succeeded.
-   */
-  set(qualifier, data) {
-    let location = new ResourceLocation(qualifier);
-    try {
-      location.set(data);
-      return true;
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "QuotaExceededError") {
-        console.warn("Could not save data: Too many saves!");
-      }
-      if (err instanceof Error)
-        console.warn(
-          "Could not save data: " +
-            err.message +
-            " (" +
-            err.constructor?.name +
-            ")"
-        );
-      else console.warn("Could not save data: " + err);
-    }
-    return false;
-  },
-  /**
-   * Removes data from a location.
-   * @param {string} qualifier Where the data to delete are.
-   * @returns {Boolean} Whether or not the operation succeeded.
-   */
-  delete(qualifier) {
-    let location = new ResourceLocation(qualifier);
-    try {
-      location.delete();
-      return true;
-    } catch (err) {
-      console.warn(
-        "Could not delete data: " +
-          err.message +
-          " (" +
-          err.constructor?.name +
-          ")"
-      );
-      return false;
-    }
-  },
-  /**
-   * Clears all save items from a particular namespace.
-   * @param {keyof Window.localStorage | "*"} namespace Namespace to clear items from. This differentiates saves from different mods. Use `*` to clear all saves.
-   * @returns {Boolean} Whether or not the operation succeeded.
-   */
-  clear(namespace = "ma") {
-    if (!ResourceLocation.storageAvailable) {
-      console.warn("Could not clear data: Storage unavailable.");
-      return false;
-    }
-    if (namespace === "*") {
-      localStorage.clear();
-      return true;
-    }
-    iterateStorage(localStorage, (key, value) => {
-      if (key === namespaceID(namespace)) localStorage.removeItem(key);
-    });
-    return true;
-  },
-};
-
 //### The class that does most of it ###
 
 class ResourceLocation {
@@ -171,6 +89,90 @@ class ResourceLocation {
     return namespaceID(this.namespace);
   }
 }
+
+//### Interface ###
+const Serialiser = {
+  get available() {
+    return ResourceLocation.storageAvailable;
+  },
+  /**
+   * Gets some data from a qualified path. Useful for getting data from a single string.
+   * @param {string} qualifier Full path to the saved data. Does not require the namespace (`ma: ...`)
+   * @returns The data stored.
+   */
+  get(qualifier) {
+    return new ResourceLocation(qualifier).get();
+  },
+  /**
+   * Saves some data to localStorage.
+   * @param {Object} data The object to save to localStorage.
+   * @param {string} qualifier Where to save these data.
+   * @returns {Boolean} Whether or not the operation succeeded.
+   */
+  set(qualifier, data) {
+    let location = new ResourceLocation(qualifier);
+    try {
+      location.set(data);
+      return true;
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "QuotaExceededError") {
+        console.warn("Could not save data: Too many saves!");
+      }
+      if (err instanceof Error)
+        console.warn(
+          "Could not save data: " +
+            err.message +
+            " (" +
+            err.constructor?.name +
+            ")"
+        );
+      else console.warn("Could not save data: " + err);
+    }
+    return false;
+  },
+  /**
+   * Removes data from a location.
+   * @param {string} qualifier Where the data to delete are.
+   * @returns {Boolean} Whether or not the operation succeeded.
+   */
+  delete(qualifier) {
+    let location = new ResourceLocation(qualifier);
+    try {
+      location.delete();
+      return true;
+    } catch (err) {
+      console.warn(
+        "Could not delete data: " +
+          err.message +
+          " (" +
+          err.constructor?.name +
+          ")"
+      );
+      return false;
+    }
+  },
+  /**
+   * Clears all save items from a particular namespace.
+   * @param {keyof Window.localStorage | "*"} namespace Namespace to clear items from. This differentiates saves from different mods. Use `*` to clear all saves.
+   * @returns {Boolean} Whether or not the operation succeeded.
+   */
+  clear(namespace = ResourceLocation.defaultNamespace) {
+    if (!ResourceLocation.storageAvailable) {
+      console.warn("Could not clear data: Storage unavailable.");
+      return false;
+    }
+    if (namespace === "*") {
+      localStorage.clear();
+      return true;
+    }
+    iterateStorage(localStorage, (key, value) => {
+      if (key === namespaceID(namespace)) localStorage.removeItem(key);
+    });
+    return true;
+  },
+};
+
+
 
 //Feature check
 if (!storageAvailable("localStorage")) {

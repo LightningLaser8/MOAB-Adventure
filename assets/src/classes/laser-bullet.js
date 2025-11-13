@@ -10,6 +10,7 @@ class LaserBullet extends Bullet {
   /** @type {Weapon} */
   source = null;
   #dirInited = false;
+  bounceable = false;
   init() {
     super.init();
     if (this.extendTime === -1) this.extendTime = this.maxLife * 0.2;
@@ -49,6 +50,7 @@ class LaserBullet extends Bullet {
       }
       //Follow
       if (this.followsScreen) this.pos = this.pos.subXY(game.player?.speed ?? 0, 0);
+      this.checkEntities();
     }
   }
   draw() {

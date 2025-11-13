@@ -7,6 +7,8 @@ class FinalBoss extends Boss {
   onDeath(source) {
     //Do all the stuff bosses do,
     super.onDeath(source);
+    //but don't start spawning boxes yet
+    world.reducedSpawns = true;
     //If there is a next world
     if (Registry.worlds.has(this.destinationWorld)) {
       //Create an effect as a warning, 3/4 of the way through the transport delay
@@ -35,12 +37,14 @@ class FinalBoss extends Boss {
       );
       //And add an operation to the timer
       Timer.main.do(
-        //To move the player to a world,
-        moveToWorld,
+        () => {
+          //To move the player to a world,
+          moveToWorld(this.destinationWorld);
+          //And save progress (again)
+          saveGame();
+        },
         //After the specified delay.
-        this.transportDelay,
-        //Passing in the next world to go to.
-        this.destinationWorld
+        this.transportDelay
       );
     } else {
       //Create an effect as a warning, but don't wait

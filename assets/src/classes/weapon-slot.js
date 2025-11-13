@@ -15,15 +15,27 @@ class WeaponSlot {
   attemptUpgrade() {
     if (!this.upgrades[this.tier]) return false; //Index 0 is tier 1, stop if no later upgrade
     let nextWeapon = Registry.weapons.get(this.upgrades[this.tier]); //Load next weapon from registry
-    if(nextWeapon.cost){
+    if (nextWeapon.cost) {
       if (game.shards < nextWeapon.cost.shards) return false; //If not enough shards
       if (game.bloonstones < nextWeapon.cost.bloonstones) return false; //If not enough bloonstones
       //Take the player's money
       game.shards -= nextWeapon.cost.shards;
-      game.bloonstones -= nextWeapon.cost.bloonstones;  
+      game.bloonstones -= nextWeapon.cost.bloonstones;
     }
     //Give them the weapon
     this.tier++;
+    this.weapon = weapon(nextWeapon); //Construct as weapon
+    this.weapon.slot = this; //Set the slot
+    return true; //It worked!
+  }
+  setTier(tier) {
+    let index = tier - 1;
+    if (!this.upgrades[index]) return false; //Index 0 is tier 1, stop if no later upgrade
+
+    let nextWeapon = Registry.weapons.get(this.upgrades[index]); //Load next weapon from registry
+    //Ignore cost
+    //Give them the weapon
+    this.tier = tier;
     this.weapon = weapon(nextWeapon); //Construct as weapon
     this.weapon.slot = this; //Set the slot
     return true; //It worked!

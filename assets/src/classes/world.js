@@ -49,15 +49,17 @@ class World {
     this.#actualTick();
     this.#removeDead();
     this.tickSpawns(game.player.speed);
-    if (Math.random() < this.ambienceChance) {
-      playSound(this.ambientSound);
+    if (this.ambientSound && Math.random() < this.ambienceChance) {
+      SoundCTX.play(this.ambientSound);
     }
-    playSound(this.bgm, true);
+    SoundCTX.play(this.bgm, true);
   }
   #actualTick() {
     //Tick *everything*
     for (let bullet of this.bullets) {
-      bullet.step(1);
+      for (let i = 0; i < bullet.updates; i++) {
+        bullet.step(1);
+      }
     }
     for (let particle of this.particles) {
       particle.step(1);
@@ -89,7 +91,7 @@ class World {
               instance.sparkColourTo, // |
               instance.smokeColour, //   |- These are optional, but can be set per instance
               instance.smokeColourTo, // |
-              instance.waveColour, //     /
+              instance.waveColour, //    /
               bullet.status,
               bullet.statusDuration,
               instance.bossDamageMultiplier ?? 1
@@ -106,7 +108,7 @@ class World {
         }
         if (!bullet.fragDisabled) bullet.frag();
         //Sound time!
-        playSound(bullet.despawnSound);
+        SoundCTX.play(bullet.despawnSound);
         //Delete the bullet
         this.bullets.splice(b, 1);
       }
@@ -124,7 +126,10 @@ class World {
         if (!entity.left) {
           if (entity.lastHurtSource) entity.lastHurtSource.dv += entity.dv;
           entity.onDeath(entity.lastHurtSource);
-          playSound(entity.deathSound);
+          SoundCTX.play(entity.deathSound);
+        }
+        else {
+          entity.onDespawn();
         }
         game.maxDV += entity.dv;
         if (entity instanceof Boss && !entity.isMinion) game.totalBosses++;
@@ -161,13 +166,7 @@ class World {
         ent.addToWorld(this);
         spawnGroup.$currentCooldown = spawnGroup.interval;
       } else {
-        spawnGroup.$currentCooldown -=
-          dt *
-          (this.reducedSpawns
-            ? game.difficulty === "impossible"
-              ? 0
-              : 0.2
-            : 1);
+        if (!this.reducedSpawns) spawnGroup.$currentCooldown -= dt;
       }
     }
   }
@@ -176,7 +175,7 @@ class World {
       entity: Box.default,
       interval: 60,
       isHighTier: false,
-      imposMode: "ignore",
+      imposMode: "ignore", // "when-on", "when-off" or "ignore"
     }
   ) {
     //Handle bad properties like `null`
@@ -192,7 +191,7 @@ class World {
       //Apply difficulty rules
       spawn.interval =
         (spawn.oldinterval ?? 60) /
-          difficulty[game.difficulty][
+          Registry.difficulties.get(game.difficulty)[
             spawn.isHighTier ? "spawnRateHighTier" : "spawnRateLowTier"
           ] ?? 1;
     }
@@ -213,6 +212,9 @@ class World {
     }
     return null;
   }
+  getAllBosses() {
+    return this.entities.filter((entity) => entity.isBoss && !entity.hidden);
+  }
   setBossList(...bosses) {
     this.#bossList = bosses;
   }
@@ -223,5 +225,11 @@ class World {
     this.#currentBossIndex++;
     if (this.#currentBossIndex >= this.#bossList.length)
       this.#currentBossIndex = 0;
+  }
+  getBossIndex() {
+    return this.#currentBossIndex;
+  }
+  setBossIndex(idx) {
+    this.#currentBossIndex = idx;
   }
 }

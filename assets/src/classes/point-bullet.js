@@ -24,6 +24,7 @@ class PointBullet extends Bullet {
           //Teleport to it
           this.pos = tpos;
           this.hitEffect();
+          this.checkEntities();
         } else {
           //Delete self
           this.remove = true;

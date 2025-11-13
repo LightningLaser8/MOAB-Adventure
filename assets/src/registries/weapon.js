@@ -5,7 +5,7 @@
 //Tier 1 - 2
 Registry.weapons.add("tiny-shooter", {
   name: "Tiny Shooter",
-  description: "Shoots a single, low damage bullet directly\nforwards.",
+  description: "Shoots a single, low damage bullet directly forwards.",
   reload: 20,
   fireSound: "shoot",
   cost: {
@@ -341,7 +341,7 @@ Registry.weapons.add("bomb-shooter", {
 });
 Registry.weapons.add("heavy-shots", {
   name: "Heavy Shots",
-  description: "Large bullets deal more damage, and knock boxes\nback.",
+  description: "Large bullets deal more damage, and knock boxes back.",
   reload: 30,
   fireSound: "shoot",
   cost: {
@@ -486,6 +486,7 @@ Registry.weapons.add("laser-blaster", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -768,7 +769,7 @@ Registry.weapons.add("laser-blaster", {
 });
 Registry.weapons.add("rifle", {
   name: "Rifle",
-  description: "Shoots a single, fast-moving bullet.\nPierces one box.",
+  description: "Shoots a single, fast-moving bullet. Pierces one box.",
   reload: 30,
   fireSound: "shoot",
   cost: {
@@ -779,7 +780,8 @@ Registry.weapons.add("rifle", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: false,
       pierce: 1,
@@ -1693,7 +1695,7 @@ Registry.weapons.add("kinetic-impactor", {
 });
 Registry.weapons.add("cryo-cannon", {
   name: "Cryo Cannon",
-  description: "Shoots freezing ice bombs that slow down targets'\nweapons",
+  description: "Shoots freezing ice bombs that slow down targets' weapons",
   reload: 45,
   fireSound: "bomb-shoot",
   cost: {
@@ -2008,6 +2010,7 @@ Registry.weapons.add("accelerator", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -2632,7 +2635,7 @@ Registry.weapons.add("lancer", {
 Registry.weapons.add("sniper", {
   name: "Sniper",
   description:
-    "Shots travel to the mouse pointer instantly,\ndealing high damage to a single target.",
+    "Shots travel to the mouse pointer instantly, dealing high damage to a single target.",
   reload: 60,
   fireSound: "sniper-shoot",
   recoil: 5,
@@ -2831,7 +2834,8 @@ Registry.weapons.add("shotgun", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: false,
       pierce: 1,
@@ -3016,7 +3020,7 @@ Registry.weapons.add("shotgun", {
 Registry.weapons.add("nuke-launcher", {
   name: "Nuke Launcher",
   description:
-    "Shoots nuclear explosives, dealing great damage in\na much larger area, leaving radioactive fallout.",
+    "Shoots nuclear explosives, dealing great damage in a much larger area, leaving radioactive fallout.",
   reload: 90,
   fireSound: "bomb-shoot",
   recoil: 5,
@@ -3337,7 +3341,7 @@ Registry.weapons.add("nuke-launcher", {
 });
 Registry.weapons.add("missile-battery", {
   name: "Missile Battery",
-  description: "Launches 6 smaller missiles, following the mouse\ncursor.",
+  description: "Launches 6 smaller missiles, following the mouse cursor.",
   reload: 90,
   fireSound: "bomb-shoot",
   cost: {
@@ -3670,7 +3674,7 @@ Registry.weapons.add("missile-battery", {
 Registry.weapons.add("controlled-collision-device", {
   name: "Controlled Collision Device",
   description:
-    "Finer control over directional displacement.\n(Knockback acts towards mouse)",
+    "Finer control over directional displacement. (Knockback acts towards mouse)",
   reload: 45,
   fireSound: "shoot",
   cost: {
@@ -3971,7 +3975,7 @@ Registry.weapons.add("controlled-collision-device", {
 Registry.weapons.add("shattering-shells", {
   name: "Shattering Shells",
   description:
-    "Ice bombs release many low damage shards,\nwith a lesser effect",
+    "Ice bombs release many low damage shards, with a lesser effect",
   reload: 45,
   fireSound: "bomb-shoot",
   cost: {
@@ -4485,7 +4489,7 @@ Registry.weapons.add("shattering-shells", {
 Registry.weapons.add("greenbeam", {
   name: "Greenbeam™",
   description:
-    "Shorter wavelength of lasers increases photon\nenergy, dealing increased damage.",
+    "Shorter wavelength of lasers increases photon energy, dealing increased damage.",
   reload: 45,
   accel: 0.2,
   accelDecay: 0.03,
@@ -4499,6 +4503,7 @@ Registry.weapons.add("greenbeam", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
+      updates: 2,
       speed: 40,
       hitSize: 10,
       trail: false,
@@ -4878,7 +4883,7 @@ Registry.weapons.add("greenbeam", {
 });
 Registry.weapons.add("spike", {
   name: "Spike",
-  description: "Bigger laser that travels farther and knocks boxes\nback.",
+  description: "Bigger laser that travels farther and knocks boxes back.",
   reload: 90,
   fireSound: "laser",
   recoil: 15,
@@ -5331,7 +5336,7 @@ Registry.weapons.add("spike", {
 Registry.weapons.add("sharp-shooter", {
   name: "Sharp Shooter",
   description:
-    "30% chance to fire a powerful critical shot,\ndealing triple damage.",
+    "30% chance to fire a powerful critical shot, dealing triple damage.",
   reload: 60,
   fireSound: "sniper-shoot",
   cost: {
@@ -5625,7 +5630,7 @@ Registry.weapons.add("sharp-shooter", {
 Registry.weapons.add("du-rounds", {
   name: "DU Rounds",
   description:
-    "Depleted uranium rounds pierce enemies of any type,\nand irradiate them!",
+    "Depleted uranium rounds pierce enemies of any type, and irradiate them!",
   reload: 50,
   fireSound: "shoot",
   recoil: 20,
@@ -5637,7 +5642,8 @@ Registry.weapons.add("du-rounds", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [0, 200, 0, 20],
@@ -5875,7 +5881,7 @@ Registry.weapons.add("du-rounds", {
 //Tier 6
 Registry.weapons.add("meltdown", {
   name: "Meltdown",
-  description: "Explosions have more fallout, and fire radioactive\nlasers.",
+  description: "Explosions have more fallout, and fire radioactive lasers.",
   reload: 220,
   fireSound: "bomb-shoot",
   recoil: 15,
@@ -6932,7 +6938,7 @@ Registry.weapons.add("swarmer", {
 Registry.weapons.add("telekinetic-transporter", {
   name: "Telekinetic Transporter",
   description:
-    "Main attack replaced with a telekinetic grab\nability, capable of smashing boxes into each other.\nMultiple boxes can be held at once.",
+    "Main attack replaced with a telekinetic grab ability, capable of smashing boxes into each other. Multiple boxes can be held at once.",
   reload: 60,
   fireSound: "laser-bolt",
   cost: {
@@ -7326,7 +7332,7 @@ Registry.weapons.add("telekinetic-transporter", {
 Registry.weapons.add("ray-of-frost", {
   type: "multi",
   name: "Ray of Frost",
-  description: "Shoots 2 secondary ice beams which independently\ntarget.",
+  description: "Shoots 2 secondary ice beams which independently target.",
   cost: {
     shards: 32500,
     bloonstones: 200,
@@ -10316,7 +10322,7 @@ Registry.weapons.add("hunter", {
     shards: 35600,
     bloonstones: 200,
   },
-  dvRatio: 3 / 10,
+  dvRatio: 3 / 100,
   shoot: {
     bullet: {
       type: "critical",
@@ -10852,7 +10858,8 @@ Registry.weapons.add("super-shotgun", {
     bullet: {
       type: "Bullet",
       lifetime: 40,
-      speed: 55,
+      speed: 30,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [0, 0, 200, 20],
@@ -13011,6 +13018,7 @@ Registry.weapons.add("hive", {
           trailColour: [187, 255, 0],
           trailColourTo: [255, 255, 0, 0],
           targetType: "nearest",
+          retarget: false,
           turnSpeed: 4.5,
           despawnSound: "explosion",
           damage: [
@@ -16333,28 +16341,38 @@ Registry.weapons.add("ultraviolet-obliterator", {
           //Extra damage, i guess
           type: "missile",
           trailShape: "rhombus",
-          lifetime: 20,
-          speed: 40,
-          hitSize: 7,
+          lifetime: 60,
+          speed: 30,
+          hitSize: 14,
           trail: true,
-          knockback: 90,
+          knockback: 60,
           multiHit: true,
-          pierce: 10,
+          pierce: 3,
           trailColour: [200, 0, 255, 200],
           trailColourTo: [0, 0, 255, 50],
+          trailWidth: 7,
           targetType: "nearest",
-          turnSpeed: 3,
+          trackingRange: 400,
+          retarget: false,
+          turnSpeed: 4,
           flameLength: 1000,
           damage: [
             {
               type: "laser",
               amount: 100,
+              area: 60,
+              //Purple to blue explosion
+              smokeColour: [150, 0, 200, 200],
+              smokeColourTo: [0, 0, 100, 0],
+              sparkColour: [200, 100, 255],
+              sparkColourTo: [0, 0, 255],
+              waveColour: [200, 0, 255],
             },
           ],
           drawer: {
-            shape: "ellipse",
-            width: 14,
-            height: 7,
+            shape: "moved-back-triangle",
+            width: 42,
+            height: 21,
             fill: [255, 255, 255],
           },
         },
@@ -17601,7 +17619,8 @@ Registry.weapons.add("crucify", {
         intervalDirection: 180, //Fire extras behind laser
         intervalBullet: {
           lifetime: 15,
-          speed: 50,
+          speed: 30,
+          updates: 2,
           hitSize: 7,
           trail: true,
           knockback: 90,
@@ -19033,7 +19052,7 @@ Registry.weapons.add("foreshadow", {
     shards: 75000,
     bloonstones: 1000,
   },
-  dvRatio: 10, //needed to keep up with other t7s
+  dvRatio: 1, //needed to keep up with other t7s
   shoot: {
     bullet: {
       type: "critical",
@@ -19045,7 +19064,7 @@ Registry.weapons.add("foreshadow", {
         damage: [
           {
             type: "ballistic",
-            amount: 9000, //that's a LOT of damage
+            amount: 900,
           },
         ],
         hitColour: [255, 0, 0],
@@ -19058,7 +19077,7 @@ Registry.weapons.add("foreshadow", {
         damage: [
           {
             type: "ballistic",
-            amount: 3000,
+            amount: 300,
           },
         ],
         hitColour: [255, 255, 0],
@@ -19948,7 +19967,8 @@ Registry.weapons.add("diffuse", {
     bullet: {
       type: "Bullet",
       lifetime: 50,
-      speed: 55,
+      speed: 25,
+      updates: 2,
       hitSize: 6,
       trail: true,
       trailColour: [251, 157, 81, 20],
@@ -20756,4 +20776,4 @@ Registry.weapons.add("diffuse", {
     },
   ],
 });
-//Finally, 20759 loc later, all weapons finished. Phew.
+//Finally, 20765 loc later, all 38 weapons finished. Phew.

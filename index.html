@@ -8,9 +8,8 @@
   <title>MOAB Adventure</title>
   <link rel="icon" type="image/x-icon" href="./assets/textures/ui/moab.png">
   <link href="./style.css" rel="stylesheet" type="text/css" />
-  <!-- Import p5 -->
+  <!-- Import p5, but not sound -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
 
 <body>
@@ -18,25 +17,32 @@
     //Disable p5's errors, they don't really help
     p5.disableFriendlyErrors = true;
     //Game info
-    const gameVersion = "0.0.104-ex";
+    const gameVersion = "0.0.112-ex";
     const isPreview = true;
     let versionReplacementText = "";
   </script>
   <!-- Core -->
+  <script src="./assets/src/core/hotkey.js"></script>
   <script src="./assets/src/core/ui.js"></script>
   <script src="./assets/src/core/constructor.js"></script>
+  <script src="./assets/src/core/text.js"></script>
   <script src="./assets/src/core/number.js"></script>
+  <script src="./assets/src/core/sound.js"></script>
   <script src="./assets/src/core/registry.js"></script>
   <script src="./assets/src/core/serialiser.js"></script>
   <!-- Classes -->
   <script src="./assets/src/classes/animation.js"></script>
   <script src="./assets/src/classes/timer.js"></script>
+  <script src="./assets/src/classes/particle.js"></script>
   <script src="./assets/src/classes/shape-particle.js"></script>
   <script src="./assets/src/classes/text-particle.js"></script>
   <script src="./assets/src/classes/wave-particle.js"></script>
   <script src="./assets/src/classes/image-particle.js"></script>
+  <script src="./assets/src/classes/linear-particle.js"></script>
+  <script src="./assets/src/classes/lightning-particle.js"></script>
   <script src="./assets/src/classes/part.js"></script>
   <script src="./assets/src/classes/weapon.js"></script>
+  <script src="./assets/src/classes/support-weapon.js"></script>
   <script src="./assets/src/classes/booster.js"></script>
   <script src="./assets/src/classes/multi-weapon.js"></script>
   <script src="./assets/src/classes/weapon-slot.js"></script>
@@ -46,6 +52,7 @@
   <script src="./assets/src/classes/point-bullet.js"></script>
   <script src="./assets/src/classes/grab-bullet.js"></script>
   <script src="./assets/src/classes/laser-bullet.js"></script>
+  <script src="./assets/src/classes/shield.js"></script>
   <script src="./assets/src/classes/telegraph.js"></script>
   <script src="./assets/src/classes/continuous-laser-bullet.js"></script>
   <script src="./assets/src/classes/critical.js"></script>
@@ -56,11 +63,13 @@
   <script src="./assets/src/classes/entity.js"></script>
   <script src="./assets/src/classes/worm-entity.js"></script>
   <script src="./assets/src/classes/boss-action.js"></script>
+  <script src="./assets/src/classes/action-trigger.js"></script>
   <script src="./assets/src/classes/boss.js"></script>
   <script src="./assets/src/classes/final-boss.js"></script>
   <script src="./assets/src/classes/box.js"></script>
   <!-- Special Effects -->
   <script src="./assets/src/effects.js"></script>
+  <script src="./assets/src/line-effects.js"></script>
   <script src="./assets/src/core/vfx.js"></script>
   <!-- Registries -->
   <script src="./assets/src/registries/images.js"></script>
@@ -78,20 +87,27 @@
   <script src="./assets/src/registries/status-effect.js"></script>
   <script src="./assets/src/registries/world.js"></script>
   <script src="./assets/src/registries/vfx.js"></script>
+  <script src="./assets/src/registries/difficulty.js"></script>
   <!-- User interface -->
   <script src="./assets/src/ui/title.js"></script>
   <script src="./assets/src/ui/start.js"></script>
   <script src="./assets/src/ui/new-game.js"></script>
+  <script src="./assets/src/ui/load-game.js"></script>
   <script src="./assets/src/ui/options.js"></script>
   <script src="./assets/src/ui/weapon-slots.js"></script>
   <script src="./assets/src/ui/in-game.js"></script>
   <script src="./assets/src/ui/you-died.js"></script>
   <script src="./assets/src/ui/you-win.js"></script>
   <script src="./assets/src/ui/crash.js"></script>
+  <script src="./assets/src/ui/how-to-play.js"></script>
   <!-- Slot setup -->
   <script src="./assets/src/slots.js"></script>
   <!-- Actual gameplay -->
   <script src="./assets/src/game.js"></script>
+  <!-- Controls -->
+  <script src="./assets/src/controls/ui-hotkeys.js"></script>
+  <script src="./assets/src/controls/game-controls.js"></script>
+  <script src="./assets/src/controls/game-hotkeys.js"></script>
 </body>
 
 </html>

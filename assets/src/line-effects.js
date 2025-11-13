@@ -1,0 +1,151 @@
+// Different enough to not extend
+class LinearEffect {
+  create(world, positions = [], impact = false) {}
+  execute(world, positions = [], pos = () => [], impact = false) {
+    if (this.parentise) this.create(world, pos(), impact);
+    else this.create(world, positions, impact);
+  }
+}
+
+/**Extended class for repeated creation of a linear effect */
+class LinearEmissionEffect extends LinearEffect {
+  emissions = 1;
+  interval = 0;
+  amount = 1;
+  delay = 0;
+  maxXOffset = 0;
+  maxYOffset = 0;
+  isFloor = false;
+  execute(world, positions = [], pos = () => [], impact = false) {
+    let fn = () => {
+      let xo = rnd(this.maxXOffset, -this.maxXOffset);
+      let yo = rnd(this.maxYOffset, -this.maxYOffset);
+      this.create(
+        world,
+        positions.map((v) => v.addXY(xo, yo)),
+        impact
+      );
+    };
+
+    if (this.parentise) {
+      fn = () => {
+        let p = pos();
+        let xo = rnd(this.maxXOffset, -this.maxXOffset);
+        let yo = rnd(this.maxYOffset, -this.maxYOffset);
+        this.create(
+          world,
+          p.map((v) => v.addXY(xo, yo)),
+          impact
+        );
+      };
+    }
+    if (this.emissions > 1)
+      effectTimer.repeat(fn, this.emissions, this.interval, this.delay);
+    else effectTimer.do(fn, this.delay);
+  }
+  getParticleArray(world, impact) {
+    return impact
+      ? world.impactParticles
+      : this.isFloor
+      ? world.floorParticles
+      : world.particles;
+  }
+}
+/**A container for many effects at once. */
+class LinearMultiEffect extends LinearEffect {
+  /**@type {LinearEffect[]} */
+  effects = [];
+  init() {
+    this.effects = this.effects.map((x) => construct(x, "linear-effect"));
+  }
+  execute(world, positions = [], pos = () => [], impact = false) {
+    this.effects.forEach((z) => z.execute(world, positions, pos, impact));
+  }
+}
+class LineEmissionEffect extends LinearEmissionEffect {
+  //Contains properties for image and text particles too
+  line = {
+    //All
+    lifetime: 60,
+    light: 0,
+    colours: [
+      [50, 50, 50, 100],
+      [100, 100, 100, 0],
+    ],
+    strokeFrom: 10,
+    strokeTo: 0,
+  };
+  create(world, positions = [], impact = false) {
+    repeat(this.amount, () => {
+      this.getParticleArray(world, impact).push(
+        new LinearParticle(
+          positions,
+          this.line.lifetime ?? 20,
+          this.line.colours,
+          this.line.light ?? 0,
+          this.line.strokeFrom ?? 10,
+          this.line.strokeTo ?? 0
+        )
+      );
+    });
+  }
+}
+class LightningEmissionEffect extends LinearEmissionEffect {
+  //Contains properties for image and text particles too
+  line = {
+    //All
+    lifetime: 60,
+    light: 0,
+    colours: [
+      [50, 50, 50, 100],
+      [100, 100, 100, 0],
+    ],
+    strokeFrom: 10,
+    strokeTo: 0,
+    lineLength: 3,
+    deviation: 20,
+    glowEffect: 0,
+  };
+  create(world, positions = [], impact = false) {
+    repeat(this.amount, () => {
+      this.getParticleArray(world, impact).push(
+        new LightningParticle(
+          positions,
+          this.line.lifetime ?? 20,
+          this.line.colours,
+          this.line.light ?? 0,
+          this.line.strokeFrom ?? 10,
+          this.line.strokeTo ?? 0,
+          this.line.deviation ?? 20,
+          this.line.lineLength ?? 3,
+          this.line.glowEffect ?? 1
+        )
+      );
+    });
+  }
+}
+
+
+/**
+ * Creates a linear effect, independently of any objects.
+ * @param {string | Object} effect Registry name of the visual effect, or a constructible visual effect.
+ * @param {Vector[]} positions Positions to spawn the effect along
+ * @param {() => Vector[]} pos Function to get position for parentised effects.
+ * @returns
+ */
+function createLinearEffect(
+  effect,
+  world,
+  positions,
+  pos,
+  impact = false
+) {
+  if (effect === "none") return new LinearEffect();
+  /**@type {LinearEffect} */
+  let fx = construct(
+    typeof effect === "object" ? effect : Registries.vfx.get(effect),
+    "linear-effect"
+  );
+  fx.execute(world, positions, pos, impact);
+  return fx;
+}

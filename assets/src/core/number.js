@@ -15,9 +15,7 @@ function shortenedNumber(num = 0, digits = 3) {
   let shownNumSize = poT % 3;
   //Assemble
   let suffix = sizes[sizeIndex];
-  return suffix != undefined
-    ? `${roundNum(shownNum * 10 ** shownNumSize, 2)}${suffix}`
-    : "∞";
+  return suffix != undefined ? `${roundNum(shownNum * 10 ** shownNumSize, 2)}${suffix}` : "∞";
 }
 function clamp(x, min, max) {
   return Math.max(min, Math.min(max, x));
@@ -43,9 +41,7 @@ function dynamicSort(property) {
     sortOrder = -1;
     property = property.substring(1);
   }
-  return (a, b) =>
-    (a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0) *
-    sortOrder;
+  return (a, b) => (a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0) * sortOrder;
 }
 
 /**
@@ -70,8 +66,7 @@ function colinterp(cols, factor, forceint = false) {
       //Interpolate between the 2 chosen colours
       let o = Math.max(c1.length, c2.length); //Allows colour arrays of any length
       let out = [];
-      for (let i = 0; i < o; i++)
-        out.push((c1[i] ?? 255) * (1 - fact) + (c2[i] ?? 255) * fact);
+      for (let i = 0; i < o; i++) out.push((c1[i] ?? 255) * (1 - fact) + (c2[i] ?? 255) * fact);
       return forceint ? out.map((x) => Math.round(x)) : out;
     }
   }
@@ -84,10 +79,10 @@ function colinterp(cols, factor, forceint = false) {
 class Vector {
   /**@readonly */
   static ZERO = new this(0, 0);
-  get x(){
+  get x() {
     return this.#x;
   }
-  get y(){
+  get y() {
     return this.#y;
   }
   #x = 0;
@@ -161,7 +156,7 @@ class Vector {
   }
   /** The angle in radians this vector makes with the positive x-axis. */
   get angleRad() {
-    return Math.atan2(this.#y, this.#x);
+    return this.#x == 0 && this.#y == 0 ? 0 : Math.atan2(this.#y, this.#x);
   }
   /**
    * Returns the unit vector of this vector, i.e. this vector scaled by 1/magnitude.
@@ -187,7 +182,10 @@ class Vector {
    * @returns The new rotated vector.
    */
   rotateRad(angle) {
-    return new Vector(this.#x * Math.cos(angle) - this.#y * Math.sin(angle), this.#y * Math.cos(angle) + this.#x * Math.sin(angle));
+    return new Vector(
+      this.#x * Math.cos(angle) - this.#y * Math.sin(angle),
+      this.#y * Math.cos(angle) + this.#x * Math.sin(angle)
+    );
   }
   /**
    * Finds the distance between this vector and another.
@@ -250,6 +248,23 @@ class Vector {
   toDirectional() {
     return new DirectionVector(this.angleRad, this.magnitude, true);
   }
+  /**@param {Vector} other */
+  lerp(other, factor) {
+    return new Vector(
+      other.x * factor + this.#x * (1 - factor),
+      other.y * factor + this.#y * (1 - factor)
+    );
+  }
+  multiLerp(other, divisions) {
+    let a = [];
+    for (let i = 0; i <= 1; i += 1 / divisions) {
+      a.push(this.lerp(other, i));
+    }
+    return a;
+  }
+  directionTo(x, y) {
+    return this.subXY(x, y).toDirectional().reversed();
+  }
 }
 /**Immutable direction vector. Stores direction and magnitude, rather than x and y values. */
 class DirectionVector extends Vector {
@@ -267,6 +282,7 @@ class DirectionVector extends Vector {
   constructor(direction, magnitude = 1, isRadian = false) {
     super();
     this.angleRad = isRadian ? direction : (direction / 180) * Math.PI;
+    this.angleRad %= Math.PI * 2;
     this.magnitude = magnitude;
     delete this.toDirectional;
   }
@@ -285,6 +301,9 @@ class DirectionVector extends Vector {
   rotateRad(angle) {
     return new DirectionVector(this.angleRad + angle, this.magnitude, true);
   }
+  reversed() {
+    return new DirectionVector(this.angleRad + Math.PI, this.magnitude, true);
+  }
   clone() {
     return new DirectionVector(this.angleRad, this.magnitude, true);
   }
@@ -299,8 +318,7 @@ function turn(direction, x, y, toX, toY, amount) {
   //Define variables
   let currentDirection = Vector.fromAngle(direction).angle; //Find current angle, standardised
   let targetDirection = delta.angle; //Find target angle, standardised
-  if (targetDirection === currentDirection)
-    return { direction: direction, done: true }; //Do nothing if facing the right way
+  if (targetDirection === currentDirection) return { direction: direction, done: true }; //Do nothing if facing the right way
   let deltaRot = targetDirection - currentDirection;
   //Rotation correction
   if (deltaRot < -180) {
