@@ -300,6 +300,7 @@ class Bullet {
       //If colliding with a this on different team, that it hasn't already been hit by and that still exists
       if (
         this.collides &&
+        entity.collides && 
         !this.remove &&
         entity.team !== this.entity.team &&
         !this.damaged.includes(entity) &&

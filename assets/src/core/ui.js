@@ -964,54 +964,6 @@ class ImageContainer {
   }
 }
 
-/**
- * @param {SoundContainer | string} sound
- * @param {boolean} waitForEnd
- */
-function playSound(sound = null, waitForEnd = false) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    //Set the sound volume to configured one
-    sound.sound.setVolume(
-      //Default volume * the category's volume.
-      (ui.volume / 100) * ((ui.piecewiseVolume[sound.category] ?? 0) / 100)
-    );
-    //Start playing, if not already
-    if (!sound.sound.isPlaying() || !waitForEnd) sound.sound.play();
-  } else {
-    let snd = Registry.sounds.get(sound);
-    //Set the sound volume to configured one
-    //No container, so no category
-    snd.sound.setVolume(
-      //Default volume * the category's volume.
-      (ui.volume / 100) * ((ui.piecewiseVolume[snd.category] ?? 0) / 100)
-    );
-    //Start playing, if not already
-    if (!snd.sound.isPlaying() || !waitForEnd) snd.sound.play();
-  }
-}
-
-function stopSound(sound = null) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    sound.sound.stop();
-  } else {
-    Registry.sounds.get(sound).sound.stop();
-  }
-}
-
-function pauseSound(sound = null) {
-  //So silence is an option
-  if (sound === null) return;
-  if (sound instanceof SoundContainer) {
-    sound.sound.pause();
-  } else {
-    Registry.sounds.get(sound).sound.pause();
-  }
-}
-
 class UIParticleEmitter extends UIComponent {
   interval = 60;
   scale = 1;
@@ -1048,10 +1000,8 @@ function createParticleEmitter(
   //Make component
   const component = new UIParticleEmitter(x, y, direction, scale, effect, interval);
   component.conditions = conditions;
-  //Set conditional things
-  component.acceptedScreens = screens;
-  //Add to game
-  ui.components.push(component);
+  //add
+  ui.addTo(component, ...screens);
   return component;
 }
 

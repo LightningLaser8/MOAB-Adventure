@@ -168,7 +168,8 @@ function uiFrame() {
 function gameFrame() {
   if (!game.paused) {
     game.keybinds.tick();
-    movePlayer();
+    validatePlayerPos();
+    passivePlayerTick();
     world.tickAll();
     tickBossEvent();
     checkBoxCollisions();
@@ -194,44 +195,29 @@ function tickBossEvent() {
   }
 }
 
-function movePlayer() {
-  // who needs this anymore?
-  // if (keyIsDown(87) && game.player.y > game.player.hitSize) {
-  //   //If 'W' pressed
-  //   game.player.y -= game.player.speed;
-  // }
-  // if (keyIsDown(83) && game.player.y < 1080 - game.player.hitSize) {
-  //   //If 'S' pressed
-  //   game.player.y += game.player.speed;
-  // }
-  // if (keyIsDown(65) && game.player.x > game.player.hitSize) {
-  //   //If 'A' pressed
-  //   game.player.x -= game.player.speed * 1.5;
-  // }
-  // if (keyIsDown(68) && game.player.x < 1920 - game.player.hitSize) {
-  //   //If 'D' pressed
-  //   game.player.x += game.player.speed * 0.67;
-  // }
-  //If the player is out of bounds, then damage rapidly
+function validatePlayerPos() {
+  //If the player is out of bounds, then remove //damage rapidly
   if (game.player.x > 1920 - game.player.hitSize + game.player.speed * 2) {
-    game.player.x -= game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.x = 1920 - game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.x < game.player.hitSize - game.player.speed * 4) {
-    game.player.x += game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.x = game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.y < game.player.hitSize - game.player.speed * 3) {
-    game.player.y += game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.y = game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
   if (game.player.y > 1080 - game.player.hitSize + game.player.speed * 3) {
-    game.player.y -= game.player.speed * 4;
-    game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
+    game.player.y = 1080 - game.player.hitSize;
+    // game.player.damage("out-of-bounds", game.player.maxHealth * 0.0125);
   }
+}
+function passivePlayerTick() {
   //regen
   if (game.player.health < game.player.maxHealth) {
-    game.player.heal(0.0003 * game.player.maxHealth);
+    game.player.heal(0.0002 * game.player.maxHealth);
   }
 }
 function drawUI() {
@@ -363,7 +349,7 @@ function createPlayer() {
   Object.defineProperty(player, "target", {
     get: () => {
       return ui.mouse;
-    }, //This way, I only have to set it once.
+    }, //This way, I only have to set it once, and it's responsive.
   });
 
   world.particles.push(
@@ -379,18 +365,12 @@ function createSupport() {
   game.support = suppor;
 
   suppor.upgrade("support-moab");
-  //is moab
-  //Change to an accessor property
-  game.support.target = game.player;
-  // Object.defineProperty(suppor, "target", {
-  //   get: () => {
-  //     return game.player;
-  //   }, //This way, I only have to set it once.
-  // });
+  suppor.target = game.player;
 
   world.particles.push(
-    new WaveParticle(suppor.x, suppor.y, 120, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
+    new WaveParticle(suppor.x, suppor.y, 60, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
   );
+  console.log("spawned support blimp", game.support)
 }
 
 function fireIfPossible() {
@@ -472,6 +452,9 @@ function reset() {
   //back to start
   moveToWorld("ocean-skies");
 
+  // Reset some UI
+  UIComponent.setCondition("boss:no");
+
   //garbage collect player
   game.player = null;
 }
@@ -533,6 +516,14 @@ function moveToWorld(worldName = "ocean-skies") {
     //Reset player position
     game.player.x = 200;
     game.player.y = 540;
+  }
+  //If support exists
+  if (game.support) {
+    //Put it in world too
+    game.support.addToWorld(newWorld);
+    //Reset player position
+    game.support.x = 300;
+    game.support.y = 740;
   }
 
   //Set the game's world to the new one. The old one will be garbage collected.
@@ -606,7 +597,7 @@ function loadGame(slot) {
   game.player.dv = save.dv ?? 0;
   //Choices
   game.player.weaponSlots = [];
-  [1, 2, "3/4", 5].forEach((sl, i) => setSelectedAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1));
+  [1, 2, "3/4", 5].forEach((sl, i) => selector.setAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1));
   game.player.weaponSlots = [];
   game.player.addWeaponSlot(selector.getAP(1));
   game.player.addWeaponSlot(selector.getAP(2));

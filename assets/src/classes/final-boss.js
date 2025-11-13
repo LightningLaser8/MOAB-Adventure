@@ -7,6 +7,8 @@ class FinalBoss extends Boss {
   onDeath(source) {
     //Do all the stuff bosses do,
     super.onDeath(source);
+    //but don't start spawning boxes yet
+    world.reducedSpawns = true;
     //If there is a next world
     if (Registry.worlds.has(this.destinationWorld)) {
       //Create an effect as a warning, 3/4 of the way through the transport delay
