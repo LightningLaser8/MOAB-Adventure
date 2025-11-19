@@ -159,6 +159,7 @@ class UIComponent {
     }
     return false;
   }
+  #txtinited = false;
   constructor(
     x = 0,
     y = 0,
@@ -186,6 +187,29 @@ class UIComponent {
     this.interactive = !!onpress;
   }
   draw() {
+    if (!this.#txtinited) {
+      this.#txtinited = true;
+      let processed;
+      if (!this.text.startsWith("*")) {
+        let c = 1;
+        if (this.width > 0) {
+          textFont(this.ocr ? fonts.ocr : fonts.darktech);
+          textSize(this.textSize);
+          let singleCharWidth = textWidth("-");
+          // console.log(
+          //   `test char width: ${singleCharWidth} (charsize ${this.textSize}, font ${
+          //     this.ocr ? "ocr" : "darktech"
+          //   })`
+          // );
+          while (singleCharWidth * c <= this.width) c++;
+          // console.log(`${c} max chars for width ${this.width}`);
+        } else c = 100001;
+        c -= 2;
+        processed = wrapWords(this.text, c);
+        // console.log(`raw:\n${this.text}\nprocessed text:\n${processed}`);
+      } else processed = this.text.substring(1);
+      if (Object.getOwnPropertyDescriptor(this, "text").writable) this.text = processed;
+    }
     push();
     noStroke();
     if (this.inverted) scale(1, -1);
@@ -292,7 +316,11 @@ class UIComponent {
     fill(this.textColour);
     textAlign(CENTER, CENTER);
     textSize(this.textSize);
-    text(this.text, this.x, this.y);
+    text(
+      this.text.replaceAll(/\{\{[^\{\}]*\}\}/g, (m) => getKeyDesc(m.substring(2, m.length - 2))),
+      this.x,
+      this.y
+    );
     pop();
   }
   checkMouse() {
@@ -322,8 +350,13 @@ class UIComponent {
   }
 }
 
+function getKeyDesc(naem) {
+  return ui.keybinds.describe(naem) ?? game.keybinds.describe(naem) ?? "None";
+}
+
 class ImageUIComponent extends UIComponent {
   angle = 0;
+  opacity = 1;
   constructor(
     x = 0,
     y = 0,
@@ -344,8 +377,41 @@ class ImageUIComponent extends UIComponent {
     if (this.emphasised) fill(...this.emphasisColour);
     //Draw outline behind background
     if (this.outline) rect(this.x, this.y, this.width + 18, this.height + 18);
+    if (this.opacity !== 1) tint(255, 255 * this.opacity);
     //Draw image
     rotatedImg(this.image, this.x, this.y, this.width - 2, this.height - 2, this.angle);
+    pop();
+  }
+}
+class ShapeUIComponent extends UIComponent {
+  angle = 0;
+  shape = "rect";
+  backgroundColour = [100, 100, 100];
+  outlineWidth = 10;
+  constructor(
+    x = 0,
+    y = 0,
+    width = 1,
+    height = 1,
+    drawnShape = null,
+    onpress = () => {},
+    outline = true
+  ) {
+    //Initialise component
+    super(x, y, width, height, "none", onpress, "", false, 0);
+    this.shape = drawnShape;
+    this.outline = outline;
+  }
+  draw() {
+    push();
+    if (this.outline) {
+      if (this.emphasised) stroke(...this.emphasisColour);
+      else stroke(...this.outlineColour);
+      strokeWeight(this.outlineWidth);
+    } else noStroke();
+    fill(...this.backgroundColour);
+    //Draw image
+    rotatedShape(this.shape, this.x, this.y, this.width - 2, this.height - 2, this.angle);
     pop();
   }
 }
@@ -785,6 +851,34 @@ function createUIImageComponent(
     width,
     height,
     shownImage,
+    onpress ?? (() => {}),
+    outline
+  );
+  component.conditions = conditions;
+  //Set conditional things
+  component.isInteractive = !!onpress;
+  //Add to game
+  ui.addTo(component, ...screens);
+  return component;
+}
+function createUIShapeComponent(
+  screens = [],
+  conditions = [],
+  x = 0,
+  y = 0,
+  width = 1,
+  height = 1,
+  onpress = null,
+  drawnShape = null,
+  outline = true
+) {
+  //Make component
+  const component = new ShapeUIComponent(
+    x,
+    y,
+    width,
+    height,
+    drawnShape,
     onpress ?? (() => {}),
     outline
   );

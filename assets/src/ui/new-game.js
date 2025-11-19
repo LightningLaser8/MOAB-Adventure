@@ -392,7 +392,7 @@ createUIComponent(
   60,
   "none",
   () => quickstart(1),
-  "Quickstart X.1",
+  "*Quickstart X.1",
   true,
   30
 );
@@ -406,7 +406,7 @@ createUIComponent(
   60,
   "none",
   () => quickstart(2),
-  "Quickstart X.2",
+  "*Quickstart X.2",
   true,
   30
 );

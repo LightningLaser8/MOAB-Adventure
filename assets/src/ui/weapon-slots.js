@@ -23,7 +23,7 @@ createUIComponent(
   () => {
     ui.menuState = "new-game";
   },
-  "< Back",
+  "*< Back",
   false,
   30
 ).isBackButton = true;
@@ -106,7 +106,7 @@ createUIComponent(
   1275,
   530,
   750,
-  600
+  620
 );
 //AP1
 UIComponent.setCondition("ap1-slot:none");
@@ -121,7 +121,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap1-slot:1");
   },
-  "Heavy\nArtillery",
+  "Heavy Artillery",
   true,
   45
 );
@@ -136,7 +136,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap1-slot:2");
   },
-  "Missile\nLauncher",
+  "Missile Launcher",
   true,
   45
 );
@@ -157,12 +157,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap1", "ap1-slot:1"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Wide-range exploding projectile attacks.\nFire rate: Slow\nDamage: High\nArea: Large\nAim Required: Medium-High\nSupport Value: None",
+  "Wide-range exploding projectile attacks.\n\nFire rate: Slow\nDamage: High\nArea: Large\nAim Required: Medium-High\nSupport Value: None",
   true,
   30
 );
@@ -183,12 +183,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap1", "ap1-slot:2"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Fast bursts of homing explosives.\nFire rate: High in bursts\nDamage: Low\nArea: Small\nAim Required: Low to none\nSupport Value: Low",
+  "Fast bursts of homing explosives.\n\nFire rate: High in bursts\nDamage: Low\nArea: Small\nAim Required: Low to none\nSupport Value: Low",
   true,
   30
 );
@@ -205,7 +205,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap2-slot:1");
   },
-  "Box\nManipulation",
+  "Box Manipulation",
   true,
   40
 );
@@ -220,7 +220,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap2-slot:2");
   },
-  "Boss Slowdown\n and Debuffing",
+  "Boss Slowdown and Debuffing",
   true,
   35
 );
@@ -241,12 +241,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap2", "ap2-slot:1"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Attacks based on moving boxes around.\nFire rate: Medium\nDamage: Medium\nArea: None\nAim Required: High\nSupport Value: Medium",
+  "Attacks based on moving boxes around.\n\nFire rate: Medium\nDamage: Medium\nArea: None\nAim Required: High\nSupport Value: Medium",
   true,
   30
 );
@@ -267,12 +267,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap2", "ap2-slot:2"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Attacks focused on making bosses\neasier to deal with.\nFire rate: Medium\nDamage: Low\nArea: Small\nAim Required: Medium\nSupport Value: High",
+  "Attacks focused on making bosses\neasier to deal with.\n\nFire rate: Medium\nDamage: Low\nArea: Small\nAim Required: Medium\nSupport Value: High",
   true,
   30
 );
@@ -289,7 +289,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap3/4-slot:1");
   },
-  "Continuous\nLaser Beam",
+  "Continuous Laser Beam",
   true,
   40
 );
@@ -304,7 +304,7 @@ createUIComponent(
   () => {
     UIComponent.setCondition("ap3/4-slot:2");
   },
-  "Instant\nDamage",
+  "Instant Damage",
   true,
   45
 );
@@ -325,12 +325,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap3/4", "ap3/4-slot:1"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Persistent piercing lasers that follow\nthe mouse pointer.\nFire rate: Low, but lasts a while\nDamage: High over time\nArea: Very Low\nAim Required: Medium-High\nSupport Value: None",
+  "Persistent piercing lasers that follow\nthe mouse pointer.\n\nFire rate: Low, but lasts a while\nDamage: High over time\nArea: Very Low\nAim Required: Medium-High\nSupport Value: None",
   true,
   30
 );
@@ -351,12 +351,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap3/4", "ap3/4-slot:2"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Gets all the damage out in one burst.\nFire rate: Medium-Low\nDamage: Very High\nArea: Small\nAim Required: High\nSupport Value: None",
+  "Deals damage in short bursts\nof piercing laser pain.\n\nFire rate: Medium-Low\nDamage: Very High\nArea: Small\nAim Required: High\nSupport Value: None",
   true,
   30
 );
@@ -409,12 +409,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap5", "ap5-slot:1"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Single-target bolts that follow\nthe mouse pointer.\nFire rate: Low\nDamage: Extremely High\nArea: Possibly Negative\nAim Required: Very High\nSupport Value: None",
+  "Single-target bolts that follow\nthe mouse pointer.\n\nFire rate: Low\nDamage: Extremely High\nArea: Possibly Negative\nAim Required: Very High\nSupport Value: None",
   true,
   30
 );
@@ -435,12 +435,12 @@ createUIComponent(
   ["weapon-slots"],
   ["open-slot:ap5", "ap5-slot:2"],
   1275,
-  600,
+  620,
   0,
   0,
   "none",
   null,
-  "Shoots wide-angle bursts of bullets.\nFire rate: Medium, but many projectiles\nDamage: Low\nArea: Wide\nAim Required: Low\nSupport Value: Low",
+  "Shoots wide-angle bursts of bullets.\n\nFire rate: Medium, but many projectiles\nDamage: Low\nArea: Wide\nAim Required: Low\nSupport Value: Low",
   true,
   30
 );

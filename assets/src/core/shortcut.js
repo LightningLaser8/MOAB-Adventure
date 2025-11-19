@@ -4,11 +4,13 @@ class ModifiedKey {
   ctrl = false;
   shift = false;
   alt = false;
-  constructor(key, control = false, shift = false, alt = false) {
+  ignore = false;
+  constructor(key, control = false, shift = false, alt = false, ignore = false) {
     this.key = key;
     this.ctrl = control;
     this.shift = shift;
     this.alt = alt;
+    this.ignore = ignore;
     //console.log(`created [${key}:${(control ? "c" : "") + (shift ? "s" : "") + (alt ? "a" : "")}]`);
   }
   active(key, ctrl, shift, alt) {
@@ -17,7 +19,10 @@ class ModifiedKey {
     //     this.key
     //   }:${(this.ctrl ? "c" : "") + (this.shift ? "s" : "") + (this.alt ? "a" : "")}]`
     // );
-    return this.key === key && this.ctrl === ctrl && this.shift === shift && this.alt === alt;
+    return (
+      this.key === key &&
+      (this.ignore || (this.ctrl === ctrl && this.shift === shift && this.alt === alt))
+    );
   }
 }
 /** Defines a _mousebind_: a mapping of a mouse button (optionally with modifiers) to an event. */
@@ -25,34 +30,49 @@ class Mousebind extends ModifiedKey {}
 
 /** Defines a _shortcut_: that is, a keybind that fires once, when a key is pressed. */
 class ShortcutBinding {
-  static create(key, mods = { ctrl: false, shift: false, alt: false }, event) {
-    let b = new this();
-    b.shortcut = new ModifiedKey("" + key, mods.ctrl, mods.shift, mods.alt);
-    b.event = event;
-    return b;
+  #event_press;
+  #event_release;
+  #held = false;
+  /**@readonly */
+  get down() {
+    return this.#held;
+  }
+  constructor(
+    key,
+    mods = { ctrl: false, shift: false, alt: false, ignore: false },
+    events = { press: null, hold: null, release: null }
+  ) {
+    this.shortcut = new ModifiedKey("" + key, mods.ctrl, mods.shift, mods.alt, mods.ignore);
+    this.#event_press = events.press;
+    this.#event_release = events.release;
   }
   /** @type {ModifiedKey?} */
   shortcut = null;
   /** @type {() => void} */
   event = () => undefined;
   fire() {
-    void this.event();
+    if (this.#event_press) void this.#event_press();
+    this.#held = true;
   }
-  unfire() {}
+  unfire() {
+    if (this.#held && this.#event_release) void this.#event_release();
+    this.#held = false;
+  }
   tick() {}
   /**@type {ModifiedKey} */
-  #original;
+  #original = null;
   /** Changes a binding's settings. Won't change name or event.
-   * @param {{key: string?, ctrl: boolean?, shift: boolean?, alt: boolean?}} [mods={}]
+   * @param {{key: string?, ctrl: boolean?, shift: boolean?, alt: boolean?, ignore: boolean?}} [mods={}]
    */
   modify(mods = {}) {
     mods ??= {};
-    this.#original = this.shortcut;
+    this.#original ??= this.shortcut;
     this.shortcut = new ModifiedKey(
       mods.key ?? this.shortcut.key,
       mods.ctrl ?? this.shortcut.ctrl,
       mods.shift ?? this.shortcut.shift,
-      mods.alt ?? this.shortcut.alt
+      mods.alt ?? this.shortcut.alt,
+      mods.ignore ?? this.shortcut.ignore
     );
   }
   /**Resets this keybind to its original value. */
@@ -63,21 +83,17 @@ class ShortcutBinding {
 
 /** Defines a _control_: that is, a keybind that fires repeatedly until released. */
 class HeldControlBinding extends ShortcutBinding {
-  static create(key, mods = { ctrl: false, shift: false, alt: false }, event) {
-    let b = new this();
-    b.shortcut = new ModifiedKey("" + key, mods.ctrl, mods.shift, mods.alt);
-    b.event = event;
-    return b;
-  }
-  #held = false;
-  fire() {
-    this.#held = true;
-  }
-  unfire() {
-    this.#held = false;
+  #event_hold;
+  constructor(
+    key,
+    mods = { ctrl: false, shift: false, alt: false, ignore: false },
+    events = { press: null, hold: null, release: null }
+  ) {
+    super(key, mods, events);
+    this.#event_hold = events.hold;
   }
   tick() {
-    if (this.#held) void this.event();
+    if (this.down && this.#event_hold) void this.#event_hold();
   }
 }
 
@@ -85,14 +101,53 @@ class HeldControlBinding extends ShortcutBinding {
 class KeybindHandler {
   /** @type {Map<string, ShortcutBinding>} */
   #scuts = new Map();
-  /** Creates and connects a new shortcut binding. */
-  shortcut(name, key, mods = { ctrl: false, shift: false, alt: false }, event) {
-    this.#scuts.set(name, ShortcutBinding.create(key, mods, event));
+  #ctrl = Object.freeze({
+    /** Creates and connects a new control binding with no modifiers, and only a hold event.
+     * @param {{ press: () => void, hold: () => void, release: () => void }} events
+     */
+    simple: (name, key, event) => {
+      this.#scuts.set(name, new HeldControlBinding(key, { ignore: true }, { hold: event }));
+    },
+    /** Creates and connects a new control binding.
+     * @param {{ press: () => void, hold: () => void, release: () => void }} events
+     */
+    advanced: (
+      name,
+      key,
+      mods = { ctrl: false, shift: false, alt: false, ignore: false },
+      events
+    ) => {
+      this.#scuts.set(name, new HeldControlBinding(key, mods, events));
+    },
+  });
+  #shct = Object.freeze({
+    /** Creates and connects a new shortcut binding with no modifiers, and only a keydown event.
+     * @param {{ press: () => void, hold: () => void, release: () => void }} events
+     */
+    simple: (name, key, event) => {
+      this.#scuts.set(name, new HeldControlBinding(key, { ignore: true }, { press: event }));
+    },
+    /** Creates and connects a new shortcut binding.
+     * @param {{ press: () => void, hold: () => void, release: () => void }} events
+     */
+    advanced: (
+      name,
+      key,
+      mods = { ctrl: false, shift: false, alt: false, ignore: false },
+      events
+    ) => {
+      this.#scuts.set(name, new ShortcutBinding(key, mods, events));
+    },
+  });
+  /**@readonly */
+  get control() {
+    return this.#ctrl;
   }
-  /** Creates and connects a new control binding. */
-  control(name, key, mods = { ctrl: false, shift: false, alt: false }, event) {
-    this.#scuts.set(name, HeldControlBinding.create(key, mods, event));
+  /**@readonly */
+  get shortcut() {
+    return this.#shct;
   }
+
   /** Changes a binding's settings. Won't change name or event.
    * @param {{key: string?, ctrl: boolean?, shift: boolean?, alt: boolean?}} [mods={}]
    */
@@ -120,10 +175,22 @@ class KeybindHandler {
     let b = this.#scuts.get(name);
     return !b || !b.fire();
   }
+  /**
+   * Fires the right event for whatever you put in here. Uses normal `KeyboardEvent`s.
+   * @param {KeyboardEvent} ev
+   */
+  event(ev, isRelease = false) {
+    if (isRelease) return this.up(ev.code);
+    else return this.down(ev.code, ev.ctrlKey, ev.shiftKey, ev.altKey);
+  }
+  #simplify(key) {
+    return key.replace("Key", "").replace("Digit", "");
+  }
   /** Fires connected events for each keybind matching the passed in key and modifiers.
    * @returns `true` if some event fired, `false` if not.
    */
-  down(key, ctrl = keyIsDown(17), shift = keyIsDown(16), alt = keyIsDown(18)) {
+  down(key, ctrl = false, shift = false, alt = false) {
+    key = this.#simplify(key);
     let fired = false;
     // console.log(`firing [${key}:${(ctrl ? "c" : "") + (shift ? "s" : "") + (alt ? "a" : "")}]`);
     this.#scuts.forEach((binding, name) => {
@@ -141,9 +208,12 @@ class KeybindHandler {
    * @returns `true` if some event fired, `false` if not.
    */
   up(key) {
+    key = this.#simplify(key);
+    // console.log(`unfiring [${key}:*]`);
     this.#scuts.forEach((binding, name) => {
       if (binding.shortcut.key === key) {
         binding.unfire();
+        // console.log(`deactivated ${name}`);
       }
     });
   }
@@ -158,27 +228,34 @@ class KeybindHandler {
     let b = this.#scuts.get(name)?.shortcut;
     return b
       ? `${b.ctrl ? "Ctrl + " : ""}${b.shift ? "Shitf + " : ""}${b.alt ? "Alt + " : ""}${b.key}`
-      : "None";
+      : undefined;
   }
-  /** Returns the key associated with the specified binding. */
+  /** Returns the key name associated with the specified binding. */
   key(name) {
-    let b = this.#scuts.get(name)?.shortcut?.key;
-    return b ? b.toUpperCase() : undefined;
+    let b = this.#scuts.get(name)?.shortcut;
+    return b?.key;
   }
   /** Returns whether or not the specified binding requires the `ctrl` key to be held. */
   ctrl(name) {
-    return this.#scuts.get(name)?.shortcut?.ctrl;
+    let b = this.#scuts.get(name)?.shortcut;
+    return b?.ctrl;
   }
   /** Returns whether or not the specified binding requires the `shift` key to be held. */
   shift(name) {
-    return this.#scuts.get(name)?.shortcut?.shift;
+    let b = this.#scuts.get(name)?.shortcut;
+    return b?.shift;
   }
   /** Returns whether or not the specified binding requires the `alt` key to be held. */
   alt(name) {
-    return this.#scuts.get(name)?.shortcut?.alt;
+    let b = this.#scuts.get(name)?.shortcut;
+    return b?.alt;
   }
   /** Returns the key and modifiers associated with the specified binding, as a `ModifiedKey` object. */
   descriptor(name) {
-    return this.#scuts.get(name)?.shortcut;
+    let b = this.#scuts.get(name)?.shortcut;
+    return b;
+  }
+  get all() {
+    return [...this.#scuts.keys()];
   }
 }

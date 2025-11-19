@@ -10,7 +10,7 @@ createUIComponent(
   75,
   "none",
   undefined,
-  "         Load Game",
+  "*         Load Game",
   false,
   50
 );
@@ -26,7 +26,7 @@ createUIComponent(
   () => {
     ui.menuState = "start-menu";
   },
-  "< Back",
+  "*< Back",
   false,
   30
 );

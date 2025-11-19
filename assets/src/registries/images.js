@@ -23,8 +23,15 @@ Registry.images.add("ui.clock", new ImageContainer("assets/textures/ui/clock.png
 Registry.images.add("ui.title", new ImageContainer("assets/textures/screens/title.png"));
 Registry.images.add("ui.movement", new ImageContainer("assets/textures/ui/move-indicator.png"));
 Registry.images.add("ui.4-move", new ImageContainer("assets/textures/ui/4-move-indicator.png"));
-Registry.images.add("ui.shotgun", new ImageContainer("assets/textures/ui/shotgun.png"));
 Registry.images.add("ui.shoot", new ImageContainer("assets/textures/ui/shoot-indicator.png"));
+Registry.images.add("ui.deamth", new ImageContainer("assets/textures/ui/deamth.png"));
+Registry.images.add("ui.dash", new ImageContainer("assets/textures/ui/dash.png"));
+Registry.images.add("ui.dash-2", new ImageContainer("assets/textures/ui/dash2.png"));
+Registry.images.add("ui.dash-spike", new ImageContainer("assets/textures/ui/dash-spike.png"));
+
+Registry.images.add("ui.shotgun", new ImageContainer("assets/textures/ui/shotgun.png"));
+Registry.images.add("ui.shield-projector", new ImageContainer("assets/textures/ui/shield-projector.png"));
+Registry.images.add("ui.double-booster", new ImageContainer("assets/textures/ui/double-booster.png"));
 //boxes
 Registry.images.add("box.wood", new ImageContainer("assets/textures/entity/box/wood.svg"));
 Registry.images.add("box.hardwood", new ImageContainer("assets/textures/entity/box/hardwood.svg"));

@@ -179,6 +179,7 @@ class Entity {
             this.y -= resolution * ymove;
 
             //Propagate knockback
+
             entity.knock(
               amount * 0.75 /* exponential decay */,
               direction,
@@ -197,6 +198,24 @@ class Entity {
         }
       }
     }
+    //visual effect because cool
+    this.world.particles.push(
+      new AfterImageParticle(
+        this.x,
+        this.y,
+        radians(direction),
+        10,
+        0,
+        0,
+        "ui.dash-spike",
+        300,
+        100,
+        133,
+        400,
+        0,
+        true
+      )
+    );
   }
   takeDamage(amount = 0, source = null) {
     this.damageTaken += Math.min(amount, this.health) * this.effectiveHealthMult;

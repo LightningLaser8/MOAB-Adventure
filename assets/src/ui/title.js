@@ -21,17 +21,17 @@ createUIComponent(
 createUIComponent(
   ["title"],
   [],
-  1260,
-  870,
-  100,
-  100,
+  960,
+  970,
+  250,
+  50,
   "none",
   () => {
     ui.menuState = "how-to-play";
   },
-  "?",
+  "How to Play",
   true,
-  100
+  30
 );
 Object.defineProperty(
   UIComponent.alignLeft(

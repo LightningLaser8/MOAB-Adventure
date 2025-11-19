@@ -195,7 +195,7 @@ class WaveEmissionEffect extends ParticleEmissionEffect {
 }
 
 function repeat(n, func, ...params) {
-  for (let i = 0; i < n; i++) func(...params);
+  for (let i = 0; i < n; i++) func(i, ...params);
 }
 
 /**

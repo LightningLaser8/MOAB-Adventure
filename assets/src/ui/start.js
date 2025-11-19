@@ -11,7 +11,7 @@ createUIComponent(
   75,
   "none",
   undefined,
-  "         Select Option",
+  "*         Select Option",
   false,
   50
 );
@@ -27,7 +27,7 @@ createUIComponent(
   () => {
     ui.menuState = "title";
   },
-  "< Back",
+  "*< Back",
   false,
   30
 ).isBackButton = true;
@@ -125,7 +125,7 @@ createUIComponent(
   () => {
     ui.menuState = "start-menu";
   },
-  "< Back",
+  "*< Back",
   false,
   30
 ).isBackButton = true;

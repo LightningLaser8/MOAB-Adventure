@@ -460,11 +460,12 @@ function reset() {
 }
 
 //Triggers on any key press
-function keyPressed() {
+function keyPressed(ev) {
+  if (ui.keybinds.event(ev)) return false;
+  if (ui.menuState === "in-game" && game.keybinds.event(ev)) return false;
+
   //ignore caps lock
   let k = key.toLowerCase();
-  if (ui.keybinds.down(k)) return false;
-  if (ui.menuState === "in-game" && game.keybinds.down(k)) return false;
 
   if (k === "f3") {
     //Toggle debug mode
@@ -481,10 +482,9 @@ function keyPressed() {
   }
   return false; //Prevent any default behaviour
 }
-function keyReleased() {
-  let k = key.toLowerCase();
-  ui.keybinds.up(k);
-  game.keybinds.up(k);
+function keyReleased(ev) {
+  ui.keybinds.event(ev, true);
+  game.keybinds.event(ev, true);
 }
 
 function keyTyped() {

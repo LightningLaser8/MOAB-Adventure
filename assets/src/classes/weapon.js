@@ -122,7 +122,7 @@ class Weapon {
       this._cooldown = this.getAcceleratedReloadRate();
       this.accelerate(); //Apply acceleration effects
 
-      this.slot.entity.knock(this.recoil, this.rotation + 180);
+      if(this.recoil) this.slot.entity.knock(this.recoil, this.rotation + 180);
 
       patternedBulletExpulsion(
         this.x,
