@@ -61,7 +61,7 @@ class MASoundEngine {
    */
   play(sound, waitForEnd) {
     if (!sound) return;
-    if (typeof sound === "string") sound = Registry.sounds.get(sound);
+    if (typeof sound === "string") sound = Registry.sound_containers.get(sound);
     // Now that it's a sound container, play it
 
     if (this.#activeSounds.has(sound)) {
@@ -71,9 +71,7 @@ class MASoundEngine {
 
     const bufnode = this.context.createBufferSource();
     bufnode.buffer = sound.sound;
-    bufnode.connect(
-      this.piecewiseVolume[sound.category] ?? this.piecewiseVolume.other
-    );
+    bufnode.connect(this.piecewiseVolume[sound.category] ?? this.piecewiseVolume.other);
     bufnode.onended = () => {
       bufnode.disconnect();
       this.#activeSounds.delete(sound);
@@ -98,7 +96,7 @@ class MASoundEngine {
       });
       return;
     }
-    if (typeof sound === "string") sound = Registry.sounds.get(sound);
+    if (typeof sound === "string") sound = Registry.sound_containers.get(sound);
 
     const bufnode = this.#activeSounds.get(sound);
     if (bufnode) {
@@ -107,9 +105,14 @@ class MASoundEngine {
         bufnode.disconnect();
         this.#activeSounds.delete(sound);
       } catch (e) {
-        console.warn("Failed to stop sound "+sound+":", e);
+        console.warn("Failed to stop sound " + sound + ":", e);
       }
     }
+  }
+  commit() {
+    Registry.sounds.forEach((i, n) =>
+      Registry.sound_containers.add(n, new SoundContainer(i.path, i.category ?? "other"))
+    );
   }
 }
 

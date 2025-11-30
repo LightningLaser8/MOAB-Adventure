@@ -79,7 +79,7 @@ class Part {
       typeof this.image === "string"
     ) {
       //If it's an image, draw it
-      rotatedImg(
+      ImageCTX.draw(
         this.image,
         finalPos.x,
         finalPos.y,

@@ -11,14 +11,18 @@ class Registry {
   static genericType = new this();
   static weapons = new this();
   static images = new this();
+  static image_containers = new this();
   static statuses = new this();
   static blimps = new this();
   static entities = new this();
   static sounds = new this();
+  static sound_containers = new this();
   static worlds = new this();
   static vfx = new this();
   static achievements = new this();
   static difficulties = new this();
+  static slots = new this();
+  static dynamic_slots = new this();
   /** Adds an item to registry.
    * @param {string} name Registry name of item. This is not case sensitive.
    * @param {*} item Item to add to registry.
@@ -111,13 +115,13 @@ class Registry {
   }
   /**
    * Executes a function for each element in the registry.
-   * @param {(item, name: string) => void} func Callback for each element.
+   * @param {(item, name: string) => void} callback Callback for each element.
    */
-  forEach(func) {
+  forEach(callback) {
     //Use built-in Map iterator
     this.#content.forEach((element, name) => {
       //Discard return value
-      void func(element, name);
+      void callback(element, name);
     });
   }
   /**

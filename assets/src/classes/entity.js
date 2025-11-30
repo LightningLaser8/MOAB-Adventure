@@ -247,7 +247,7 @@ class Entity {
   }
   draw() {
     if (this.drawer.image) {
-      rotatedImg(
+      ImageCTX.draw(
         this.drawer.image,
         this.x,
         this.y,

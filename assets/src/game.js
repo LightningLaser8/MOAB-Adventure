@@ -65,10 +65,12 @@ let backgrounds = {
 };
 
 async function preload() {
-  await Registry.images.forEachAsync(async (name, item) => {
+  ImageCTX.commit();
+  await Registry.image_containers.forEachAsync(async (name, item) => {
     await item.load();
   });
-  await Registry.sounds.forEachAsync(async (name, item) => {
+  SoundCTX.commit();
+  await Registry.sound_containers.forEachAsync(async (name, item) => {
     if (!(await item.load())) console.error("Failed to load " + name);
   });
   fonts.ocr = await loadFont("assets/font/ocr_a_extended.ttf");
@@ -335,12 +337,12 @@ function showOffscreenBosses() {
 function createPlayer() {
   let player = construct(Registry.entities.get("player"));
   //Add all slots: not all of them will be accessible
-  player.addWeaponSlot(selector.getAP(1));
-  player.addWeaponSlot(selector.getAP(2));
-  player.addWeaponSlot(selector.getAP(3));
-  player.addWeaponSlot(selector.getAP(4));
-  player.addWeaponSlot(selector.getAP(5));
-  player.addWeaponSlot(aps.booster);
+  player.addWeaponSlot(selector2.ap(1));
+  player.addWeaponSlot(selector2.ap(2));
+  player.addWeaponSlot(selector2.ap(3));
+  player.addWeaponSlot(selector2.ap(4));
+  player.addWeaponSlot(selector2.ap(5));
+  player.addWeaponSlot(selector2.booster());
   player.addToWorld(world);
   game.player = player;
   //is moab
@@ -360,7 +362,7 @@ function createPlayer() {
 function createSupport() {
   let suppor = construct(Registry.entities.get("support"));
   //Add all slots: not all of them will be accessible
-  suppor.addWeaponSlot(selector.sp1());
+  suppor.addWeaponSlot(selector2.sp1());
   suppor.addToWorld(world);
   game.support = suppor;
 
@@ -552,7 +554,7 @@ function saveGame() {
 
     levels: game.player.weaponSlots.map((x) => x.tier),
     support: game.support.weaponSlots.map((x) => x.tier),
-    choices: [1, 2, "3/4", 5].map((s) => +UIComponent.getCondition("ap" + s + "-slot")),
+    choices: [1, 2, 3, 4, 5].map((s) => +UIComponent.getCondition("ap" + s + "-slot")),
     blimp: game.player.blimpName,
 
     health: game.player.health,
@@ -597,17 +599,17 @@ function loadGame(slot) {
   game.player.dv = save.dv ?? 0;
   //Choices
   game.player.weaponSlots = [];
-  [1, 2, "3/4", 5].forEach((sl, i) => selector.setAP(sl, (save.choices ?? [1, 1, 1, 1])[i] ?? 1));
+  [1, 2, 3, 4, 5].forEach((sl, i) => selector2.chooseAP(sl, (save.choices ?? [1, 1, 1, 1, 1])[i] ?? 1));
   game.player.weaponSlots = [];
-  game.player.addWeaponSlot(selector.getAP(1));
-  game.player.addWeaponSlot(selector.getAP(2));
-  game.player.addWeaponSlot(selector.getAP(3));
-  game.player.addWeaponSlot(selector.getAP(4));
-  game.player.addWeaponSlot(selector.getAP(5));
-  game.player.addWeaponSlot(selector.booster());
+  game.player.addWeaponSlot(selector2.ap(1));
+  game.player.addWeaponSlot(selector2.ap(2));
+  game.player.addWeaponSlot(selector2.ap(3));
+  game.player.addWeaponSlot(selector2.ap(4));
+  game.player.addWeaponSlot(selector2.ap(5));
+  game.player.addWeaponSlot(selector2.booster());
   for (let sl = 0; sl < 6; sl++) game.player.weaponSlots[sl].setTier((save.levels ?? [])[sl] ?? 0);
 
-  game.support.addWeaponSlot(selector.sp1());
+  game.support.addWeaponSlot(selector2.sp1());
   for (let sl = 0; sl < 1; sl++)
     game.support.weaponSlots[sl].setTier((save.support ?? [])[sl] ?? 0);
   //blomp

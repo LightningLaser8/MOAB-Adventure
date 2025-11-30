@@ -42,7 +42,7 @@ createUIComponent(
   ["weapon-slots"],
   [],
   680,
-  400,
+  300,
   200,
   50,
   "both",
@@ -57,7 +57,7 @@ createUIComponent(
   ["weapon-slots"],
   [],
   680,
-  500,
+  400,
   200,
   50,
   "both",
@@ -72,16 +72,31 @@ createUIComponent(
   ["weapon-slots"],
   [],
   680,
+  500,
+  200,
+  50,
+  "both",
+  () => {
+    UIComponent.setCondition("open-slot:ap3");
+  },
+  "AP3",
+  false,
+  35
+);
+createUIComponent(
+  ["weapon-slots"],
+  [],
+  680,
   600,
   200,
   50,
   "both",
   () => {
-    UIComponent.setCondition("open-slot:ap3/4");
+    UIComponent.setCondition("open-slot:ap4");
   },
-  "AP3/4",
+  "AP4",
   false,
-  25
+  35
 );
 createUIComponent(
   ["weapon-slots"],
@@ -276,18 +291,18 @@ createUIComponent(
   true,
   30
 );
-//AP3/4
-UIComponent.setCondition("ap3/4-slot:none");
+//AP3
+UIComponent.setCondition("ap3-slot:none");
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4"],
+  ["open-slot:ap3"],
   1100,
   330,
   300,
   100,
   "none",
   () => {
-    UIComponent.setCondition("ap3/4-slot:1");
+    UIComponent.setCondition("ap3-slot:1");
   },
   "Continuous Laser Beam",
   true,
@@ -295,14 +310,14 @@ createUIComponent(
 );
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4"],
+  ["open-slot:ap3"],
   1450,
   330,
   300,
   100,
   "none",
   () => {
-    UIComponent.setCondition("ap3/4-slot:2");
+    UIComponent.setCondition("ap3-slot:2");
   },
   "Instant Damage",
   true,
@@ -310,20 +325,20 @@ createUIComponent(
 );
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4", "ap3/4-slot:1"],
+  ["open-slot:ap3", "ap3-slot:1"],
   1275,
   430,
   0,
   0,
   "none",
   null,
-  "AP3/4.1: Continuous Laser Beam",
+  "AP3.1: Continuous Laser Beam",
   true,
   40
 );
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4", "ap3/4-slot:1"],
+  ["open-slot:ap3", "ap3-slot:1"],
   1275,
   620,
   0,
@@ -336,20 +351,105 @@ createUIComponent(
 );
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4", "ap3/4-slot:2"],
+  ["open-slot:ap3", "ap3-slot:2"],
   1275,
   430,
   0,
   0,
   "none",
   null,
-  "AP3/4.2: Instant Damage",
+  "AP3.2: Instant Damage",
   true,
   35
 );
 createUIComponent(
   ["weapon-slots"],
-  ["open-slot:ap3/4", "ap3/4-slot:2"],
+  ["open-slot:ap3", "ap3-slot:2"],
+  1275,
+  620,
+  0,
+  0,
+  "none",
+  null,
+  "Deals damage in short bursts\nof piercing laser pain.\n\nFire rate: Medium-Low\nDamage: Very High\nArea: Small\nAim Required: High\nSupport Value: None",
+  true,
+  30
+);
+
+//AP4
+UIComponent.setCondition("ap4-slot:none");
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4"],
+  1100,
+  330,
+  300,
+  100,
+  "none",
+  () => {
+    UIComponent.setCondition("ap4-slot:1");
+  },
+  "Continuous Laser Beam",
+  true,
+  40
+);
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4"],
+  1450,
+  330,
+  300,
+  100,
+  "none",
+  () => {
+    UIComponent.setCondition("ap4-slot:2");
+  },
+  "Instant Damage",
+  true,
+  45
+);
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4", "ap4-slot:1"],
+  1275,
+  430,
+  0,
+  0,
+  "none",
+  null,
+  "AP4.1: Continuous Laser Beam",
+  true,
+  40
+);
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4", "ap4-slot:1"],
+  1275,
+  620,
+  0,
+  0,
+  "none",
+  null,
+  "Persistent piercing lasers that follow\nthe mouse pointer.\n\nFire rate: Low, but lasts a while\nDamage: High over time\nArea: Very Low\nAim Required: Medium-High\nSupport Value: None",
+  true,
+  30
+);
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4", "ap4-slot:2"],
+  1275,
+  430,
+  0,
+  0,
+  "none",
+  null,
+  "AP4.2: Instant Damage",
+  true,
+  35
+);
+createUIComponent(
+  ["weapon-slots"],
+  ["open-slot:ap4", "ap4-slot:2"],
   1275,
   620,
   0,

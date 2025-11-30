@@ -113,12 +113,7 @@ class UIComponent {
   }
   //Gets the value of a condition
   static getCondition(condition) {
-    if (ui.conditions[condition]) {
-      //Separate property values
-      //If property exists
-      return ui.conditions[condition]; //Check it and return
-    }
-    return null; //If unsure, ignore
+    return ui.conditions[condition] ?? ""; //Check it and return
   }
   //Sets property:value on game ui: input "slot:1" => sets "slot" to "1"
   static setCondition(condition) {
@@ -292,12 +287,13 @@ class UIComponent {
         fill(...this.backgroundColour);
         rect(this.x, this.y, this.width - 2, this.height - 2);
       } else {
-        drawImg(
+        ImageCTX.draw(
           "ui.background",
           this.x,
           this.y,
           this.width - 2,
           this.height - 2,
+          0,
           0,
           0,
           this.width - 2,
@@ -379,7 +375,7 @@ class ImageUIComponent extends UIComponent {
     if (this.outline) rect(this.x, this.y, this.width + 18, this.height + 18);
     if (this.opacity !== 1) tint(255, 255 * this.opacity);
     //Draw image
-    rotatedImg(this.image, this.x, this.y, this.width - 2, this.height - 2, this.angle);
+    ImageCTX.draw(this.image, this.x, this.y, this.width - 2, this.height - 2, this.angle);
     pop();
   }
 }
@@ -641,40 +637,6 @@ function createHealthbarComponent(
   return component;
 }
 
-function drawImg(
-  img = "error",
-  x,
-  y,
-  width,
-  height,
-  ...otherParameters //IDK what else p5 image takes
-) {
-  noSmooth();
-  //Get from registry if it exists
-  img = Registry.images.has(img) ? Registry.images.get(img) : img;
-  if (img instanceof ImageContainer) {
-    if (!img.image) return; //Cancel if no image loaded yet
-    image(img.image, x, y, width, height, ...otherParameters);
-  } else {
-    //Try to draw it directly if not
-    try {
-      image(img, x, y, width, height, ...otherParameters);
-    } catch (error) {
-      //Say the problem
-      console.error("Could not draw image: ", img);
-      //Replace with a working image
-      drawImg("error", x, y, width, height, ...otherParameters);
-    }
-  }
-}
-
-function rotatedImg(img = "error", x, y, width, height, angle) {
-  push(); //Save current position, rotation, etc
-  translate(x, y); //Move middle to 0,0
-  rotate(angle);
-  drawImg(img, 0, 0, width, height);
-  pop(); //Return to old state
-}
 
 function rotatedShape(shape = "circle", x, y, width, height, angle) {
   push(); //Save current position, rotation, etc

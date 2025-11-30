@@ -200,7 +200,7 @@ class Bullet {
   draw() {
     if (this.drawer.hidden) return;
     if (this.drawer.image) {
-      rotatedImg(
+      ImageCTX.draw(
         this.drawer.image,
         this.x,
         this.y,
@@ -325,7 +325,7 @@ class Bullet {
           let direction = 
           this.pos.sub(this.entity.target).angleRad
           entity.knock(this.knockback, direction, this.kineticKnockback); //Knock with default resolution
-        } else {
+        } else if (this.knockback) {
           entity.knock(
             this.knockback,
             this.direction,

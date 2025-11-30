@@ -197,7 +197,7 @@ class Boss extends ScalingEntity {
   draw() {
     let d = this.getDraw();
     if (d.image) {
-      rotatedImg(d.image, this.x, this.y, d.width, d.height, this.directionRad);
+      ImageCTX.draw(d.image, this.x, this.y, d.width, d.height, this.directionRad);
     } else {
       //If no image, draw shape instead
       rotatedShape(d.shape, this.x, this.y, d.width, d.height, this.directionRad);
