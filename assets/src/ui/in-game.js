@@ -29,7 +29,7 @@ const background = {
 
 createUIComponent(["in-game"], [], 350, 55, 700, 125, "right");
 //Shards
-createUIImageComponent(["in-game"], [], 40, 60, 65, 75, null, "ui.shard", false);
+createUIImageComponent(["in-game"], [], 40, 60, 75, 75, null, "ui.shard", false);
 //Overwrite text
 UIComponent.alignLeft(
   Object.defineProperty(
@@ -41,7 +41,7 @@ UIComponent.alignLeft(
   )
 );
 //Bloonstones
-createUIImageComponent(["in-game"], [], 330, 60, 60, 75, null, "ui.bloonstone", false);
+createUIImageComponent(["in-game"], [], 330, 60, 75, 75, null, "ui.bloonstone", false);
 //Overwrite text
 UIComponent.alignLeft(
   Object.defineProperty(

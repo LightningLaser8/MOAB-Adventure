@@ -84,7 +84,8 @@ createUIComponent(
   [
     "ap1-slot:1|2",
     "ap2-slot:1|2",
-    "ap3/4-slot:1|2",
+    "ap3-slot:1|2",
+    "ap4-slot:1|2",
     "ap5-slot:1|2",
     "difficulty:easy|normal|hard|impossible",
     "saveslot:0|1|2|3|4|5",
@@ -105,7 +106,7 @@ createUIComponent(
 );
 createUIComponent(
   ["new-game"],
-  ["any", "ap1-slot:none", "ap2-slot:none", "ap3/4-slot:none", "ap5-slot:none"],
+  ["any", "ap1-slot:none", "ap2-slot:none", "ap3-slot:none", "ap4-slot:none", "ap5-slot:none"],
   960,
   800,
   0,
@@ -422,7 +423,8 @@ function quickstart(subslot) {
 
     UIComponent.setCondition("ap1-slot:" + subslot);
     UIComponent.setCondition("ap2-slot:" + subslot);
-    UIComponent.setCondition("ap3/4-slot:" + subslot);
+    UIComponent.setCondition("ap3-slot:" + subslot);
+    UIComponent.setCondition("ap4-slot:" + subslot);
     UIComponent.setCondition("ap5-slot:" + subslot);
 
     ui.menuState = "in-game";

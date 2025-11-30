@@ -22,7 +22,7 @@ class Registry {
   static achievements = new this();
   static difficulties = new this();
   static slots = new this();
-  static dynamic_slots = new this();
+  static currency = new this();
   /** Adds an item to registry.
    * @param {string} name Registry name of item. This is not case sensitive.
    * @param {*} item Item to add to registry.

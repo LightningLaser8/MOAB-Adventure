@@ -372,7 +372,7 @@ function createSupport() {
   world.particles.push(
     new WaveParticle(suppor.x, suppor.y, 60, 0, 1920, [255, 0, 0], [255, 0, 0, 0], 100, 0)
   );
-  console.log("spawned support blimp", game.support)
+  console.log("spawned support blimp", game.support);
 }
 
 function fireIfPossible() {
@@ -542,6 +542,7 @@ function reload() {
 
 function saveGame() {
   let save = {
+    saveFormatVersion: CURRENT_SAVE_FORMAT_VERSION,
     achs: game.achievements,
     level: game.level,
     zone: game.world,
@@ -585,7 +586,7 @@ function deleteGame(slot) {
 function loadGame(slot) {
   let save = Serialiser.get("save." + slot);
   //settings
-  game.difficulty = save.difficulty ?? "easy";
+  game.difficulty = save.difficulty ?? "normal";
   game.mode = save.mode ?? "adventure";
   //Progress
   game.bossdelay = 0;
@@ -598,8 +599,9 @@ function loadGame(slot) {
   game.maxDV = save.maxDV ?? 0;
   game.player.dv = save.dv ?? 0;
   //Choices
-  game.player.weaponSlots = [];
-  [1, 2, 3, 4, 5].forEach((sl, i) => selector2.chooseAP(sl, (save.choices ?? [1, 1, 1, 1, 1])[i] ?? 1));
+  [1, 2, 3, 4, 5].forEach((sl, i) => {
+    selector2.chooseAP(sl, (save.choices ?? [1, 1, 1, 1, 1])[i] ?? 1);
+  });
   game.player.weaponSlots = [];
   game.player.addWeaponSlot(selector2.ap(1));
   game.player.addWeaponSlot(selector2.ap(2));

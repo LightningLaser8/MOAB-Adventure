@@ -17,8 +17,9 @@
     //Disable p5's errors, they don't really help
     p5.disableFriendlyErrors = true;
     //Game info
-    const gameVersion = "0.0.114";
+    const gameVersion = "0.0.115";
     const isPreview = true;
+    const CURRENT_SAVE_FORMAT_VERSION = 1;
     let versionReplacementText = "";
   </script>
   <!-- Core -->
@@ -31,6 +32,7 @@
   <script src="./assets/src/core/images.js"></script>
   <script src="./assets/src/core/registry.js"></script>
   <script src="./assets/src/core/serialiser.js"></script>
+  <script src="./assets/src/core/save-converter.js"></script>
   <!-- Classes -->
   <script src="./assets/src/classes/animation.js"></script>
   <script src="./assets/src/classes/timer.js"></script>
@@ -74,7 +76,6 @@
   <!-- Dynamic Registries -->
   <script src="./assets/src/registries/images.js"></script>
   <script src="./assets/src/registries/sounds.js"></script>
-  <script src="./assets/src/registries/slots.js"></script>
   <!-- Static Registries -->
   <script src="./assets/src/registries/generic-type.js"></script>
   <script src="./assets/src/registries/weapon-type.js"></script>

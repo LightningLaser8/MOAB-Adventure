@@ -15,17 +15,18 @@ const selector2 = {
     return this.slot(`ap${ap}`);
   },
   booster() {
-    return this.get("booster");
+    return this.slot("booster");
   },
   sp1() {
-    return this.get("sp1");
+    return this.slot("sp1");
   },
   slot(name) {
-    return new WeaponSlot(...this.get(name).upgrades);
+    return new WeaponSlot(...this.get(name)?.upgrades ?? []);
   },
 
   /**utility to set slot choices */
   chooseAP(ap, val) {
+    console.log("setting "+`ap${ap}-slot:${val}`)
     UIComponent.setCondition(`ap${ap}-slot:${val}`);
   },
 };
